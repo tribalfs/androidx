@@ -288,7 +288,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
     }
 
     @Override
-    protected Parcelable onSaveInstanceState() {
+    protected @NonNull Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         return new SavedState(superState, mRefreshing);
     }
@@ -635,7 +635,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
      *
      * @param colorResIds
      */
-    public void setColorSchemeResources(@ColorRes int... colorResIds) {
+    public void setColorSchemeResources(@NonNull @ColorRes int... colorResIds) {
         final Context context = getContext();
         int[] colorRes = new int[colorResIds.length];
         for (int i = 0; i < colorResIds.length; i++) {
@@ -651,7 +651,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
      *
      * @param colors
      */
-    public void setColorSchemeColors(@ColorInt int... colors) {
+    public void setColorSchemeColors(@NonNull @ColorInt int... colors) {
         ensureTarget();
         mProgress.setColorSchemeColors(colors);
     }

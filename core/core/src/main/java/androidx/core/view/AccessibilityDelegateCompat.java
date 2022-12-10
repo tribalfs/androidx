@@ -43,6 +43,10 @@ import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.List;
 
+/*
+ * Original code by Samsung, all rights reserved to the original author.
+ */
+
 /**
  * Helper for accessing {@link AccessibilityDelegate}.
  * <p>
@@ -406,4 +410,10 @@ public class AccessibilityDelegateCompat {
                 view.getTag(R.id.tag_accessibility_actions);
         return actions == null ? Collections.emptyList() : actions;
     }
+
+
+    public void seslNotifyPerformAction(int virtualViewId,
+                                        int action, Bundle arguments) {
+    }
+
 }

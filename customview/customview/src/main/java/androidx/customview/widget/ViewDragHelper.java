@@ -16,6 +16,8 @@
 
 package androidx.customview.widget;
 
+import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -30,11 +32,14 @@ import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
+import androidx.annotation.RestrictTo;
 import androidx.core.view.ViewCompat;
 
 import java.util.Arrays;
 
 /**
+ *  <p><b></b>SESL variant</b></p><br>
+ *
  * ViewDragHelper is a utility class for writing custom ViewGroups. It offers a number
  * of useful operations and state tracking for allowing a user to drag and reposition
  * views within their parent ViewGroup.
@@ -149,6 +154,9 @@ public class ViewDragHelper {
 
     @NonNull
     private final ViewGroup mParentView;
+
+    //sesl
+    private boolean mIsUpdateOffsetLR = true;
 
     /**
      * A Callback is used as a communication channel with the ViewDragHelper back to the
@@ -381,6 +389,20 @@ public class ViewDragHelper {
         helper.mTouchSlop = (int) (helper.mTouchSlop * (1 / sensitivity));
         return helper;
     }
+
+    //Sesl
+    public static ViewDragHelper seslCreate(@NonNull ViewGroup forParent, float sensitivity,
+            @NonNull Callback cb) {
+        final ViewDragHelper helper = create(forParent, cb);
+        helper.mTouchSlop = (int) (helper.mTouchSlop * (1 / sensitivity));
+        helper.mIsUpdateOffsetLR = false;
+        return helper;
+    }
+
+    public void seslSetUpdateOffsetLR(boolean update) {
+        mIsUpdateOffsetLR = update;
+    }
+    //sesl
 
     /**
      * Apps should use ViewDragHelper.create() to get a new instance.
@@ -773,7 +795,7 @@ public class ViewDragHelper {
             final int dx = x - mCapturedView.getLeft();
             final int dy = y - mCapturedView.getTop();
 
-            if (dx != 0) {
+            if (dx != 0 && mIsUpdateOffsetLR/*sesl*/) {
                 ViewCompat.offsetLeftAndRight(mCapturedView, dx);
             }
             if (dy != 0) {
@@ -1241,7 +1263,7 @@ public class ViewDragHelper {
                     }
                 }
 
-                saveLastMotion(ev);
+                    saveLastMotion(ev);
                 break;
             }
 
@@ -1490,7 +1512,9 @@ public class ViewDragHelper {
         final int oldTop = mCapturedView.getTop();
         if (dx != 0) {
             clampedX = mCallback.clampViewPositionHorizontal(mCapturedView, left, dx);
-            ViewCompat.offsetLeftAndRight(mCapturedView, clampedX - oldLeft);
+            if (mIsUpdateOffsetLR || getViewDragState() != STATE_SETTLING) {//sesl
+                ViewCompat.offsetLeftAndRight(mCapturedView, clampedX - oldLeft);
+            }
         }
         if (dy != 0) {
             clampedY = mCallback.clampViewPositionVertical(mCapturedView, top, dy);
@@ -1588,5 +1612,11 @@ public class ViewDragHelper {
     private static <T> T requireNonNull(@Nullable T obj, @NonNull String message) {
         if (obj == null) throw new NullPointerException(message);
         return obj;
+    }
+
+    //sesl
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    public void setTouchSlop(int touchSlop) {
+        mTouchSlop = touchSlop;
     }
 }

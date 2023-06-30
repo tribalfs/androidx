@@ -23,6 +23,7 @@ import android.widget.HorizontalScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Method;
@@ -39,7 +40,7 @@ public class SeslHorizontalScrollViewReflector {
     }
 
     public static void setTouchSlop(@NonNull HorizontalScrollView scrollView, int touchSlop) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (DeviceInfo.isSamsung() &&  Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_setTouchSlop", Integer.TYPE);
             if (method != null) {
                 SeslBaseReflector.invoke(scrollView, method, touchSlop);

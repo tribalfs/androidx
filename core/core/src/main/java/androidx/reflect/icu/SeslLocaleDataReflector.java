@@ -23,6 +23,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Field;
@@ -46,7 +47,7 @@ public class SeslLocaleDataReflector {
 
     public static Object get(@NonNull Locale locale) {
         Method method;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (DeviceInfo.isSamsung() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             method = SeslBaseReflector.getDeclaredMethod(mSemClassName, "get", Locale.class);
         } else {
             method = SeslBaseReflector.getMethod(mClassName, "get", Locale.class);

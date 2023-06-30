@@ -24,6 +24,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Constructor;
@@ -43,17 +44,19 @@ public class SeslSemBlurInfoReflector {
     }
 
     public static Object semCreateBlurBuilder(int blurMode) {
-        Constructor<?> constructor = SeslBaseReflector.getConstructor(mBuilderClass, Integer.TYPE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (constructor != null) {
-                try {
-                    return constructor.newInstance(blurMode);
-                } catch (IllegalAccessException e) {
-                    Log.e(TAG, "semCreateBlurBuilder IllegalAccessException", e);
-                } catch (InstantiationException e) {
-                    Log.e(TAG, "semCreateBlurBuilder InstantiationException", e);
-                } catch (InvocationTargetException e) {
-                    Log.e(TAG, "semCreateBlurBuilder InvocationTargetException", e);
+        if (DeviceInfo.isSamsung()) {
+            Constructor<?> constructor = SeslBaseReflector.getConstructor(mBuilderClass, Integer.TYPE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (constructor != null) {
+                    try {
+                        return constructor.newInstance(blurMode);
+                    } catch (IllegalAccessException e) {
+                        Log.e(TAG, "semCreateBlurBuilder IllegalAccessException", e);
+                    } catch (InstantiationException e) {
+                        Log.e(TAG, "semCreateBlurBuilder InstantiationException", e);
+                    } catch (InvocationTargetException e) {
+                        Log.e(TAG, "semCreateBlurBuilder InvocationTargetException", e);
+                    }
                 }
             }
         }
@@ -62,64 +65,69 @@ public class SeslSemBlurInfoReflector {
     }
 
     public static Object semSetBuilderBlurRadius(Object builder, int radius) {
-        Method method;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            method = SeslBaseReflector.getDeclaredMethod(mBuilderClass, "hidden_setRadius", Integer.TYPE);
-        } else {
-            method = null;
-        }
+        if (DeviceInfo.isSamsung()) {
+            Method method;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                method = SeslBaseReflector.getDeclaredMethod(mBuilderClass, "hidden_setRadius", Integer.TYPE);
+            } else {
+                method = null;
+            }
 
-        if (method != null) {
-            method.setAccessible(true);
-            SeslBaseReflector.invoke(builder, method, radius);
+            if (method != null) {
+                method.setAccessible(true);
+                SeslBaseReflector.invoke(builder, method, radius);
+            }
         }
-
         return builder;
     }
 
     public static Object semSetBuilderBlurBackgroundColor(Object builder, int color) {
-        Method method;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            method = SeslBaseReflector.getDeclaredMethod(mBuilderClass, "hidden_setBackgroundColor", Integer.TYPE);
-        } else {
-            method = null;
-        }
+        if (DeviceInfo.isSamsung()) {
+            Method method;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                method = SeslBaseReflector.getDeclaredMethod(mBuilderClass, "hidden_setBackgroundColor", Integer.TYPE);
+            } else {
+                method = null;
+            }
 
-        if (method != null) {
-            method.setAccessible(true);
-            SeslBaseReflector.invoke(builder, method, color);
+            if (method != null) {
+                method.setAccessible(true);
+                SeslBaseReflector.invoke(builder, method, color);
+            }
         }
-
         return builder;
     }
 
     public static Object semSetBuilderBlurBackgroundCornerRadius(Object builder, float cornerRadius) {
-        Method method;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            method = SeslBaseReflector.getDeclaredMethod(mBuilderClass, "hidden_setBackgroundCornerRadius", Float.TYPE);
-        } else {
-            method = null;
-        }
+        if (DeviceInfo.isSamsung()) {
+            Method method;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                method = SeslBaseReflector.getDeclaredMethod(mBuilderClass, "hidden_setBackgroundCornerRadius", Float.TYPE);
+            } else {
+                method = null;
+            }
 
-        if (method != null) {
-            method.setAccessible(true);
-            SeslBaseReflector.invoke(builder, method, cornerRadius);
+            if (method != null) {
+                method.setAccessible(true);
+                SeslBaseReflector.invoke(builder, method, cornerRadius);
+            }
         }
-
         return builder;
     }
 
     public static void semBuildSetBlurInfo(Object builder, @NonNull View view) {
-        Method method;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            method = SeslBaseReflector.getDeclaredMethod(mBuilderClass, "hidden_build");
-        } else {
-            method = null;
-        }
+        if (DeviceInfo.isSamsung()) {
+            Method method;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                method = SeslBaseReflector.getDeclaredMethod(mBuilderClass, "hidden_build");
+            } else {
+                method = null;
+            }
 
-        if (method != null) {
-            method.setAccessible(true);
-            SeslViewReflector.semSetBlurInfo(view, SeslBaseReflector.invoke(builder, method));
+            if (method != null) {
+                method.setAccessible(true);
+                SeslViewReflector.semSetBlurInfo(view, SeslBaseReflector.invoke(builder, method));
+            }
         }
     }
 }

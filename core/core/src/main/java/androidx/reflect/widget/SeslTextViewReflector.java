@@ -16,6 +16,8 @@
 
 package androidx.reflect.widget;
 
+import static androidx.reflect.DeviceInfo.isSamsung;
+
 import android.os.Build;
 import android.widget.TextView;
 
@@ -36,38 +38,42 @@ public class SeslTextViewReflector {
     }
 
     public static void semSetActionModeMenuItemEnabled(@NonNull TextView textView, int menuId, boolean enabled) {
-        Method method;
+        if (isSamsung()) {
+            Method method;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetActionModeMenuItemEnabled", Integer.TYPE, Boolean.TYPE);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            method = SeslBaseReflector.getMethod(mClass, "semSetActionModeMenuItemEnabled", Integer.TYPE, Boolean.TYPE);
-        } else {
-            method = SeslBaseReflector.getMethod(mClass, "setNewActionPopupMenu", Integer.TYPE, Boolean.TYPE);
-        }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetActionModeMenuItemEnabled", Integer.TYPE, Boolean.TYPE);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                method = SeslBaseReflector.getMethod(mClass, "semSetActionModeMenuItemEnabled", Integer.TYPE, Boolean.TYPE);
+            } else {
+                method = SeslBaseReflector.getMethod(mClass, "setNewActionPopupMenu", Integer.TYPE, Boolean.TYPE);
+            }
 
-        if (method != null) {
-            SeslBaseReflector.invoke(textView, method, menuId, enabled);
+            if (method != null) {
+                SeslBaseReflector.invoke(textView, method, menuId, enabled);
+            }
         }
     }
 
     public static int getField_SEM_AUTOFILL_ID() {
-        Object SEM_AUTOFILL_ID = null;
+        if (isSamsung()) {
+            Object SEM_AUTOFILL_ID = null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_SEM_AUTOFILL_ID");
-            if (method != null) {
-                SEM_AUTOFILL_ID = SeslBaseReflector.invoke(null, method);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_SEM_AUTOFILL_ID");
+                if (method != null) {
+                    SEM_AUTOFILL_ID = SeslBaseReflector.invoke(null, method);
+                }
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Field field = SeslBaseReflector.getDeclaredField(mClass, "SEM_AUTOFILL_ID");
+                if (field != null) {
+                    SEM_AUTOFILL_ID = SeslBaseReflector.get(null, field);
+                }
             }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Field field = SeslBaseReflector.getDeclaredField(mClass, "SEM_AUTOFILL_ID");
-            if (field != null) {
-                SEM_AUTOFILL_ID = SeslBaseReflector.get(null, field);
-            }
-        }
 
-        if (SEM_AUTOFILL_ID instanceof Integer) {
-            return (Integer) SEM_AUTOFILL_ID;
+            if (SEM_AUTOFILL_ID instanceof Integer) {
+                return (Integer) SEM_AUTOFILL_ID;
+            }
         }
 
         return 0;
@@ -86,68 +92,74 @@ public class SeslTextViewReflector {
     }
 
     public static boolean semIsTextSelectionProgressing() {
-        Method method = null;
+        if (isSamsung()) {
+            Method method = null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semIsTextSelectionProgressing");
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            method = SeslBaseReflector.getMethod(mClass, "semIsTextSelectionProgressing");
-        }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semIsTextSelectionProgressing");
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                method = SeslBaseReflector.getMethod(mClass, "semIsTextSelectionProgressing");
+            }
 
-        if (method != null) {
-            Object result = SeslBaseReflector.invoke(null, method);
-            if (result instanceof Boolean) {
-                return (Boolean) result;
+            if (method != null) {
+                Object result = SeslBaseReflector.invoke(null, method);
+                if (result instanceof Boolean) {
+                    return (Boolean) result;
+                }
             }
         }
-
         return false;
     }
 
     public static boolean semIsTextViewHovered() {
-        Method method = null;
+        if (isSamsung()) {
+            Method method = null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semIsTextViewHovered");
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            method = SeslBaseReflector.getMethod(mClass, "semIsTextViewHovered");
-        }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semIsTextViewHovered");
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                method = SeslBaseReflector.getMethod(mClass, "semIsTextViewHovered");
+            }
 
-        if (method != null) {
-            Object result = SeslBaseReflector.invoke(null, method);
-            if (result instanceof Boolean) {
-                return (Boolean) result;
+            if (method != null) {
+                Object result = SeslBaseReflector.invoke(null, method);
+                if (result instanceof Boolean) {
+                    return (Boolean) result;
+                }
             }
         }
-
         return false;
     }
 
     public static void semSetButtonShapeEnabled(@NonNull TextView textView, boolean enabled) {
-        Method method = null;
+        if (isSamsung()) {
+            Method method = null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetButtonShapeEnabled", Boolean.TYPE);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            method = SeslBaseReflector.getMethod(mClass, "semSetButtonShapeEnabled", Boolean.TYPE);
-        }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetButtonShapeEnabled", Boolean.TYPE);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                method = SeslBaseReflector.getMethod(mClass, "semSetButtonShapeEnabled", Boolean.TYPE);
+            }
 
-        if (method != null) {
-            SeslBaseReflector.invoke(textView, method, enabled);
+            if (method != null) {
+                SeslBaseReflector.invoke(textView, method, enabled);
+            }
         }
     }
 
     public static void semSetButtonShapeEnabled(@NonNull TextView textView, boolean enabled, int textColor) {
-        Method method = null;
+        if (isSamsung()) {
+            Method method = null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetButtonShapeEnabled", Boolean.TYPE, Integer.TYPE);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            method = SeslBaseReflector.getMethod(mClass, "semSetButtonShapeEnabled", Boolean.TYPE, Integer.TYPE);
-        }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetButtonShapeEnabled", Boolean.TYPE, Integer.TYPE);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                method = SeslBaseReflector.getMethod(mClass, "semSetButtonShapeEnabled", Boolean.TYPE, Integer.TYPE);
+            }
 
-        if (method != null) {
-            SeslBaseReflector.invoke(textView, method, enabled, textColor);
+            if (method != null) {
+                SeslBaseReflector.invoke(textView, method, enabled, textColor);
+            }
         }
     }
 }

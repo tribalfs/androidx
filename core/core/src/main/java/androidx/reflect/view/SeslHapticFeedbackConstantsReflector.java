@@ -22,6 +22,7 @@ import android.os.Build;
 import android.view.HapticFeedbackConstants;
 
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Method;
@@ -38,17 +39,19 @@ public class SeslHapticFeedbackConstantsReflector {
     }
 
     public static int semGetVibrationIndex(int index) {
-        Method method = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semGetVibrationIndex", Integer.TYPE);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            method = SeslBaseReflector.getMethod(mClass, "semGetVibrationIndex", Integer.TYPE);
-        }
+        if (DeviceInfo.isSamsung()) {
+            Method method = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semGetVibrationIndex", Integer.TYPE);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                method = SeslBaseReflector.getMethod(mClass, "semGetVibrationIndex", Integer.TYPE);
+            }
 
-        if (method != null) {
-            Object result = SeslBaseReflector.invoke(null, method, index);
-            if (result instanceof Integer) {
-                return (Integer) result;
+            if (method != null) {
+                Object result = SeslBaseReflector.invoke(null, method, index);
+                if (result instanceof Integer) {
+                    return (Integer) result;
+                }
             }
         }
 

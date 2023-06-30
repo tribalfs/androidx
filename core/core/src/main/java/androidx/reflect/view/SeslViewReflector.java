@@ -27,6 +27,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Field;
@@ -124,7 +125,11 @@ public class SeslViewReflector {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
             method = SeslBaseReflector.getMethod(mClass, "notifyViewAccessibilityStateChangedIfNeeded", Integer.TYPE);
         } else {
-            method = SeslBaseReflector.getMethod(mClass, "hidden_notifyViewAccessibilityStateChangedIfNeeded", Integer.TYPE);
+            if (DeviceInfo.isSamsung()) {
+                method = SeslBaseReflector.getMethod(mClass, "hidden_notifyViewAccessibilityStateChangedIfNeeded", Integer.TYPE);
+            }else{
+               return;
+            }
         }
 
         if (method != null) {
@@ -149,7 +154,7 @@ public class SeslViewReflector {
     }
 
     public static int semGetHoverPopupType(@NonNull View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (DeviceInfo.isSamsung() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Method method = SeslBaseReflector.getMethod(mClass, "semGetHoverPopupType");
             if (method != null) {
                 Object result = SeslBaseReflector.invoke(view, method);
@@ -171,32 +176,36 @@ public class SeslViewReflector {
     }
 
     public static void semSetHoverPopupType(@NonNull View view, int type) {
-        Method method;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetHoverPopupType", Integer.TYPE);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            method = SeslBaseReflector.getMethod(mClass, "semSetHoverPopupType", Integer.TYPE);
-        } else {
-            method = SeslBaseReflector.getMethod(mClass, "setHoverPopupType", Integer.TYPE);
-        }
+        if (DeviceInfo.isSamsung()) {
+            Method method;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetHoverPopupType", Integer.TYPE);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                method = SeslBaseReflector.getMethod(mClass, "semSetHoverPopupType", Integer.TYPE);
+            } else {
+                method = SeslBaseReflector.getMethod(mClass, "setHoverPopupType", Integer.TYPE);
+            }
 
-        if (method != null) {
-            SeslBaseReflector.invoke(view, method, type);
+            if (method != null) {
+                SeslBaseReflector.invoke(view, method, type);
+            }
         }
     }
 
     public static void semSetDirectPenInputEnabled(@NonNull View view, boolean enabled) {
-        Method method;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetDirectPenInputEnabled", Boolean.TYPE);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            method = SeslBaseReflector.getMethod(mClass, "semSetDirectPenInputEnabled", Boolean.TYPE);
-        } else {
-            method = SeslBaseReflector.getMethod(mClass, "setWritingBuddyEnabled", Boolean.TYPE);
-        }
+        if (DeviceInfo.isSamsung()) {
+            Method method;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetDirectPenInputEnabled", Boolean.TYPE);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                method = SeslBaseReflector.getMethod(mClass, "semSetDirectPenInputEnabled", Boolean.TYPE);
+            } else {
+                method = SeslBaseReflector.getMethod(mClass, "setWritingBuddyEnabled", Boolean.TYPE);
+            }
 
-        if (method != null) {
-            SeslBaseReflector.invoke(view, method, enabled);
+            if (method != null) {
+                SeslBaseReflector.invoke(view, method, enabled);
+            }
         }
     }
 
@@ -213,7 +222,7 @@ public class SeslViewReflector {
     }
 
     public static void semSetBlurInfo(@NonNull View view, @Nullable Object blurInfo) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if ( DeviceInfo.isSamsung() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             try {
                 Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetBlurInfo", Class.forName("android.view.SemBlurInfo"));
                 if (method != null) {
@@ -226,31 +235,35 @@ public class SeslViewReflector {
     }
 
     public static void semSetPointerIcon(@NonNull View view, int toolType, PointerIcon pointerIcon) {
-        Method method = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetPointerIcon", Integer.TYPE, PointerIcon.class);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            method = SeslBaseReflector.getMethod(mClass, "semSetPointerIcon", Integer.TYPE, PointerIcon.class);
-        }
+        if ( DeviceInfo.isSamsung()) {
+            Method method = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetPointerIcon", Integer.TYPE, PointerIcon.class);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                method = SeslBaseReflector.getMethod(mClass, "semSetPointerIcon", Integer.TYPE, PointerIcon.class);
+            }
 
-        if (method != null) {
-            SeslBaseReflector.invoke(view, method, toolType, pointerIcon);
+            if (method != null) {
+                SeslBaseReflector.invoke(view, method, toolType, pointerIcon);
+            }
         }
     }
 
     public static boolean isHighContrastTextEnabled(@NonNull View view) {
-        String methodName;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            methodName = "semIsHighContrastTextEnabled";
-        } else {
-            methodName = "isHighContrastTextEnabled";
-        }
+        if (DeviceInfo.isSamsung() ) {
+            String methodName;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                methodName = "semIsHighContrastTextEnabled";
+            } else {
+                methodName = "isHighContrastTextEnabled";
+            }
 
-        Method method = SeslBaseReflector.getMethod(mClass, methodName);
-        if (method != null) {
-            Object invoke = SeslBaseReflector.invoke(view, method);
-            if (invoke instanceof Boolean) {
-                return (Boolean) invoke;
+            Method method = SeslBaseReflector.getMethod(mClass, methodName);
+            if (method != null) {
+                Object invoke = SeslBaseReflector.invoke(view, method);
+                if (invoke instanceof Boolean) {
+                    return (Boolean) invoke;
+                }
             }
         }
 
@@ -258,21 +271,23 @@ public class SeslViewReflector {
     }
 
     public static Object semGetHoverPopup(@NonNull View view, boolean createIfNotExist) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semGetHoverPopup", Boolean.TYPE);
-            if (method != null) {
-                return SeslBaseReflector.invoke(view, method, createIfNotExist);
+        if (DeviceInfo.isSamsung()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semGetHoverPopup", Boolean.TYPE);
+                if (method != null) {
+                    return SeslBaseReflector.invoke(view, method, createIfNotExist);
+                }
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Method method = SeslBaseReflector.getMethod(mClass, "semGetHoverPopup", Boolean.TYPE);
+                if (method != null) {
+                    return SeslBaseReflector.invoke(view, method, createIfNotExist);
+                }
             }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Method method = SeslBaseReflector.getMethod(mClass, "semGetHoverPopup", Boolean.TYPE);
-            if (method != null) {
-                return SeslBaseReflector.invoke(view, method, createIfNotExist);
-            }
-        } else {
-            Method method = SeslBaseReflector.getMethod(mClass, "getHoverPopupWindow");
-            if (method != null) {
-                return SeslBaseReflector.invoke(view, method);
-            }
+        }
+
+        Method method = SeslBaseReflector.getMethod(mClass, "getHoverPopupWindow");
+        if (method != null) {
+            return SeslBaseReflector.invoke(view, method);
         }
 
         return null;
@@ -283,7 +298,11 @@ public class SeslViewReflector {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
             method = SeslBaseReflector.getDeclaredMethod(mClass, "resolvePadding");
         } else {
-            method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_resolvePadding");
+            if (DeviceInfo.isSamsung()) {
+                method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_resolvePadding");
+            }else{
+                return;
+            }
         }
 
         if (method != null) {

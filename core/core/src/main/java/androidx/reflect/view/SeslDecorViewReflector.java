@@ -23,6 +23,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Method;
@@ -38,7 +39,7 @@ public class SeslDecorViewReflector {
     }
 
     public static void semSetForceHideRoundedCorner(@NonNull View view, boolean value) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (DeviceInfo.isSamsung() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Method method = SeslBaseReflector.getDeclaredMethod(view.getClass(), "hidden_semSetForceHideRoundedCorner", Boolean.TYPE);
             if (method != null) {
                 SeslBaseReflector.invoke(view, method, value);

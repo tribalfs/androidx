@@ -23,6 +23,7 @@ import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Field;
@@ -40,7 +41,11 @@ public class SeslConfigurationReflector {
     }
 
     public static boolean isDexEnabled(@NonNull Configuration configuration) {
-        return getField_semDesktopModeEnabled(configuration) == getField_SEM_DESKTOP_MODE_ENABLED();
+        if (DeviceInfo.isSamsung()) {
+            return getField_semDesktopModeEnabled(configuration) == getField_SEM_DESKTOP_MODE_ENABLED();
+        }else{
+            return false;
+        }
     }
 
     private static int getField_semDesktopModeEnabled(@NonNull Configuration configuration) {

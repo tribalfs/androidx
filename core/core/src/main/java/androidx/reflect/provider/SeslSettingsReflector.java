@@ -22,6 +22,7 @@ import android.os.Build;
 import android.provider.Settings;
 
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Field;
@@ -45,26 +46,26 @@ public class SeslSettingsReflector {
 
         public static String getField_SEM_PEN_HOVERING() {
             Object PEN_HOVERING = null;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_SEM_PEN_HOVERING");
-                if (method != null) {
-                    PEN_HOVERING = SeslBaseReflector.invoke(null, method);
-                }
-            } else {
-                String fieldName;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    fieldName = "SEM_PEN_HOVERING";
+            if (DeviceInfo.isSamsung()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_SEM_PEN_HOVERING");
+                    if (method != null) {
+                        PEN_HOVERING = SeslBaseReflector.invoke(null, method);
+                    }
                 } else {
-                    fieldName = "PEN_HOVERING";
-                }
+                    String fieldName;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        fieldName = "SEM_PEN_HOVERING";
+                    } else {
+                        fieldName = "PEN_HOVERING";
+                    }
 
-                Field field = SeslBaseReflector.getField(mClass, fieldName);
-                if (field != null) {
-                    PEN_HOVERING = SeslBaseReflector.get(null, field);
+                    Field field = SeslBaseReflector.getField(mClass, fieldName);
+                    if (field != null) {
+                        PEN_HOVERING = SeslBaseReflector.get(null, field);
+                    }
                 }
             }
-
             if (PEN_HOVERING instanceof String) {
                 return (String) PEN_HOVERING;
             } else {
@@ -75,10 +76,12 @@ public class SeslSettingsReflector {
         public static String getField_SEM_ACCESSIBILITY_REDUCE_TRANSPARENCY() {
             Object result = null;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_SEM_ACCESSIBILITY_REDUCE_TRANSPARENCY");
-                if (method != null) {
-                    result = SeslBaseReflector.invoke(null, method);
+            if (DeviceInfo.isSamsung()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_SEM_ACCESSIBILITY_REDUCE_TRANSPARENCY");
+                    if (method != null) {
+                        result = SeslBaseReflector.invoke(null, method);
+                    }
                 }
             }
 

@@ -21,6 +21,7 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 import android.os.Build;
 
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Field;
@@ -42,11 +43,13 @@ public class SeslBuildReflector {
         }
 
         public static int getField_SEM_PLATFORM_INT() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                Field field = SeslBaseReflector.getDeclaredField(mClass, "SEM_PLATFORM_INT");
-                if (field != null) {
-                    if (SeslBaseReflector.get(null, field) instanceof Integer) {
-                        return (Integer) SeslBaseReflector.get(null, field);
+            if (DeviceInfo.isSamsung()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    Field field = SeslBaseReflector.getDeclaredField(mClass, "SEM_PLATFORM_INT");
+                    if (field != null) {
+                        if (SeslBaseReflector.get(null, field) instanceof Integer) {
+                            return (Integer) SeslBaseReflector.get(null, field);
+                        }
                     }
                 }
             }

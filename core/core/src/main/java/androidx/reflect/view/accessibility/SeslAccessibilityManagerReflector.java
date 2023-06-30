@@ -18,6 +18,7 @@ package androidx.reflect.view.accessibility;
 
 import android.view.accessibility.AccessibilityManager;
 
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Method;
@@ -33,11 +34,12 @@ public class SeslAccessibilityManagerReflector {
     }
 
     public static boolean isScreenReaderEnabled(AccessibilityManager accessibilityManager, boolean defaultValue) {
-        Method method = SeslBaseReflector.getDeclaredMethod(mClassName, "semIsScreenReaderEnabled");
-        if (method != null && accessibilityManager != null) {
-            return (Boolean) SeslBaseReflector.invoke(accessibilityManager, method);
-        } else {
-            return defaultValue;
+        if (DeviceInfo.isSamsung()) {
+            Method method = SeslBaseReflector.getDeclaredMethod(mClassName, "semIsScreenReaderEnabled");
+            if (method != null && accessibilityManager != null) {
+                return (Boolean) SeslBaseReflector.invoke(accessibilityManager, method);
+            }
         }
+        return defaultValue;
     }
 }

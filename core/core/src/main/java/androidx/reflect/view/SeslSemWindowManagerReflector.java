@@ -19,6 +19,7 @@ package androidx.reflect.view;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Method;
@@ -47,25 +48,31 @@ public class SeslSemWindowManagerReflector {
     }
 
     public static void registerFoldStateListener(@NonNull Object listener, Object handler) {
-        Method method = SeslBaseReflector.getMethod(mClassName, "registerFoldStateListener", SeslBaseReflector.getClass(mListenerName), Handler.class);
-        if (method != null) {
-            SeslBaseReflector.invoke(getInstance(), method, listener, handler);
+        if (DeviceInfo.isSamsung()) {
+            Method method = SeslBaseReflector.getMethod(mClassName, "registerFoldStateListener", SeslBaseReflector.getClass(mListenerName), Handler.class);
+            if (method != null) {
+                SeslBaseReflector.invoke(getInstance(), method, listener, handler);
+            }
         }
     }
 
     public static void unregisterFoldStateListener(@NonNull Object listener) {
-        Method method = SeslBaseReflector.getMethod(mClassName, "unregisterFoldStateListener", SeslBaseReflector.getClass(mListenerName));
-        if (method != null) {
-            SeslBaseReflector.invoke(getInstance(), method, listener);
+        if (DeviceInfo.isSamsung()) {
+            Method method = SeslBaseReflector.getMethod(mClassName, "unregisterFoldStateListener", SeslBaseReflector.getClass(mListenerName));
+            if (method != null) {
+                SeslBaseReflector.invoke(getInstance(), method, listener);
+            }
         }
     }
 
     public static boolean isTableMode() {
-        Method method = SeslBaseReflector.getMethod(mClassName, "isTableMode");
-        if (method != null) {
-            Object result = SeslBaseReflector.invoke(getInstance(), method);
-            if (result instanceof Boolean) {
-                return (Boolean) result;
+        if (DeviceInfo.isSamsung()) {
+            Method method = SeslBaseReflector.getMethod(mClassName, "isTableMode");
+            if (method != null) {
+                Object result = SeslBaseReflector.invoke(getInstance(), method);
+                if (result instanceof Boolean) {
+                    return (Boolean) result;
+                }
             }
         }
 

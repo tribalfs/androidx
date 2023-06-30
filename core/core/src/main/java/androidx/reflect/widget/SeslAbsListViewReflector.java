@@ -17,6 +17,7 @@
 package androidx.reflect.widget;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
+import static androidx.reflect.DeviceInfo.isSamsung;
 
 import android.os.Build;
 import android.widget.AbsListView;
@@ -41,51 +42,57 @@ public class SeslAbsListViewReflector {
     }
 
     public static EdgeEffect getField_mEdgeGlowTop(@NonNull AbsListView listView) {
-        Object edgeGlowTop = null;
+        if (isSamsung()) {
+            Object edgeGlowTop = null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_mEdgeGlowTop");
-            if (method != null) {
-                edgeGlowTop = SeslBaseReflector.invoke(listView, method);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_mEdgeGlowTop");
+                if (method != null) {
+                    edgeGlowTop = SeslBaseReflector.invoke(listView, method);
+                }
+            } else {
+                Field field = SeslBaseReflector.getDeclaredField(mClass, "mEdgeGlowTop");
+                if (field != null) {
+                    edgeGlowTop = SeslBaseReflector.get(listView, field);
+                }
             }
-        } else {
-            Field field = SeslBaseReflector.getDeclaredField(mClass, "mEdgeGlowTop");
-            if (field != null) {
-                edgeGlowTop = SeslBaseReflector.get(listView, field);
-            }
-        }
 
-        if (edgeGlowTop instanceof EdgeEffect) {
-            return (EdgeEffect) edgeGlowTop;
+            if (edgeGlowTop instanceof EdgeEffect) {
+                return (EdgeEffect) edgeGlowTop;
+            }
         }
 
         return null;
     }
 
     public static void setField_mEdgeGlowTop(@NonNull AbsListView listView, EdgeEffect edgeEffect) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_mEdgeGlowTop", EdgeEffect.class);
-            if (method != null) {
-                SeslBaseReflector.invoke(listView, method, edgeEffect);
-            }
-        } else {
-            Field field = SeslBaseReflector.getDeclaredField(mClass, "mEdgeGlowTop");
-            if (field != null) {
-                SeslBaseReflector.set(listView, field, edgeEffect);
+        if (isSamsung()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_mEdgeGlowTop", EdgeEffect.class);
+                if (method != null) {
+                    SeslBaseReflector.invoke(listView, method, edgeEffect);
+                }
+            } else {
+                Field field = SeslBaseReflector.getDeclaredField(mClass, "mEdgeGlowTop");
+                if (field != null) {
+                    SeslBaseReflector.set(listView, field, edgeEffect);
+                }
             }
         }
     }
 
     public static void setField_mEdgeGlowBottom(@NonNull AbsListView listView, EdgeEffect edgeEffect) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_mEdgeGlowBottom", EdgeEffect.class);
-            if (method != null) {
-                SeslBaseReflector.invoke(listView, method, edgeEffect);
-            }
-        } else {
-            Field field = SeslBaseReflector.getDeclaredField(mClass, "mEdgeGlowBottom");
-            if (field != null) {
-                SeslBaseReflector.set(listView, field, edgeEffect);
+        if (isSamsung()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_mEdgeGlowBottom", EdgeEffect.class);
+                if (method != null) {
+                    SeslBaseReflector.invoke(listView, method, edgeEffect);
+                }
+            } else {
+                Field field = SeslBaseReflector.getDeclaredField(mClass, "mEdgeGlowBottom");
+                if (field != null) {
+                    SeslBaseReflector.set(listView, field, edgeEffect);
+                }
             }
         }
     }

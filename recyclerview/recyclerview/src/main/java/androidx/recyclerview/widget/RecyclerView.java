@@ -1421,11 +1421,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             @Override
             public void addView(View child, int index) {
                 if (VERBOSE_TRACING) {
-                    TraceCompat.beginSection("RV addView");
+                    Trace.beginSection("RV addView");
                 }
                 RecyclerView.this.addView(child, index);
                 if (VERBOSE_TRACING) {
-                    TraceCompat.endSection();
+                    Trace.endSection();
                 }
                 dispatchChildAttached(child);
             }
@@ -1447,11 +1447,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     child.clearAnimation();
                 }
                 if (VERBOSE_TRACING) {
-                    TraceCompat.beginSection("RV removeViewAt");
+                    Trace.beginSection("RV removeViewAt");
                 }
                 RecyclerView.this.removeViewAt(index);
                 if (VERBOSE_TRACING) {
-                    TraceCompat.endSection();
+                    Trace.endSection();
                 }
             }
 
@@ -2625,7 +2625,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         startInterceptRequestLayout();
         onEnterLayoutOrScroll();
 
-        TraceCompat.beginSection(TRACE_SCROLL_TAG);
+        Trace.beginSection(TRACE_SCROLL_TAG);
         fillRemainingScrollValues(mState);
 
         int consumedX = 0;
@@ -2643,7 +2643,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             //sesl
         }
 
-        TraceCompat.endSection();
+        Trace.endSection();
         repositionShadowingViews();
 
         onExitLayoutOrScroll();
@@ -2665,9 +2665,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
      */
     void consumePendingUpdateOperations() {
         if (!mFirstLayoutComplete || mDataSetHasChangedAfterLayout) {
-            TraceCompat.beginSection(TRACE_ON_DATA_SET_CHANGE_LAYOUT_TAG);
+            Trace.beginSection(TRACE_ON_DATA_SET_CHANGE_LAYOUT_TAG);
             dispatchLayout();
-            TraceCompat.endSection();
+            Trace.endSection();
             return;
         }
         if (!mAdapterHelper.hasPendingUpdates()) {
@@ -2679,7 +2679,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         if (mAdapterHelper.hasAnyUpdateTypes(AdapterHelper.UpdateOp.UPDATE) && !mAdapterHelper
                 .hasAnyUpdateTypes(AdapterHelper.UpdateOp.ADD | AdapterHelper.UpdateOp.REMOVE
                         | AdapterHelper.UpdateOp.MOVE)) {
-            TraceCompat.beginSection(TRACE_HANDLE_ADAPTER_UPDATES_TAG);
+            Trace.beginSection(TRACE_HANDLE_ADAPTER_UPDATES_TAG);
             startInterceptRequestLayout();
             onEnterLayoutOrScroll();
             mAdapterHelper.preProcess();
@@ -2693,11 +2693,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             }
             stopInterceptRequestLayout(true);
             onExitLayoutOrScroll();
-            TraceCompat.endSection();
+            Trace.endSection();
         } else if (mAdapterHelper.hasPendingUpdates()) {
-            TraceCompat.beginSection(TRACE_ON_DATA_SET_CHANGE_LAYOUT_TAG);
+            Trace.beginSection(TRACE_ON_DATA_SET_CHANGE_LAYOUT_TAG);
             dispatchLayout();
-            TraceCompat.endSection();
+            Trace.endSection();
         }
     }
 
@@ -5670,9 +5670,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        TraceCompat.beginSection(TRACE_ON_LAYOUT_TAG);
+        Trace.beginSection(TRACE_ON_LAYOUT_TAG);
         dispatchLayout();
-        TraceCompat.endSection();
+        Trace.endSection();
         mFirstLayoutComplete = true;
 
         //Sesl

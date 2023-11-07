@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.Trace;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -35,7 +36,6 @@ import android.view.accessibility.AccessibilityEvent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
-import androidx.core.os.TraceCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 
@@ -1700,11 +1700,11 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         while ((layoutState.mInfinite || remainingSpace > 0) && layoutState.hasMore(state)) {
             layoutChunkResult.resetInternal();
             if (RecyclerView.VERBOSE_TRACING) {
-                TraceCompat.beginSection("LLM LayoutChunk");
+                Trace.beginSection("LLM LayoutChunk");
             }
             layoutChunk(recycler, state, layoutState, layoutChunkResult);
             if (RecyclerView.VERBOSE_TRACING) {
-                TraceCompat.endSection();
+                Trace.endSection();
             }
             if (layoutChunkResult.mFinished) {
                 break;

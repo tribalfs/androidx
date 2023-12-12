@@ -626,7 +626,6 @@ public class AppCompatTextView extends TextView implements TintableBackgroundVie
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void setCompoundDrawablesRelative(@Nullable Drawable start, @Nullable Drawable top,
             @Nullable Drawable end, @Nullable Drawable bottom) {
@@ -658,7 +657,6 @@ public class AppCompatTextView extends TextView implements TintableBackgroundVie
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void setCompoundDrawablesRelativeWithIntrinsicBounds(@Nullable Drawable start,
             @Nullable Drawable top, @Nullable Drawable end, @Nullable Drawable bottom) {
@@ -668,7 +666,6 @@ public class AppCompatTextView extends TextView implements TintableBackgroundVie
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void setCompoundDrawablesRelativeWithIntrinsicBounds(
             int start, int top, int end, int bottom) {

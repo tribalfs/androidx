@@ -969,7 +969,7 @@ class AppCompatDelegateImpl extends AppCompatDelegate
                 // Floating windows can never have an action bar, reset the flags
                 mHasActionBar = mOverlayActionBar = false;
             } else if (mHasActionBar) {
-                /**
+                /*
                  * This needs some explanation. As we can not use the android:theme attribute
                  * pre-L, we emulate it by manually creating a LayoutInflater using a
                  * ContextThemeWrapper pointing to actionBarTheme.
@@ -992,7 +992,7 @@ class AppCompatDelegateImpl extends AppCompatDelegate
                         .findViewById(R.id.decor_content_parent);
                 mDecorContentParent.setWindowCallback(getWindowCallback());
 
-                /**
+                /*
                  * Propagate features to DecorContentParent
                  */
                 if (mOverlayActionBar) {

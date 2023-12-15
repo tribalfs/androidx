@@ -121,6 +121,7 @@ public final class BidiFormatter {
     /**
      * Empty string constant.
      */
+    @SuppressWarnings("InlineTrivialConstant")
     private static final String EMPTY_STRING = "";
 
     /**

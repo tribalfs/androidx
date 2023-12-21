@@ -16,14 +16,18 @@
 
 package androidx.viewpager.widget;
 
+import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -32,6 +36,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.FocusFinder;
 import android.view.Gravity;
+import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
@@ -50,10 +55,12 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
+import androidx.core.math.MathUtils;
 import androidx.core.view.AccessibilityDelegateCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -72,6 +79,8 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * Layout manager that allows the user to flip left and right
  * through pages of data.  You supply an implementation of a
  * {@link PagerAdapter} to generate the pages that the view shows.
@@ -199,6 +208,23 @@ public class ViewPager extends ViewGroup {
     private int mTouchSlop;
 
     private boolean mDragInGutterEnabled = true;
+
+
+    //Sesl
+    private static final float DEFAULT_TOUCH_SLOP_RATE = 0.5f;
+    private static final int MAX_SCROLL_X = 0x1000000;
+
+    private int mLeftIncr = -1;
+    private int mOrientation;
+    private int mScaledTouchSlop = 0;
+    private int mPagingTouchSlop = 0;
+    private float mTouchSlopRatio = DEFAULT_TOUCH_SLOP_RATE;
+
+    private boolean mIsMouseWheelEventSupport = false;
+    private boolean mIsChangedConfiguration = false;
+    private boolean mUsePagingTouchSlopForStylus = false;
+    private boolean mSupportLayoutDirectionForDatePicker = false;
+    //sesl
 
     /**
      * Position of the last motion event.
@@ -416,6 +442,12 @@ public class ViewPager extends ViewGroup {
         mScroller = new Scroller(context, sInterpolator);
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         final float density = context.getResources().getDisplayMetrics().density;
+
+        //Sesl
+        mOrientation = context.getResources().getConfiguration().orientation;
+        mScaledTouchSlop = configuration.getScaledTouchSlop();
+        mPagingTouchSlop = configuration.getScaledPagingTouchSlop();
+        //sesl
 
         mTouchSlop = configuration.getScaledPagingTouchSlop();
         mMinimumVelocity = (int) (MIN_FLING_VELOCITY * density);
@@ -691,6 +723,10 @@ public class ViewPager extends ViewGroup {
             final int width = getClientWidth();
             destX = (int) (width * Math.max(mFirstOffset,
                     Math.min(curInfo.offset, mLastOffset)));
+
+            if (seslIsDatePickerLayoutRtl()) {
+                destX = (MAX_SCROLL_X - ((int) ((width * curInfo.widthFactor) + 0.5f))) - destX;
+            }
         }
         if (smoothScroll) {
             smoothScrollTo(destX, 0, velocity);
@@ -1097,7 +1133,14 @@ public class ViewPager extends ViewGroup {
 
     void populate(int newCurrentItem) {
         ItemInfo oldCurInfo = null;
+        int focusDirection= View.FOCUS_FORWARD;
         if (mCurItem != newCurrentItem) {
+            //sesl
+            if (mSupportLayoutDirectionForDatePicker) {
+                focusDirection = mCurItem < newCurrentItem ?
+                        View.FOCUS_RIGHT : View.FOCUS_LEFT;
+            }
+
             oldCurInfo = infoForPosition(mCurItem);
             mCurItem = newCurrentItem;
         }
@@ -1272,7 +1315,7 @@ public class ViewPager extends ViewGroup {
                     View child = getChildAt(i);
                     ii = infoForChild(child);
                     if (ii != null && ii.position == mCurItem) {
-                        if (child.requestFocus(View.FOCUS_FORWARD)) {
+                        if (child.requestFocus(focusDirection/*sesl*/)) {
                             break;
                         }
                     }
@@ -1638,6 +1681,20 @@ public class ViewPager extends ViewGroup {
         }
     }
 
+    //sesl
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        final int orientation = newConfig.orientation;
+        if (mOrientation != orientation) {
+            mOrientation = orientation;
+            if (mPageMargin > 0) {
+                setCurrentItemInternal(mCurItem, false, true, 0);
+            }
+        }
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -1645,6 +1702,11 @@ public class ViewPager extends ViewGroup {
         // Make sure scroll position is set correctly.
         if (w != oldw) {
             recomputeScrollPosition(w, oldw, mPageMargin, mPageMargin);
+
+            //sesl
+            if (mPageMargin > 0) {
+                setCurrentItemInternal(mCurItem, false, true, 0);
+            }
         }
     }
 
@@ -1656,9 +1718,11 @@ public class ViewPager extends ViewGroup {
                 final int widthWithMargin = width - getPaddingLeft() - getPaddingRight() + margin;
                 final int oldWidthWithMargin = oldWidth - getPaddingLeft() - getPaddingRight()
                         + oldMargin;
-                final int xpos = getScrollX();
+                final int xpos = getScrollStart();//sesl
                 final float pageOffset = (float) xpos / oldWidthWithMargin;
-                final int newOffsetPixels = (int) (pageOffset * widthWithMargin);
+                final int newOffsetPixels = seslIsDatePickerLayoutRtl() ?
+                        (int) ((1 << 24) - (pageOffset * widthWithMargin))
+                        : (int) (pageOffset * widthWithMargin); //sesl
 
                 scrollTo(newOffsetPixels, getScrollY());
             }
@@ -1750,7 +1814,9 @@ public class ViewPager extends ViewGroup {
                 ItemInfo ii;
                 if (!lp.isDecor && (ii = infoForChild(child)) != null) {
                     int loff = (int) (childWidth * ii.offset);
-                    int childLeft = paddingLeft + loff;
+                    int childLeft = seslIsDatePickerLayoutRtl() ?
+                            MAX_SCROLL_X - paddingRight
+                                    - loff - child.getMeasuredWidth() : paddingLeft + loff;//sesl
                     int childTop = paddingTop;
                     if (lp.needsMeasure) {
                         // This was added during layout and needs measurement.
@@ -1779,8 +1845,9 @@ public class ViewPager extends ViewGroup {
         mBottomPageBounds = height - paddingBottom;
         mDecorChildCount = decorCount;
 
-        if (mFirstLayout) {
+        if (mFirstLayout || mIsChangedConfiguration/*sesl*/) {
             scrollToItem(mCurItem, false, 0, false);
+            mIsChangedConfiguration = false;//sesl
         }
         mFirstLayout = false;
     }
@@ -1826,6 +1893,11 @@ public class ViewPager extends ViewGroup {
             }
             return false;
         }
+
+        if (seslIsDatePickerLayoutRtl()) {
+            xpos = MAX_SCROLL_X - xpos;
+        }
+
         final ItemInfo ii = infoForCurrentScrollPosition();
         final int width = getClientWidth();
         final int widthWithMargin = width + mPageMargin;
@@ -2100,7 +2172,7 @@ public class ViewPager extends ViewGroup {
                     mIsUnableToDrag = true;
                     return false;
                 }
-                if (xDiff > mTouchSlop && xDiff * 0.5f > yDiff) {
+                if (xDiff > mTouchSlop && xDiff * mTouchSlopRatio > yDiff) {//sesl
                     if (DEBUG) Log.v(TAG, "Starting drag!");
                     mIsBeingDragged = true;
                     requestParentDisallowInterceptTouchEvent(true);
@@ -2137,6 +2209,12 @@ public class ViewPager extends ViewGroup {
                 mIsUnableToDrag = false;
 
                 mIsScrollStarted = true;
+                //Sesl
+                if (mUsePagingTouchSlopForStylus) {
+                    mTouchSlop = ev.isFromSource(InputDevice.SOURCE_STYLUS)
+                            ? mPagingTouchSlop : mScaledTouchSlop;
+                }
+                //sesl
                 mScroller.computeScrollOffset();
                 if (mScrollState == SCROLL_STATE_SETTLING
                         && Math.abs(mScroller.getFinalX() - mScroller.getCurrX()) > mCloseEnough) {
@@ -2277,12 +2355,20 @@ public class ViewPager extends ViewGroup {
                     int initialVelocity = (int) velocityTracker.getXVelocity(mActivePointerId);
                     mPopulatePending = true;
                     final int width = getClientWidth();
-                    final int scrollX = getScrollX();
+                    final int scrollX = getScrollStart();//sesl
                     final ItemInfo ii = infoForCurrentScrollPosition();
                     final float marginOffset = (float) mPageMargin / width;
                     final int currentPage = ii.position;
-                    final float pageOffset = (((float) scrollX / width) - ii.offset)
-                            / (ii.widthFactor + marginOffset);
+                    //Sesl
+                    final float pageOffset;
+                    if (seslIsDatePickerLayoutRtl()) {
+                        pageOffset = (ii.offset - ((float) scrollX / width))
+                                / (ii.widthFactor + marginOffset);
+                    } else {
+                        pageOffset = (((float) scrollX / width) - ii.offset)
+                                / (ii.widthFactor + marginOffset);
+                    }
+                    //sesl
                     final int activePointerIndex = ev.findPointerIndex(mActivePointerId);
                     final float x = ev.getX(activePointerIndex);
                     final int totalDelta = (int) (x - mInitialMotionX);
@@ -2367,6 +2453,10 @@ public class ViewPager extends ViewGroup {
     private boolean performDrag(float x, float y) {
         boolean needsInvalidate = false;
 
+        if (seslIsDatePickerLayoutRtl()) {
+            mIsChangedConfiguration = false;
+        }
+
         final float dX = mLastMotionX - x;
         mLastMotionX = x;
         final float releaseConsumed = releaseHorizontalGlow(dX, y);
@@ -2380,6 +2470,11 @@ public class ViewPager extends ViewGroup {
 
         float oldScrollX = getScrollX();
         float scrollX = oldScrollX + deltaX;
+
+        if (seslIsDatePickerLayoutRtl()) {
+            scrollX = (1 << 24)- scrollX;
+        }
+
         final int width = getClientWidth();
 
         float leftBound = width * mFirstOffset;
@@ -2392,28 +2487,37 @@ public class ViewPager extends ViewGroup {
         if (firstItem.position != 0) {
             leftAbsolute = false;
             leftBound = firstItem.offset * width;
+        } else if (seslIsDatePickerLayoutRtl()) {
+            leftBound = width + (mFirstOffset * width);//sesl
         }
         if (lastItem.position != mAdapter.getCount() - 1) {
             rightAbsolute = false;
             rightBound = lastItem.offset * width;
+        } else if (seslIsDatePickerLayoutRtl()) {
+            rightBound = width + (mLastOffset * width);//sesl
         }
 
         if (scrollX < leftBound) {
             if (leftAbsolute) {
                 float over = leftBound - scrollX;
-                EdgeEffectCompat.onPullDistance(mLeftEdge, over / width, 1 - y / getHeight());
+                EdgeEffectCompat.onPullDistance(seslIsDatePickerLayoutRtl() ?
+                        mRightEdge : mLeftEdge, over / width, 1 - y / getHeight());//sesl
                 needsInvalidate = true;
             }
             scrollX = leftBound;
         } else if (scrollX > rightBound) {
             if (rightAbsolute) {
                 float over = scrollX - rightBound;
-                EdgeEffectCompat.onPullDistance(mRightEdge, over / width, y / getHeight());
+                EdgeEffectCompat.onPullDistance(seslIsDatePickerLayoutRtl() ?
+                        mLeftEdge : mRightEdge, over / width, y / getHeight());//sesl
                 needsInvalidate = true;
             }
             scrollX = rightBound;
         }
         // Don't lose the rounded component
+        if (seslIsDatePickerLayoutRtl()) {
+            scrollX = (1 << 24) - scrollX;
+        }
         mLastMotionX += scrollX - (int) scrollX;
         scrollTo((int) scrollX, getScrollY());
         pageScrolled((int) scrollX);
@@ -2427,7 +2531,7 @@ public class ViewPager extends ViewGroup {
      */
     private ItemInfo infoForCurrentScrollPosition() {
         final int width = getClientWidth();
-        final float scrollOffset = width > 0 ? (float) getScrollX() / width : 0;
+        final float scrollOffset = width > 0 ? (float) getScrollStart()/*sesl*/ / width : 0;
         final float marginOffset = width > 0 ? (float) mPageMargin / width : 0;
         int lastPos = -1;
         float lastOffset = 0.f;
@@ -2472,10 +2576,10 @@ public class ViewPager extends ViewGroup {
         if (Math.abs(deltaX) > mFlingDistance && Math.abs(velocity) > mMinimumVelocity
                 && EdgeEffectCompat.getDistance(mLeftEdge) == 0 // don't fling while stretched
                 && EdgeEffectCompat.getDistance(mRightEdge) == 0) {
-            targetPage = velocity > 0 ? currentPage : currentPage + 1;
+            targetPage = velocity > 0 ? currentPage : currentPage - mLeftIncr;//sesl
         } else {
             final float truncator = currentPage >= mCurItem ? 0.4f : 0.6f;
-            targetPage = currentPage + (int) (pageOffset + truncator);
+            targetPage = currentPage - (mLeftIncr * (int) (pageOffset + truncator));//sesl
         }
 
         if (mItems.size() > 0) {
@@ -2483,7 +2587,7 @@ public class ViewPager extends ViewGroup {
             final ItemInfo lastItem = mItems.get(mItems.size() - 1);
 
             // Only let the user target pages we have items for
-            targetPage = Math.max(firstItem.position, Math.min(targetPage, lastItem.position));
+            targetPage = MathUtils.clamp(targetPage, firstItem.position, lastItem.position);
         }
 
         return targetPage;
@@ -2504,7 +2608,13 @@ public class ViewPager extends ViewGroup {
                 final int width = getWidth();
 
                 canvas.rotate(270);
-                canvas.translate(-height + getPaddingTop(), mFirstOffset * width);
+                //sesl
+                if (seslIsDatePickerLayoutRtl()) {
+                    canvas.translate(-height + getPaddingTop(), ((-(mLastOffset + 1.0f))
+                            * ((float) width)) + (1 << 24));
+                } else {
+                    canvas.translate(-height + getPaddingTop(), mFirstOffset * width);
+                }
                 mLeftEdge.setSize(/* width= */height, /* height= */width);
                 needsInvalidate |= mLeftEdge.draw(canvas);
                 canvas.restoreToCount(restoreCount);
@@ -2515,7 +2625,11 @@ public class ViewPager extends ViewGroup {
                 final int height = getHeight() - getPaddingTop() - getPaddingBottom();
 
                 canvas.rotate(90);
-                canvas.translate(-getPaddingTop(), -(mLastOffset + 1) * width);
+                if (seslIsDatePickerLayoutRtl()) {
+                    canvas.translate(-getPaddingTop(), (mFirstOffset * ((float) width)) - (1 << 24));
+                } else {
+                    canvas.translate(-getPaddingTop(), -(mLastOffset + 1) * width);
+                }
                 mRightEdge.setSize(/* width= */height, /* height= */width);
                 needsInvalidate |= mRightEdge.draw(canvas);
                 canvas.restoreToCount(restoreCount);
@@ -2554,11 +2668,19 @@ public class ViewPager extends ViewGroup {
 
                 float drawAt;
                 if (pos == ii.position) {
-                    drawAt = (ii.offset + ii.widthFactor) * width;
+                    if (seslIsDatePickerLayoutRtl()) {
+                        drawAt = (1 << 24) - ii.offset;
+                    } else {
+                        drawAt = (ii.offset + ii.widthFactor) * width;
+                    }
                     offset = ii.offset + ii.widthFactor + marginOffset;
                 } else {
                     float widthFactor = mAdapter.getPageWidth(pos);
-                    drawAt = (offset + widthFactor) * width;
+                    if (seslIsDatePickerLayoutRtl()) {
+                        drawAt = (1 << 24) - offset;
+                    } else {
+                        drawAt = (offset + widthFactor) * width;
+                    }
                     offset += widthFactor + marginOffset;
                 }
 
@@ -2788,7 +2910,7 @@ public class ViewPager extends ViewGroup {
                 if (x + scrollX >= child.getLeft() && x + scrollX < child.getRight()
                         && y + scrollY >= child.getTop() && y + scrollY < child.getBottom()
                         && canScroll(child, true, dx, x + scrollX - child.getLeft(),
-                                y + scrollY - child.getTop())) {
+                            y + scrollY - child.getTop())) {
                     return true;
                 }
             }
@@ -2942,7 +3064,7 @@ public class ViewPager extends ViewGroup {
 
     boolean pageLeft() {
         if (mCurItem > 0) {
-            setCurrentItem(mCurItem - 1, true);
+            setCurrentItem(mCurItem + mLeftIncr/*sesl*/, true);
             return true;
         }
         return false;
@@ -2950,7 +3072,7 @@ public class ViewPager extends ViewGroup {
 
     boolean pageRight() {
         if (mAdapter != null && mCurItem < (mAdapter.getCount() - 1)) {
-            setCurrentItem(mCurItem + 1, true);
+            setCurrentItem(mCurItem - mLeftIncr/*sesl*/, true);
             return true;
         }
         return false;
@@ -3224,4 +3346,85 @@ public class ViewPager extends ViewGroup {
             return llp.position - rlp.position;
         }
     }
+
+    //Sesl
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        if (mIsMouseWheelEventSupport) {
+            if ((event.getSource() & InputDevice.SOURCE_CLASS_POINTER) != 0
+                    && event.getAction() == MotionEvent.ACTION_SCROLL) {
+                float axisValue = event.getAxisValue(MotionEvent.AXIS_VSCROLL);
+                if (axisValue > 0) {
+                    setCurrentItem(mCurItem - 1, true);
+                    return true;
+                } else if (axisValue < 0) {
+                    setCurrentItem(mCurItem + 1, true);
+                    return true;
+                }
+            }
+        }
+        return super.onGenericMotionEvent(event);
+    }
+
+    public void seslSetSupportedMouseWheelEvent(boolean support) {
+        mIsMouseWheelEventSupport = support;
+    }
+
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    public void seslSetConfigurationChanged(boolean isChanged) {
+        mIsChangedConfiguration = isChanged;
+    }
+
+    public void seslSetPagingTouchSlopForStylus(boolean enabled) {
+        mUsePagingTouchSlopForStylus = enabled;
+    }
+
+    public boolean seslIsPagingTouchSlopForStylusEnabled() {
+        return mUsePagingTouchSlopForStylus;
+    }
+
+    public void seslSetTouchSlop(int slopConstant) {
+        mScaledTouchSlop = slopConstant;
+    }
+
+    public int seslGetTouchSlop() {
+        return mScaledTouchSlop;
+    }
+
+    public float seslGetDefaultTouchSlopRatio() {
+        return DEFAULT_TOUCH_SLOP_RATE;
+    }
+
+    public void seslSetTouchSlopRatio(float ratio) {
+        mTouchSlopRatio = ratio;
+    }
+
+    public float seslGetTouchSlopRatio() {
+        return mTouchSlopRatio;
+    }
+
+    @Override
+    public void onRtlPropertiesChanged(int layoutDirection) {
+        super.onRtlPropertiesChanged(layoutDirection);
+        if (mSupportLayoutDirectionForDatePicker) {
+            mLeftIncr = layoutDirection
+                    == ViewGroup.LAYOUT_DIRECTION_LTR ? -1 : 1;
+        }
+    }
+
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    public void canSupportLayoutDirectionForDatePicker(boolean enabled) {
+        mSupportLayoutDirectionForDatePicker = enabled;
+    }
+
+    private boolean seslIsDatePickerLayoutRtl() {
+        return mSupportLayoutDirectionForDatePicker
+                && ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL;
+    }
+
+    private int getScrollStart() {
+        return seslIsDatePickerLayoutRtl() ?
+                MAX_SCROLL_X - getScrollX() : getScrollX();
+    }
+    //sesl
 }

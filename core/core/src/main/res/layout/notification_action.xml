@@ -27,16 +27,15 @@
         android:id="@+id/action_image"
         android:layout_width="@dimen/notification_action_icon_size"
         android:layout_height="@dimen/notification_action_icon_size"
-        android:layout_gravity="center|start"
-        android:scaleType="centerInside"/>
+        android:layout_gravity="start|center_vertical"
+        android:scaleType="centerInside" />
+
     <TextView
         style="@style/Widget.Compat.NotificationActionText"
         android:id="@+id/action_text"
-        android:textColor="#ccc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|start"
-        android:paddingLeft="4dp"
+        android:layout_gravity="start|center_vertical"
         android:paddingStart="4dp"
         android:singleLine="true"
         android:ellipsize="end"

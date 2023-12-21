@@ -16,8 +16,8 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Widget.Compat.NotificationActionContainer"
     android:id="@+id/action_container"
+    style="@style/Widget.Compat.NotificationActionContainer"
     android:layout_width="0dp"
     android:layout_weight="1"
     android:layout_height="48dp"
@@ -30,7 +30,7 @@
         android:id="@+id/action_image"
         android:layout_width="@dimen/notification_action_icon_size"
         android:layout_height="@dimen/notification_action_icon_size"
-        android:layout_gravity="center|start"
+        android:layout_gravity="start|center_vertical"
         android:scaleType="centerInside"
         android:enabled="false"
         android:alpha="0.5"/>
@@ -39,13 +39,11 @@
         android:id="@+id/action_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|start"
-        android:textColor="#ccc"
-        android:paddingLeft="4dp"
+        android:layout_gravity="start|center_vertical"
         android:paddingStart="4dp"
         android:singleLine="true"
         android:ellipsize="end"
         android:clickable="false"
         android:enabled="false"
-        android:alpha="0.5"/>
+        android:alpha="0.5" />
 </LinearLayout>

@@ -14,6 +14,7 @@
 .settings/
 project.properties
 local.properties
+secrets.gradle
 **/bin
 **/gen
 *.iml

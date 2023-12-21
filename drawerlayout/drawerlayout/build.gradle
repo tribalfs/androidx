@@ -1,34 +1,43 @@
-import androidx.build.Publish
-
 plugins {
-    id("AndroidXPlugin")
     id("com.android.library")
-    id("kotlin-android")
+    id("maven-publish")
+    id("org.jetbrains.kotlin.android")
 }
+
 
 dependencies {
     api("androidx.annotation:annotation:1.2.0")
-    api("androidx.core:core:1.2.0")
-    api("androidx.customview:customview:1.1.0")
+    api project(":core:core")
+    api project(':customview:customview')
 
-    androidTestImplementation(libs.kotlinStdlib)
-    androidTestImplementation(libs.testExtJunit)
-    androidTestImplementation(libs.testCore)
-    androidTestImplementation(libs.testRunner)
-    androidTestImplementation(libs.testRules)
-    androidTestImplementation(libs.truth)
-    androidTestImplementation(libs.espressoCore, excludes.espresso)
-    androidTestImplementation(project(":internal-testutils-runtime"))
-}
-
-androidx {
-    name = "Drawer Layout"
-    publish = Publish.SNAPSHOT_AND_RELEASE
-    inceptionYear = "2018"
-    description = "The Support Library is a static library that you can add to your Android application in order to use APIs that are either not available for older platform versions or utility APIs that aren't a part of the framework APIs. Compatible on devices running API 14 or later."
-    metalavaK2UastEnabled = true
+//    androidTestImplementation(libs.kotlinStdlib)
+//    androidTestImplementation(libs.testExtJunit)
+//    androidTestImplementation(libs.testCore)
+//    androidTestImplementation(libs.testRunner)
+//    androidTestImplementation(libs.testRules)
+//    androidTestImplementation(libs.truth)
+//    androidTestImplementation(libs.espressoCore, excludes.espresso)
+//    androidTestImplementation(project(":internal-testutils-runtime"))
 }
 
 android {
-    namespace "androidx.drawerlayout"
+    namespace = "androidx.drawerlayout"
+
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
 }
+
+ext {
+    POM_NAME = "SESL Drawer Layout"
+    POM_DESCRIPTION = "SESL variant of android jetpack androidx.drawerlayout:drawerlayout module. " +
+            "The Support Library is a static library that you can add to your Android application in order to use APIs that are either not available for older platform versions" +
+            " or utility APIs that aren't a part of the framework APIs. Compatible on devices running API 19 or later."
+}
+

@@ -14,20 +14,131 @@
  * limitations under the License.
  */
 
-import androidx.build.AndroidXRootPlugin
-import androidx.build.SdkHelperKt
-
-buildscript {
-    SdkHelperKt.setSupportRootFolder(project, project.projectDir)
-    SdkHelperKt.writeSdkPathToLocalPropertiesFile(project)
+plugins {
+    id("com.android.application") version "8.1.2" apply false
+    id("com.android.library") version "8.1.2" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.10" apply false
 }
 
-apply from: "buildSrc/dependencies.gradle"
+apply from: new File("manifest.gradle")
 
-apply plugin: AndroidXRootPlugin
+allprojects {
+    tasks.withType(Javadoc).tap {
+        configureEach {
+            options.addStringOption('Xdoclint:none', '-quiet')
+            options.addStringOption('encoding', 'UTF-8')
+            options.addStringOption('charSet', 'UTF-8')
+        }
+    }
+}
 
-// workaround for https://github.com/gradle/gradle/issues/24822
-if (project.hasProperty("androidx.update.signatures")) {
-    apply plugin: "java-library"
-    apply from: "buildSrc/shared-dependencies.gradle"
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
+}
+
+subprojects {
+
+    project.plugins.whenPluginAdded { plugin ->
+        def isAndroidLibrary = "com.android.build.gradle.LibraryPlugin" == plugin.class.name
+        def isAndroidApp = "com.android.build.gradle.AppPlugin" == plugin.class.name
+        def isAndroidTest = "com.android.build.gradle.TestPlugin" == plugin.class.name
+
+        if (isAndroidLibrary || isAndroidApp || isAndroidTest) {
+            project.android {
+                compileSdk = rootProject.ext.compile_sdk
+                defaultConfig.minSdk = rootProject.ext.min_sdk
+                defaultConfig.targetSdk = rootProject.ext.target_sdk
+                def projectDir = "androidx." + project.projectDir.getName()
+                def version_info = rootProject.ext.versions_metadata[projectDir]
+                defaultConfig.minSdk = version_info[3]
+
+                if (isAndroidLibrary) {
+                    defaultConfig.versionName = "${version_info[0]}+${version_info[1]}+${version_info[2]}"
+                    println "set versionName=$defaultConfig.versionName"
+
+                    android {
+                        lint {
+                            baseline = file("lint-baseline.xml")
+                        }
+                    }
+
+                    publishing {
+                        singleVariant("release"){
+                            withSourcesJar()
+                            withJavadocJar()
+                        }
+                    }
+
+
+                    afterEvaluate {
+                        def JAVA_RESOURCES_TEMP_DIR = "$buildDir/javaResources"
+                        def versionFileName = namespace + '_' + project.projectDir.getName() + '.version'
+                        task writeVersionFile() {
+                            def versionFileDir = JAVA_RESOURCES_TEMP_DIR + '/META-INF'
+                            new File(versionFileDir).mkdirs()
+                            new File(versionFileDir + '/' + versionFileName).text = defaultConfig.versionName + "\n"
+                        }
+                        println "writeVersionFile $defaultConfig.versionName >> $versionFileName"
+
+                        libraryVariants.all {
+                            it.processJavaResourcesProvider.get().dependsOn(writeVersionFile)
+                        }
+
+                        project.android.sourceSets.main.resources.srcDir JAVA_RESOURCES_TEMP_DIR
+                    }
+
+                }
+            }
+
+        }
+        if (isAndroidLibrary) {
+
+            project.afterEvaluate {
+                publishing {
+                    publications {
+                        release(MavenPublication) {
+                            group = "$groupId"
+                            version = android.defaultConfig.versionName
+                            afterEvaluate {
+                                from components.release
+                            }
+
+                            pom {
+                                name = POM_NAME
+                                description = POM_DESCRIPTION
+                                packaging = POM_PACKAGING
+                                url = POM_URL
+                                inceptionYear = POM_INCEPTION_YEAR
+
+                                licenses {
+                                    license {
+                                        name = POM_LICENCE_NAME
+                                        url = POM_LICENCE_URL
+                                        distribution = POM_LICENCE_DIST
+                                    }
+                                }
+
+                                developers {
+                                    developer {
+                                        id = POM_DEVELOPER_ID
+                                        name = POM_DEVELOPER_NAME
+                                        url = POM_DEVELOPER_URL
+                                    }
+                                }
+
+                                scm {
+                                    url = POM_SCM_URL
+                                    connection = POM_SCM_CONNECTION
+                                    developerConnection = POM_SCM_DEV_CONNECTION
+                                }
+                            }
+
+                            println "release(MavenPublication) => group:$group | version: $version"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }

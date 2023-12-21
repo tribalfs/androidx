@@ -1,7 +1,0 @@
-// Baseline format: 1.0
-ChangedClass: androidx.compose.ui.text.input.PlatformImeOptions:
-    Class androidx.compose.ui.text.input.PlatformImeOptions changed class/interface declaration
-
-
-RemovedClass: androidx.compose.ui.text.input.AndroidImeOptions:
-    Removed class androidx.compose.ui.text.input.AndroidImeOptions

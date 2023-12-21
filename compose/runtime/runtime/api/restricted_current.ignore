@@ -1,3 +1,0 @@
-// Baseline format: 1.0
-AddedAbstractMethod: androidx.compose.runtime.ControlledComposition#abandonChanges():
-    Added method androidx.compose.runtime.ControlledComposition.abandonChanges()

@@ -1,39 +1,39 @@
-import androidx.build.Publish
-
 plugins {
-    id("AndroidXPlugin")
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish")
+    id("signing")
+}
+
+android {
+    namespace = "androidx.core.ktx"
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
     // Atomically versioned.
     constraints {
-        implementation(project(":core:core"))
+        implementation project(":core:core")
     }
 
     api(libs.kotlinStdlib)
     api("androidx.annotation:annotation:1.1.0")
-    api(project(":core:core"))
+    api project(":core:core")
 
-    androidTestImplementation(libs.junit)
-    androidTestImplementation(libs.testExtJunit)
-    androidTestImplementation(libs.testCore)
-    androidTestImplementation(libs.testRunner)
-    androidTestImplementation(libs.testRules)
-    androidTestImplementation(libs.truth)
-    androidTestImplementation(project(":internal-testutils-truth"))
+//    androidTestImplementation(libs.junit)
+//    androidTestImplementation(libs.testExtJunit)
+//    androidTestImplementation(libs.testCore)
+//    androidTestImplementation(libs.testRunner)
+//    androidTestImplementation(libs.testRules)
+//    androidTestImplementation(libs.truth)
+//    androidTestImplementation(project(":internal-testutils-truth"))
 }
 
-androidx {
-    name = "Core Kotlin Extensions"
-    publish = Publish.SNAPSHOT_AND_RELEASE
-    mavenVersion = LibraryVersions.CORE
-    inceptionYear = "2018"
-    description = "Kotlin extensions for 'core' artifact"
-    metalavaK2UastEnabled = true
-}
 
-android {
-    namespace "androidx.core.ktx"
+ext {
+    POM_NAME = "SESL Core Kotlin Extensions"
+    POM_DESCRIPTION = "SESL variant of android jetpack androidx.core:core-ktx module - Kotlin extensions for 'core' artifact"
 }

@@ -1,45 +1,49 @@
-import androidx.build.Publish
-
 plugins {
-    id("AndroidXPlugin")
     id("com.android.library")
+    id("maven-publish")
+    id("signing")
 }
+
 
 dependencies {
     api("androidx.annotation:annotation:1.1.0")
-    api("androidx.core:core:1.1.0")
+    api project(":core:core")
     api("androidx.interpolator:interpolator:1.0.0")
-
-    androidTestImplementation(libs.junit)
-    androidTestImplementation(libs.testExtJunit)
-    androidTestImplementation(libs.testCore)
-    androidTestImplementation(libs.testRunner)
-    androidTestImplementation(libs.testRules)
-    androidTestImplementation(libs.espressoCore, excludes.espresso)
-    androidTestImplementation(libs.bundles.espressoContrib, excludes.espresso)
-    androidTestImplementation(libs.mockitoCore, excludes.bytebuddy) // DexMaker has it"s own MockMaker
-    androidTestImplementation(libs.dexmakerMockito, excludes.bytebuddy) // DexMaker has it"s own MockMaker
-    androidTestImplementation(project(":internal-testutils-espresso"))
-    androidTestImplementation(project(":internal-testutils-runtime"), {
-        exclude group: "androidx.swiperefreshlayout", module: "swiperefreshlayout"
-    })
-    androidTestImplementation(project(":recyclerview:recyclerview"), {
-        exclude group: "androidx.swiperefreshlayout", module: "swiperefreshlayout"
-    })
-    androidTestImplementation(libs.multidex)
-}
-
-androidx {
-    name = "Swipe Refresh Layout"
-    publish = Publish.SNAPSHOT_AND_RELEASE
-    inceptionYear = "2018"
-    description = "The Support Library is a static library that you can add to your Android application in order to use APIs that are either not available for older platform versions or utility APIs that aren't a part of the framework APIs. Compatible on devices running API 14 or later."
-    metalavaK2UastEnabled = true
+//
+//    androidTestImplementation(libs.junit)
+//    androidTestImplementation(libs.testExtJunit)
+//    androidTestImplementation(libs.testCore)
+//    androidTestImplementation(libs.testRunner)
+//    androidTestImplementation(libs.testRules)
+//    androidTestImplementation(libs.espressoCore, excludes.espresso)
+//    androidTestImplementation(libs.bundles.espressoContrib, excludes.espresso)
+//    androidTestImplementation(libs.mockitoCore, excludes.bytebuddy) // DexMaker has it"s own MockMaker
+//    androidTestImplementation(libs.dexmakerMockito, excludes.bytebuddy) // DexMaker has it"s own MockMaker
+//    androidTestImplementation(project(":internal-testutils-espresso"))
+//    androidTestImplementation(project(":internal-testutils-runtime"), {
+//        exclude group: "androidx.swiperefreshlayout", module: "swiperefreshlayout"
+//    })
+//    androidTestImplementation(project(":recyclerview:recyclerview"), {
+//        exclude group: "androidx.swiperefreshlayout", module: "swiperefreshlayout"
+//    })
+//    androidTestImplementation(libs.multidex)
 }
 
 android {
     defaultConfig {
         multiDexEnabled = true
     }
-    namespace "androidx.swiperefreshlayout"
+    namespace = "androidx.swiperefreshlayout"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 }
+
+ext {
+    POM_NAME = "SESL Swipe Refresh Layout"
+    POM_DESCRIPTION = "SESL variant of android jetpack androidx.swiperefreshlayout:swiperefreshlayout module. " +
+      "Compatible on devices running API 21 or later."
+}
+

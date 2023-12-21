@@ -1,35 +1,54 @@
-import androidx.build.Publish
-
 plugins {
-    id("AndroidXPlugin")
-    id("com.android.library")
-    id("kotlin-android")
+    id ("com.android.library")
+    id ("org.jetbrains.kotlin.android")
+    id ("kotlin-kapt")
+    id ("maven-publish")
+    id ("signing")
 }
+
 
 dependencies {
     api("androidx.annotation:annotation:1.1.0")
-    implementation("androidx.core:core-ktx:1.1.0")
-    api("androidx.customview:customview:1.1.0")
+    implementation project(":core:core-ktx")
+    api project(":customview:customview")
     implementation("androidx.window:window:1.2.0-rc01")
     implementation("androidx.transition:transition:1.4.1")
 
-    androidTestImplementation(libs.testExtJunit)
-    androidTestImplementation(libs.testRunner)
-    androidTestImplementation(libs.espressoCore, excludes.espresso)
-    androidTestImplementation(libs.kotlinStdlib)
-    androidTestImplementation(libs.truth)
-    androidTestImplementation(project(':internal-testutils-runtime'))
-    androidTestImplementation("androidx.window:window-testing:1.2.0-rc01")
-}
-
-androidx {
-    name = "Sliding Pane Layout"
-    publish = Publish.SNAPSHOT_AND_RELEASE
-    inceptionYear = "2018"
-    description = "SlidingPaneLayout offers a responsive, two pane layout that automatically switches between overlapping panes on smaller devices to a side by side view on larger devices."
-    metalavaK2UastEnabled = true
+    api project(":appcompat:appcompat")
+    implementation project(":coordinatorlayout:coordinatorlayout")
+//
+//    androidTestImplementation(libs.testExtJunit)
+//    androidTestImplementation(libs.testRunner)
+//    androidTestImplementation(libs.espressoCore, excludes.espresso)
+//    androidTestImplementation(libs.kotlinStdlib)
+//    androidTestImplementation(libs.truth)
+//    androidTestImplementation(project(':internal-testutils-runtime'))
+//    androidTestImplementation("androidx.window:window-testing:1.2.0-rc01")
 }
 
 android {
-    namespace "androidx.slidingpanelayout"
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
+    namespace = "androidx.slidingpanelayout"
+    
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+ext {
+    POM_NAME = "SESL Sliding Pane Layout"
+    POM_DESCRIPTION = "SESL variant of android jetpack androidx.slidingpanepayout:slidingpanepayout module. " +
+            "SlidingPaneLayout offers a responsive, two pane layout that automatically switches between overlapping panes on smaller devices to a side by side view on larger devices."
+
 }

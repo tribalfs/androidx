@@ -28,8 +28,11 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -75,6 +78,7 @@ import androidx.core.app.SharedElementCallback;
 import androidx.core.view.LayoutInflaterCompat;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
+import androidx.fragment.R;
 import androidx.fragment.app.strictmode.FragmentStrictMode;
 import androidx.lifecycle.HasDefaultViewModelProviderFactory;
 import androidx.lifecycle.Lifecycle;
@@ -1917,6 +1921,24 @@ public class Fragment implements ComponentCallbacks, OnCreateContextMenuListener
     @MainThread
     @Nullable
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (nextAnim == R.anim.sesl_fragment_open_exit) {
+            getView().setTranslationZ(0.0f);
+            getView().setForeground(new ColorDrawable(getResources().getColor(R.color.sesl_fragment_fgcolor)));
+            return null;
+        } else if (nextAnim == R.anim.sesl_fragment_open_enter) {
+            getView().setTranslationZ(1.0f);
+            getView().setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            getView().setBackgroundTintMode(PorterDuff.Mode.SRC);
+            getView().setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.sesl_fragment_bgcolor)));
+            return null;
+        } else if (nextAnim == R.anim.sesl_fragment_close_enter) {
+            getView().setForeground(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+            getView().setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            getView().setBackgroundTintMode(PorterDuff.Mode.SRC);
+            getView().setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.sesl_fragment_bgcolor)));
+            getActivity().getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.sesl_fragment_fgcolor));
+            return null;
+        }
         return null;
     }
 

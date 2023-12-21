@@ -965,4 +965,10 @@ public abstract class FragmentTransaction {
      */
     @MainThread
     public abstract void commitNowAllowingStateLoss();
+
+    //sesl
+    @NonNull
+    public FragmentTransaction setAnimations() {
+        return this;
+    }
 }

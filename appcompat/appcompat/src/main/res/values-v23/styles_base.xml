@@ -16,6 +16,7 @@
 -->
 
 <resources>
+<!--
 
     <style name="Base.Widget.AppCompat.Button.Borderless.Colored" parent="android:Widget.Material.Button.Borderless.Colored" />
 
@@ -40,5 +41,6 @@
     </style>
 
     <style name="Base.Widget.AppCompat.ActionButton.Overflow" parent="android:Widget.Material.ActionButton.Overflow" />
+-->
 
 </resources>

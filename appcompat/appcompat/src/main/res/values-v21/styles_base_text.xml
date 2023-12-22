@@ -17,7 +17,7 @@
 
 <resources>
 
-    <style name="Base.TextAppearance.AppCompat" parent="android:TextAppearance.Material" />
+ <!--   <style name="Base.TextAppearance.AppCompat" parent="android:TextAppearance.Material" />
 
     <style name="Base.TextAppearance.AppCompat.Display4" parent="android:TextAppearance.Material.Display4" />
 
@@ -41,7 +41,7 @@
 
     <style name="Base.TextAppearance.AppCompat.Menu" parent="android:TextAppearance.Material.Menu" />
 
-    <!-- Now deprecated styles -->
+    &lt;!&ndash; Now deprecated styles &ndash;&gt;
 
     <style name="Base.TextAppearance.AppCompat.Inverse" parent="android:TextAppearance.Material.Inverse" />
 
@@ -62,5 +62,5 @@
     <style name="Base.TextAppearance.AppCompat.Widget.Button" parent="android:TextAppearance.Material.Widget.Button" />
 
     <style name="Base.TextAppearance.AppCompat.Widget.Switch" parent="android:TextAppearance.Material.Button" />
-
+-->
 </resources>

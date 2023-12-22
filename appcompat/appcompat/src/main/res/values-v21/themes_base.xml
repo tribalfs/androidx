@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2014 The Android Open Source Project
+  Copyright 2024 The Android Open Source Project
 
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
 
-          http://www.apache.org/licenses/LICENSE-2.0
+       http://www.apache.org/licenses/LICENSE-2.0
 
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
 
 <resources>
+<!--
 
-    <!--
+    &lt;!&ndash;
         Theme in the "Platform.AppCompat" family are designed to be aliases for the default
         theme on a given platform version and should set up the default theme ready for adding our
         unbundled Action Bar.
-    -->
+    &ndash;&gt;
     <eat-comment/>
 
     <style name="Platform.AppCompat" parent="Platform.V21.AppCompat" />
     <style name="Platform.AppCompat.Light" parent="Platform.V21.AppCompat.Light" />
 
     <style name="Platform.V21.AppCompat" parent="android:Theme.Material.NoActionBar">
-        <!-- Update link colors pre-v23 -->
+        &lt;!&ndash; Update link colors pre-v23 &ndash;&gt;
         <item name="android:textColorLink">?android:attr/colorAccent</item>
         <item name="android:textColorLinkInverse">?android:attr/colorAccent</item>
 
-        <!-- Update hint colors pre-v25 -->
+        &lt;!&ndash; Update hint colors pre-v25 &ndash;&gt;
         <item name="android:textColorHint">@color/abc_hint_foreground_material_dark</item>
         <item name="android:textColorHintInverse">@color/abc_hint_foreground_material_light</item>
 
@@ -41,11 +42,11 @@
     </style>
 
     <style name="Platform.V21.AppCompat.Light" parent="android:Theme.Material.Light.NoActionBar">
-        <!-- Update link colors pre-v23 -->
+        &lt;!&ndash; Update link colors pre-v23 &ndash;&gt;
         <item name="android:textColorLink">?android:attr/colorAccent</item>
         <item name="android:textColorLinkInverse">?android:attr/colorAccent</item>
 
-        <!-- Update hint colors pre-v25 -->
+        &lt;!&ndash; Update hint colors pre-v25 &ndash;&gt;
         <item name="android:textColorHint">@color/abc_hint_foreground_material_light</item>
         <item name="android:textColorHintInverse">@color/abc_hint_foreground_material_dark</item>
 
@@ -57,7 +58,7 @@
     <style name="Base.Theme.AppCompat.Light" parent="Base.V21.Theme.AppCompat.Light" />
 
     <style name="Base.V21.Theme.AppCompat" parent="Base.V7.Theme.AppCompat">
-        <!-- Action Bar styling attributes -->
+        &lt;!&ndash; Action Bar styling attributes &ndash;&gt;
         <item name="actionBarSize">?android:attr/actionBarSize</item>
         <item name="actionBarDivider">?android:attr/actionBarDivider</item>
         <item name="actionBarItemBackground">@drawable/abc_action_bar_item_background_material</item>
@@ -66,12 +67,12 @@
         <item name="actionModeCloseDrawable">?android:attr/actionModeCloseDrawable</item>
         <item name="homeAsUpIndicator">?android:attr/homeAsUpIndicator</item>
 
-        <!-- For PopupMenu -->
+        &lt;!&ndash; For PopupMenu &ndash;&gt;
         <item name="listPreferredItemHeightSmall">?android:attr/listPreferredItemHeightSmall</item>
         <item name="textAppearanceLargePopupMenu">?android:attr/textAppearanceLargePopupMenu</item>
         <item name="textAppearanceSmallPopupMenu">?android:attr/textAppearanceSmallPopupMenu</item>
 
-        <!-- General view attributes -->
+        &lt;!&ndash; General view attributes &ndash;&gt;
         <item name="selectableItemBackground">?android:attr/selectableItemBackground</item>
         <item name="selectableItemBackgroundBorderless">?android:attr/selectableItemBackgroundBorderless</item>
         <item name="borderlessButtonStyle">?android:borderlessButtonStyle</item>
@@ -81,7 +82,7 @@
         <item name="editTextColor">?android:attr/editTextColor</item>
         <item name="listChoiceBackgroundIndicator">?android:attr/listChoiceBackgroundIndicator</item>
 
-        <!-- Copy the platform default styles for the AppCompat widgets -->
+        &lt;!&ndash; Copy the platform default styles for the AppCompat widgets &ndash;&gt;
         <item name="buttonStyle">?android:attr/buttonStyle</item>
         <item name="buttonStyleSmall">?android:attr/buttonStyleSmall</item>
         <item name="checkboxStyle">?android:attr/checkboxStyle</item>
@@ -90,7 +91,7 @@
         <item name="ratingBarStyle">?android:attr/ratingBarStyle</item>
         <item name="spinnerStyle">?android:attr/spinnerStyle</item>
 
-        <!-- Copy our color theme attributes to the framework -->
+        &lt;!&ndash; Copy our color theme attributes to the framework &ndash;&gt;
         <item name="android:colorPrimary">?attr/colorPrimary</item>
         <item name="android:colorPrimaryDark">?attr/colorPrimaryDark</item>
         <item name="android:colorAccent">?attr/colorAccent</item>
@@ -101,7 +102,7 @@
     </style>
 
     <style name="Base.V21.Theme.AppCompat.Light" parent="Base.V7.Theme.AppCompat.Light">
-        <!-- Action Bar styling attributes -->
+        &lt;!&ndash; Action Bar styling attributes &ndash;&gt;
         <item name="actionBarSize">?android:attr/actionBarSize</item>
         <item name="actionBarDivider">?android:attr/actionBarDivider</item>
         <item name="actionBarItemBackground">@drawable/abc_action_bar_item_background_material</item>
@@ -110,12 +111,12 @@
         <item name="actionModeCloseDrawable">?android:attr/actionModeCloseDrawable</item>
         <item name="homeAsUpIndicator">?android:attr/homeAsUpIndicator</item>
 
-        <!-- For PopupMenu -->
+        &lt;!&ndash; For PopupMenu &ndash;&gt;
         <item name="listPreferredItemHeightSmall">?android:attr/listPreferredItemHeightSmall</item>
         <item name="textAppearanceLargePopupMenu">?android:attr/textAppearanceLargePopupMenu</item>
         <item name="textAppearanceSmallPopupMenu">?android:attr/textAppearanceSmallPopupMenu</item>
 
-        <!-- General view attributes -->
+        &lt;!&ndash; General view attributes &ndash;&gt;
         <item name="selectableItemBackground">?android:attr/selectableItemBackground</item>
         <item name="selectableItemBackgroundBorderless">?android:attr/selectableItemBackgroundBorderless</item>
         <item name="borderlessButtonStyle">?android:borderlessButtonStyle</item>
@@ -125,7 +126,7 @@
         <item name="editTextColor">?android:attr/editTextColor</item>
         <item name="listChoiceBackgroundIndicator">?android:attr/listChoiceBackgroundIndicator</item>
 
-        <!-- Copy the platform default styles for the AppCompat widgets -->
+        &lt;!&ndash; Copy the platform default styles for the AppCompat widgets &ndash;&gt;
         <item name="buttonStyle">?android:attr/buttonStyle</item>
         <item name="buttonStyleSmall">?android:attr/buttonStyleSmall</item>
         <item name="checkboxStyle">?android:attr/checkboxStyle</item>
@@ -134,7 +135,7 @@
         <item name="ratingBarStyle">?android:attr/ratingBarStyle</item>
         <item name="spinnerStyle">?android:attr/spinnerStyle</item>
 
-        <!-- Copy our color theme attributes to the framework -->
+        &lt;!&ndash; Copy our color theme attributes to the framework &ndash;&gt;
         <item name="android:colorPrimary">?attr/colorPrimary</item>
         <item name="android:colorPrimaryDark">?attr/colorPrimaryDark</item>
         <item name="android:colorAccent">?attr/colorAccent</item>
@@ -156,7 +157,7 @@
     <style name="Base.Theme.AppCompat.Light.Dialog" parent="Base.V21.Theme.AppCompat.Light.Dialog" />
 
     <style name="Platform.ThemeOverlay.AppCompat" parent="">
-        <!-- Copy our color theme attributes to the framework -->
+        &lt;!&ndash; Copy our color theme attributes to the framework &ndash;&gt;
         <item name="android:colorPrimary">?attr/colorPrimary</item>
         <item name="android:colorPrimaryDark">?attr/colorPrimaryDark</item>
         <item name="android:colorAccent">?attr/colorAccent</item>
@@ -175,5 +176,6 @@
     <style name="Base.V21.ThemeOverlay.AppCompat.Dialog" parent="Base.V7.ThemeOverlay.AppCompat.Dialog">
         <item name="android:windowElevation">@dimen/abc_floating_window_z</item>
     </style>
+-->
 
 </resources>

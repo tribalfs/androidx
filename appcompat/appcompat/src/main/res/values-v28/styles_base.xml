@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.V7.Widget.AppCompat.EditText" parent="@android:style/Widget.EditText">
+        <item name="android:textSize">@dimen/sesl_edit_text_size</item>
+        <item name="android:textColor">@color/sesl_edit_text_dark</item>
+        <item name="android:textColorHint">@color/sesl_edit_text_hint_color_dark</item>
+        <item name="android:background">?attr/editTextBackground</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textCursorDrawable">@drawable/sesl_text_cursor</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="fontFamily">sec</item>
+    </style>
+    <style name="Base.Widget.AppCompat.Button.Dialog" parent="@style/Base.Widget.AppCompat.Light.Button.Borderless.Small">
+        <item name="android:textSize">@dimen/sesl_dialog_button_text_size</item>
+        <item name="android:textColor">@color/sesl_dialog_button_text_color_dark</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:background">@drawable/sesl_dialog_btn_default_borderless</item>
+        <item name="android:minWidth">@dimen/sesl_dialog_button_min_width</item>
+        <item name="android:minHeight">@dimen/sesl_dialog_button_min_height</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:fontFamily">sec</item>
+        <item name="android:stateListAnimator">@drawable/sesl_dialog_button_disabled_anim</item>
+        <item name="android:textFontWeight">600</item>
+        <item name="textAllCaps">false</item>
+    </style>
+    <style name="Base.Widget.AppCompat.Light.Button.Dialog" parent="@style/Base.Widget.AppCompat.Light.Button.Borderless.Small">
+        <item name="android:textSize">@dimen/sesl_dialog_button_text_size</item>
+        <item name="android:textColor">@color/sesl_dialog_button_text_color_light</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:background">@drawable/sesl_dialog_btn_default_borderless</item>
+        <item name="android:minWidth">@dimen/sesl_dialog_button_min_width</item>
+        <item name="android:minHeight">@dimen/sesl_dialog_button_min_height</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:fontFamily">sec</item>
+        <item name="android:stateListAnimator">@drawable/sesl_dialog_button_disabled_anim</item>
+        <item name="android:textFontWeight">600</item>
+        <item name="textAllCaps">false</item>
+    </style>
+    <style name="Base.Widget.AppCompat.TextView.ListSeparator" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/sesl_list_subheader_text_size</item>
+        <item name="android:textColor">@color/sesl_list_subheader_text_color_dark</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">?attr/roundedCornerColor</item>
+        <item name="android:paddingTop">@dimen/sesl_list_subheader_padding_top</item>
+        <item name="android:paddingBottom">@dimen/sesl_list_subheader_padding_bottom</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textDirection">locale</item>
+        <item name="android:paddingStart">?attr/listPreferredItemPaddingStart</item>
+        <item name="android:paddingEnd">?android:attr/listPreferredItemPaddingEnd</item>
+        <item name="android:textFontWeight">600</item>
+        <item name="fontFamily">sec</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.Widget.FastScroll" parent="@android:style/TextAppearance.Widget">
+        <item name="android:fontFamily">sec</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="TextAppearance.Design.CollapsingToolbar.Expanded" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/sesl_appbar_extended_title_text_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sec</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="TextAppearance.Design.CollapsingToolbar.Expanded.Inverse" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">@dimen/sesl_appbar_extended_title_text_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sec</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="TextAppearance.Design.Snackbar.SeslFontRegular" parent="@android:style/TextAppearance">
+        <item name="android:fontFamily">sec</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="TextAppearance.Design.Snackbar.SeslFontSemiBold" parent="@android:style/TextAppearance">
+        <item name="android:fontFamily">sec</item>
+        <item name="android:textFontWeight">600</item>
+    </style>
+
+</resources>

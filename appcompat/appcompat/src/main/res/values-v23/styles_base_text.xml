@@ -15,10 +15,12 @@
      limitations under the License.
 -->
 <resources>
+<!--
 
     <style name="Base.TextAppearance.AppCompat.Widget.Button.Inverse" parent="android:TextAppearance.Material.Widget.Button.Inverse" />
 
-    <!-- We can use the fixed TextAppearance.Material.Widget.ActionBar.Menu on 23+ -->
+    &lt;!&ndash; We can use the fixed TextAppearance.Material.Widget.ActionBar.Menu on 23+ &ndash;&gt;
     <style name="Base.TextAppearance.AppCompat.Widget.ActionBar.Menu" parent="android:TextAppearance.Material.Widget.ActionBar.Menu" />
+-->
 
 </resources>

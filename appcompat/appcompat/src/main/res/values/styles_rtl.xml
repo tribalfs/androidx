@@ -17,12 +17,10 @@
 <resources>
 
     <style name="RtlOverlay.Widget.AppCompat.SearchView.MagIcon" parent="android:Widget">
-        <item name="android:layout_marginLeft">@dimen/abc_dropdownitem_text_padding_left</item>
     </style>
 
     <style name="RtlOverlay.Widget.AppCompat.Search.DropDown" parent="android:Widget">
-        <item name="android:paddingLeft">@dimen/abc_dropdownitem_text_padding_left</item>
-        <item name="android:paddingRight">4dp</item>
+        <item name="android:paddingEnd">4dp</item>
     </style>
 
     <style name="RtlOverlay.Widget.AppCompat.Search.DropDown.Query" parent="android:Widget">
@@ -43,7 +41,7 @@
     </style>
 
     <style name="RtlOverlay.Widget.AppCompat.ActionBar.TitleItem" parent="android:Widget">
-        <item name="android:layout_gravity">center_vertical|left</item>
+        <item name="android:layout_gravity">center|left</item>
         <item name="android:paddingRight">8dp</item>
     </style>
 
@@ -53,8 +51,6 @@
     </style>
 
     <style name="RtlUnderlay.Widget.AppCompat.ActionButton.Overflow" parent="Base.Widget.AppCompat.ActionButton">
-        <item name="android:paddingLeft">@dimen/abc_action_bar_overflow_padding_start_material</item>
-        <item name="android:paddingRight">@dimen/abc_action_bar_overflow_padding_end_material</item>
     </style>
 
     <style name="RtlOverlay.Widget.AppCompat.PopupMenuItem" parent="android:Widget">
@@ -87,5 +83,7 @@
 
     <style name="RtlOverlay.DialogWindowTitle.AppCompat" parent="Base.DialogWindowTitle.AppCompat">
     </style>
+
+    <style name="RtlOverlay.DialogWindowTitle.AppCompat.Light" parent="Base.DialogWindowTitle.AppCompat.Light" />
 
 </resources>

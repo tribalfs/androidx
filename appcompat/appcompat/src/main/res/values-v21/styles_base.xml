@@ -21,6 +21,7 @@
      define base styles for the platform version. The "*.AppCompat"
      variants are for direct use or use as parent styles by the app. -->
     <eat-comment/>
+<!--
 
     <style name="Base.Widget.AppCompat.ActionBar.TabView"
            parent="android:Widget.Material.ActionBar.TabView">
@@ -66,7 +67,7 @@
            parent="android:TextAppearance.Material.Widget.ActionMode.Subtitle">
     </style>
 
-    <!-- Action Button Styles -->
+    &lt;!&ndash; Action Button Styles &ndash;&gt;
 
     <style name="Base.Widget.AppCompat.ActionButton"
            parent="android:Widget.Material.ActionButton">
@@ -77,18 +78,18 @@
         <item name="android:minWidth">56dp</item>
     </style>
 
-    <!-- We use srcCompat on API 21-22 to allow tinting with themed CSLs -->
+    &lt;!&ndash; We use srcCompat on API 21-22 to allow tinting with themed CSLs &ndash;&gt;
     <style name="Base.Widget.AppCompat.ActionButton.Overflow"
            parent="android:Widget.Material.ActionButton.Overflow">
         <item name="android:src">@null</item>
         <item name="srcCompat">@drawable/abc_ic_menu_overflow_material</item>
     </style>
 
-    <!--
+    &lt;!&ndash;
         Widget.AppCompat.Toolbar style is purposely ommitted. This is because the support
         Toolbar implementation is used on ALL platforms and relies on the unbundled attrs.
         The supporting Toolbar styles below only use basic attrs so work fine.
-    -->
+    &ndash;&gt;
 
     <style name="Base.Widget.AppCompat.Toolbar.Button.Navigation"
            parent="android:Widget.Material.Toolbar.Button.Navigation">
@@ -102,7 +103,7 @@
            parent="android:TextAppearance.Material.Widget.ActionBar.Subtitle">
     </style>
 
-    <!-- Spinner Widgets -->
+    &lt;!&ndash; Spinner Widgets &ndash;&gt;
 
     <style name="Base.Widget.AppCompat.ListView.DropDown"
            parent="android:Widget.Material.ListView.DropDown"/>
@@ -112,12 +113,12 @@
 
     <style name="Base.Widget.AppCompat.Spinner" parent="android:Widget.Material.Spinner" />
 
-    <!-- Base.Widget.AppCompat.Spinner.Underlined is overridden in ldltr-v21 and v23 -->
+    &lt;!&ndash; Base.Widget.AppCompat.Spinner.Underlined is overridden in ldltr-v21 and v23 &ndash;&gt;
 
     <style name="Base.Widget.AppCompat.ListView" parent="android:Widget.Material.ListView" />
     <style name="Base.Widget.AppCompat.ListView.Menu" />
 
-    <!-- Popup Menu -->
+    &lt;!&ndash; Popup Menu &ndash;&gt;
 
     <style name="Base.Widget.AppCompat.ListPopupWindow" parent="android:Widget.Material.ListPopupWindow">
     </style>
@@ -161,7 +162,7 @@
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
-    <!-- Search View result styles -->
+    &lt;!&ndash; Search View result styles &ndash;&gt;
 
     <style name="Base.TextAppearance.AppCompat.SearchResult.Title"
            parent="android:TextAppearance.Material.SearchResult.Title">
@@ -203,7 +204,7 @@
 
     <style name="Base.Widget.AppCompat.ImageButton" parent="android:Widget.Material.ImageButton" />
 
-    <!-- Progress Bar -->
+    &lt;!&ndash; Progress Bar &ndash;&gt;
 
     <style name="Base.Widget.AppCompat.ProgressBar.Horizontal"
            parent="android:Widget.Material.ProgressBar.Horizontal">
@@ -216,5 +217,6 @@
     <style name="Base.Widget.AppCompat.TextView.SpinnerItem" parent="android:Widget.Material.TextView.SpinnerItem" />
 
     <style name="Base.TextAppearance.AppCompat.Widget.TextView.SpinnerItem" parent="android:TextAppearance.Material.Widget.TextView.SpinnerItem" />
+-->
 
 </resources>

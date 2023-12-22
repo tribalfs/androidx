@@ -23,6 +23,6 @@
     <eat-comment/>
 
     <!-- The platform Underlined style only works in LTR in v21-22 -->
-    <style name="Base.Widget.AppCompat.Spinner.Underlined" parent="android:Widget.Material.Spinner.Underlined" />
+ <!--   <style name="Base.Widget.AppCompat.Spinner.Underlined" parent="android:Widget.Material.Spinner.Underlined" />-->
 
 </resources>

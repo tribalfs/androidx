@@ -39,6 +39,8 @@ dependencies {
     constraints {
         api project(":viewpager2:viewpager2")
     }
+
+    implementation(project(":appcompat:appcompat"))
 }
 
 android {

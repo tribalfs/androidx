@@ -20,12 +20,15 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -59,6 +62,8 @@ import androidx.appcompat.R;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.reflect.widget.SeslAdapterViewReflector;
+import androidx.reflect.widget.SeslTextViewReflector;
 
 import java.lang.ref.WeakReference;
 
@@ -67,6 +72,7 @@ class AlertController {
     final AppCompatDialog mDialog;
     private final Window mWindow;
     private final int mButtonIconDimen;
+    private int mLastOrientation;
 
     private CharSequence mTitle;
     private CharSequence mMessage;
@@ -200,6 +206,9 @@ class AlertController {
         mButtonIconDimen = a.getDimensionPixelSize(R.styleable.AlertDialog_buttonIconDimen, 0);
 
         a.recycle();
+
+        // for devices without SamsungBasicInteraction flag
+        window.setGravity(Gravity.BOTTOM);
 
         /* We use a custom title so never request a window title */
         di.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -469,6 +478,16 @@ class AlertController {
         final View defaultContentPanel = parentPanel.findViewById(R.id.contentPanel);
         final View defaultButtonPanel = parentPanel.findViewById(R.id.buttonPanel);
 
+        //sesl
+        parentPanel.addOnLayoutChangeListener(
+                (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> v.post(() -> {
+                    if (mContext.getResources().getConfiguration().orientation != mLastOrientation) {
+                        setupPaddings();
+                        parentPanel.requestLayout();
+                    }
+                    mLastOrientation = mContext.getResources().getConfiguration().orientation;
+                }));
+
         // Install custom content before setting up the title or buttons so
         // that we can handle panel overrides.
         final ViewGroup customPanel = (ViewGroup) parentPanel.findViewById(R.id.customPanel);
@@ -494,15 +513,29 @@ class AlertController {
         final boolean hasButtonPanel = buttonPanel != null
                 && buttonPanel.getVisibility() != View.GONE;
 
-        // Only display the text spacer if we don't have buttons.
-        if (!hasButtonPanel) {
-            if (contentPanel != null) {
-                final View spacer = contentPanel.findViewById(R.id.textSpacerNoButtons);
-                if (spacer != null) {
-                    spacer.setVisibility(View.VISIBLE);
-                }
+        //sesl
+        final boolean hasDefaultTopPanel = defaultTopPanel != null
+                && defaultTopPanel.getVisibility() != View.GONE;
+        final boolean hasDefaultContentPanel = defaultContentPanel != null
+                && defaultContentPanel.getVisibility() != View.GONE;
+        final boolean hasCustomTitleView = mCustomTitleView != null
+                && mCustomTitleView.getVisibility() != View.GONE;
+
+        if ((hasCustomPanel && !hasDefaultTopPanel && !hasDefaultContentPanel) || hasCustomTitleView) {
+            adjustParentPanelPadding(parentPanel);
+        }
+
+        if (hasCustomPanel && hasDefaultTopPanel && !hasDefaultContentPanel) {
+            adjustTopPanelPadding(parentPanel);
+        }
+        adjustButtonsPadding();
+
+        if (!parentPanel.isInTouchMode()) {
+            if (!requestFocusForContent(hasCustomPanel ? customPanel : contentPanel)) {
+                requestFocusForDefaultButton();
             }
         }
+        //sesl
 
         if (hasTopPanel) {
             // Only clip scrolling content to padding if we have a title.
@@ -510,22 +543,6 @@ class AlertController {
                 mScrollView.setClipToPadding(true);
             }
 
-            // Only show the divider if we have a title.
-            View divider = null;
-            if (mMessage != null || mListView != null) {
-                divider = topPanel.findViewById(R.id.titleDividerNoCustom);
-            }
-
-            if (divider != null) {
-                divider.setVisibility(View.VISIBLE);
-            }
-        } else {
-            if (contentPanel != null) {
-                final View spacer = contentPanel.findViewById(R.id.textSpacerNoTitle);
-                if (spacer != null) {
-                    spacer.setVisibility(View.VISIBLE);
-                }
-            }
         }
 
         if (mListView instanceof RecycleListView) {
@@ -546,10 +563,12 @@ class AlertController {
         final ListView listView = mListView;
         if (listView != null && mAdapter != null) {
             listView.setAdapter(mAdapter);
+            SeslAdapterViewReflector.semSetBottomColor(listView, Color.TRANSPARENT);
             final int checkedItem = mCheckedItem;
             if (checkedItem > -1) {
                 listView.setItemChecked(checkedItem, true);
-                listView.setSelection(checkedItem);
+                listView.setSelectionFromTop(checkedItem,
+                        mContext.getResources().getDimensionPixelSize(R.dimen.sesl_select_dialog_padding_top));
             }
         }
     }
@@ -662,12 +681,17 @@ class AlertController {
             }
 
             if (mListView != null) {
-                ((LinearLayoutCompat.LayoutParams) customPanel.getLayoutParams()).weight = 0;
+                if (customPanel.getLayoutParams() instanceof LinearLayout.LayoutParams) {
+                    ((LinearLayout.LayoutParams) customPanel.getLayoutParams()).weight = 0;
+                } else {
+                    ((LinearLayoutCompat.LayoutParams) customPanel.getLayoutParams()).weight = 0;
+                }
             }
         } else {
             customPanel.setVisibility(View.GONE);
         }
     }
+
 
     private void setupTitle(ViewGroup topPanel) {
         if (mCustomTitleView != null) {
@@ -688,6 +712,7 @@ class AlertController {
                 // Display the title if a title is supplied, else hide it.
                 mTitleView = (TextView) mWindow.findViewById(R.id.alertTitle);
                 mTitleView.setText(mTitle);
+                checkMaxFontScale(mTitleView, mContext.getResources().getDimensionPixelSize(R.dimen.sesl_dialog_title_text_size));
 
                 // Do this last so that if the user has supplied any icons we
                 // use them instead of the default ones. If the user has
@@ -728,6 +753,7 @@ class AlertController {
 
         if (mMessage != null) {
             mMessageView.setText(mMessage);
+            checkMaxFontScale(mMessageView, mContext.getResources().getDimensionPixelSize(R.dimen.sesl_dialog_body_text_size));
         } else {
             mMessageView.setVisibility(View.GONE);
             mScrollView.removeView(mMessageView);
@@ -760,6 +786,28 @@ class AlertController {
         int BIT_BUTTON_NEGATIVE = 2;
         int BIT_BUTTON_NEUTRAL = 4;
         int whichButtons = 0;
+
+        //sesl
+        boolean isEnabledShowBtnBg = Settings.System.getInt(mContext.getContentResolver(), "show_button_background", 0) == 1;
+        boolean isThemeApplied = Settings.System.getString(mContext.getContentResolver(), "current_sec_active_themepackage") != null;
+
+        TypedValue colorBackground = new TypedValue();
+        mContext.getTheme().resolveAttribute(android.R.attr.colorBackground, colorBackground, true);
+
+        int buttonBackgroundColor = colorBackground.resourceId > 0
+                ? mContext.getResources().getColor(colorBackground.resourceId) : Color.WHITE;
+
+        TypedValue colorPrimaryDark = new TypedValue();
+        mContext.getTheme().resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true);
+
+        int buttonTextColor;
+        if (colorPrimaryDark.resourceId != 0) {
+            buttonTextColor = mContext.getResources().getColor(colorPrimaryDark.resourceId);
+        } else {
+            buttonTextColor = colorPrimaryDark.data;
+        }
+        //sesl
+
         mButtonPositive = (Button) buttonPanel.findViewById(android.R.id.button1);
         mButtonPositive.setOnClickListener(mButtonHandler);
 
@@ -793,6 +841,31 @@ class AlertController {
         mButtonNeutral = (Button) buttonPanel.findViewById(android.R.id.button3);
         mButtonNeutral.setOnClickListener(mButtonHandler);
 
+
+        //sesl
+        if (isThemeApplied) {
+            mButtonPositive.setTextColor(buttonTextColor);
+            mButtonNegative.setTextColor(buttonTextColor);
+            mButtonNeutral.setTextColor(buttonTextColor);
+        }
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            if (colorBackground.resourceId > 0) {
+                SeslTextViewReflector.semSetButtonShapeEnabled(mButtonPositive, isEnabledShowBtnBg, buttonBackgroundColor);
+                SeslTextViewReflector.semSetButtonShapeEnabled(mButtonNegative, isEnabledShowBtnBg, buttonBackgroundColor);
+                SeslTextViewReflector.semSetButtonShapeEnabled(mButtonNeutral, isEnabledShowBtnBg, buttonBackgroundColor);
+            } else {
+                SeslTextViewReflector.semSetButtonShapeEnabled(mButtonPositive, isEnabledShowBtnBg);
+                SeslTextViewReflector.semSetButtonShapeEnabled(mButtonNegative, isEnabledShowBtnBg);
+                SeslTextViewReflector.semSetButtonShapeEnabled(mButtonNeutral, isEnabledShowBtnBg);
+            }
+        } else if (isEnabledShowBtnBg) {
+            mButtonPositive.setBackgroundResource(R.drawable.sesl_dialog_btn_show_button_shapes_background);
+            mButtonNegative.setBackgroundResource(R.drawable.sesl_dialog_btn_show_button_shapes_background);
+            mButtonNeutral.setBackgroundResource(R.drawable.sesl_dialog_btn_show_button_shapes_background);
+        }
+        //sesl
+
+
         if (TextUtils.isEmpty(mButtonNeutralText) && mButtonNeutralIcon == null) {
             mButtonNeutral.setVisibility(View.GONE);
         } else {
@@ -823,6 +896,21 @@ class AlertController {
         if (!hasButtons) {
             buttonPanel.setVisibility(View.GONE);
         }
+
+        //sesl
+        boolean buttonNeutralVisible = mButtonNeutral.getVisibility() == View.VISIBLE;
+        boolean buttonPositiveVisible = mButtonPositive.getVisibility() == View.VISIBLE;
+        boolean buttonNegativeVisible = mButtonNegative.getVisibility() == View.VISIBLE;
+
+        View divider2 = mWindow.findViewById(R.id.sem_divider2);
+        if (divider2 != null && ((buttonNeutralVisible && buttonPositiveVisible) || (buttonNeutralVisible && buttonNegativeVisible))) {
+            divider2.setVisibility(View.VISIBLE);
+        }
+        View divider1 = mWindow.findViewById(R.id.sem_divider1);
+        if (divider1 != null && buttonPositiveVisible && buttonNegativeVisible) {
+            divider1.setVisibility(View.VISIBLE);
+        }
+        //sesl
     }
 
     private void centerButton(Button button) {
@@ -1114,4 +1202,117 @@ class AlertController {
             return position;
         }
     }
+
+    //sesl
+    private boolean requestFocusForContent(View content) {
+        if (content != null && content.requestFocus()) {
+            return true;
+        }
+        if (mListView != null) {
+            mListView.setSelection(0);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void requestFocusForDefaultButton() {
+        if (mButtonPositive.getVisibility() == View.VISIBLE) {
+            mButtonPositive.requestFocus();
+        } else if (mButtonNegative.getVisibility() == View.VISIBLE) {
+            mButtonNegative.requestFocus();
+        } else if (mButtonNeutral.getVisibility() == View.VISIBLE) {
+            mButtonNeutral.requestFocus();
+        }
+    }
+
+
+    private void checkMaxFontScale(TextView textview, int baseSize) {
+        float currentFontScale = mContext.getResources().getConfiguration().fontScale;
+        if (currentFontScale > 1.3f) {
+            float scaleBase = baseSize / currentFontScale;
+            textview.setTextSize(TypedValue.COMPLEX_UNIT_PX, scaleBase * 1.3f);
+        }
+    }
+
+    private void adjustButtonsPadding() {
+        int btnTextSize = mContext.getResources().getDimensionPixelSize(R.dimen.sesl_dialog_button_text_size);
+
+        if (mButtonPositive.getVisibility() != View.GONE) {
+            mButtonPositive.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) btnTextSize);
+            checkMaxFontScale(mButtonPositive, btnTextSize);
+        }
+        if (mButtonNegative.getVisibility() != View.GONE) {
+            mButtonNegative.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) btnTextSize);
+            checkMaxFontScale(mButtonNegative, btnTextSize);
+        }
+        if (mButtonNeutral.getVisibility() != View.GONE) {
+            mButtonNeutral.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) btnTextSize);
+            checkMaxFontScale(mButtonNeutral, btnTextSize);
+        }
+    }
+
+    private void adjustParentPanelPadding(View parentPanel) {
+        parentPanel.setPadding(0, 0, 0, 0);
+    }
+
+    private void adjustTopPanelPadding(View parentPanel) {
+        View mTitleTemplate = parentPanel.findViewById(R.id.title_template);
+        Resources resources = mContext.getResources();
+        mTitleTemplate.setPadding(resources.getDimensionPixelSize(R.dimen.sesl_dialog_padding_horizontal),
+                0,
+                resources.getDimensionPixelSize(R.dimen.sesl_dialog_padding_horizontal),
+                0);
+    }
+
+    private void setupPaddings() {
+        final View mParentPanel = mWindow.findViewById(R.id.parentPanel);
+        final View mTitleTemplate = mParentPanel.findViewById(R.id.title_template);
+        final View mScrollview = mParentPanel.findViewById(R.id.scrollView);
+        final View mTopPanel = mParentPanel.findViewById(R.id.topPanel);
+        final View mButtonPanel = mParentPanel.findViewById(R.id.buttonBarLayout);
+        final View customPanel = mParentPanel.findViewById(R.id.customPanel);
+        final View defaultContentPanel = mParentPanel.findViewById(R.id.contentPanel);
+
+        final boolean hasCustomTitleView = mCustomTitleView != null && mCustomTitleView.getVisibility() != View.GONE;
+        final boolean hasCustomPanel = customPanel != null && customPanel.getVisibility() != View.GONE;
+        final boolean hasTopPanel = mTopPanel != null && mTopPanel.getVisibility() != View.GONE;
+        final boolean hasDefaultContentPanel = defaultContentPanel != null && defaultContentPanel.getVisibility() != View.GONE;
+
+        Resources resources = mContext.getResources();
+
+        if ((!hasCustomPanel || hasTopPanel || hasDefaultContentPanel) && !hasCustomTitleView) {
+            mParentPanel.setPadding(0, resources.getDimensionPixelSize(R.dimen.sesl_dialog_title_padding_top), 0, 0);
+        } else {
+            mParentPanel.setPadding(0, 0, 0, 0);
+        }
+
+        if (mTitleTemplate != null) {
+            if (!hasCustomPanel || !hasTopPanel || hasDefaultContentPanel) {
+                mTitleTemplate.setPadding(resources.getDimensionPixelSize(R.dimen.sesl_dialog_padding_horizontal),
+                        0,
+                        resources.getDimensionPixelSize(R.dimen.sesl_dialog_padding_horizontal),
+                        resources.getDimensionPixelSize(R.dimen.sesl_dialog_title_padding_bottom));
+            } else {
+                mTitleTemplate.setPadding(resources.getDimensionPixelSize(R.dimen.sesl_dialog_padding_horizontal),
+                        0,
+                        resources.getDimensionPixelSize(R.dimen.sesl_dialog_padding_horizontal),
+                        0);
+            }
+        }
+        if (mScrollview != null) {
+            mScrollview.setPadding(resources.getDimensionPixelSize(R.dimen.sesl_dialog_body_text_scroll_padding_start),
+                    0,
+                    resources.getDimensionPixelSize(R.dimen.sesl_dialog_body_text_scroll_padding_end),
+                    resources.getDimensionPixelSize(R.dimen.sesl_dialog_body_text_padding_bottom));
+        }
+        if (mButtonPanel != null) {
+            mButtonPanel.setPadding(resources.getDimensionPixelSize(R.dimen.sesl_dialog_button_bar_padding_horizontal),
+                    0,
+                    resources.getDimensionPixelSize(R.dimen.sesl_dialog_button_bar_padding_horizontal),
+                    resources.getDimensionPixelSize(R.dimen.sesl_dialog_button_bar_padding_bottom));
+        }
+    }
+    //sesl
+
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.view.menu.ListMenuItemView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:paddingTop="@dimen/sesl_select_dialog_item_padding_vertical"
+    android:paddingBottom="@dimen/sesl_select_dialog_item_padding_vertical">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:duplicateParentState="true">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:duplicateParentState="true"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:maxLines="1"
+            android:paddingStart="@dimen/sesl_select_dialog_item_padding_horizontal"
+            android:paddingEnd="@dimen/sesl_select_dialog_item_padding_horizontal"
+            android:textAlignment="viewStart"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Dialog"
+            android:textColor="@color/sesl_select_dialog_list_item_text_light"
+            android:textSize="@dimen/sesl_select_dialog_list_item_text_size" />
+
+        <TextView
+            android:id="@+id/shortcut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_alignParentStart="true"
+            android:duplicateParentState="true"
+            android:maxLines="1"
+            android:textAlignment="viewStart"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </RelativeLayout>
+</androidx.appcompat.view.menu.ListMenuItemView>

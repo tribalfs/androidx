@@ -44,4 +44,25 @@
     <string name="abc_menu_space_shortcut_label" msgid="5473865519181928982">"spasi"</string>
     <string name="abc_menu_enter_shortcut_label" msgid="7986526966204849475">"enter"</string>
     <string name="abc_menu_delete_shortcut_label" msgid="838001238306846836">"delete"</string>
+
+    <string name="sesl_more_item_label">Lainnya</string>
+    <string name="sesl_searchview_description_submit">Kirim pertanyaan</string>
+    <string name="sesl_index_assistant_text">Usap ke atas atau ke bawah dengan dua jari untuk menggulir.</string>
+    <string name="sesl_index_section">Indeks bagian</string>
+    <string name="sesl_action_menu_overflow_badge_text_n">B</string>
+    <string name="sesl_index_scrollbar">Bilah gulir</string>
+    <string name="sesl_searchview_description_clear">Hapus bidang pencarian</string>
+    <string name="sesl_searchview_description_search">Cari</string>
+    <string name="sesl_toolbar_collapse_description">Ciutkan</string>
+    <string name="sesl_action_bar_up_description">Navigasi ke atas</string>
+    <string name="sesl_searchview_description_voice">Pencarian dengan suara</string>
+    <string name="sesl_searchview_description_query">Cari pertanyaan</string>
+    <string name="sesl_index_selected">Dipilih</string>
+    <string name="sesl_action_menu_overflow_badge_description">Konten baru tersedia</string>
+    <string name="sesl_search_hint">Cari</string>
+    <string name="sesl_action_menu_overflow_description">Opsi lainnya</string>
+    <string name="sesl_switchbar_off_text">Tdk aktif</string>
+    <string name="sesl_switchbar_on_text">Aktif</string>
+    <string name="sesl_switch_off">Nonaktif</string>
+    <string name="sesl_switch_on">Aktif</string>
 </resources>

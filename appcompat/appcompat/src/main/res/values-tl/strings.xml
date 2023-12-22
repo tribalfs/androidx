@@ -44,4 +44,25 @@
     <string name="abc_menu_space_shortcut_label" msgid="5473865519181928982">"space"</string>
     <string name="abc_menu_enter_shortcut_label" msgid="7986526966204849475">"enter"</string>
     <string name="abc_menu_delete_shortcut_label" msgid="838001238306846836">"delete"</string>
+
+    <string name="sesl_more_item_label">Higit pa</string>
+    <string name="sesl_searchview_description_submit">Isumite ang katanungan</string>
+    <string name="sesl_index_assistant_text">Mag-swipe pataas o pababa gamit ang dalawang daliri para mag-scroll.</string>
+    <string name="sesl_index_section">Index ng seksiyon</string>
+    <string name="sesl_action_menu_overflow_badge_text_n">N</string>
+    <string name="sesl_index_scrollbar">Scroll bar</string>
+    <string name="sesl_searchview_description_clear">I-clear ang field ng paghahanap</string>
+    <string name="sesl_searchview_description_search">Maghanap</string>
+    <string name="sesl_toolbar_collapse_description">I-collapse</string>
+    <string name="sesl_action_bar_up_description">Mag-navigate pataas</string>
+    <string name="sesl_searchview_description_voice">Paghahanap gamit ang boses</string>
+    <string name="sesl_searchview_description_query">Katanungan sa paghahanap</string>
+    <string name="sesl_index_selected">Pinili</string>
+    <string name="sesl_action_menu_overflow_badge_description">May bagong content na magagamit</string>
+    <string name="sesl_search_hint">Maghanap</string>
+    <string name="sesl_action_menu_overflow_description">Karagdagang mga opsiyon</string>
+    <string name="sesl_switchbar_off_text">Naka-off</string>
+    <string name="sesl_switchbar_on_text">Naka-on</string>
+    <string name="sesl_switch_off">Naka-off</string>
+    <string name="sesl_switch_on">Naka-on</string>
 </resources>

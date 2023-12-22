@@ -44,4 +44,25 @@
     <string name="abc_menu_space_shortcut_label" msgid="5473865519181928982">"preslednica"</string>
     <string name="abc_menu_enter_shortcut_label" msgid="7986526966204849475">"enter"</string>
     <string name="abc_menu_delete_shortcut_label" msgid="838001238306846836">"delete"</string>
+
+    <string name="sesl_more_item_label">Več</string>
+    <string name="sesl_searchview_description_submit">Pošlji poizvedbo</string>
+    <string name="sesl_index_assistant_text">Za pomikanje podrsajte z dvema prstoma navzgor ali navzdol.</string>
+    <string name="sesl_index_section">Indeks odsekov</string>
+    <string name="sesl_action_menu_overflow_badge_text_n">N</string>
+    <string name="sesl_index_scrollbar">Drsna vrstica</string>
+    <string name="sesl_searchview_description_clear">Počisti iskalno polje</string>
+    <string name="sesl_searchview_description_search">Iskanje</string>
+    <string name="sesl_toolbar_collapse_description">Strni</string>
+    <string name="sesl_action_bar_up_description">Usmerjanje gor</string>
+    <string name="sesl_searchview_description_voice">Glasovno iskanje</string>
+    <string name="sesl_searchview_description_query">Iskalna poizvedba</string>
+    <string name="sesl_index_selected">Izbrano</string>
+    <string name="sesl_action_menu_overflow_badge_description">Na voljo je nova vsebina</string>
+    <string name="sesl_search_hint">Iskanje</string>
+    <string name="sesl_action_menu_overflow_description">Več možnosti</string>
+    <string name="sesl_switchbar_off_text">Izključ.</string>
+    <string name="sesl_switchbar_on_text">Vključeno</string>
+    <string name="sesl_switch_off">Izklopljeno</string>
+    <string name="sesl_switch_on">Vklopljeno</string>
 </resources>

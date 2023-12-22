@@ -44,4 +44,25 @@
     <string name="abc_menu_space_shortcut_label" msgid="5473865519181928982">"فضاء"</string>
     <string name="abc_menu_enter_shortcut_label" msgid="7986526966204849475">"enter"</string>
     <string name="abc_menu_delete_shortcut_label" msgid="838001238306846836">"حذف"</string>
+
+    <string name="sesl_more_item_label">المزيد</string>
+    <string name="sesl_searchview_description_submit">إرسال استعلام</string>
+    <string name="sesl_index_assistant_text">اسحب نحو الأعلى أو نحو الأسفل بإصبعين للتمرير.</string>
+    <string name="sesl_index_section">فهرس القسم</string>
+    <string name="sesl_action_menu_overflow_badge_text_n">ج</string>
+    <string name="sesl_index_scrollbar">شريط التمرير</string>
+    <string name="sesl_searchview_description_clear">مسح حقل البحث</string>
+    <string name="sesl_searchview_description_search">البحث</string>
+    <string name="sesl_toolbar_collapse_description">طي</string>
+    <string name="sesl_action_bar_up_description">الرجوع للخلف</string>
+    <string name="sesl_searchview_description_voice">البحث الصوتي</string>
+    <string name="sesl_searchview_description_query">البحث عن استعلام</string>
+    <string name="sesl_index_selected">تم التحديد</string>
+    <string name="sesl_action_menu_overflow_badge_description">محتوى جديد متوفر</string>
+    <string name="sesl_search_hint">البحث</string>
+    <string name="sesl_action_menu_overflow_description">مزيد من الخيارات</string>
+    <string name="sesl_switchbar_off_text">غير مفعل</string>
+    <string name="sesl_switchbar_on_text">مفعل</string>
+    <string name="sesl_switch_off">متوقف عن التشغيل</string>
+    <string name="sesl_switch_on">قيد التشغيل</string>
 </resources>

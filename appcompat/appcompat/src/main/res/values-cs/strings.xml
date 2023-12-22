@@ -44,4 +44,25 @@
     <string name="abc_menu_space_shortcut_label" msgid="5473865519181928982">"mezerník"</string>
     <string name="abc_menu_enter_shortcut_label" msgid="7986526966204849475">"enter"</string>
     <string name="abc_menu_delete_shortcut_label" msgid="838001238306846836">"delete"</string>
+
+    <string name="sesl_more_item_label">Další</string>
+    <string name="sesl_searchview_description_submit">Odeslat dotaz</string>
+    <string name="sesl_index_assistant_text">Potažením nahoru nebo dolů dvěma prsty posunete.</string>
+    <string name="sesl_index_section">Sekce rejstříku</string>
+    <string name="sesl_action_menu_overflow_badge_text_n">N</string>
+    <string name="sesl_index_scrollbar">Posuvník</string>
+    <string name="sesl_searchview_description_clear">Vymazat pole Hledat</string>
+    <string name="sesl_searchview_description_search">Hledat</string>
+    <string name="sesl_toolbar_collapse_description">Sbalit</string>
+    <string name="sesl_action_bar_up_description">Navigovat nahoru</string>
+    <string name="sesl_searchview_description_voice">Hledání hlasem</string>
+    <string name="sesl_searchview_description_query">Vyhledávací dotaz</string>
+    <string name="sesl_index_selected">Vybráno</string>
+    <string name="sesl_action_menu_overflow_badge_description">K dispozici je nový obsah</string>
+    <string name="sesl_search_hint">Hledat</string>
+    <string name="sesl_action_menu_overflow_description">Další možnosti</string>
+    <string name="sesl_switchbar_off_text">Vypnuto</string>
+    <string name="sesl_switchbar_on_text">Zapnuto</string>
+    <string name="sesl_switch_off">Vypnuto</string>
+    <string name="sesl_switch_on">Zapnuto</string>
 </resources>

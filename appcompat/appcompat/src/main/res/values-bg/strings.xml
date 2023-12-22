@@ -44,4 +44,25 @@
     <string name="abc_menu_space_shortcut_label" msgid="5473865519181928982">"клавиша за интервал"</string>
     <string name="abc_menu_enter_shortcut_label" msgid="7986526966204849475">"enter"</string>
     <string name="abc_menu_delete_shortcut_label" msgid="838001238306846836">"delete"</string>
+
+    <string name="sesl_more_item_label">Още</string>
+    <string name="sesl_searchview_description_submit">Подаване на заявка</string>
+    <string name="sesl_index_assistant_text">Плъзнете нагоре или надолу с два пръста, за да превъртите.</string>
+    <string name="sesl_index_section">Указател на разделите</string>
+    <string name="sesl_action_menu_overflow_badge_text_n">Н</string>
+    <string name="sesl_index_scrollbar">Лента за превъртане</string>
+    <string name="sesl_searchview_description_clear">Изчистване на полето за търсене</string>
+    <string name="sesl_searchview_description_search">Търсене</string>
+    <string name="sesl_toolbar_collapse_description">Свиване</string>
+    <string name="sesl_action_bar_up_description">Навигация нагоре</string>
+    <string name="sesl_searchview_description_voice">Гласово търсене</string>
+    <string name="sesl_searchview_description_query">Заявка за търсене</string>
+    <string name="sesl_index_selected">Избрано</string>
+    <string name="sesl_action_menu_overflow_badge_description">Налично е ново съдържание</string>
+     <string name="sesl_search_hint">Търсене</string>
+    <string name="sesl_action_menu_overflow_description">Още опции</string>
+    <string name="sesl_switchbar_off_text">Изключено</string>
+    <string name="sesl_switchbar_on_text">Включено</string>
+    <string name="sesl_switch_off">Изключено</string>
+    <string name="sesl_switch_on">Включено</string>
 </resources>

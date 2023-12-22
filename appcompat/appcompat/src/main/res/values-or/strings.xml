@@ -44,4 +44,25 @@
     <string name="abc_menu_space_shortcut_label" msgid="5473865519181928982">"ସ୍ପେସ୍‍"</string>
     <string name="abc_menu_enter_shortcut_label" msgid="7986526966204849475">"ଏଣ୍ଟର୍"</string>
     <string name="abc_menu_delete_shortcut_label" msgid="838001238306846836">"ଡିଲିଟ କରନ୍ତୁ"</string>
+
+    <string name="sesl_more_item_label">ଅଧିକ</string>
+    <string name="sesl_searchview_description_submit">ଜିଜ୍ଞାସା ଉପସ୍ଥାପନା କରନ୍ତୁ</string>
+    <string name="sesl_index_assistant_text">ସ୍କ୍ରଲ୍ କରିବାକୁ ଦୁଇ ଆଙ୍ଗୁଠିରେ ଉପର କିମ୍ବା ତଳକୁ ସ୍ୱାଇପ୍ କରନ୍ତୁ।</string>
+    <string name="sesl_index_section">ବିଭାଗ ଇଣ୍ତେକ୍ସ</string>
+    <string name="sesl_action_menu_overflow_badge_text_n">N</string>
+    <string name="sesl_index_scrollbar">ସ୍କ୍ରଲ୍ ବାର୍</string>
+    <string name="sesl_searchview_description_clear">ସର୍ଚ୍ଚ କ୍ଷେତ୍ର ଖାଲି କରନ୍ତୁ</string>
+    <string name="sesl_searchview_description_search">ସର୍ଚ୍ଚ</string>
+    <string name="sesl_toolbar_collapse_description">କୋଲାପ୍ସ</string>
+    <string name="sesl_action_bar_up_description">ଉପରକୁ ନେଭିଗେଟ୍ କରନ୍ତୁ</string>
+    <string name="sesl_searchview_description_voice">ଭଏସ୍ ସର୍ଚ୍ଚ</string>
+    <string name="sesl_searchview_description_query">ଜିଜ୍ଞାସା ଖୋଜନ୍ତୁ</string>
+    <string name="sesl_index_selected">ଚୟନିତ</string>
+    <string name="sesl_action_menu_overflow_badge_description">ନୂତନ ବିଷୟବସ୍ତୁ ଉପଲବ୍ଧ</string>
+    <string name="sesl_search_hint">ସର୍ଚ୍ଚ</string>
+    <string name="sesl_action_menu_overflow_description">ଅଧିକ ବିକଳ୍ପ</string>
+    <string name="sesl_switchbar_off_text">ଅଫ୍</string>
+    <string name="sesl_switchbar_on_text">ଅନ୍</string>
+    <string name="sesl_switch_off">ଅଫ୍ ଅଛି</string>
+    <string name="sesl_switch_on">ଅନ୍ ଅଛି</string>
 </resources>

@@ -44,4 +44,25 @@
     <string name="abc_menu_space_shortcut_label" msgid="5473865519181928982">"Espai"</string>
     <string name="abc_menu_enter_shortcut_label" msgid="7986526966204849475">"Retorn"</string>
     <string name="abc_menu_delete_shortcut_label" msgid="838001238306846836">"Supr"</string>
+
+    <string name="sesl_more_item_label">Més</string>
+    <string name="sesl_searchview_description_submit">Enviar consulta</string>
+    <string name="sesl_index_assistant_text">Llisca cap amunt o cap avall amb dos dits per desplaçar-te.</string>
+    <string name="sesl_index_section">Índex de seccions</string>
+    <string name="sesl_action_menu_overflow_badge_text_n">N</string>
+    <string name="sesl_index_scrollbar">Barra de desplaçament</string>
+    <string name="sesl_searchview_description_clear">Esborrar el camp de cerca</string>
+    <string name="sesl_searchview_description_search">Cercar</string>
+    <string name="sesl_toolbar_collapse_description">Contreure</string>
+    <string name="sesl_action_bar_up_description">Navegar amunt</string>
+    <string name="sesl_searchview_description_voice">Cerca de veu</string>
+    <string name="sesl_searchview_description_query">Consulta de cerca</string>
+    <string name="sesl_index_selected">Seleccionat</string>
+    <string name="sesl_action_menu_overflow_badge_description">Hi ha contingut nou disponible</string>
+    <string name="sesl_search_hint">Cercar</string>
+    <string name="sesl_action_menu_overflow_description">Més opcions</string>
+    <string name="sesl_switchbar_off_text">Desactivat</string>
+    <string name="sesl_switchbar_on_text">Activat</string>
+    <string name="sesl_switch_off">Desactivat</string>
+    <string name="sesl_switch_on">Activat</string>
 </resources>

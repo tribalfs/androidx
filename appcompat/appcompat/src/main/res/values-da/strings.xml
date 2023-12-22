@@ -44,4 +44,25 @@
     <string name="abc_menu_space_shortcut_label" msgid="5473865519181928982">"mellemrum"</string>
     <string name="abc_menu_enter_shortcut_label" msgid="7986526966204849475">"enter"</string>
     <string name="abc_menu_delete_shortcut_label" msgid="838001238306846836">"slet"</string>
+
+    <string name="sesl_more_item_label">Mere</string>
+    <string name="sesl_searchview_description_submit">Send forespørgsel</string>
+    <string name="sesl_index_assistant_text">Stryg op eller ned med to fingre for at rulle.</string>
+    <string name="sesl_index_section">Sektionsindeks</string>
+    <string name="sesl_action_menu_overflow_badge_text_n">N</string>
+    <string name="sesl_index_scrollbar">Rullepanel</string>
+    <string name="sesl_searchview_description_clear">Ryd søgefelt</string>
+    <string name="sesl_searchview_description_search">Søg</string>
+    <string name="sesl_toolbar_collapse_description">Skjul</string>
+    <string name="sesl_action_bar_up_description">Naviger op</string>
+    <string name="sesl_searchview_description_voice">Stemmesøgning</string>
+    <string name="sesl_searchview_description_query">Søgeforespørgsel</string>
+    <string name="sesl_index_selected">Valgt</string>
+    <string name="sesl_action_menu_overflow_badge_description">Nyt indhold tilgængeligt</string>
+    <string name="sesl_search_hint">Søg</string>
+    <string name="sesl_action_menu_overflow_description">Flere indstillinger</string>
+    <string name="sesl_switchbar_off_text">Fra</string>
+    <string name="sesl_switchbar_on_text">Til</string>
+    <string name="sesl_switch_off">Fra</string>
+    <string name="sesl_switch_on">Til</string>
 </resources>

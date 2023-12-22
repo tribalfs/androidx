@@ -44,4 +44,25 @@
     <string name="abc_menu_space_shortcut_label" msgid="5473865519181928982">"spatie"</string>
     <string name="abc_menu_enter_shortcut_label" msgid="7986526966204849475">"Enter"</string>
     <string name="abc_menu_delete_shortcut_label" msgid="838001238306846836">"Delete"</string>
+
+    <string name="sesl_more_item_label">Meer</string>
+    <string name="sesl_searchview_description_submit">Zoekopdracht verzenden</string>
+    <string name="sesl_index_assistant_text">Veeg omhoog of omlaag met twee vingers om te scrollen.</string>
+    <string name="sesl_index_section">Sectie-index</string>
+    <string name="sesl_action_menu_overflow_badge_text_n">N</string>
+    <string name="sesl_index_scrollbar">Schuifbalk</string>
+    <string name="sesl_searchview_description_clear">Zoekveld wissen</string>
+    <string name="sesl_searchview_description_search">Zoeken</string>
+    <string name="sesl_toolbar_collapse_description">Samenvouwen</string>
+    <string name="sesl_action_bar_up_description">Omhoog navigeren</string>
+    <string name="sesl_searchview_description_voice">Gesproken zoekopdracht</string>
+    <string name="sesl_searchview_description_query">Zoekopdracht</string>
+    <string name="sesl_index_selected">Geselecteerd</string>
+    <string name="sesl_action_menu_overflow_badge_description">Nieuwe inhoud beschikbaar</string>
+    <string name="sesl_search_hint">Zoeken</string>
+    <string name="sesl_action_menu_overflow_description">Meer opties</string>
+    <string name="sesl_switchbar_off_text">Uit</string>
+    <string name="sesl_switchbar_on_text">Aan</string>
+    <string name="sesl_switch_off">Uit</string>
+    <string name="sesl_switch_on">Aan</string>
 </resources>

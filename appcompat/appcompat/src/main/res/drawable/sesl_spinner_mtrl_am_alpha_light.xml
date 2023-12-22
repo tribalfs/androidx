@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:width="22dp" android:autoMirrored="true" android:viewportWidth="22" android:viewportHeight="24">
+    <path android:fillColor="@color/sesl_spinner_icon_color_default_light" android:pathData="M10.545,14.59L6.811,9.572C6.532,9.198 6.799,8.667 7.265,8.667L14.734,8.667C15.201,8.667 15.468,9.198 15.189,9.572L11.455,14.59C11.228,14.895 10.772,14.895 10.545,14.59" android:strokeColor="#00000000" android:strokeWidth="1" android:fillType="evenOdd"/>
+</vector>

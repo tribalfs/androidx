@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2018 The Android Open Source Project
+  ~ Copyright (C) 2022 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,18 +14,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<!--Sesl-->
-<animated-selector
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:state_enabled="false"
-        android:state_checked="true"
-        android:drawable="@drawable/sesl_btn_check_to_on_025"/>
-    <item
-        android:state_enabled="false"
-        android:drawable="@drawable/sesl_btn_check_to_on_001"/>
-    <item
-        android:state_checked="true"
-        android:drawable="@drawable/sesl_btn_check_to_on_026"/>
-    <item android:drawable="@drawable/sesl_btn_check_to_on_000"/>
-</animated-selector>
+<!-- Original code by Samsung, all rights reserved to the original author. -->
+<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+        android:src="@drawable/sesl_text_select_handle_middle_alpha" />

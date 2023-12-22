@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:tint="?attr/actionMenuTextColor"
+    android:height="@dimen/sesl_action_button_icon_size"
+    android:width="@dimen/sesl_action_button_icon_size"
+    android:autoMirrored="true"
+    android:viewportWidth="72"
+    android:viewportHeight="72">
+    <path
+        android:fillColor="@android:color/black"
+        android:pathData="M46.692,12.457C47.577,11.584 47.589,10.159 46.716,9.274C45.843,8.392 44.418,8.383 43.533,9.256L20.199,32.266C19.191,33.259 18.636,34.588 18.636,36.004C18.636,37.417 19.191,38.749 20.199,39.742L43.533,62.749C43.971,63.178 44.541,63.394 45.114,63.394C45.693,63.394 46.275,63.169 46.716,62.725C47.589,61.84 47.577,60.415 46.692,59.542L23.361,36.535C23.163,36.346 23.136,36.121 23.136,36.004C23.136,35.887 23.163,35.659 23.361,35.47L46.692,12.457Z" android:strokeColor="#00000000" android:strokeWidth="1" android:fillType="evenOdd"/>
+</vector>

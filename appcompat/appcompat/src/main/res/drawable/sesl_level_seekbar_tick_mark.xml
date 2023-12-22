@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:state_enabled="false">
+        <layer-list>
+            <item>
+                <shape
+                    android:shape="oval">
+                    <solid
+                        android:color="@color/sesl_tick_mark_disable_seekbar_level"/>
+                    <size
+                        android:height="@dimen/sesl_seekbar_level_tick_mark_height_width"
+                        android:width="@dimen/sesl_seekbar_level_tick_mark_height_width"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item
+        android:state_enabled="true">
+        <layer-list>
+            <item>
+                <shape
+                    android:shape="oval">
+                    <solid
+                        android:color="@color/sesl_tick_mark_seekbar_level"/>
+                    <size
+                        android:height="@dimen/sesl_seekbar_level_tick_mark_height_width"
+                        android:width="@dimen/sesl_seekbar_level_tick_mark_height_width"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

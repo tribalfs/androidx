@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android" android:drawable="@drawable/sesl_btn_radio_to_on_026">
+    <target android:name="s3" android:animation="@anim/sesl_radio_outcircle_0_scaley_0"/>
+    <target android:name="s3pg1p10" android:animation="@anim/sesl_radio_outcircle_0_ellipsepath1custom1_stroke1_s3pg1p2"/>
+    <target android:name="s2" android:animation="@anim/sesl_radio_outcircle_1_scaley_4"/>
+    <target android:name="s2pg1p10" android:animation="@anim/sesl_radio_outcircle_1_ellipsepath1custom5_stroke1_s2pg1p2"/>
+    <target android:name="s1" android:animation="@anim/sesl_radio_incircle_scaley_8"/>
+</animated-vector>

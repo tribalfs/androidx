@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt" android:height="20dp" android:width="20dp" android:viewportWidth="20" android:viewportHeight="20" aapt:fps="60">
+    <group android:name="c1s3" android:scaleX="0.2" android:scaleY="0.2" android:translateX="10" android:translateY="10" aapt:layer_name="SwitchThumb_stroke ParentLink">
+        <group android:name="s3" aapt:layer_name="SwitchThumb_stroke">
+            <group android:name="s3pg1" aapt:layer_name="Ellipse 1">
+                <path android:name="s3pg1p10" android:fillColor="@color/sesl_switch_thumb_on_stroke_color_light" android:pathData="M 0 -40 C 22.091 -40 40 -22.091 40 0 C 40 22.091 22.091 40 0 40 C -22.091 40 -40 22.091 -40 0 C -40 -22.091 -22.091 -40 0 -40 Z" android:fillAlpha="0" aapt:layer_name="Ellipse Path 1" aapt:style_name="Fill 1"/>
+            </group>
+        </group>
+    </group>
+    <group android:name="c1s2" android:scaleX="0.2" android:scaleY="0.2" android:translateX="10" android:translateY="10" aapt:layer_name="SwitchThumb_fill ParentLink">
+        <group android:name="s2" aapt:layer_name="SwitchThumb_fill">
+            <group android:name="s2pg1" aapt:layer_name="Ellipse 1">
+                <path android:name="s2pg1p10" android:fillColor="@color/sesl_switch_thumb_on_color" android:pathData="M 0 -32 C 17.673 -32 32 -17.673 32 0 C 32 17.673 17.673 32 0 32 C -17.673 32 -32 17.673 -32 0 C -32 -17.673 -17.673 -32 0 -32 Z" android:fillAlpha="1" aapt:layer_name="Ellipse Path 1" aapt:style_name="Fill 1"/>
+            </group>
+        </group>
+    </group>
+    <group android:name="c1" android:scaleX="0.2" android:scaleY="0.2" android:translateX="10" android:translateY="10" aapt:layer_name="SwitchThumb_parent">
+        <path android:name="c1sld" android:fillColor="#ffffff" android:pathData="M 0 0 H 100 V 100H 0 V 0 Z" android:fillAlpha="0" aapt:layer_name="SwitchThumb_parent"/>
+    </group>
+</vector>

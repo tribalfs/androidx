@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:autoMirrored="true">
+    <item android:state_enabled="false" android:drawable="@drawable/sesl_spinner_mtrl_am_alpha_disabled_light"/>
+    <item android:drawable="@drawable/sesl_spinner_mtrl_am_alpha_light"/>
+</selector>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:gravity="center">
+        <shape
+            android:shape="oval">
+            <size
+                android:height="16dp" android:width="16dp"/>
+            <solid
+                android:color="@color/sesl_switch_thumb_on_color"/>
+        </shape>
+    </item>
+    <item
+        android:gravity="center"
+        android:id="@+id/sesl_switch_thumb_on">
+        <shape
+            android:shape="oval">
+            <size
+                android:height="20dp"
+                android:width="20dp"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/sesl_switch_thumb_on_stroke_color_light"/>
+        </shape>
+    </item>
+</layer-list>

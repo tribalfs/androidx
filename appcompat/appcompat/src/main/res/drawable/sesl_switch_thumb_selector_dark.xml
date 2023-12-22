@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false" android:state_checked="true" android:drawable="@drawable/sesl_switchthumb_dark_on_dim"/>
+    <item android:state_enabled="false" android:drawable="@drawable/sesl_switchthumb_dark_off_dim"/>
+    <item android:state_checked="true" android:state_pressed="true" android:id="@+id/pressedOn" android:drawable="@drawable/sesl_switchthumb_pressed"/>
+    <item android:state_checked="true" android:state_pressed="false" android:id="@+id/unpressedOn" android:drawable="@drawable/sesl_switchthumb"/>
+    <item android:state_checked="false" android:state_pressed="true" android:id="@+id/pressedOff" android:drawable="@drawable/sesl_switchthumb_off_pressed"/>
+    <item android:state_checked="false" android:state_pressed="false" android:id="@+id/unpressedOff" android:drawable="@drawable/sesl_switchthumb_off"/>
+    <transition android:drawable="@drawable/sesl_switchthumb_transition" android:toId="@+id/pressedOn" android:fromId="@+id/unpressedOn"/>
+    <transition android:drawable="@drawable/sesl_switchthumb_transition_reverse" android:toId="@+id/unpressedOn" android:fromId="@+id/pressedOn"/>
+    <transition android:drawable="@drawable/sesl_switchthumb_off_transition" android:toId="@+id/pressedOff" android:fromId="@+id/unpressedOff"/>
+    <transition android:drawable="@drawable/sesl_switchthumb_off_transition_reverse" android:toId="@+id/unpressedOff" android:fromId="@+id/pressedOff"/>
+</animated-selector>

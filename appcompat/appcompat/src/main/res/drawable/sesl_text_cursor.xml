@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android" android:inset="@dimen/sesl_text_cursor_inset">
+    <shape android:tint="?attr/colorPrimary" android:shape="rectangle">
+        <size android:height="@dimen/sesl_text_cursor_width" android:width="@dimen/sesl_text_cursor_width"/>
+        <solid android:color="?attr/colorPrimary"/>
+    </shape>
+</inset>

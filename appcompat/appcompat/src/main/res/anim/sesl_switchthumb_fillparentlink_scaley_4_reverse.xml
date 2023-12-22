@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android" android:ordering="together">
+    <set android:ordering="sequentially">
+        <objectAnimator android:interpolator="@anim/easing_custom_0_400_0_000_0_600_1_000"
+            android:duration="200" android:valueFrom="0.2" android:valueTo="0.25" android:propertyName="scaleX"/>
+    </set>
+    <set android:ordering="sequentially">
+        <objectAnimator android:interpolator="@anim/easing_custom_0_400_0_000_0_600_1_000"
+            android:duration="200" android:valueFrom="0.2" android:valueTo="0.25" android:propertyName="scaleY"/>
+    </set>
+</set>

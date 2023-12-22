@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="sesl_dialog_background_corner_radius">26dp</dimen>
+    <dimen name="sesl_dialog_background_inset_horizontal">10dp</dimen>
+    <dimen name="sesl_dialog_button_bar_padding_bottom">20dp</dimen>
+    <dimen name="sesl_dialog_title_padding_bottom">12dp</dimen>
+</resources>

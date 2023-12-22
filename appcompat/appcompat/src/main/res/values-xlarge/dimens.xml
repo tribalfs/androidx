@@ -12,7 +12,7 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
+  -->
 
 <resources>
     <item type="dimen" name="abc_dialog_fixed_width_major">50%</item>
@@ -23,4 +23,7 @@
     <item type="dimen" name="abc_dialog_min_width_major">45%</item>
     <item type="dimen" name="abc_dialog_min_width_minor">72%</item>
 
+<!--
+    <item type="dimen" name="sesl_dialog_min_width_major">45.000004%</item>
+    <item type="dimen" name="sesl_dialog_min_width_minor">72.0%</item>-->
 </resources>

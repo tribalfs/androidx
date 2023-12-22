@@ -14,15 +14,31 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+<!-- Original code by Samsung, all rights reserved to the original author. -->
 
 <resources>
     <!-- The max amount of scroll ItemTouchHelper will trigger if dragged view is out of
     RecyclerView's bounds.-->
-    <dimen name="item_touch_helper_max_drag_scroll_per_frame">20dp</dimen>
-    <dimen name="item_touch_helper_swipe_escape_velocity">120dp</dimen>
-    <dimen name="item_touch_helper_swipe_escape_max_velocity">800dp</dimen>
-
     <dimen name="fastscroll_default_thickness">8dp</dimen>
     <dimen name="fastscroll_minimum_range">50dp</dimen>
     <dimen name="fastscroll_margin">0dp</dimen>
+
+    <dimen name="item_touch_helper_max_drag_scroll_per_frame">20dp</dimen>
+    <dimen name="item_touch_helper_swipe_escape_max_velocity">800dp</dimen>
+    <dimen name="item_touch_helper_swipe_escape_velocity">120dp</dimen>
+
+    <dimen name="sesl_fast_scroll_additional_touch_area">11dp</dimen>
+    <dimen name="sesl_fast_scroll_preview_margin_end">24dp</dimen>
+    <dimen name="sesl_fast_scroll_thumb_margin_end">8dp</dimen>
+    <dimen name="sesl_fast_scroller_touch_target_min_size">48dp</dimen>
+    <dimen name="sesl_fast_scroller_track_bottom_padding">20dp</dimen>
+    <dimen name="sesl_fast_scroller_track_top_padding">6dp</dimen>
+
+    <dimen name="sesl_index_tip_height">29dp</dimen>
+    <dimen name="sesl_index_tip_margin_top">6dp</dimen>
+    <dimen name="sesl_index_tip_max_width">150dp</dimen>
+    <dimen name="sesl_index_tip_min_width">25dp</dimen>
+    <dimen name="sesl_index_tip_padding">14dp</dimen>
+    <dimen name="sesl_index_tip_radius">15dp</dimen>
+    <dimen name="sesl_index_tip_text_size">13sp</dimen>
 </resources>

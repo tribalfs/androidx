@@ -46,7 +46,6 @@ import androidx.annotation.RestrictTo;
 import androidx.appcompat.R;
 import androidx.appcompat.widget.SeslDropDownItemTextView;
 import androidx.appcompat.widget.TintTypedArray;
-import androidx.core.view.ViewCompat;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -124,7 +123,7 @@ public class ListMenuItemView extends LinearLayout
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        ViewCompat.setBackground(this, mBackground);
+        setBackground(mBackground);
 
         //Sesl
         mDropDownItemTextView = findViewById(R.id.sub_menu_title);

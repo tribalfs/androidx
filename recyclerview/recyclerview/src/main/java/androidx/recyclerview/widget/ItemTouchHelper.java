@@ -1277,7 +1277,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
         final int originalMovementFlags = mCallback.getMovementFlags(mRecyclerView, viewHolder);
         final int absoluteMovementFlags = mCallback.convertToAbsoluteDirection(
                 originalMovementFlags,
-                ViewCompat.getLayoutDirection(mRecyclerView));
+                mRecyclerView.getLayoutDirection());
         final int flags = (absoluteMovementFlags
                 & ACTION_MODE_SWIPE_MASK) >> (ACTION_STATE_SWIPE * DIRECTION_FLAG_COUNT);
         if (flags == 0) {
@@ -1292,7 +1292,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
                 if ((originalFlags & swipeDir) == 0) {
                     // convert to relative
                     return Callback.convertToRelativeDirection(swipeDir,
-                            ViewCompat.getLayoutDirection(mRecyclerView));
+                            mRecyclerView.getLayoutDirection());
                 }
                 return swipeDir;
             }
@@ -1308,7 +1308,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
                 if ((originalFlags & swipeDir) == 0) {
                     // convert to relative
                     return Callback.convertToRelativeDirection(swipeDir,
-                            ViewCompat.getLayoutDirection(mRecyclerView));
+                            mRecyclerView.getLayoutDirection());
                 }
                 return swipeDir;
             }
@@ -1567,7 +1567,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
                 return flags; // does not have any abs flags, good.
             }
             flags &= ~masked; //remove left / right.
-            if (layoutDirection == ViewCompat.LAYOUT_DIRECTION_LTR) {
+            if (layoutDirection == View.LAYOUT_DIRECTION_LTR) {
                 // no change. just OR with 2 bits shifted mask and return
                 flags |= masked << 2; // START is 2 bits after LEFT, END is 2 bits after RIGHT.
                 return flags;
@@ -1658,7 +1658,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
                 return flags; // does not have any relative flags, good.
             }
             flags &= ~masked; //remove start / end
-            if (layoutDirection == ViewCompat.LAYOUT_DIRECTION_LTR) {
+            if (layoutDirection == View.LAYOUT_DIRECTION_LTR) {
                 // no change. just OR with 2 bits shifted mask and return
                 flags |= masked >> 2; // START is 2 bits after LEFT, END is 2 bits after RIGHT.
                 return flags;
@@ -1674,7 +1674,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
         final int getAbsoluteMovementFlags(RecyclerView recyclerView,
                 ViewHolder viewHolder) {
             final int flags = getMovementFlags(recyclerView, viewHolder);
-            return convertToAbsoluteDirection(flags, ViewCompat.getLayoutDirection(recyclerView));
+            return convertToAbsoluteDirection(flags, recyclerView.getLayoutDirection());
         }
 
         boolean hasDragFlag(RecyclerView recyclerView, ViewHolder viewHolder) {

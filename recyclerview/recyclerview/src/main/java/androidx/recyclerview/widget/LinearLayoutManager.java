@@ -1125,7 +1125,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     }
 
     protected boolean isLayoutRTL() {
-        return getLayoutDirection() == ViewCompat.LAYOUT_DIRECTION_RTL;
+        return getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
     }
 
     void ensureLayoutState() {

@@ -54,6 +54,7 @@ public class MenuPopupHelper implements MenuHelper {
 
     // Immutable cached popup menu properties.
     private final MenuBuilder mMenu;
+    //private final boolean mOverflowOnly;//sesl
     private final int mPopupStyleAttr;
     private final int mPopupStyleRes;
 
@@ -105,12 +106,12 @@ public class MenuPopupHelper implements MenuHelper {
     }
 
     /**
-     * Sets the view to which the popup window is anchored.
-     * <p>
-     * Changes take effect on the next call to show().
-     *
-     * @param anchor the view to which the popup window should be anchored
-     */
+      * Sets the view to which the popup window is anchored.
+      * <p>
+      * Changes take effect on the next call to show().
+      *
+      * @param anchor the view to which the popup window should be anchored
+      */
     public void setAnchorView(@NonNull View anchor) {
         mAnchorView = anchor;
     }
@@ -132,12 +133,12 @@ public class MenuPopupHelper implements MenuHelper {
     }
 
     /**
-     * Sets the alignment of the popup window relative to the anchor view.
-     * <p>
-     * Changes take effect on the next call to show().
-     *
-     * @param gravity alignment of the popup relative to the anchor
-     */
+      * Sets the alignment of the popup window relative to the anchor view.
+      * <p>
+      * Changes take effect on the next call to show().
+      *
+      * @param gravity alignment of the popup relative to the anchor
+      */
     public void setGravity(int gravity) {
         mDropDownGravity = gravity;
     }
@@ -279,7 +280,7 @@ public class MenuPopupHelper implements MenuHelper {
             // edge will be aligned with the anchor view. Adjust by the anchor
             // width such that the top-right corner is at the X offset.
             GravityCompat.getAbsoluteGravity(mDropDownGravity,
-                    ViewCompat.getLayoutDirection(mAnchorView));
+                    mAnchorView.getLayoutDirection());
 
             final boolean isRtl = ViewCompat.getLayoutDirection(mAnchorView) ==
                     ViewCompat.LAYOUT_DIRECTION_RTL;

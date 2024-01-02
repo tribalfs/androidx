@@ -64,7 +64,6 @@ import androidx.annotation.StyleRes;
 import androidx.appcompat.R;
 import androidx.appcompat.util.SeslMisc;
 import androidx.appcompat.view.menu.ShowableListMenu;
-import androidx.core.view.ViewCompat;
 import androidx.core.widget.PopupWindowCompat;
 import androidx.reflect.provider.SeslSettingsReflector;
 import androidx.reflect.view.SeslSemBlurInfoReflector;
@@ -691,7 +690,7 @@ public class ListPopupWindow implements ShowableListMenu {
         PopupWindowCompat.setWindowLayoutType(mPopup, mDropDownWindowLayoutType);
 
         if (mPopup.isShowing()) {
-            if (!ViewCompat.isAttachedToWindow(getAnchorView())) {
+            if (!getAnchorView().isAttachedToWindow()) {
                 //Don't update position if the anchor view is detached from window.
                 return;
             }
@@ -1410,7 +1409,7 @@ public class ListPopupWindow implements ShowableListMenu {
 
         @Override
         public void run() {
-            if (mDropDownList != null && ViewCompat.isAttachedToWindow(mDropDownList)
+            if (mDropDownList != null && mDropDownList.isAttachedToWindow()
                     && mDropDownList.getCount() > mDropDownList.getChildCount()
                     && mDropDownList.getChildCount() <= mListItemExpandMaximum) {
                 mPopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NOT_NEEDED);

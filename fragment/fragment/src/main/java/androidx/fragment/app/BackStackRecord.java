@@ -72,13 +72,13 @@ final class BackStackRecord extends FragmentTransaction implements
                 writer.print(prefix); writer.print("mTransition=#");
                         writer.print(Integer.toHexString(mTransition));
             }
-            if (mEnterAnim != 0 || mExitAnim !=0) {
+            if (mEnterAnim != 0 || mExitAnim != 0) {
                 writer.print(prefix); writer.print("mEnterAnim=#");
                         writer.print(Integer.toHexString(mEnterAnim));
                         writer.print(" mExitAnim=#");
                         writer.println(Integer.toHexString(mExitAnim));
             }
-            if (mPopEnterAnim != 0 || mPopExitAnim !=0) {
+            if (mPopEnterAnim != 0 || mPopExitAnim != 0) {
                 writer.print(prefix); writer.print("mPopEnterAnim=#");
                         writer.print(Integer.toHexString(mPopEnterAnim));
                         writer.print(" mPopExitAnim=#");

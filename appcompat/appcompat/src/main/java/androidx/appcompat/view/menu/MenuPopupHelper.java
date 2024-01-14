@@ -22,6 +22,7 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.Build;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -40,6 +41,8 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 
 /**
+ * <p><b></b>SESL variant</b></p><br>
+ *
  * Presents a menu as a small, simple popup anchored to another view.
  *
  */
@@ -51,7 +54,6 @@ public class MenuPopupHelper implements MenuHelper {
 
     // Immutable cached popup menu properties.
     private final MenuBuilder mMenu;
-    private final boolean mOverflowOnly;
     private final int mPopupStyleAttr;
     private final int mPopupStyleRes;
 
@@ -63,6 +65,14 @@ public class MenuPopupHelper implements MenuHelper {
 
     private MenuPopup mPopup;
     private OnDismissListener mOnDismissListener;
+
+    //Sesl
+    private boolean mOverflowOnly;
+    private boolean mOverlapAnchor;
+    private boolean mOverlapAnchorSet;
+    private boolean mForceShowUpper = false;
+    private boolean mAllowScrollingAnchorParent = true;
+    //sesl
 
     public MenuPopupHelper(@NonNull Context context, @NonNull MenuBuilder menu) {
         this(context, menu, null, false, R.attr.popupMenuStyle, 0);
@@ -95,12 +105,12 @@ public class MenuPopupHelper implements MenuHelper {
     }
 
     /**
-      * Sets the view to which the popup window is anchored.
-      * <p>
-      * Changes take effect on the next call to show().
-      *
-      * @param anchor the view to which the popup window should be anchored
-      */
+     * Sets the view to which the popup window is anchored.
+     * <p>
+     * Changes take effect on the next call to show().
+     *
+     * @param anchor the view to which the popup window should be anchored
+     */
     public void setAnchorView(@NonNull View anchor) {
         mAnchorView = anchor;
     }
@@ -122,12 +132,12 @@ public class MenuPopupHelper implements MenuHelper {
     }
 
     /**
-      * Sets the alignment of the popup window relative to the anchor view.
-      * <p>
-      * Changes take effect on the next call to show().
-      *
-      * @param gravity alignment of the popup relative to the anchor
-      */
+     * Sets the alignment of the popup window relative to the anchor view.
+     * <p>
+     * Changes take effect on the next call to show().
+     *
+     * @param gravity alignment of the popup relative to the anchor
+     */
     public void setGravity(int gravity) {
         mDropDownGravity = gravity;
     }
@@ -232,19 +242,20 @@ public class MenuPopupHelper implements MenuHelper {
 
         display.getRealSize(displaySize);
 
-        final int smallestWidth = Math.min(displaySize.x, displaySize.y);
-        final int minSmallestWidthCascading = mContext.getResources().getDimensionPixelSize(
-                R.dimen.abc_cascading_menus_min_smallest_width);
-        final boolean enableCascadingSubmenus = smallestWidth >= minSmallestWidthCascading;
+        //Sesl
+        final StandardMenuPopup popup = new StandardMenuPopup(
+                mContext, mMenu, mAnchorView, mPopupStyleAttr,
+                mPopupStyleRes, mOverflowOnly);
 
-        final MenuPopup popup;
-        if (enableCascadingSubmenus) {
-            popup = new CascadingMenuPopup(mContext, mAnchorView, mPopupStyleAttr,
-                    mPopupStyleRes, mOverflowOnly);
-        } else {
-            popup = new StandardMenuPopup(mContext, mMenu, mAnchorView, mPopupStyleAttr,
-                    mPopupStyleRes, mOverflowOnly);
+        if (mOverlapAnchorSet) {
+            popup.seslSetOverlapAnchor(mOverlapAnchor);
+            popup.seslForceShowUpper(mForceShowUpper);
         }
+
+        if (!mAllowScrollingAnchorParent) {
+            popup.seslSetAllowScrollingAnchorParent(mAllowScrollingAnchorParent);
+        }
+        //sesl
 
         // Assign immutable properties.
         popup.addMenu(mMenu);
@@ -267,13 +278,17 @@ public class MenuPopupHelper implements MenuHelper {
             // If the resolved drop-down gravity is RIGHT, the popup's right
             // edge will be aligned with the anchor view. Adjust by the anchor
             // width such that the top-right corner is at the X offset.
-            final int hgrav = GravityCompat.getAbsoluteGravity(mDropDownGravity,
-                    ViewCompat.getLayoutDirection(mAnchorView)) & Gravity.HORIZONTAL_GRAVITY_MASK;
-            if (hgrav == Gravity.RIGHT) {
-                xOffset -= mAnchorView.getWidth();
-            }
+            GravityCompat.getAbsoluteGravity(mDropDownGravity,
+                    ViewCompat.getLayoutDirection(mAnchorView));
 
-            popup.setHorizontalOffset(xOffset);
+            final boolean isRtl = ViewCompat.getLayoutDirection(mAnchorView) ==
+                    ViewCompat.LAYOUT_DIRECTION_RTL;
+            final int hOffset = mContext.getResources().getDimensionPixelOffset(R.dimen.sesl_menu_popup_offset_horizontal);
+            if (isRtl) {
+                popup.setHorizontalOffset(xOffset + hOffset);
+            } else {
+                popup.setHorizontalOffset(xOffset - hOffset);
+            }
             popup.setVerticalOffset(yOffset);
 
             // Set the transition epicenter to be roughly finger (or mouse
@@ -343,5 +358,33 @@ public class MenuPopupHelper implements MenuHelper {
      */
     public ListView getListView() {
         return getPopup().getListView();
+    }
+
+
+    //Sesl
+    /**
+     * Update the popup menu content width.
+     */
+    public void seslUpdate() {
+        if (mPopup instanceof StandardMenuPopup) {
+            ((StandardMenuPopup) mPopup).seslUpdate();
+        }
+    }
+
+    public void seslSetOverflowOnly(boolean overflowOnly) {
+        mOverflowOnly = overflowOnly;
+    }
+
+    public void seslSetOverlapAnchor(boolean overlapAnchor) {
+        mOverlapAnchorSet = true;
+        mOverlapAnchor = overlapAnchor;
+    }
+
+    public void seslForceShowUpper(boolean force) {
+        mForceShowUpper = force;
+    }
+
+    public void seslSetAllowScrollingAnchorParent(boolean enabled) {
+        mAllowScrollingAnchorParent = enabled;
     }
 }

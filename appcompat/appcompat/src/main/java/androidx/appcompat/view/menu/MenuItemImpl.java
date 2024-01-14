@@ -48,7 +48,7 @@ import androidx.core.view.ActionProvider;
 /**
  */
 @RestrictTo(LIBRARY_GROUP_PREFIX)
-public final class MenuItemImpl implements SupportMenuItem {
+public final class MenuItemImpl implements SupportMenuItem, SeslMenuItem {
 
     private static final String TAG = "MenuItemImpl";
 
@@ -86,6 +86,7 @@ public final class MenuItemImpl implements SupportMenuItem {
     private Runnable mItemCallback;
     private SupportMenuItem.OnMenuItemClickListener mClickListener;
 
+    private String mBadgeText;//sesl
     private CharSequence mContentDescription;
     private CharSequence mTooltipText;
 
@@ -904,4 +905,19 @@ public final class MenuItemImpl implements SupportMenuItem {
     public CharSequence getTooltipText() {
         return mTooltipText;
     }
+
+    //Sesl
+    @Override
+    public String getBadgeText() {
+        return mBadgeText;
+    }
+
+    @Override
+    public void setBadgeText(String text) {
+        if (mBadgeText == null || !mBadgeText.equals(text)) {
+            mBadgeText = text;
+            mMenu.onItemsChanged(false);
+        }
+    }
+    //sesl
 }

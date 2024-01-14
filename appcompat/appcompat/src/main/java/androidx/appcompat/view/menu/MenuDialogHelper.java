@@ -29,6 +29,8 @@ import androidx.appcompat.R;
 import androidx.appcompat.app.AlertDialog;
 
 /**
+ * <p><b></b>SESL variant</b></p><br>
+ *
  * Helper for menus that appear as Dialogs (context and submenus).
  */
 class MenuDialogHelper implements DialogInterface.OnKeyListener,
@@ -57,7 +59,7 @@ class MenuDialogHelper implements DialogInterface.OnKeyListener,
         final AlertDialog.Builder builder = new AlertDialog.Builder(menu.getContext());
 
         mPresenter = new ListMenuPresenter(builder.getContext(),
-                R.layout.abc_list_menu_item_layout);
+                R.layout.sesl_list_menu_item_layout);
 
         mPresenter.setCallback(this);
         mMenu.addMenuPresenter(mPresenter);

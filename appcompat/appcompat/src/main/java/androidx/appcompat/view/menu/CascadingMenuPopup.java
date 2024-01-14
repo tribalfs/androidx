@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -46,6 +47,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.R;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.MenuItemHoverListener;
 import androidx.appcompat.widget.MenuPopupWindow;
 import androidx.core.internal.view.SupportMenu;
@@ -58,12 +60,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * A popup for a menu which will allow multiple submenus to appear in a cascading fashion, side by
  * side.
  */
 final class CascadingMenuPopup extends MenuPopup implements MenuPresenter, OnKeyListener,
         PopupWindow.OnDismissListener {
-    private static final int ITEM_LAYOUT = R.layout.abc_cascading_menu_item_layout;
+    //Sesl
+    private static final int ITEM_LAYOUT = R.layout.sesl_cascading_menu_item_layout;
+    private static final int SUB_MENU_ITEM_LAYOUT = R.layout.sesl_popup_sub_menu_item_layout;
+    //sesl
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({HORIZ_POSITION_LEFT, HORIZ_POSITION_RIGHT})
@@ -207,7 +214,7 @@ final class CascadingMenuPopup extends MenuPopup implements MenuPresenter, OnKey
     private boolean mShowTitle;
     private Callback mPresenterCallback;
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    ViewTreeObserver mTreeObserver;
+            ViewTreeObserver mTreeObserver;
     private PopupWindow.OnDismissListener mOnDismissListener;
 
     /** Whether popup menus should disable exit animations when closing. */
@@ -221,7 +228,17 @@ final class CascadingMenuPopup extends MenuPopup implements MenuPresenter, OnKey
     @SuppressWarnings("deprecation")
     public CascadingMenuPopup(@NonNull Context context, @NonNull View anchor,
             @AttrRes int popupStyleAttr, @StyleRes int popupStyleRes, boolean overflowOnly) {
-        mContext = context;
+
+        //Sesl
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.popupTheme, outValue, false);
+        if (outValue.data != 0) {
+            mContext = new ContextThemeWrapper(context, outValue.data);
+        } else {
+            mContext = context;
+        }
+        //sesl
+
         mAnchorView = anchor;
         mPopupStyleAttr = popupStyleAttr;
         mPopupStyleRes = popupStyleRes;
@@ -231,8 +248,7 @@ final class CascadingMenuPopup extends MenuPopup implements MenuPresenter, OnKey
         mLastPosition = getInitialMenuPosition();
 
         final Resources res = context.getResources();
-        mMenuMaxWidth = Math.max(res.getDisplayMetrics().widthPixels / 2,
-                res.getDimensionPixelSize(R.dimen.abc_config_prefDialogWidth));
+        mMenuMaxWidth = res.getDisplayMetrics().widthPixels;//sesl
 
         mSubMenuHoverHandler = new Handler();
     }
@@ -368,18 +384,34 @@ final class CascadingMenuPopup extends MenuPopup implements MenuPresenter, OnKey
      */
     private void showMenu(@NonNull MenuBuilder menu) {
         final LayoutInflater inflater = LayoutInflater.from(mContext);
-        final MenuAdapter adapter = new MenuAdapter(menu, inflater, mOverflowOnly, ITEM_LAYOUT);
+
+        //Sesl
+        boolean isExclusiveCheckable = false;
+        for (int i = 0; i < menu.size(); i++) {
+            if (((MenuItemImpl) menu.getItem(i)).isExclusiveCheckable()) {
+                isExclusiveCheckable = true;
+                break;
+            }
+        }
+
+        final MenuAdapter adapter;
+        if (isExclusiveCheckable) {
+            adapter = new MenuAdapter(menu, inflater, mOverflowOnly, SUB_MENU_ITEM_LAYOUT);
+        } else {
+            adapter = new MenuAdapter(menu, inflater, mOverflowOnly, ITEM_LAYOUT);
+        }
+        //sesl
 
         // Apply "force show icon" setting. There are 3 cases:
         // (1) This is the top level menu and icon spacing is forced. Add spacing.
         // (2) This is a submenu. Add spacing if any of the visible menu items has an icon.
         // (3) This is the top level menu and icon spacing isn't forced. Do not add spacing.
         if (!isShowing() && mForceShowIcon) {
-          // Case 1
-          adapter.setForceShowIcon(true);
+            // Case 1
+            adapter.setForceShowIcon(true);
         } else if (isShowing()) {
-          // Case 2
-          adapter.setForceShowIcon(MenuPopup.shouldPreserveIconSpacing(menu));
+            // Case 2
+            adapter.setForceShowIcon(MenuPopup.shouldPreserveIconSpacing(menu));
         }
         // Case 3: Else, don't allow spacing for icons (default behavior; do nothing).
 
@@ -492,7 +524,7 @@ final class CascadingMenuPopup extends MenuPopup implements MenuPresenter, OnKey
         // If this is the root menu, show the title if requested.
         if (parentInfo == null && mShowTitle && menu.getHeaderTitle() != null) {
             final FrameLayout titleItemView = (FrameLayout) inflater.inflate(
-                    R.layout.abc_popup_menu_header_item_layout, listView, false);
+                    R.layout.sesl_popup_menu_header_item_layout, listView, false);
             final TextView titleView = (TextView) titleItemView.findViewById(android.R.id.title);
             titleItemView.setEnabled(false);
             titleView.setText(menu.getHeaderTitle());

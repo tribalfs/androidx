@@ -19,11 +19,16 @@ package androidx.appcompat.widget;
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,6 +41,7 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.view.ViewCompat;
 
 /**
+ * <p><b>SESL variant</b></p>
  */
 @RestrictTo(LIBRARY_GROUP_PREFIX)
 public class ActionBarContextView extends AbsActionBarView {
@@ -52,6 +58,13 @@ public class ActionBarContextView extends AbsActionBarView {
     private int mSubtitleStyleRes;
     private boolean mTitleOptional;
     private int mCloseItemLayout;
+
+    //Sesl
+    private static final String TAG = "ActionBarContextView";
+    private static float MAX_FONT_SCALE = 1.2f;
+    private boolean mIsActionModeAccessibilityOn;
+    private boolean mCheckActionModeOn;
+    //sesl
 
     public ActionBarContextView(@NonNull Context context) {
         this(context, null);
@@ -78,10 +91,11 @@ public class ActionBarContextView extends AbsActionBarView {
 
         mCloseItemLayout = a.getResourceId(
                 R.styleable.ActionMode_closeItemLayout,
-                R.layout.abc_action_mode_close_item_material);
+                R.layout.sesl_action_mode_close_item);
 
         a.recycle();
     }
+
 
     @Override
     public void onDetachedFromWindow() {
@@ -115,7 +129,6 @@ public class ActionBarContextView extends AbsActionBarView {
     public void setTitle(CharSequence title) {
         mTitle = title;
         initTitle();
-        ViewCompat.setAccessibilityPaneTitle(this, title);
     }
 
     public void setSubtitle(CharSequence subtitle) {
@@ -134,7 +147,7 @@ public class ActionBarContextView extends AbsActionBarView {
     private void initTitle() {
         if (mTitleLayout == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            inflater.inflate(R.layout.abc_action_bar_title_item, this);
+            inflater.inflate(R.layout.sesl_action_bar_title_item, this);
             mTitleLayout = (LinearLayout) getChildAt(getChildCount() - 1);
             mTitleView = (TextView) mTitleLayout.findViewById(R.id.action_bar_title);
             mSubtitleView = (TextView) mTitleLayout.findViewById(R.id.action_bar_subtitle);
@@ -159,6 +172,8 @@ public class ActionBarContextView extends AbsActionBarView {
     }
 
     public void initForMode(final ActionMode mode) {
+        mCheckActionModeOn = true;//sesl
+
         if (mClose == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             mClose = inflater.inflate(mCloseItemLayout, this, false);
@@ -259,15 +274,18 @@ public class ActionBarContextView extends AbsActionBarView {
 
         final int contentWidth = MeasureSpec.getSize(widthMeasureSpec);
 
+        final int topPadding =
+                getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding);//sesl
+
         int maxHeight = mContentHeight > 0 ?
-                mContentHeight : MeasureSpec.getSize(heightMeasureSpec);
+                mContentHeight + topPadding : MeasureSpec.getSize(heightMeasureSpec);
 
         final int verticalPadding = getPaddingTop() + getPaddingBottom();
         int availableWidth = contentWidth - getPaddingLeft() - getPaddingRight();
         final int height = maxHeight - verticalPadding;
         final int childSpecHeight = MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST);
 
-        if (mClose != null) {
+        if (mClose != null && mClose.getVisibility() == View.VISIBLE) {//sesl
             availableWidth = measureChildView(mClose, availableWidth, childSpecHeight, 0);
             MarginLayoutParams lp = (MarginLayoutParams) mClose.getLayoutParams();
             availableWidth -= lp.leftMargin + lp.rightMargin;
@@ -279,6 +297,50 @@ public class ActionBarContextView extends AbsActionBarView {
         }
 
         if (mTitleLayout != null && mCustomView == null) {
+            //Sesl
+            final Context context = getContext();
+            if (mTitleView != null) {
+                TypedArray a = context.obtainStyledAttributes(mTitleStyleRes,
+                        R.styleable.TextAppearance);
+                TypedValue value = a.peekValue(R.styleable.TextAppearance_android_textSize);
+                a.recycle();
+
+                final float textSize = TypedValue.complexToFloat(value.data);
+                if (TextUtils.isEmpty(mSubtitle)) {
+                    mTitleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
+                            textSize
+                                    * Math.min(context.getResources().getConfiguration().fontScale,
+                                    MAX_FONT_SCALE));
+                } else {
+                    mTitleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+                }
+            }
+            if (mClose == null || mClose.getVisibility() == View.GONE) {
+                final int contentInsetStart =
+                        (int) context.getResources().getDimension(R.dimen.sesl_toolbar_content_inset);
+                boolean isRtl =
+                        ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_LTR;
+                if (mTitleView != null && mTitleView.getVisibility() == View.VISIBLE) {
+                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mTitleView.getLayoutParams();
+                    if (isRtl) {
+                        lp.leftMargin = contentInsetStart;
+                    } else {
+                        lp.rightMargin = contentInsetStart;
+                    }
+                    mTitleView.setLayoutParams(lp);
+                }
+                if (mSubtitleView != null && mSubtitleView.getVisibility() == View.VISIBLE) {
+                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mSubtitleView.getLayoutParams();
+                    if (isRtl) {
+                        lp.leftMargin = contentInsetStart;
+                    } else {
+                        lp.rightMargin = contentInsetStart;
+                    }
+                    mSubtitleView.setLayoutParams(lp);
+                }
+            }
+            //sesl
+
             if (mTitleOptional) {
                 final int titleWidthSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
                 mTitleLayout.measure(titleWidthSpec, childSpecHeight);
@@ -369,4 +431,71 @@ public class ActionBarContextView extends AbsActionBarView {
     public boolean isTitleOptional() {
         return mTitleOptional;
     }
+
+
+    //Sesl
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        TypedArray a = getContext().obtainStyledAttributes(null, R.styleable.ActionMode,
+                android.R.attr.actionModeStyle, 0);
+
+        final int height = a.getDimensionPixelSize(R.styleable.ActionMode_height, -1);
+        if (height >= 0) {
+            setContentHeight(height);
+        }
+
+        setPadding(0,
+                getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding),
+                0,
+                0);
+
+        a.recycle();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        final int top = getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding);
+        setPadding(0, top, 0, 0);
+
+        TypedArray a = getContext().obtainStyledAttributes(null, R.styleable.ActionMode,
+                android.R.attr.actionModeStyle, 0);
+        final int height = a.getDimensionPixelSize(R.styleable.ActionMode_height, -1);
+        a.recycle();
+
+        ViewGroup.LayoutParams lp = getLayoutParams();
+        lp.height = height + top;
+        setLayoutParams(lp);
+    }
+
+    @Override
+    public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
+        if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            // Action mode started
+            Log.d(TAG, "onInitializeAccessibilityEvent Check ActionMode :"
+                    + mCheckActionModeOn);
+            if (mCheckActionModeOn) {
+                mIsActionModeAccessibilityOn = true;
+                mCheckActionModeOn = false;
+            } else {
+                mIsActionModeAccessibilityOn = false;
+            }
+            Log.d(TAG, "onInitializeAccessibilityEvent mIsActionModeAccessibilityOn :"
+                    + mIsActionModeAccessibilityOn);
+            event.setSource(this);
+            event.setClassName(getClass().getName());
+            event.setPackageName(getContext().getPackageName());
+            event.setContentDescription(mTitle);
+        } else {
+            super.onInitializeAccessibilityEvent(event);
+        }
+    }
+
+    public boolean getIsActionModeAccessibilityOn() {
+        return mIsActionModeAccessibilityOn;
+    }
+    //sesl
 }

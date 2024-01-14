@@ -16,9 +16,10 @@
 
 package androidx.appcompat.widget;
 
-import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -27,6 +28,9 @@ import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableContainer;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.text.InputFilter;
 import android.text.Layout;
@@ -44,13 +48,18 @@ import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.animation.Animation;
+import android.view.animation.PathInterpolator;
+import android.view.animation.Transformation;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
 import androidx.appcompat.R;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.text.AllCapsTransformationMethod;
@@ -58,12 +67,16 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.widget.TextViewCompat;
 import androidx.emoji2.text.EmojiCompat;
+import androidx.reflect.view.SeslHapticFeedbackConstantsReflector;
+import androidx.reflect.view.SeslViewReflector;
 import androidx.resourceinspection.annotation.Attribute;
 
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * SwitchCompat is a complete backport of the core {@link Switch} widget that
  * brings the visuals and functionality of the toggle widget to older versions
  * of the Android platform. Unlike other widgets in this package, SwitchCompat
@@ -100,7 +113,7 @@ import java.lang.ref.WeakReference;
  * Toggle Buttons</a> guide.</p>
  */
 public class SwitchCompat extends CompoundButton implements EmojiCompatConfigurationView {
-    private static final int THUMB_ANIMATION_DURATION = 250;
+    private static final int THUMB_ANIMATION_DURATION = 150;//sesl
 
     private static final int TOUCH_MODE_IDLE = 0;
     private static final int TOUCH_MODE_DOWN = 1;
@@ -197,7 +210,7 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
     private Layout mOffLayout;
     @Nullable
     private TransformationMethod mSwitchTransformationMethod;
-    ObjectAnimator mPositionAnimator;
+
     private final AppCompatTextHelper mTextHelper;
     @NonNull
     private AppCompatEmojiTextHelper mAppCompatEmojiTextHelper;
@@ -210,6 +223,24 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
     private static final int[] CHECKED_STATE_SET = {
             android.R.attr.state_checked
     };
+
+    //Sesl
+    private static final int THUMB_ANIMATION_DURATION_ABOVE_M = 300;
+    private static final int MIN_FLING_VELOCITY = 500;
+    private static final int CHANGE_FLING_VELOCITY = 2000;
+    private static final float THUMB_TRACK_WIDTH_RATIO = 0.5714286f;
+    private Drawable mTrackOnDrawable;
+    private Drawable mTrackOffDrawable;
+    ThumbAnimation mPositionAnimator;
+    private CharSequence mAccessibilityTextOn;
+    private CharSequence mAccessibilityTextOff;
+
+    private PathInterpolator mInterpolator;
+
+    @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
+    public static final boolean SUPPORT_TOUCH_FEEDBACK = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
+    public int mTrackMargin = 0;
+    //sesl
 
     /**
      * Construct a new Switch with default styling.
@@ -264,6 +295,12 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
         mTrackDrawable = a.getDrawable(R.styleable.SwitchCompat_track);
         if (mTrackDrawable != null) {
             mTrackDrawable.setCallback(this);
+            //Sesl
+            mTrackOnDrawable = mTrackDrawable.getConstantState().newDrawable();
+            mTrackOffDrawable = mTrackDrawable.getConstantState().newDrawable();
+            mTrackOnDrawable.setState(new int[]{android.R.attr.state_enabled, android.R.attr.state_checked});
+            mTrackOffDrawable.setState(new int[]{android.R.attr.state_enabled, -android.R.attr.state_checked});
+            //sesl
         }
         setTextOnInternal(a.getText(R.styleable.SwitchCompat_android_textOn));
         setTextOffInternal(a.getText(R.styleable.SwitchCompat_android_textOff));
@@ -323,6 +360,13 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
 
         AppCompatEmojiTextHelper emojiTextViewHelper = getEmojiTextViewHelper();
         emojiTextViewHelper.loadFromAttributes(attrs, defStyleAttr);
+
+        //Sesl
+        mSwitchWidth = getResources().getDimensionPixelSize(R.dimen.sesl_switch_width);
+        mAccessibilityTextOn = getResources().getString(R.string.sesl_switch_on);
+        mAccessibilityTextOff = getResources().getString(R.string.sesl_switch_off);
+        mInterpolator = new PathInterpolator(0.22f, 0.25f, 0.0f, 1.0f);
+        //sesl
 
         // Refresh display with current params
         refreshDrawableState();
@@ -527,6 +571,13 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
         }
         mTrackDrawable = track;
         if (track != null) {
+            //Sesl
+            Drawable.ConstantState constantState = track.getConstantState();
+            mTrackOnDrawable = constantState.newDrawable();
+            mTrackOffDrawable = constantState.newDrawable();
+            mTrackOnDrawable.setState(new int[]{android.R.attr.state_enabled, android.R.attr.state_checked});
+            mTrackOffDrawable.setState(new int[]{android.R.attr.state_enabled, -android.R.attr.state_checked});
+            //sesl
             track.setCallback(this);
         }
         requestLayout();
@@ -814,7 +865,6 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
         }
     }
 
-
     /**
      * Sets the text displayed when the button is in the checked state.
      *
@@ -828,6 +878,7 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
             // on/off-text are updated.
             setOnStateDescriptionOnRAndAbove();
         }
+
     }
 
     /**
@@ -876,6 +927,7 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
                 ? transformationMethod.getTransformation(onOffText, this)
                 : onOffText);
     }
+
 
     /**
      * Sets whether the on/off text should be displayed.
@@ -961,13 +1013,15 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
             paddingRight = Math.max(paddingRight, inset.right);
         }
 
-        final int switchWidth =
-                mEnforceSwitchWidth
-                        ? Math.max(mSwitchMinWidth, 2 * mThumbWidth + paddingLeft + paddingRight)
-                        : mSwitchMinWidth;
+//        final int switchWidth =
+//                mEnforceSwitchWidth
+//                        ? Math.max(mSwitchMinWidth, 2 * mThumbWidth + paddingLeft + paddingRight)
+//                        : mSwitchMinWidth;
         final int switchHeight = Math.max(trackHeight, thumbHeight);
-        mSwitchWidth = switchWidth;
+//        mSwitchWidth = switchWidth;
         mSwitchHeight = switchHeight;
+//        mTrackMargin = ((float) mThumbWidth) / ((float) mSwitchWidth) > THUMB_TRACK_WIDTH_RATIO
+//        ? (int) Math.ceil(i6 - (i7 * 0.5714286f)) : 0;
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
@@ -1100,6 +1154,7 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
         cancel.recycle();
     }
 
+
     /**
      * Called from onTouchEvent to end a drag operation.
      *
@@ -1133,17 +1188,47 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
         cancelSuperTouch(ev);
     }
 
+    //sesl
     private void animateThumbToCheckedState(final boolean newCheckedState) {
-        final float targetPosition = newCheckedState ? 1 : 0;
-        mPositionAnimator = ObjectAnimator.ofFloat(this, THUMB_POS, targetPosition);
-        mPositionAnimator.setDuration(THUMB_ANIMATION_DURATION);
-        mPositionAnimator.setAutoCancel(true);
-        mPositionAnimator.start();
+        if (mPositionAnimator != null) {
+            cancelPositionAnimator();
+        }
+        final float targetPosition = newCheckedState ? 1f : 0f;
+        mPositionAnimator = new ThumbAnimation(mThumbPosition, targetPosition);
+        if (Build.VERSION.SDK_INT >= 23) {
+            mPositionAnimator.setDuration(THUMB_ANIMATION_DURATION_ABOVE_M);
+        }else{
+            mPositionAnimator.setDuration(THUMB_ANIMATION_DURATION);
+        }
+
+        mPositionAnimator.setInterpolator(mInterpolator);
+        mPositionAnimator.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (mPositionAnimator == animation) {
+                    setThumbPosition(newCheckedState ? 1.0f : 0.0f);
+                    mPositionAnimator = null;
+                }
+            }
+        });
+        startAnimation(mPositionAnimator);
     }
+    //sesl
 
     private void cancelPositionAnimator() {
         if (mPositionAnimator != null) {
-            mPositionAnimator.cancel();
+            //Sesl
+            clearAnimation();
+            mPositionAnimator = null;
+            //sesl
         }
     }
 
@@ -1176,12 +1261,16 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
 
     @Override
     public void setChecked(boolean checked) {
+        //Sesl
+        if (canHapticFeedback(checked)) {
+            performHapticFeedback(SeslHapticFeedbackConstantsReflector.semGetVibrationIndex(27));
+        }
+        //sesl
         super.setChecked(checked);
 
         // Calling the super method may result in setChecked() getting called
         // recursively with a different value, so load the REAL value...
         checked = isChecked();
-
         if (checked) {
             setOnStateDescriptionOnRAndAbove();
         } else {
@@ -1252,6 +1341,7 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
         mSwitchBottom = switchBottom;
         mSwitchRight = switchRight;
     }
+
 
     @Override
     public void draw(@NonNull Canvas c) {
@@ -1348,7 +1438,23 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
                 trackDrawable.draw(canvas);
                 canvas.restoreToCount(saveCount);
             } else {
+                //Sesl
+                Drawable trackBgDrawable = isChecked() ? mTrackOffDrawable : mTrackOnDrawable;
+                trackBgDrawable.setBounds(trackDrawable.getBounds());
+
+                int alpha = (int)constrain(mThumbPosition * 255.0f, 0f, 255f);
+                int bgAlpha = 255 - alpha;
+
+                if (isChecked()) {
+                    trackDrawable.setAlpha(alpha);
+                    trackBgDrawable.setAlpha(bgAlpha);
+                } else {
+                    trackDrawable.setAlpha(bgAlpha);
+                    trackBgDrawable.setAlpha(alpha);
+                }
+                //sesl
                 trackDrawable.draw(canvas);
+                trackBgDrawable.draw(canvas);//sesl
             }
         }
 
@@ -1435,7 +1541,7 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
                 insets = DrawableUtils.INSETS_NONE;
             }
 
-            return mSwitchWidth - mThumbWidth - padding.left - padding.right
+            return (mSwitchWidth + mTrackMargin) - mThumbWidth - padding.left - padding.right
                     - insets.left - insets.right;
         } else {
             return 0;
@@ -1504,11 +1610,10 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
         if (mTrackDrawable != null) {
             mTrackDrawable.jumpToCurrentState();
         }
-
-        if (mPositionAnimator != null && mPositionAnimator.isStarted()) {
-            mPositionAnimator.end();
-            mPositionAnimator = null;
-        }
+        //Sesl
+        cancelPositionAnimator();
+        setThumbPosition(isChecked() ? 1.0f : 0.0f);
+        //sesl
     }
 
     @Override
@@ -1627,7 +1732,6 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
         return getEmojiTextViewHelper().isEnabled();
     }
 
-
     /**
      * Call this before caching the text in mOnLayout or mOffLayout to ensure the layouts get
      * updated when emojicompat loads
@@ -1671,21 +1775,81 @@ public class SwitchCompat extends CompoundButton implements EmojiCompatConfigura
             mOuterWeakRef = new WeakReference<>(view);
         }
 
-
         @Override
         public void onInitialized() {
-            SwitchCompat view = mOuterWeakRef.get();
-            if (view != null) {
-                view.onEmojiCompatInitializedForSwitchText();
+            SwitchCompat view  = mOuterWeakRef.get();
+            if (view  != null) {
+                view .onEmojiCompatInitializedForSwitchText();
+            }
+        }
+        @Override
+        public void onFailed(@Nullable Throwable throwable) {
+            SwitchCompat view  = mOuterWeakRef.get();
+            if (view  != null) {
+                view .onEmojiCompatInitializedForSwitchText();
             }
         }
 
+    }
+
+    //Sesl
+    private class ThumbAnimation extends Animation {
+        final float mStartPosition;
+        final float mEndPosition;
+        final float mDiff;
+
+        ThumbAnimation(float startPosition, float endPosition) {
+            mStartPosition = startPosition;
+            mEndPosition = endPosition;
+            mDiff = endPosition - startPosition;
+        }
+
         @Override
-        public void onFailed(@Nullable Throwable throwable) {
-            SwitchCompat view = mOuterWeakRef.get();
-            if (view != null) {
-                view.onEmojiCompatInitializedForSwitchText();
-            }
+        protected void applyTransformation(float interpolatedTime, Transformation t) {
+            setThumbPosition(mStartPosition + (mDiff * interpolatedTime));
         }
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mSwitchWidth = getResources().getDimensionPixelSize(R.dimen.sesl_switch_width);
+        mAccessibilityTextOn = getResources().getString(R.string.sesl_switch_on);
+        mAccessibilityTextOff = getResources().getString(R.string.sesl_switch_off);
+    }
+
+    public void setCheckedWithoutAnimation(boolean checked) {
+        super.setChecked(checked);
+        boolean isChecked = isChecked();
+        if (isChecked) {
+            setOnStateDescriptionOnRAndAbove();
+        } else {
+            setOffStateDescriptionOnRAndAbove();
+        }
+        cancelPositionAnimator();
+        setThumbPosition(isChecked ? 1.0f : 0.0f);
+    }
+
+    public boolean canHapticFeedback(boolean isChecked) {
+        return SUPPORT_TOUCH_FEEDBACK
+                && isChecked != isChecked()
+                && hasWindowFocus()
+                && SeslViewReflector.isVisibleToUser(this)
+                && !isTemporarilyDetached();
+    }
+
+    public void seslSetTrackStrokeColor(@ColorInt int color) {
+        DrawableContainer.DrawableContainerState containerState = (DrawableContainer.DrawableContainerState) mTrackDrawable.getConstantState();
+        LayerDrawable switchDrawable = (LayerDrawable) containerState.getChildren()[2];
+        GradientDrawable trackDrawable = (GradientDrawable) switchDrawable.findDrawableByLayerId(R.id.sesl_switch_track_on);
+        trackDrawable.setStroke(4, color);
+    }
+
+    public void seslSetThumbStrokeColor(@ColorInt int color) {
+        DrawableContainer.DrawableContainerState containerState = (DrawableContainer.DrawableContainerState) mThumbDrawable.getConstantState();
+        LayerDrawable switchDrawable = (LayerDrawable) containerState.getChildren()[2];
+        GradientDrawable thumbDrawable = (GradientDrawable) switchDrawable.findDrawableByLayerId(R.id.sesl_switch_thumb_on);
+        thumbDrawable.setStroke(4, color);
+    }
+    //sesl
 }

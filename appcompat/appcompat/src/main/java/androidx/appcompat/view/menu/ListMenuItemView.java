@@ -16,30 +16,44 @@
 
 package androidx.appcompat.view.menu;
 
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static android.widget.RelativeLayout.CENTER_VERTICAL;
+import static android.widget.RelativeLayout.TRUE;
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.AbsListView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RestrictTo;
 import androidx.appcompat.R;
+import androidx.appcompat.widget.SeslDropDownItemTextView;
 import androidx.appcompat.widget.TintTypedArray;
 import androidx.core.view.ViewCompat;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * The item view for each item in the ListView-based MenuViews.
  *
  */
@@ -53,6 +67,7 @@ public class ListMenuItemView extends LinearLayout
     private RadioButton mRadioButton;
     private TextView mTitleView;
     private CheckBox mCheckBox;
+
     private TextView mShortcutView;
     private ImageView mSubMenuArrowView;
     private ImageView mGroupDivider;
@@ -60,14 +75,21 @@ public class ListMenuItemView extends LinearLayout
 
     private Drawable mBackground;
     private int mTextAppearance;
-    private Context mTextAppearanceContext;
     private boolean mPreserveIconSpacing;
-    private Drawable mSubMenuArrow;
-    private boolean mHasListDivider;
-
     private LayoutInflater mInflater;
 
     private boolean mForceShowIcon;
+
+    //Sesl
+    private final Drawable mSubMenuArrow;
+    private final boolean mHasListDivider;
+    private static final int BADGE_LIMIT_NUMBER = 99;
+    private final NumberFormat mNumberFormat;
+    private LinearLayout mTitleParent;
+    private TextView mBadgeView;
+    private SeslDropDownItemTextView mDropDownItemTextView;
+    private boolean mIsSubMenu = false;
+    //sesl
 
     public ListMenuItemView(Context context, AttributeSet attrs) {
         this(context, attrs, R.attr.listMenuViewStyle);
@@ -84,7 +106,7 @@ public class ListMenuItemView extends LinearLayout
                 MenuView_android_itemTextAppearance, -1);
         mPreserveIconSpacing = a.getBoolean(
                 R.styleable.MenuView_preserveIconSpacing, false);
-        mTextAppearanceContext = context;
+
         mSubMenuArrow = a.getDrawable(R.styleable.MenuView_subMenuArrow);
 
         final TypedArray b = context.getTheme()
@@ -94,6 +116,8 @@ public class ListMenuItemView extends LinearLayout
 
         a.recycle();
         b.recycle();
+
+        mNumberFormat = NumberFormat.getInstance(Locale.getDefault());//sesl
     }
 
     @Override
@@ -102,20 +126,32 @@ public class ListMenuItemView extends LinearLayout
 
         ViewCompat.setBackground(this, mBackground);
 
-        mTitleView = findViewById(R.id.title);
-        if (mTextAppearance != -1) {
-            mTitleView.setTextAppearance(mTextAppearanceContext,
-                    mTextAppearance);
-        }
+        //Sesl
+        mDropDownItemTextView = findViewById(R.id.sub_menu_title);
 
-        mShortcutView = findViewById(R.id.shortcut);
-        mSubMenuArrowView = findViewById(R.id.submenuarrow);
-        if (mSubMenuArrowView != null) {
-            mSubMenuArrowView.setImageDrawable(mSubMenuArrow);
-        }
-        mGroupDivider = findViewById(R.id.group_divider);
+        mIsSubMenu = mDropDownItemTextView != null;
 
-        mContent = findViewById(R.id.content);
+        if (!mIsSubMenu) {
+            mTitleView = findViewById(R.id.title);
+            if (mTextAppearance != -1) {
+                mTitleView.setTextAppearance( mTextAppearance);
+            }
+            if (mTitleView != null) {
+                mTitleView.setSingleLine(false);
+                mTitleView.setMaxLines(2);
+            }
+
+            mShortcutView = findViewById(R.id.shortcut);
+            mSubMenuArrowView = findViewById(R.id.submenuarrow);
+            if (mSubMenuArrowView != null) {
+                mSubMenuArrowView.setImageDrawable(mSubMenuArrow);
+            }
+            mGroupDivider = findViewById(R.id.group_divider);
+
+            mContent = findViewById(R.id.content);
+            mTitleParent = findViewById(R.id.title_parent);
+        }
+        //sesl
     }
 
     @Override
@@ -131,6 +167,7 @@ public class ListMenuItemView extends LinearLayout
         setEnabled(itemData.isEnabled());
         setSubMenuArrowVisible(itemData.hasSubMenu());
         setContentDescription(itemData.getContentDescription());
+        setBadgeText(itemData.getBadgeText());//sesl
     }
 
     private void addContentView(View v) {
@@ -151,12 +188,25 @@ public class ListMenuItemView extends LinearLayout
 
     @Override
     public void setTitle(CharSequence title) {
-        if (title != null) {
-            mTitleView.setText(title);
+        //Sesl
+        if (mIsSubMenu) {
+            if (title != null) {
+                mDropDownItemTextView.setText(title);
 
-            if (mTitleView.getVisibility() != VISIBLE) mTitleView.setVisibility(VISIBLE);
-        } else {
-            if (mTitleView.getVisibility() != GONE) mTitleView.setVisibility(GONE);
+                if (mDropDownItemTextView.getVisibility() != VISIBLE)
+                    mDropDownItemTextView.setVisibility(VISIBLE);
+            } else {
+                if (mDropDownItemTextView.getVisibility() != GONE)
+                    mDropDownItemTextView.setVisibility(GONE);
+            }
+        } else {//sesl
+            if (title != null) {
+                mTitleView.setText(title);
+
+                if (mTitleView.getVisibility() != VISIBLE) mTitleView.setVisibility(VISIBLE);
+            } else {
+                if (mTitleView.getVisibility() != GONE) mTitleView.setVisibility(GONE);
+            }
         }
     }
 
@@ -171,48 +221,62 @@ public class ListMenuItemView extends LinearLayout
             return;
         }
 
-        // Depending on whether its exclusive check or not, the checkbox or
-        // radio button will be the one in use (and the other will be otherCompoundButton)
-        final CompoundButton compoundButton;
-        final CompoundButton otherCompoundButton;
+        if (!mIsSubMenu) {//sesl
+            // Depending on whether its exclusive check or not, the checkbox or
+            // radio button will be the one in use (and the other will be otherCompoundButton)
+            final CompoundButton compoundButton;
+            final CompoundButton otherCompoundButton;
 
-        if (mItemData.isExclusiveCheckable()) {
-            if (mRadioButton == null) {
-                insertRadioButton();
+            if (mItemData.isExclusiveCheckable()) {
+                if (mRadioButton == null) {
+                    insertRadioButton();
+                }
+                compoundButton = mRadioButton;
+                otherCompoundButton = mCheckBox;
+            } else {
+                if (mCheckBox == null) {
+                    insertCheckBox();
+                }
+                compoundButton = mCheckBox;
+                otherCompoundButton = mRadioButton;
             }
-            compoundButton = mRadioButton;
-            otherCompoundButton = mCheckBox;
+
+            if (checkable) {
+                compoundButton.setChecked(mItemData.isChecked());
+
+                if (compoundButton.getVisibility() != VISIBLE) {
+                    compoundButton.setVisibility(VISIBLE);
+                }
+
+                // Make sure the other compound button isn't visible
+                if (otherCompoundButton != null && otherCompoundButton.getVisibility() != GONE) {
+                    otherCompoundButton.setVisibility(GONE);
+                }
+            } else {
+                if (mCheckBox != null) {
+                    mCheckBox.setVisibility(GONE);
+                }
+                if (mRadioButton != null) {
+                    mRadioButton.setVisibility(GONE);
+                }
+            }
         } else {
-            if (mCheckBox == null) {
-                insertCheckBox();
-            }
-            compoundButton = mCheckBox;
-            otherCompoundButton = mRadioButton;
-        }
-
-        if (checkable) {
-            compoundButton.setChecked(mItemData.isChecked());
-
-            if (compoundButton.getVisibility() != VISIBLE) {
-                compoundButton.setVisibility(VISIBLE);
-            }
-
-            // Make sure the other compound button isn't visible
-            if (otherCompoundButton != null && otherCompoundButton.getVisibility() != GONE) {
-                otherCompoundButton.setVisibility(GONE);
-            }
-        } else {
-            if (mCheckBox != null) {
-                mCheckBox.setVisibility(GONE);
-            }
-            if (mRadioButton != null) {
-                mRadioButton.setVisibility(GONE);
+            //sesl
+            if (checkable) {
+                mDropDownItemTextView.setChecked(mItemData.isChecked());
             }
         }
     }
 
     @Override
     public void setChecked(boolean checked) {
+        //Sesl
+        if (mIsSubMenu) {
+            mDropDownItemTextView.setChecked(checked);
+            return;
+        }
+        //sesl
+
         CompoundButton compoundButton;
 
         if (mItemData.isExclusiveCheckable()) {
@@ -231,13 +295,17 @@ public class ListMenuItemView extends LinearLayout
     }
 
     private void setSubMenuArrowVisible(boolean hasSubmenu) {
-        if (mSubMenuArrowView != null) {
+        if (mSubMenuArrowView != null && !mIsSubMenu) {//sesl
             mSubMenuArrowView.setVisibility(hasSubmenu ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public void setShortcut(boolean showShortcut, char shortcutKey) {
+        if (mIsSubMenu) {//sesl
+            return;
+        }
+
         final int newVisibility = (showShortcut && mItemData.shouldShowShortcut())
                 ? VISIBLE : GONE;
 
@@ -252,6 +320,10 @@ public class ListMenuItemView extends LinearLayout
 
     @Override
     public void setIcon(Drawable icon) {
+        if (mIsSubMenu) {//sesl
+            return;
+        }
+
         final boolean showIcon = mItemData.shouldShowIcon() || mForceShowIcon;
         if (!showIcon && !mPreserveIconSpacing) {
             return;
@@ -278,7 +350,7 @@ public class ListMenuItemView extends LinearLayout
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (mIconView != null && mPreserveIconSpacing) {
+        if (mIconView != null && mPreserveIconSpacing && !mIsSubMenu) {//sesl
             // Enforce minimum icon spacing
             ViewGroup.LayoutParams lp = getLayoutParams();
             LayoutParams iconLp = (LayoutParams) mIconView.getLayoutParams();
@@ -290,16 +362,18 @@ public class ListMenuItemView extends LinearLayout
     }
 
     private void insertIconView() {
-        LayoutInflater inflater = getInflater();
-        mIconView = (ImageView) inflater.inflate(R.layout.abc_list_menu_item_icon,
-                this, false);
-        addContentView(mIconView, 0);
+        if (!mIsSubMenu) {//sesl
+            LayoutInflater inflater = getInflater();
+            mIconView = (ImageView) inflater.inflate(R.layout.abc_list_menu_item_icon,
+                    this, false);
+            addContentView(mIconView, 0);
+        }
     }
 
     private void insertRadioButton() {
         LayoutInflater inflater = getInflater();
         mRadioButton =
-                (RadioButton) inflater.inflate(R.layout.abc_list_menu_item_radio,
+                (RadioButton) inflater.inflate(R.layout.sesl_list_menu_item_radio,
                         this, false);
         addContentView(mRadioButton);
     }
@@ -307,7 +381,7 @@ public class ListMenuItemView extends LinearLayout
     private void insertCheckBox() {
         LayoutInflater inflater = getInflater();
         mCheckBox =
-                (CheckBox) inflater.inflate(R.layout.abc_list_menu_item_checkbox,
+                (CheckBox) inflater.inflate(R.layout.sesl_list_menu_item_checkbox,
                         this, false);
         addContentView(mCheckBox);
     }
@@ -352,5 +426,84 @@ public class ListMenuItemView extends LinearLayout
             rect.top += mGroupDivider.getHeight() + lp.topMargin + lp.bottomMargin;
         }
     }
+
+    //Sesl
+    @Override
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo nodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(nodeInfo);
+
+        if (mBadgeView != null && mBadgeView.getVisibility() == View.VISIBLE
+                && mBadgeView.getWidth() > 0) {
+            if (!TextUtils.isEmpty(getContentDescription())) {
+                nodeInfo.setContentDescription(getContentDescription());
+            } else {
+                nodeInfo.setContentDescription(((Object) mItemData.getTitle()) + " , "
+                        + getResources().getString(R.string.sesl_action_menu_overflow_badge_description));
+            }
+        }
+    }
+
+    private void setBadgeText(String text) {
+        if (mBadgeView == null) {
+            mBadgeView = findViewById(R.id.menu_badge);
+        }
+
+        if (mBadgeView == null) {
+            Log.i(TAG, "SUB_MENU_ITEM_LAYOUT case, mBadgeView is null");
+            return;
+        }
+
+        RelativeLayout.LayoutParams badgeLp = (RelativeLayout.LayoutParams) mBadgeView.getLayoutParams();
+        RelativeLayout.LayoutParams titleLp = (RelativeLayout.LayoutParams) mTitleParent.getLayoutParams();
+        Resources res = getResources();
+
+        if (isNumericValue(text)) {
+            final String localeFormattedNumber = mNumberFormat.format(Math.min(Integer.parseInt(text), BADGE_LIMIT_NUMBER));
+            seslCheckMaxFontScale(mBadgeView, res.getDimensionPixelSize(R.dimen.sesl_menu_item_badge_text_size));
+            mBadgeView.setText(localeFormattedNumber);
+            float default_width = res.getDimension(R.dimen.sesl_badge_default_width);
+            float additionalWidth = res.getDimension(R.dimen.sesl_badge_additional_width);
+            badgeLp.width = (int) (default_width + (localeFormattedNumber.length() * additionalWidth));
+            badgeLp.height = (int)(default_width + additionalWidth);
+            badgeLp.addRule(CENTER_VERTICAL, TRUE);
+            mBadgeView.setLayoutParams(badgeLp);
+        } else {
+            badgeLp.topMargin = (int) res.getDimension(R.dimen.sesl_list_menu_item_dot_badge_top_margin);
+            titleLp.width = WRAP_CONTENT;
+            mTitleParent.setLayoutParams(titleLp);
+            mBadgeView.setLayoutParams(badgeLp);
+
+        }
+
+        if (text != null && mTitleParent != null) {
+            mTitleParent.setPaddingRelative(
+                    0,
+                    0,
+                    badgeLp.width + getResources().getDimensionPixelSize(R.dimen.sesl_list_menu_item_dot_badge_end_margin),
+                    0
+            );
+        }
+        mBadgeView.setVisibility(text == null ? View.GONE : View.VISIBLE);
+    }
+
+    private boolean isNumericValue(String str) {
+        if (str == null) {
+            return false;
+        }
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public final void seslCheckMaxFontScale(TextView textView, int i) {
+        float f = getResources().getConfiguration().fontScale;
+        if (f > 1.2f) {
+            textView.setTextSize(0, (i / f) * 1.2f);
+        }
+    }
+    //sesl
 }
 

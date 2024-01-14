@@ -41,9 +41,12 @@ import androidx.core.view.TintableBackgroundView;
 import androidx.core.widget.AutoSizeableTextView;
 import androidx.core.widget.TextViewCompat;
 import androidx.core.widget.TintableCompoundDrawablesView;
+import androidx.reflect.widget.SeslTextViewReflector;
 import androidx.resourceinspection.annotation.AppCompatShadowedAttributes;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * A {@link Button} which supports compatible features on older versions of the platform,
  * including:
  * <ul>
@@ -459,4 +462,14 @@ public class AppCompatButton extends Button implements TintableBackgroundView,
     public boolean isEmojiCompatEnabled() {
         return getEmojiTextViewHelper().isEnabled();
     }
+
+    //Sesl
+    public void seslSetButtonShapeEnabled(boolean enabled) {
+        SeslTextViewReflector.semSetButtonShapeEnabled(this, enabled);
+    }
+
+    public void seslSetButtonShapeEnabled(boolean enabled, int textColor) {
+        SeslTextViewReflector.semSetButtonShapeEnabled(this, enabled, textColor);
+    }
+    //sesl
 }

@@ -40,12 +40,15 @@ import androidx.appcompat.graphics.drawable.DrawableWrapperCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewPropertyAnimatorCompat;
 import androidx.core.widget.ListViewAutoScrollHelper;
+import androidx.reflect.widget.SeslAdapterViewReflector;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * <p>Wrapper class for a ListView. This wrapper can hijack the focus to
  * make sure the list uses the appropriate drawables and states when
  * displayed on screen within a drop down. The focus is never actually
@@ -66,33 +69,33 @@ class DropDownListView extends ListView {
     private GateKeeperDrawable mSelector;
 
     /*
-    * WARNING: This is a workaround for a touch mode issue.
-    *
-    * Touch mode is propagated lazily to windows. This causes problems in
-    * the following scenario:
-    * - Type something in the AutoCompleteTextView and get some results
-    * - Move down with the d-pad to select an item in the list
-    * - Move up with the d-pad until the selection disappears
-    * - Type more text in the AutoCompleteTextView *using the soft keyboard*
-    *   and get new results; you are now in touch mode
-    * - The selection comes back on the first item in the list, even though
-    *   the list is supposed to be in touch mode
-    *
-    * Using the soft keyboard triggers the touch mode change but that change
-    * is propagated to our window only after the first list layout, therefore
-    * after the list attempts to resurrect the selection.
-    *
-    * The trick to work around this issue is to pretend the list is in touch
-    * mode when we know that the selection should not appear, that is when
-    * we know the user moved the selection away from the list.
-    *
-    * This boolean is set to true whenever we explicitly hide the list's
-    * selection and reset to false whenever we know the user moved the
-    * selection back to the list.
-    *
-    * When this boolean is true, isInTouchMode() returns true, otherwise it
-    * returns super.isInTouchMode().
-    */
+     * WARNING: This is a workaround for a touch mode issue.
+     *
+     * Touch mode is propagated lazily to windows. This causes problems in
+     * the following scenario:
+     * - Type something in the AutoCompleteTextView and get some results
+     * - Move down with the d-pad to select an item in the list
+     * - Move up with the d-pad until the selection disappears
+     * - Type more text in the AutoCompleteTextView *using the soft keyboard*
+     *   and get new results; you are now in touch mode
+     * - The selection comes back on the first item in the list, even though
+     *   the list is supposed to be in touch mode
+     *
+     * Using the soft keyboard triggers the touch mode change but that change
+     * is propagated to our window only after the first list layout, therefore
+     * after the list attempts to resurrect the selection.
+     *
+     * The trick to work around this issue is to pretend the list is in touch
+     * mode when we know that the selection should not appear, that is when
+     * we know the user moved the selection away from the list.
+     *
+     * This boolean is set to true whenever we explicitly hide the list's
+     * selection and reset to false whenever we know the user moved the
+     * selection back to the list.
+     *
+     * When this boolean is true, isInTouchMode() returns true, otherwise it
+     * returns super.isInTouchMode().
+     */
     private boolean mListSelectionHidden;
 
     /**
@@ -126,6 +129,7 @@ class DropDownListView extends ListView {
         mHijackFocus = hijackFocus;
         setCacheColorHint(0); // Transparent, since the background drawable could be anything.
     }
+
     private boolean superIsSelectedChildViewEnabled() {
         if (Build.VERSION.SDK_INT >= 33) {
             return Api33Impl.isSelectedChildViewEnabled(this);
@@ -140,6 +144,7 @@ class DropDownListView extends ListView {
             PreApi33Impl.setSelectedChildViewEnabled(this, enabled);
         }
     }
+
 
     @Override
     public boolean isInTouchMode() {
@@ -438,12 +443,6 @@ class DropDownListView extends ListView {
 
     @Override
     public boolean onHoverEvent(@NonNull MotionEvent ev) {
-        if (SDK_INT < 26) {
-            // On SDK 26 and below, hover events force the UI into touch mode which does not show
-            // the selector. Don't bother trying to move selection.
-            return super.onHoverEvent(ev);
-        }
-
         final int action = ev.getActionMasked();
         if (action == MotionEvent.ACTION_HOVER_EXIT && mResolveHoverRunnable == null) {
             // This may be transitioning to TOUCH_DOWN. Postpone drawable state
@@ -457,23 +456,20 @@ class DropDownListView extends ListView {
         if (action == MotionEvent.ACTION_HOVER_ENTER
                 || action == MotionEvent.ACTION_HOVER_MOVE) {
             final int position = pointToPosition((int) ev.getX(), (int) ev.getY());
+            final int mSelectedPosition = SeslAdapterViewReflector
+                    .getField_mSelectedPosition(this);
 
-            if (position != INVALID_POSITION && position != getSelectedItemPosition()) {
+            if (position != INVALID_POSITION && position != mSelectedPosition) {
                 final View hoveredItem = getChildAt(position - getFirstVisiblePosition());
                 if (hoveredItem.isEnabled()) {
                     // Force a focus so that the proper selector state gets
                     // used when we update.
                     requestFocus();
-
-                    if (SDK_INT >= 30 && Api30Impl.canPositionSelectorForHoveredItem()) {
-                        // Starting in SDK 30, setSelectionFromTop does not move selection. Instead,
-                        // we'll reflect on the methods used by the platform DropDownListView.
-                        Api30Impl.positionSelectorForHoveredItem(this, position, hoveredItem);
-                    } else {
-                        setSelectionFromTop(position, hoveredItem.getTop() - this.getTop());
+                    if (!isHovered()) {
+                        setHovered(true);
                     }
                 }
-                updateSelectorStateCompat();
+                drawableStateChanged();
             }
         } else {
             // Do not cancel the selected position if the selection is visible

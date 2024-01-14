@@ -31,6 +31,7 @@ import androidx.annotation.AttrRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.R;
@@ -40,6 +41,8 @@ import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.view.menu.ShowableListMenu;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * Static library support version of the framework's {@link android.widget.PopupMenu}.
  * Used to write apps that run on platforms prior to Android 3.0.  When running
  * on Android 3.0 or above, this implementation is still used; it does not try
@@ -56,9 +59,14 @@ public class PopupMenu {
     OnDismissListener mOnDismissListener;
     private View.OnTouchListener mDragListener;
 
+    //Sesl
+    private int mXOffset = 0;
+    private int mYOffset = 0;
+    //sesl
+
     /**
      * Constructor to create a new popup menu with an anchor view.
-         *
+     *
      * @param context Context the popup menu is running in, through which it
      *        can access the current theme, resources, etc.
      * @param anchor Anchor view for this popup. The popup will appear below
@@ -121,6 +129,7 @@ public class PopupMenu {
         });
 
         mPopup = new MenuPopupHelper(context, mMenu, anchor, false, popupStyleAttr, popupStyleRes);
+        mPopup.seslSetOverflowOnly(true);
         mPopup.setGravity(gravity);
         mPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -235,8 +244,9 @@ public class PopupMenu {
      * @see #dismiss()
      */
     public void show() {
-        mPopup.show();
+        mPopup.show(mXOffset, mYOffset);//sesl
     }
+
 
     /**
      * Dismiss the menu popup.
@@ -279,6 +289,7 @@ public class PopupMenu {
         mPopup.setForceShowIcon(forceShowIcon);
     }
 
+
     /**
      * Interface responsible for receiving menu item click events if the items
      * themselves do not have individual item click listeners.
@@ -320,4 +331,41 @@ public class PopupMenu {
         }
         return mPopup.getListView();
     }
+
+    //Sesl
+
+    /**
+     * Sets a custom offset for the popup.
+     */
+    @RequiresApi(17)
+    public void seslSetOffset(int x, int y) {
+        if (mAnchor.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+            mXOffset = -x;
+        } else {
+            mXOffset = x;
+        }
+        mYOffset = y;
+    }
+
+
+    public void seslSetOverflowOnly(boolean overflowOnly) {
+        mPopup.seslSetOverflowOnly(overflowOnly);
+    }
+
+    public void seslSetAllowScrollingAnchorParent(boolean enabled) {
+        if (mPopup != null) {
+            mPopup.seslSetAllowScrollingAnchorParent(enabled);
+        }
+    }
+
+    public void seslUpdate() {
+        if (mPopup != null) {
+            mPopup.seslUpdate();
+        }
+    }
+
+    public boolean seslIsShowing() {
+        return mPopup != null && mPopup.isShowing();
+    }
+    //sesl
 }

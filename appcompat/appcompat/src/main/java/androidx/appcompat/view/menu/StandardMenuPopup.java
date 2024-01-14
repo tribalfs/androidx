@@ -19,6 +19,7 @@ package androidx.appcompat.view.menu;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Parcelable;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -34,37 +35,41 @@ import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
 import androidx.appcompat.R;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.MenuPopupWindow;
-import androidx.core.view.ViewCompat;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * A standard menu popup in which when a submenu is opened, it replaces its parent menu in the
  * viewport.
  */
 final class StandardMenuPopup extends MenuPopup implements OnDismissListener, OnItemClickListener,
         MenuPresenter, OnKeyListener {
-    private static final int ITEM_LAYOUT = R.layout.abc_popup_menu_item_layout;
+    //Sesl
+    private static final int ITEM_LAYOUT = R.layout.sesl_popup_menu_item_layout;
+    private static final int SUB_MENU_ITEM_LAYOUT = R.layout.sesl_popup_sub_menu_item_layout;
+    //sesl
 
     private final Context mContext;
 
     private final MenuBuilder mMenu;
     private final MenuAdapter mAdapter;
     private final boolean mOverflowOnly;
-    private final int mPopupMaxWidth;
+    private int mPopupMaxWidth;
     private final int mPopupStyleAttr;
     private final int mPopupStyleRes;
     // The popup window is final in order to couple its lifecycle to the lifecycle of the
     // StandardMenuPopup.
     final MenuPopupWindow mPopup;
 
+    private ListView mTmpListView = null;//sesl
+
     @SuppressWarnings("WeakerAccess") /* synthetic access */
     final OnGlobalLayoutListener mGlobalLayoutListener = new OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
-            // Only move the popup if it's showing and non-modal. We don't want
-            // to be moving around the only interactive window, since there's a
-            // good chance the user is interacting with it.
-            if (isShowing() && !mPopup.isModal()) {
+            if (isShowing()/* && !mPopup.isModal()*/) {//sesl
                 final View anchor = mShownAnchorView;
                 if (anchor == null || !anchor.isShown()) {
                     dismiss();
@@ -78,19 +83,19 @@ final class StandardMenuPopup extends MenuPopup implements OnDismissListener, On
 
     private final View.OnAttachStateChangeListener mAttachStateChangeListener =
             new View.OnAttachStateChangeListener() {
-        @Override
-        public void onViewAttachedToWindow(View v) {
-        }
+                @Override
+                public void onViewAttachedToWindow(View v) {
+                }
 
-        @Override
-        public void onViewDetachedFromWindow(View v) {
-            if (mTreeObserver != null) {
-                if (!mTreeObserver.isAlive()) mTreeObserver = v.getViewTreeObserver();
-                mTreeObserver.removeGlobalOnLayoutListener(mGlobalLayoutListener);
-            }
-            v.removeOnAttachStateChangeListener(this);
-        }
-    };
+                @Override
+                public void onViewDetachedFromWindow(View v) {
+                    if (mTreeObserver != null) {
+                        if (!mTreeObserver.isAlive()) mTreeObserver = v.getViewTreeObserver();
+                        mTreeObserver.removeGlobalOnLayoutListener(mGlobalLayoutListener);
+                    }
+                    v.removeOnAttachStateChangeListener(this);
+                }
+            };
 
     private PopupWindow.OnDismissListener mOnDismissListener;
 
@@ -98,7 +103,7 @@ final class StandardMenuPopup extends MenuPopup implements OnDismissListener, On
     View mShownAnchorView;
     private Callback mPresenterCallback;
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    ViewTreeObserver mTreeObserver;
+            ViewTreeObserver mTreeObserver;
 
     /** Whether the popup has been dismissed. Once dismissed, it cannot be opened again. */
     private boolean mWasDismissed;
@@ -113,23 +118,57 @@ final class StandardMenuPopup extends MenuPopup implements OnDismissListener, On
 
     private boolean mShowTitle;
 
+    //Sesl
+    private boolean mForceShowUpper;
+    private boolean mIsSubMenu = false;
+    private boolean mOverlapAnchor;
+    private boolean mOverlapAnchorSet;
+    private boolean mAllowScrollingAnchorParent = true;
+    //sesl
+
     public StandardMenuPopup(Context context, MenuBuilder menu, View anchorView, int popupStyleAttr,
             int popupStyleRes, boolean overflowOnly) {
-        mContext = context;
+
+        //Sesl
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.popupTheme, outValue, false);
+        if (outValue.data != 0) {
+            mContext = new ContextThemeWrapper(context, outValue.data);
+        } else {
+            mContext = context;
+        }
+        //sesl
+
         mMenu = menu;
         mOverflowOnly = overflowOnly;
         final LayoutInflater inflater = LayoutInflater.from(context);
-        mAdapter = new MenuAdapter(menu, inflater, mOverflowOnly, ITEM_LAYOUT);
+
+        //Sesl
+        mIsSubMenu = menu instanceof SubMenuBuilder;
+        boolean isExclusiveCheckable = false;
+        for (int i = 0; i < menu.size(); i++) {
+            if (((MenuItemImpl) mMenu.getItem(i)).isExclusiveCheckable()) {
+                isExclusiveCheckable = true;
+                break;
+            }
+        }
+        if (isExclusiveCheckable) {
+            mAdapter = new MenuAdapter(menu, inflater, mOverflowOnly, SUB_MENU_ITEM_LAYOUT);
+        } else {
+            mAdapter = new MenuAdapter(menu, inflater, mOverflowOnly, ITEM_LAYOUT);
+        }
+        //sesl
         mPopupStyleAttr = popupStyleAttr;
         mPopupStyleRes = popupStyleRes;
 
         final Resources res = context.getResources();
-        mPopupMaxWidth = Math.max(res.getDisplayMetrics().widthPixels / 2,
-                res.getDimensionPixelSize(R.dimen.abc_config_prefDialogWidth));
+        mPopupMaxWidth = res.getDisplayMetrics().widthPixels
+                - mContext.getResources().getDimensionPixelOffset(R.dimen.sesl_menu_popup_offset_horizontal) * 2;
 
         mAnchorView = anchorView;
 
         mPopup = new MenuPopupWindow(mContext, null, mPopupStyleAttr, mPopupStyleRes);
+        mPopup.setIsOverflowPopup(mOverflowOnly);
 
         // Present the menu using our context, not the menu builder's context.
         menu.addMenuPresenter(this, context);
@@ -155,6 +194,17 @@ final class StandardMenuPopup extends MenuPopup implements OnDismissListener, On
         }
 
         mShownAnchorView = mAnchorView;
+
+        //Sesl
+        if (mOverlapAnchorSet) {
+            mPopup.setOverlapAnchor(mOverlapAnchor);
+            mPopup.seslForceShowUpper(mForceShowUpper);
+        }
+
+        if (!mAllowScrollingAnchorParent) {
+            mPopup.seslSetAllowScrollingAnchorParent(mAllowScrollingAnchorParent);
+        }
+        //sesl
 
         mPopup.setOnDismissListener(this);
         mPopup.setOnItemClickListener(this);
@@ -183,10 +233,12 @@ final class StandardMenuPopup extends MenuPopup implements OnDismissListener, On
         final ListView listView = mPopup.getListView();
         listView.setOnKeyListener(this);
 
-        if (mShowTitle && mMenu.getHeaderTitle() != null) {
+        mTmpListView = mIsSubMenu ? null : listView;//sesl
+
+        if (mShowTitle && mMenu.getHeaderTitle() != null && !mIsSubMenu) {//sesl
             FrameLayout titleItemView =
                     (FrameLayout) LayoutInflater.from(mContext).inflate(
-                            R.layout.abc_popup_menu_header_item_layout, listView, false);
+                            R.layout.sesl_popup_menu_header_item_layout, listView, false);
             TextView titleView = (TextView) titleItemView.findViewById(android.R.id.title);
             if (titleView != null) {
                 titleView.setText(mMenu.getHeaderTitle());
@@ -270,22 +322,12 @@ final class StandardMenuPopup extends MenuPopup implements OnDismissListener, On
             subPopup.setOnDismissListener(mOnDismissListener);
             mOnDismissListener = null;
 
+            subPopup.setGravity(mDropDownGravity);//sesl
+
             // Close this menu popup to make room for the submenu popup.
             mMenu.close(false /* closeAllMenus */);
 
-            // Show the new sub-menu popup at the same location as this popup.
-            int horizontalOffset = mPopup.getHorizontalOffset();
-            final int verticalOffset = mPopup.getVerticalOffset();
-
-            // As xOffset of parent menu popup is subtracted with Anchor width for Gravity.RIGHT,
-            // So, again to display sub-menu popup in same xOffset, add the Anchor width.
-            final int hgrav = Gravity.getAbsoluteGravity(mDropDownGravity,
-                    ViewCompat.getLayoutDirection(mAnchorView)) & Gravity.HORIZONTAL_GRAVITY_MASK;
-            if (hgrav == Gravity.RIGHT) {
-                horizontalOffset += mAnchorView.getWidth();
-            }
-
-            if (subPopup.tryShow(horizontalOffset, verticalOffset)) {
+            if (subPopup.tryShow(0, 0)) {//sesl
                 if (mPresenterCallback != null) {
                     mPresenterCallback.onOpenSubMenu(subMenu);
                 }
@@ -359,4 +401,31 @@ final class StandardMenuPopup extends MenuPopup implements OnDismissListener, On
     public void setShowTitle(boolean showTitle) {
         mShowTitle = showTitle;
     }
+
+    //Sesl
+    public void seslSetOverlapAnchor(boolean overlapAnchor) {
+        mOverlapAnchorSet = true;
+        mOverlapAnchor = overlapAnchor;
+    }
+
+    public void seslForceShowUpper(boolean force) {
+        mForceShowUpper = force;
+    }
+
+    /**
+     * Update the popup menu content width.
+     */
+    public void seslUpdate() {
+        if (mPopup != null && mPopup.isShowing() && mHasContentWidth) {
+            mPopupMaxWidth = mContext.getResources().getDisplayMetrics().widthPixels
+                    - mContext.getResources().getDimensionPixelOffset(R.dimen.sesl_menu_popup_offset_horizontal) * 2;
+            mContentWidth = measureIndividualMenuWidth(mAdapter, null, mContext, mPopupMaxWidth);
+            mPopup.setContentWidth(mContentWidth);
+        }
+    }
+
+    public void seslSetAllowScrollingAnchorParent(boolean enabled) {
+        mAllowScrollingAnchorParent = enabled;
+    }
+    //sesl
 }

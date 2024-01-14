@@ -22,18 +22,23 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.os.Build;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
+import android.view.ViewConfiguration;
 
 import androidx.annotation.RestrictTo;
 import androidx.appcompat.R;
 
 /**
+ * <p><b></b>SESL variant</b></p><br>
+ *
  * Allows components to query for various configuration policy decisions about how the action bar
  * should lay out and behave on the current device.
  *
  */
 @RestrictTo(LIBRARY_GROUP_PREFIX)
 public class ActionBarPolicy {
+    private static final float MENU_WIDTH_LIMIT_FACTOR = 0.7f;//sesl
 
     private Context mContext;
 
@@ -73,40 +78,49 @@ public class ActionBarPolicy {
     }
 
     public boolean showsOverflowMenuButton() {
-        return true;
+            return true;
     }
 
     public int getEmbeddedMenuWidthLimit() {
-        return mContext.getResources().getDisplayMetrics().widthPixels / 2;
+        return (int) (mContext.getResources().getDisplayMetrics().widthPixels
+                * MENU_WIDTH_LIMIT_FACTOR);//sesl
     }
 
     public boolean hasEmbeddedTabs() {
-        return mContext.getResources().getBoolean(R.bool.abc_action_bar_embed_tabs);
+        return false;//sesl
     }
 
     public int getTabContainerHeight() {
         TypedArray a = mContext.obtainStyledAttributes(null, R.styleable.ActionBar,
                 R.attr.actionBarStyle, 0);
         int height = a.getLayoutDimension(R.styleable.ActionBar_height, 0);
-        Resources r = mContext.getResources();
-        if (!hasEmbeddedTabs()) {
-            // Stacked tabs; limit the height
-            height = Math.min(height,
-                    r.getDimensionPixelSize(R.dimen.abc_action_bar_stacked_max_height));
-        }
+
+//  Embedded not supported
+//        Resources r = mContext.getResources();
+//        if (!hasEmbeddedTabs()) {
+//            // Stacked tabs; limit the height
+//            height = Math.min(height,
+//                    r.getDimensionPixelSize(R.dimen.abc_action_bar_stacked_max_height));
+//        }
         a.recycle();
         return height;
     }
 
     public boolean enableHomeButtonByDefault() {
-        // Older apps get the home button interaction enabled by default.
-        // Newer apps need to enable it explicitly.
-        return mContext.getApplicationInfo().targetSdkVersion <
-                Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+        return false;
     }
 
+    /**
+     * Embedded tabs not supported in SESL version
+     * @return 0
+     */
     public int getStackedTabMaxWidth() {
-        return mContext.getResources().getDimensionPixelSize(
-                R.dimen.abc_action_bar_stacked_tab_max_width);
+        return 0;
+    }
+
+    //Sesl
+    public boolean hasNavigationBar() {
+        return !ViewConfiguration.get(mContext).hasPermanentMenuKey()
+                && !KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
     }
 }

@@ -30,6 +30,8 @@ import androidx.annotation.RestrictTo;
 import androidx.appcompat.R;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * Used by dialogs to change the font size and number of lines to try to fit
  * the text to the available space.
  *
@@ -62,17 +64,18 @@ public class DialogTitle extends AppCompatTextView {
                     setSingleLine(false);
                     setMaxLines(2);
 
-                    final TypedArray a = getContext().obtainStyledAttributes(null,
-                            R.styleable.TextAppearance,
-                            android.R.attr.textAppearanceMedium,
-                            android.R.style.TextAppearance_Medium);
-                    final int textSize = a.getDimensionPixelSize(
-                            R.styleable.TextAppearance_android_textSize, 0);
+                    //Sesl
+                    final int textSize = getContext().getResources().getDimensionPixelSize(R.dimen.sesl_dialog_title_text_size);
                     if (textSize != 0) {
+                        final float currentFontScale = getContext().getResources().getConfiguration().fontScale;
+                        float scaleBase = textSize;
+                        if (currentFontScale > 1.3f) {
+                            scaleBase = (textSize / currentFontScale) * 1.3f;
+                        }
                         // textSize is already expressed in pixels
-                        setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+                        setTextSize(TypedValue.COMPLEX_UNIT_PX, scaleBase);
                     }
-                    a.recycle();
+                    //sesl
 
                     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 }

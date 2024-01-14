@@ -52,12 +52,15 @@ import androidx.core.view.TintableBackgroundView;
 import androidx.core.widget.AutoSizeableTextView;
 import androidx.core.widget.TextViewCompat;
 import androidx.core.widget.TintableCompoundDrawablesView;
+import androidx.reflect.widget.SeslTextViewReflector;
 import androidx.resourceinspection.annotation.AppCompatShadowedAttributes;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * A {@link TextView} which supports compatible features on older versions of the platform,
  * including:
  * <ul>
@@ -810,8 +813,6 @@ public class AppCompatTextView extends TextView implements TintableBackgroundVie
         return mSuperCaller;
     }
 
-
-
     private interface SuperCaller {
         // api 26
         int getAutoSizeMaxTextSize();
@@ -919,4 +920,14 @@ public class AppCompatTextView extends TextView implements TintableBackgroundVie
             AppCompatTextView.super.setLineHeight(unit, lineHeight);
         }
     }
+
+    //Sesl
+    public void seslSetButtonShapeEnabled(boolean enabled) {
+        SeslTextViewReflector.semSetButtonShapeEnabled(this, enabled);
+    }
+
+    public void seslSetButtonShapeEnabled(boolean enabled, int textColor) {
+        SeslTextViewReflector.semSetButtonShapeEnabled(this, enabled, textColor);
+    }
+    //sesl
 }

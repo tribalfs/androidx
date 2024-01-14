@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <!-- The duration (in milliseconds) of the activity open/close and fragment open/close animations. -->
+    <integer name="sesl_config_activityShortDur">150</integer>
+    <integer name="sesl_config_activityDefaultDur">220</integer>
+
+    <!-- The duration (in milliseconds) of the tooltip show/hide animations. -->
+    <integer name="sesl_config_tooltipAnimTime">150</integer>
+
+    <!-- The duration (in milliseconds) of dialogs show/hide animations. -->
+    <integer name="sesl_dialog_enter_anim_duration">100</integer>
+    <integer name="sesl_dialog_exit_anim_duration">100</integer>
+    <integer name="sesl_dialog_disabled_anim_duration">100</integer>
+
+    <integer name="sesl_loading_progress_anim_duration">750</integer>
+    <integer name="sesl_loading_progress_rot_duration">3000</integer>
+
+    <integer name="sesl_menu_popup_max_item_count">10</integer>
+    <integer name="sesl_menu_popup_max_item_count_mobile_keyboard">7</integer>
+
+    <integer name="status_bar_notification_info_maxnum">999</integer>
+</resources>

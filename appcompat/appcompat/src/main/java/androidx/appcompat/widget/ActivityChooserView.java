@@ -54,6 +54,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * This class is a view for choosing an activity for handling a given {@link Intent}.
  * <p>
  * The view is composed of two adjacent buttons:
@@ -277,7 +279,7 @@ public class ActivityChooserView extends ViewGroup implements
         });
         mExpandActivityOverflowButton = expandButton;
         mExpandActivityOverflowButtonImage =
-            (ImageView) expandButton.findViewById(R.id.image);
+                (ImageView) expandButton.findViewById(R.id.image);
         mExpandActivityOverflowButtonImage.setImageDrawable(expandActivityOverflowButtonDrawable);
 
         mAdapter = new ActivityChooserViewAdapter();
@@ -291,7 +293,7 @@ public class ActivityChooserView extends ViewGroup implements
 
         Resources resources = context.getResources();
         mListPopupMaxWidth = Math.max(resources.getDisplayMetrics().widthPixels / 2,
-                resources.getDimensionPixelSize(R.dimen.abc_config_prefDialogWidth));
+                resources.getDimensionPixelSize(R.dimen.sesl_config_prefDialogWidth));
     }
 
     /**

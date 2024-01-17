@@ -110,6 +110,7 @@ class AppCompatPopupWindow extends PopupWindow {
         mHasNavigationBar = ActionBarPolicy.get(context).hasNavigationBar();
         mNavigationBarHeight = mContext.getResources().getDimensionPixelSize(R.dimen.sesl_navigation_bar_height);
         //sesl
+
     }
 
     @Override
@@ -119,6 +120,8 @@ class AppCompatPopupWindow extends PopupWindow {
             yoff -= anchor.getHeight();
         }
         super.showAsDropDown(anchor, xoff, yoff);
+
+        fixRoundedCorners();
     }
 
     @Override
@@ -128,6 +131,8 @@ class AppCompatPopupWindow extends PopupWindow {
             yoff -= anchor.getHeight();
         }
         super.showAsDropDown(anchor, xoff, yoff, gravity);
+
+        fixRoundedCorners();
     }
 
     @Override
@@ -221,4 +226,28 @@ class AppCompatPopupWindow extends PopupWindow {
         return !mIsReplacedPoupBackground;
     }
     //sesl
+
+
+    /**
+     * Adjust popup selector corners in non-Samsung Basic Interaction devices.
+     */
+    private void fixRoundedCorners() {
+        if (!mIsReplacedPoupBackground) {
+            try {
+                Log.d("ACPW", "fixRoundedCorners for non-Samsung.");
+                // get PopupWindow mBackgroundView field
+                Field field = getClass().getSuperclass().getDeclaredField("mBackgroundView");
+                field.setAccessible(true);
+                Object bg = field.get(this);
+                // if we got it, fix those corners
+                if (bg instanceof View) {
+                    ((View) bg).setClipToOutline(true);
+                }
+
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                Log.e("ACPW", "fixRoundedCorners: " + e);
+            }
+        }
+    }
+
 }

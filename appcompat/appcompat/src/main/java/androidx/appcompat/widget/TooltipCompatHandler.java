@@ -21,18 +21,28 @@ import static android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE;
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 import android.content.Context;
+import android.os.Build;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.accessibility.AccessibilityManager;
 
 import androidx.annotation.RestrictTo;
+import androidx.core.view.InputDeviceCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.ViewConfigurationCompat;
+import androidx.reflect.hardware.input.SeslInputManagerReflector;
+import androidx.reflect.provider.SeslSettingsReflector;
+import androidx.reflect.view.SeslPointerIconReflector;
+import androidx.reflect.view.SeslViewReflector;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * Event handler used used to emulate the behavior of {@link View#setTooltipText(CharSequence)}
  * prior to API level 26.
  *
@@ -67,13 +77,37 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
     // The handler currently showing a tooltip (there can be only one).
     private static TooltipCompatHandler sActiveHandler;
 
+    //Sesl
+    private static int sLayoutDirection;
+    private static int sPosX;
+    private static int sPosY;
+
+    private static boolean sIsCustomTooltipPosition = false;
+    private static boolean sIsForceActionBarX = false;
+    private static boolean sIsForceBelow = false;
+    private static boolean sIsTooltipNull = false;
+    private boolean mIsSPenPointChanged = false;
+    private boolean mIsShowRunnablePostDelayed = false;
+    private int mLastHoverEvent = -1;
+    private boolean mInitialWindowFocus = false;
+    private boolean mIsForceExitDelay = false;
+    //sesl
+
     /**
      * Set the tooltip text for the view.
      *
-     * @param view view to set the tooltip on
+     * @param view        view to set the tooltip on
      * @param tooltipText the tooltip text
      */
     public static void setTooltipText(View view, CharSequence tooltipText) {
+        //Sesl
+        if (view == null) {
+            Log.i(TAG, "view is null");
+            return;
+        }
+        sIsForceActionBarX = false;
+        //sesl
+
         // The code below is not attempting to update the tooltip text
         // for a pending or currently active tooltip, because it may lead
         // to updating the wrong tooltip in in some rare cases (e.g. when
@@ -90,6 +124,17 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
             view.setOnLongClickListener(null);
             view.setLongClickable(false);
             view.setOnHoverListener(null);
+            //Sesl
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Context context = view.getContext();
+                if (!view.isEnabled() && context != null)  {
+                    SeslViewReflector.semSetPointerIcon(view,
+                            MotionEvent.TOOL_TYPE_STYLUS,
+                            PointerIcon.getSystemIcon(context,
+                                    SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT()));
+                }
+            }
+            //sesl
         } else {
             new TooltipCompatHandler(view, tooltipText);
         }
@@ -119,20 +164,82 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
         if (mPopup != null && mFromTouch) {
             return false;
         }
+        //Sesl
+        if (mAnchor == null) {
+            Log.i(TAG, "TooltipCompat Anchor view is null");
+            return false;
+        }
+
+
+        if (event.isFromSource(InputDeviceCompat.SOURCE_STYLUS) && !isSPenHoveringSettingsEnabled()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Context context = mAnchor.getContext();
+                if (mAnchor.isEnabled() && mPopup != null && context != null) {
+                    SeslViewReflector.semSetPointerIcon(mAnchor, 2,
+                            PointerIcon.getSystemIcon(context,
+                                    SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT()));
+                }
+            }
+            return false;
+        }
+        //sesl
         AccessibilityManager manager = (AccessibilityManager)
                 mAnchor.getContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
         if (manager.isEnabled() && manager.isTouchExplorationEnabled()) {
             return false;
         }
-        switch (event.getAction()) {
+        switch (mLastHoverEvent = event.getAction()) {//sesl
             case MotionEvent.ACTION_HOVER_MOVE:
                 if (mAnchor.isEnabled() && mPopup == null && updateAnchorPos(event)) {
-                    setPendingHandler(this);
+                    //Sesl
+                    mAnchorX = (int) event.getX();
+                    mAnchorY = (int) event.getY();
+                    if (!mIsShowRunnablePostDelayed || mIsForceExitDelay) {
+                        setPendingHandler(this);
+                        mIsForceExitDelay = false;
+                        mIsShowRunnablePostDelayed = true;
+                    }
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                        showPenPointEffect(event, true);
+                    }
+                    //sesl
                 }
                 break;
             case MotionEvent.ACTION_HOVER_EXIT:
-                forceNextChangeSignificant();
-                hide();
+                //Sesl
+                Log.i(TAG, "MotionEvent.ACTION_HOVER_EXIT : hide SeslTooltipPopup");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Context context = v.getContext();
+                    if (mAnchor.isEnabled() && mPopup != null && context != null) {
+                        SeslViewReflector.semSetPointerIcon(v,
+                                MotionEvent.TOOL_TYPE_STYLUS,
+                                PointerIcon.getSystemIcon(context,
+                                        SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT()));
+                    }
+                } else {
+                    showPenPointEffect(event, false);
+                }
+                if (mPopup != null && mPopup.isShowing() && Math.abs(event.getX() - mAnchorX) < 4.0f &&
+                        Math.abs(event.getY() - mAnchorY) < 4.0f) {
+                    mIsForceExitDelay = true;
+                    mAnchor.removeCallbacks(mHideRunnable);
+                    mAnchor.postDelayed(mHideRunnable, LONG_CLICK_HIDE_TIMEOUT_MS);
+                } else {
+                    hide();
+                }
+                //sesl
+                break;
+            case MotionEvent.ACTION_HOVER_ENTER://sesl
+                mInitialWindowFocus = mAnchor.hasWindowFocus();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Context context = v.getContext();
+                    if (mAnchor.isEnabled() && mPopup == null && context != null) {
+                        SeslViewReflector.semSetPointerIcon(v,
+                                MotionEvent.TOOL_TYPE_STYLUS,
+                                PointerIcon.getSystemIcon(context,
+                                        SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_MORE()));
+                    }
+                }
                 break;
         }
 
@@ -154,7 +261,6 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
         if (!ViewCompat.isAttachedToWindow(mAnchor)) {
             return;
         }
-
         setPendingHandler(null);
         if (sActiveHandler != null) {
             sActiveHandler.hide();
@@ -163,7 +269,28 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
 
         mFromTouch = fromTouch;
         mPopup = new TooltipPopup(mAnchor.getContext());
-        mPopup.show(mAnchor, mAnchorX, mAnchorY, mFromTouch, mTooltipText);
+        //Sesl
+        if (sIsCustomTooltipPosition) {
+            sIsForceBelow = false;
+            sIsForceActionBarX = false;
+            if (sIsTooltipNull && !fromTouch) {
+                return;
+            }
+            mPopup.showActionItemTooltip(sPosX, sPosY, sLayoutDirection, mTooltipText);
+            sIsCustomTooltipPosition = false;
+        } else {
+            if (sIsTooltipNull) {
+                return;
+            }
+            if (sIsForceBelow || sIsForceActionBarX) {
+                mPopup.show(mAnchor, mAnchorX, mAnchorY, mFromTouch, mTooltipText, sIsForceBelow, sIsForceActionBarX);
+                sIsForceBelow = false;
+                sIsForceActionBarX = false;
+            } else {
+                mPopup.show(mAnchor, mAnchorX, mAnchorY, mFromTouch, mTooltipText);
+            }
+        }
+        //sesl
         // Only listen for attach state change while the popup is being shown.
         mAnchor.addOnAttachStateChangeListener(this);
 
@@ -178,6 +305,9 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
         }
         mAnchor.removeCallbacks(mHideRunnable);
         mAnchor.postDelayed(mHideRunnable, timeout);
+        if (mLastHoverEvent == MotionEvent.ACTION_HOVER_MOVE && !mAnchor.hasWindowFocus() && mInitialWindowFocus != mAnchor.hasWindowFocus()) {
+            hide();
+        }
     }
 
     void hide() {
@@ -192,10 +322,17 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
                 Log.e(TAG, "sActiveHandler.mPopup == null");
             }
         }
+        mIsShowRunnablePostDelayed = false;//sesl
         if (sPendingHandler == this) {
             setPendingHandler(null);
         }
         mAnchor.removeCallbacks(mHideRunnable);
+        //Sesl
+        sPosX = 0;
+        sPosY = 0;
+        sIsTooltipNull = false;
+        sIsCustomTooltipPosition = false;
+        //sesl
     }
 
     private static void setPendingHandler(TooltipCompatHandler handler) {
@@ -243,4 +380,45 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
     private void forceNextChangeSignificant() {
         mForceNextChangeSignificant = true;
     }
+
+    //Sesl
+    private void showPenPointEffect(MotionEvent event, boolean show) {
+        if (event.getToolType(0) != MotionEvent.TOOL_TYPE_STYLUS) {
+            return;
+        }
+        if (show) {
+            SeslInputManagerReflector.setPointerIconType(SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_MORE());
+            mIsSPenPointChanged = true;
+        } else if (mIsSPenPointChanged) {
+            SeslInputManagerReflector.setPointerIconType(SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT());
+            mIsSPenPointChanged = false;
+        }
+    }
+
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    public static void seslSetTooltipPosition(int x, int y, int layoutDirection) {
+        sLayoutDirection = layoutDirection;
+        sPosX = x;
+        sPosY = y;
+        sIsCustomTooltipPosition = true;
+    }
+
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    public static void seslSetTooltipNull(boolean tooltipNull) {
+        sIsTooltipNull = tooltipNull;
+    }
+
+    public static void seslSetTooltipForceBelow(boolean isbelow) {
+        sIsForceBelow = isbelow;
+    }
+
+    public static void seslSetTooltipForceActionBarPosX(boolean isForceX) {
+        sIsForceActionBarX = isForceX;
+    }
+
+    boolean isSPenHoveringSettingsEnabled() {
+        return Settings.System.getInt(mAnchor.getContext().getContentResolver(),
+                SeslSettingsReflector.SeslSystemReflector.getField_SEM_PEN_HOVERING(), 0) == 1;
+    }
+    //sesl
 }

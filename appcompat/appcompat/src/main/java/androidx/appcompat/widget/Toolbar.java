@@ -17,11 +17,15 @@
 package androidx.appcompat.widget;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY;
+import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
@@ -29,6 +33,7 @@ import android.os.Parcelable;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.Menu;
@@ -38,6 +43,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -66,21 +72,28 @@ import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.appcompat.view.menu.MenuPresenter;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.appcompat.view.menu.SubMenuBuilder;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.MarginLayoutParamsCompat;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuHostHelper;
 import androidx.core.view.MenuProvider;
+import androidx.core.view.SeslTouchTargetDelegate;
+import androidx.core.view.SeslTouchTargetDelegate.ExtraInsets;
 import androidx.core.view.ViewCompat;
 import androidx.customview.view.AbsSavedState;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.reflect.view.SeslViewReflector;
+import androidx.reflect.widget.SeslHoverPopupWindowReflector;
 import androidx.resourceinspection.annotation.Attribute;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * A standard toolbar for use within application content.
  *
  * <p>A Toolbar is a generalization of {@link ActionBar action bars} for use
@@ -158,6 +171,16 @@ import java.util.List;
 public class Toolbar extends ViewGroup implements MenuHost {
     private static final String TAG = "Toolbar";
 
+    //Sesl
+    private static final float MAX_FONT_SCALE = 1.2f;
+    private static final int SESL_TOP_INSET_TO_EXPAND = 100;
+    private Drawable mBackground;
+    private Drawable mNavButtonIconDrawable;
+    private CharSequence mNavTooltipText;
+    private ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListenerForTD;
+    private int mUserTopPadding = -1; //sesl6
+    //sesl
+
     ActionMenuView mMenuView;
     private TextView mTitleTextView;
     private TextView mSubtitleTextView;
@@ -233,7 +256,6 @@ public class Toolbar extends ViewGroup implements MenuHost {
     private ExpandedActionViewMenuPresenter mExpandedMenuPresenter;
     private MenuPresenter.Callback mActionMenuPresenterCallback;
     MenuBuilder.Callback mMenuBuilderCallback;
-
     private boolean mCollapsible;
 
     // The callback handling back events. If this is non-null, the
@@ -247,6 +269,7 @@ public class Toolbar extends ViewGroup implements MenuHost {
     // Whether this Toolbar should register a back invocation handler
     // when its action view is expanded.
     private boolean mBackInvokedCallbackEnabled;
+
 
     private final Runnable mShowOverflowMenuRunnable = new Runnable() {
         @Override public void run() {
@@ -269,12 +292,18 @@ public class Toolbar extends ViewGroup implements MenuHost {
         final TintTypedArray a = TintTypedArray.obtainStyledAttributes(getContext(), attrs,
                 R.styleable.Toolbar, defStyleAttr, 0);
         ViewCompat.saveAttributeDataForStyleable(this, context, R.styleable.Toolbar, attrs,
-                    a.getWrappedTypeArray(), defStyleAttr, 0);
+                a.getWrappedTypeArray(), defStyleAttr, 0);
 
         mTitleTextAppearance = a.getResourceId(R.styleable.Toolbar_titleTextAppearance, 0);
         mSubtitleTextAppearance = a.getResourceId(R.styleable.Toolbar_subtitleTextAppearance, 0);
         mGravity = a.getInteger(R.styleable.Toolbar_android_gravity, mGravity);
         mButtonGravity = a.getInteger(R.styleable.Toolbar_buttonGravity, Gravity.TOP);
+
+        //Sesl
+        mBackground = a.getDrawable(R.styleable.Toolbar_background);
+        mNavTooltipText = a.getText(R.styleable.Toolbar_tooltipText);
+        setBackground(mBackground);
+        //sesl
 
         // First read the correct attribute
         int titleMargin = a.getDimensionPixelOffset(R.styleable.Toolbar_titleMargin, 0);
@@ -443,6 +472,9 @@ public class Toolbar extends ViewGroup implements MenuHost {
     public int getPopupTheme() {
         return mPopupTheme;
     }
+
+
+
 
     /**
      * Sets the title margin.
@@ -1066,6 +1098,7 @@ public class Toolbar extends ViewGroup implements MenuHost {
         }
         if (mNavButtonView != null) {
             mNavButtonView.setImageDrawable(icon);
+            mNavButtonIconDrawable = icon;//sesl
         }
     }
 
@@ -1141,6 +1174,10 @@ public class Toolbar extends ViewGroup implements MenuHost {
         }
         if (mCollapseButtonView != null) {
             mCollapseButtonView.setContentDescription(description);
+            //Sesl
+            TooltipCompat.setTooltipText(mCollapseButtonView, description);
+            mCollapseDescription = description;
+            //sesl
         }
     }
 
@@ -1250,30 +1287,30 @@ public class Toolbar extends ViewGroup implements MenuHost {
             mMenuView.setMenuCallbacks(mActionMenuPresenterCallback,
                     // Have Toolbar insert a Callback to ensure onPrepareMenu is called properly
                     new MenuBuilder.Callback() {
-                    // The mMenuView item does not call into the mMenuBuilderCallback when
-                    // menuItems are selected, so this should not get called, but we implement it
-                    // anyway
-                    @Override
-                    public boolean onMenuItemSelected(@NonNull MenuBuilder menu,
-                            @NonNull MenuItem item) {
-                        // Check if there is a mMenuBuilderCallback and if so, forward the call.
-                        return mMenuBuilderCallback != null
-                                && mMenuBuilderCallback.onMenuItemSelected(menu, item);
-                    }
+                        // The mMenuView item does not call into the mMenuBuilderCallback when
+                        // menuItems are selected, so this should not get called, but we implement it
+                        // anyway
+                        @Override
+                        public boolean onMenuItemSelected(@NonNull MenuBuilder menu,
+                                @NonNull MenuItem item) {
+                            // Check if there is a mMenuBuilderCallback and if so, forward the call.
+                            return mMenuBuilderCallback != null
+                                    && mMenuBuilderCallback.onMenuItemSelected(menu, item);
+                        }
 
-                    @Override
-                    public void onMenuModeChange(@NonNull MenuBuilder menu) {
-                        // If the menu is not showing, we are about to show it, so we need to
-                        // make the prepare call.
-                        if (!mMenuView.isOverflowMenuShowing()) {
-                            mMenuHostHelper.onPrepareMenu(menu);
-                        }
-                        // If there is a mMenuBuilderCallback, forward the onMenuModeChanged call.
-                        if (mMenuBuilderCallback != null) {
-                            mMenuBuilderCallback.onMenuModeChange(menu);
+                        @Override
+                        public void onMenuModeChange(@NonNull MenuBuilder menu) {
+                            // If the menu is not showing, we are about to show it, so we need to
+                            // make the prepare call.
+                            if (!mMenuView.isOverflowMenuShowing()) {
+                                mMenuHostHelper.onPrepareMenu(menu);
+                            }
+                            // If there is a mMenuBuilderCallback, forward the onMenuModeChanged call.
+                            if (mMenuBuilderCallback != null) {
+                                mMenuBuilderCallback.onMenuModeChange(menu);
+                            }
                         }
                     }
-                }
             );
             final LayoutParams lp = generateDefaultLayoutParams();
             lp.gravity = GravityCompat.END | (mButtonGravity & Gravity.VERTICAL_GRAVITY_MASK);
@@ -1598,6 +1635,13 @@ public class Toolbar extends ViewGroup implements MenuHost {
             final LayoutParams lp = generateDefaultLayoutParams();
             lp.gravity = GravityCompat.START | (mButtonGravity & Gravity.VERTICAL_GRAVITY_MASK);
             mNavButtonView.setLayoutParams(lp);
+
+            //Sesl
+            SeslViewReflector.semSetHoverPopupType(mNavButtonView, SeslHoverPopupWindowReflector.getField_TYPE_NONE());
+            if (!TextUtils.isEmpty(mNavTooltipText)) {
+                TooltipCompat.setTooltipText(mNavButtonView, mNavTooltipText);
+            }
+            //sesl
         }
     }
 
@@ -1627,6 +1671,13 @@ public class Toolbar extends ViewGroup implements MenuHost {
                     collapseActionView();
                 }
             });
+
+            //Sesl
+            SeslViewReflector.semSetHoverPopupType(mCollapseButtonView, SeslHoverPopupWindowReflector.getField_TYPE_NONE());
+            if (!TextUtils.isEmpty(mCollapseDescription)) {
+                TooltipCompat.setTooltipText(mCollapseButtonView, mCollapseDescription);
+            }
+            //sesl
         }
     }
 
@@ -1662,6 +1713,8 @@ public class Toolbar extends ViewGroup implements MenuHost {
         return state;
     }
 
+
+
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
         if (!(state instanceof SavedState)) {
@@ -1690,17 +1743,45 @@ public class Toolbar extends ViewGroup implements MenuHost {
         post(mShowOverflowMenuRunnable);
     }
 
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         removeCallbacks(mShowOverflowMenuRunnable);
         updateBackInvokedCallbackState();
+        seslRemoveListenerForTouchDelegate();
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         updateBackInvokedCallbackState();
+        //Sesl
+        if (mUserTopPadding == -1) {
+            mUserTopPadding = getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding);
+        }
+
+        final int topPadding = getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding);
+        setPadding(0, topPadding, 0, 0);
+        //noinspection resource
+        TypedArray a = getContext().obtainStyledAttributes(R.styleable.AppCompatTheme);
+        final int actionBarSize = a.getDimensionPixelSize(R.styleable.AppCompatTheme_actionBarSize, 0);
+        a.recycle();
+        ViewGroup.LayoutParams lp = getLayoutParams();
+        lp.height = actionBarSize + topPadding;
+        setLayoutParams(lp);
+        //sesl
+    }
+
+    //sesl
+    @Override
+    protected void onWindowVisibilityChanged(int visibility) {
+        super.onWindowVisibilityChanged(visibility);
+        if (visibility == VISIBLE) {
+            seslSetTouchDelegateForToolbar();
+        } else {
+            seslRemoveListenerForTouchDelegate();
+        }
     }
 
     @Override
@@ -1845,6 +1926,17 @@ public class Toolbar extends ViewGroup implements MenuHost {
                     getVerticalMargins(mNavButtonView));
             childState = View.combineMeasuredStates(childState,
                     mNavButtonView.getMeasuredState());
+
+            //Sesl
+            Drawable navButtonDrawable = mNavButtonView.getDrawable();
+            Drawable navButtonBackground = mNavButtonView.getBackground();
+            if (navButtonDrawable != null && navButtonBackground != null) {
+                final int offsetX = mNavButtonView.getPaddingLeft() - mNavButtonView.getPaddingRight();
+                final int halfOffsetX = offsetX / 2;
+                DrawableCompat.setHotspotBounds(navButtonBackground, halfOffsetX, 0,
+                        halfOffsetX + navWidth, height);
+            }
+            //sesl
         }
 
         if (shouldLayout(mCollapseButtonView)) {
@@ -1915,6 +2007,38 @@ public class Toolbar extends ViewGroup implements MenuHost {
         final int titleVertMargins = mTitleMarginTop + mTitleMarginBottom;
         final int titleHorizMargins = mTitleMarginStart + mTitleMarginEnd;
         if (shouldLayout(mTitleTextView)) {
+            //Sesl
+            TypedArray a = getContext().obtainStyledAttributes(mTitleTextAppearance, R.styleable.TextAppearance);
+            TypedValue currentTitleTextSize = a.peekValue(R.styleable.TextAppearance_android_textSize);
+            float titleTextSize = getResources().getDimensionPixelSize(R.dimen.sesl_toolbar_title_text_size);
+            if (!TextUtils.isEmpty(mSubtitleText)) {
+                titleTextSize = getResources().getDimensionPixelSize(R.dimen.sesl_toolbar_title_text_size_with_subtitle);
+            }
+            if (currentTitleTextSize != null) {
+                titleTextSize = TypedValue.complexToFloat(currentTitleTextSize.data);
+            }
+            a.recycle();
+
+            TypedArray a2 = getContext().obtainStyledAttributes(mSubtitleTextAppearance, R.styleable.TextAppearance);
+            TypedValue currentSubtitleTextSize = a2.peekValue(R.styleable.TextAppearance_android_textSize);
+            float subtitleTextSize = getResources().getDimensionPixelSize(R.dimen.sesl_toolbar_subtitle_text_size);
+            if (currentSubtitleTextSize != null) {
+                subtitleTextSize = TypedValue.complexToFloat(currentSubtitleTextSize.data);
+            }
+            a2.recycle();
+
+            if (titleTextSize == -1.0f || !TextUtils.isEmpty(mSubtitleText)) {
+                mTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleTextSize);
+                mSubtitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, subtitleTextSize);
+            } else {
+                float fontScale = getContext().getResources().getConfiguration().fontScale;
+                if (fontScale > MAX_FONT_SCALE) {
+                    fontScale = 1.2f;
+                }
+                mTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleTextSize * fontScale);
+            }
+            //sesl
+
             titleWidth = measureChildCollapseMargins(mTitleTextView, widthMeasureSpec,
                     width + titleHorizMargins, heightMeasureSpec, titleVertMargins,
                     collapsingMargins);
@@ -1971,6 +2095,11 @@ public class Toolbar extends ViewGroup implements MenuHost {
         final int alignmentHeight = minHeight >= 0 ? Math.min(minHeight, b - t) : 0;
 
         if (shouldLayout(mNavButtonView)) {
+            //Sesl
+            if (mNavButtonView.getLayoutDirection() != mNavButtonIconDrawable.getLayoutDirection()) {
+                mNavButtonIconDrawable.setLayoutDirection(mNavButtonView.getLayoutDirection());
+            }
+            //sesl
             if (isRtl) {
                 right = layoutChildRight(mNavButtonView, right, collapsingMargins,
                         alignmentHeight);
@@ -2221,7 +2350,7 @@ public class Toolbar extends ViewGroup implements MenuHost {
         final int alignmentOffset = alignmentHeight > 0 ? (childHeight - alignmentHeight) / 2 : 0;
         switch (getChildVerticalGravity(lp.gravity)) {
             case Gravity.TOP:
-                return getPaddingTop() - alignmentOffset;
+                return getPaddingTop() /*- alignmentOffset*/;//sesl
 
             case Gravity.BOTTOM:
                 return getHeight() - getPaddingBottom() - childHeight
@@ -2534,6 +2663,7 @@ public class Toolbar extends ViewGroup implements MenuHost {
         }
     }
 
+
     /**
      * Interface responsible for receiving menu item click events if the items themselves
      * do not have individual item click listeners.
@@ -2752,7 +2882,6 @@ public class Toolbar extends ViewGroup implements MenuHost {
 
             // mCurrentExpandedItem has changed.
             updateBackInvokedCallbackState();
-
             return true;
         }
 
@@ -2827,4 +2956,168 @@ public class Toolbar extends ViewGroup implements MenuHost {
             return action::run;
         }
     }
+
+    //Sesl
+    private void seslRemoveListenerForTouchDelegate() {
+        if (mOnGlobalLayoutListenerForTD != null) {
+            getViewTreeObserver()
+                    .removeOnGlobalLayoutListener(mOnGlobalLayoutListenerForTD);
+            mOnGlobalLayoutListenerForTD = null;
+        }
+    }
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        TypedArray a = getContext().obtainStyledAttributes(R.styleable.AppCompatTheme);
+        final int actionBarSize = a.getDimensionPixelSize(R.styleable.AppCompatTheme_actionBarSize, 0);
+        if (mNavButtonView != null) {
+            a = getContext().obtainStyledAttributes(null, R.styleable.View, R.attr.actionOverflowButtonStyle, 0);
+            mNavButtonView.setMinimumHeight(a.getDimensionPixelSize(R.styleable.View_android_minHeight, 0));
+        }
+        a.recycle();
+        if (mUserTopPadding == -1) {
+            mUserTopPadding = getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding);
+        }
+        setPadding(0, mUserTopPadding, 0, 0);
+
+        ViewGroup.LayoutParams lp = getLayoutParams();
+        lp.height = actionBarSize + mUserTopPadding;
+        setLayoutParams(lp);
+
+        TypedArray a2 = getContext().obtainStyledAttributes(null, R.styleable.Toolbar, android.R.attr.toolbarStyle, 0);
+        int maxButtonHeight = a2.getDimensionPixelSize(R.styleable.Toolbar_maxButtonHeight, -1);
+        if (maxButtonHeight >= -1) {
+            mMaxButtonHeight = maxButtonHeight;
+        }
+        int minHeight = a2.getDimensionPixelSize(R.styleable.Toolbar_android_minHeight, -1);
+        if (minHeight >= -1) {
+            setMinimumHeight(minHeight);
+        }
+        a2.recycle();
+
+        if (mMenuView != null && mMenuView.isOverflowMenuShowing()) {
+            mMenuView.hideOverflowMenu();
+        }
+    }
+
+    @RestrictTo(LIBRARY_GROUP)
+    public void setTitleAccessibilityEnabled(boolean enabled) {
+        if (enabled) {
+            if (mTitleTextView != null) {
+                mTitleTextView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+            }
+            if (mSubtitleTextView != null) {
+                mSubtitleTextView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+            }
+        } else {
+            if (mTitleTextView != null) {
+                mTitleTextView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            };
+            if (mSubtitleTextView != null) {
+                mSubtitleTextView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            }
+        }
+    }
+
+    @Override
+    public boolean dispatchGenericMotionEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_HOVER_MOVE:
+            case MotionEvent.ACTION_HOVER_ENTER:
+                TooltipCompat.seslSetNextTooltipForceBelow(true);
+                TooltipCompat.seslSetNextTooltipForceActionBarPosX(true);
+                break;
+            case MotionEvent.ACTION_HOVER_EXIT:
+                TooltipCompat.seslSetNextTooltipForceBelow(false);
+                TooltipCompat.seslSetNextTooltipForceActionBarPosX(false);
+                break;
+        }
+
+        return super.dispatchGenericMotionEvent(event);
+    }
+
+    /**
+     * Return the color of the title view.
+     */
+    public int seslGetTitleTextColor() {
+        if (mTitleTextView != null) {
+            return mTitleTextView.getCurrentTextColor();
+        }
+        return Color.TRANSPARENT;
+    }
+
+    /**
+     * Return the color of the subtitle view.
+     */
+    public int seslGetSubtitleTextColor() {
+        if (mSubtitleTextView != null) {
+            return mSubtitleTextView.getCurrentTextColor();
+        }
+        return Color.TRANSPARENT;
+    }
+
+    private void seslSetTouchDelegateForToolbar() {
+        final ViewTreeObserver vto = getViewTreeObserver();
+        if (vto == null || this.mOnGlobalLayoutListenerForTD != null) {
+            return;
+        }
+        mOnGlobalLayoutListenerForTD = () -> {
+            post(() -> {
+                SeslTouchTargetDelegate seslTouchTargetDelegate = new SeslTouchTargetDelegate(this);
+                boolean shouldLayout;
+                if (shouldLayout(mNavButtonView)) {
+                    seslTouchTargetDelegate.addTouchDelegate(mNavButtonView, ExtraInsets
+                            .of(0, SESL_TOP_INSET_TO_EXPAND, 0, 0));
+                    shouldLayout = true;
+                } else {
+                    shouldLayout = false;
+                }
+                int childCount = getChildCount();
+                View childView;
+
+                int index = 0;
+                while (true) {
+                    if (index >= childCount) {
+                        childView = null;
+                        break;
+                    }
+                    childView = getChildAt(index);
+                    if (childView instanceof ActionMenuView) {
+                        break;
+                    }
+                    index++;
+                }
+                if (childView != null && childView.getVisibility() == View.VISIBLE) {
+                    ViewGroup childViewGroup = (ViewGroup) childView;
+                    int innerChildCount = childViewGroup.getChildCount();
+                    int inIndex = 0;
+                    while (inIndex < innerChildCount) {
+                        View childAt = childViewGroup.getChildAt(inIndex);
+                        if (childAt.getVisibility() == View.VISIBLE) {
+                            int measuredWidth = childAt.getMeasuredWidth() / 2;
+                            seslTouchTargetDelegate.addTouchDelegate(childAt,
+                                    SeslTouchTargetDelegate.ExtraInsets.of(inIndex == 0 ? measuredWidth : 0, measuredWidth, 0, measuredWidth));
+                            shouldLayout = true;
+                        }
+                        inIndex++;
+                    }
+                }
+                if (shouldLayout) {
+                    setTouchDelegate(seslTouchTargetDelegate);
+                }
+            });
+        };
+        vto.addOnGlobalLayoutListener(mOnGlobalLayoutListenerForTD);
+
+    }
+
+    public int seslGetUserTopPadding() {//sesl6
+        return mUserTopPadding;
+    }
+
+    public void seslSetUserTopPadding(int topPadding) {//sesl6
+        mUserTopPadding = topPadding;
+    }
+    //sesl
 }

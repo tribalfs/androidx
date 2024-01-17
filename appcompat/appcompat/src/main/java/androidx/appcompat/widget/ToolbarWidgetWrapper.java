@@ -48,6 +48,8 @@ import androidx.core.view.ViewPropertyAnimatorCompat;
 import androidx.core.view.ViewPropertyAnimatorListenerAdapter;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * Internal class used to interact with the Toolbar widget without
  * exposing interface methods to the public API.
  *
@@ -92,8 +94,8 @@ public class ToolbarWidgetWrapper implements DecorToolbar {
     private Drawable mDefaultNavigationIcon;
 
     public ToolbarWidgetWrapper(Toolbar toolbar, boolean style) {
-        this(toolbar, style, R.string.abc_action_bar_up_description,
-                R.drawable.abc_ic_ab_back_material);
+        this(toolbar, style, R.string.sesl_action_bar_up_description,
+                R.drawable.sesl_ic_ab_back_light);
     }
 
     public ToolbarWidgetWrapper(Toolbar toolbar, boolean style,
@@ -104,7 +106,7 @@ public class ToolbarWidgetWrapper implements DecorToolbar {
         mTitleSet = mTitle != null;
         mNavIcon = toolbar.getNavigationIcon();
         final TintTypedArray a = TintTypedArray.obtainStyledAttributes(toolbar.getContext(),
-                    null, R.styleable.ActionBar, R.attr.actionBarStyle, 0);
+                null, R.styleable.ActionBar, R.attr.actionBarStyle, 0);
         mDefaultNavigationIcon = a.getDrawable(R.styleable.ActionBar_homeAsUpIndicator);
         if (style) {
             final CharSequence title = a.getText(R.styleable.ActionBar_title);

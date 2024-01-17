@@ -16,6 +16,7 @@
 
 package androidx.appcompat.widget;
 
+import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 import android.os.Build;
 import android.view.View;
 
@@ -23,8 +24,11 @@ import androidx.annotation.DoNotInline;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.annotation.RestrictTo;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * Helper class used to emulate the behavior of {@link View#setTooltipText(CharSequence)} prior
  * to API level 26.
  *
@@ -61,7 +65,39 @@ public class TooltipCompat  {
 
         @DoNotInline
         static void setTooltipText(View view, CharSequence tooltipText) {
-            view.setTooltipText(tooltipText);
+            TooltipCompatHandler.setTooltipText(view, tooltipText);//sesl
         }
     }
+
+    //Sesl
+    /**
+     * Force the next Tooltip to be shown under its anchor view.
+     */
+    public static void seslSetNextTooltipForceBelow(boolean isBelow) {
+        TooltipCompatHandler.seslSetTooltipForceBelow(isBelow);
+    }
+
+    /**
+     * Force the next Tooltip to use ActionBar positioning.
+     */
+    public static void seslSetNextTooltipForceActionBarPosX(boolean isForceX) {
+        TooltipCompatHandler.seslSetTooltipForceActionBarPosX(isForceX);
+    }
+
+    /**
+     * Set a custom position where to show the next Tooltip.
+     */
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    static void setTooltipPosition(int x, int y, int layoutDirection) {
+        TooltipCompatHandler.seslSetTooltipPosition(x, y, layoutDirection);
+    }
+
+    /**
+     * Set whether to show the next Tooltip.
+     */
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    public static void setTooltipNull(boolean tooltipNull) {
+        TooltipCompatHandler.seslSetTooltipNull(tooltipNull);
+    }
+    //sesl
 }

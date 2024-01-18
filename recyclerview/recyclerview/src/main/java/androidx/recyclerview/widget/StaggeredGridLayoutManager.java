@@ -1303,7 +1303,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
     @Override
     public void onInitializeAccessibilityNodeInfoForItem(@NonNull RecyclerView.Recycler recycler,
             @NonNull RecyclerView.State state, @NonNull View host,
-            @NonNull AccessibilityNodeInfoCompat info) {
+                                                         @NonNull AccessibilityNodeInfoCompat info) {
         ViewGroup.LayoutParams lp = host.getLayoutParams();
         if (!(lp instanceof LayoutParams)) {
             super.onInitializeAccessibilityNodeInfoForItem(host, info);
@@ -1320,6 +1320,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
                     sglp.getSpanIndex(), sglp.mFullSpan ? mSpanCount : 1, false, false));
         }
     }
+
     @Override
     public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
         super.onInitializeAccessibilityEvent(event);
@@ -1363,7 +1364,7 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
 
     @Override
     public int getColumnCountForAccessibility(@NonNull RecyclerView.Recycler recycler,
-            @NonNull RecyclerView.State state) {
+                                              @NonNull RecyclerView.State state) {
         if (mOrientation == VERTICAL) {
             return Math.min(mSpanCount, state.getItemCount());
         }
@@ -2096,6 +2097,11 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
     public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state,
             int position) {
         LinearSmoothScroller scroller = new LinearSmoothScroller(recyclerView.getContext());
+        //Sesl
+        if (recyclerView != null) {
+            recyclerView.showGoToTop();
+        }
+        //sesl
         scroller.setTargetPosition(position);
         startSmoothScroll(scroller);
     }
@@ -2107,9 +2113,15 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
         }
         mPendingScrollPosition = position;
         mPendingScrollPositionOffset = INVALID_OFFSET;
+        //Sesl
+        if (mRecyclerView != null) {
+            mRecyclerView.showGoToTop();
+        }
+        //sesl
         requestLayout();
     }
 
+    //Sesl
     /**
      * Scroll to the specified adapter position with the given offset from layout start.
      * <p>
@@ -2124,13 +2136,26 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
      * @see #scrollToPosition(int)
      */
     public void scrollToPositionWithOffset(int position, int offset) {
+        scrollToPositionWithOffset(position, offset, false);
+    }
+
+    @RestrictTo(LIBRARY)
+    void scrollToPositionWithOffset(int position, int offset, boolean invalidate) {
         if (mPendingSavedState != null) {
             mPendingSavedState.invalidateAnchorPositionInfo();
         }
         mPendingScrollPosition = position;
         mPendingScrollPositionOffset = offset;
+
+        if (mRecyclerView != null) {
+            mRecyclerView.showGoToTop();
+        }
+        if (invalidate) {
+            mLazySpanLookup.clear();
+        }
         requestLayout();
     }
+    //sesl
 
     @Override
     @RestrictTo(LIBRARY)
@@ -2221,6 +2246,11 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
         mPrimaryOrientation.offsetChildren(-totalScroll);
         // always reset this if we scroll for a proper save instance state
         mLastLayoutFromEnd = mShouldReverseLayout;
+        //Sesl
+        if (mRecyclerView != null) {
+            mRecyclerView.showGoToTop();
+        }
+        //sesl
         mLayoutState.mAvailable = 0;
         recycle(recycler, mLayoutState);
         return totalScroll;
@@ -3080,6 +3110,11 @@ public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager imple
             if (mFullSpanItems == null) {
                 return null;
             }
+            //Sesl
+            if (minPos < 0) {
+                minPos = 0;
+            }
+            //sel
             final int limit = mFullSpanItems.size();
             for (int i = 0; i < limit; i++) {
                 FullSpanItem fsi = mFullSpanItems.get(i);

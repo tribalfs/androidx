@@ -26,6 +26,7 @@ import android.os.Build;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
+import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -46,6 +47,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * This is a utility class to add swipe to dismiss and drag & drop support to RecyclerView.
  * <p>
  * It works with a RecyclerView and a Callback class, which configures what type of interactions
@@ -70,6 +73,21 @@ import java.util.List;
  */
 public class ItemTouchHelper extends RecyclerView.ItemDecoration
         implements RecyclerView.OnChildAttachStateChangeListener {
+
+    // Sesl
+    private final int CALLEDBY_ONDRAWOVER = 1;
+    private final int CALLEDBY_ONDRAW = 2;
+    private final int CALLEDBY_SELECT = 3;
+
+    private int mTouchSlop = 0;
+    private int mPagingTouchSlop = 0;
+
+    private boolean mUsePagingTouchSlopForStylus = false;
+
+    private String mStartDraggingText = null;
+    private String mMoveDraggingText = null;
+    private String mEndDraggingText = null;
+    // sesl
 
     /**
      * Up direction, used for swipe & drag control.
@@ -177,7 +195,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
      * Currently selected view holder
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    ViewHolder mSelected = null;
+            ViewHolder mSelected = null;
 
     /**
      * The reference coordinates for the action start. For drag & drop, this is the time long
@@ -217,7 +235,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
      * The pointer we are tracking.
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    int mActivePointerId = ACTIVE_POINTER_ID_NONE;
+            int mActivePointerId = ACTIVE_POINTER_ID_NONE;
 
     /**
      * Developer callback which controls the behavior of ItemTouchHelper.
@@ -236,7 +254,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
      * action state.
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    int mSelectedFlags;
+            int mSelectedFlags;
 
     /**
      * When a View is dragged or swiped and needs to go back to where it was, we create a Recover
@@ -292,7 +310,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
      * that it can be drawn above other children.
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    View mOverdrawChild = null;
+            View mOverdrawChild = null;
 
     /**
      * We cache the position of the overdraw child to avoid recalculating it each time child
@@ -300,13 +318,13 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
      * detached.
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    int mOverdrawChildPosition = -1;
+            int mOverdrawChildPosition = -1;
 
     /**
      * Used to detect long press.
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    GestureDetectorCompat mGestureDetector;
+            GestureDetectorCompat mGestureDetector;
 
     /**
      * Callback for when long press occurs.
@@ -326,6 +344,15 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
                 mActivePointerId = event.getPointerId(0);
                 mInitialTouchX = event.getX();
                 mInitialTouchY = event.getY();
+                //Sesl
+                if (mUsePagingTouchSlopForStylus) {
+                    if (event.isFromSource(InputDevice.SOURCE_STYLUS)) {
+                        mSlop = mPagingTouchSlop;
+                    } else {
+                        mSlop = mTouchSlop;
+                    }
+                }
+                //sesl
                 obtainVelocityTracker();
                 if (mSelected == null) {
                     final RecoverAnimation animation = findAnimation(event);
@@ -487,6 +514,8 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
     private void setupCallbacks() {
         ViewConfiguration vc = ViewConfiguration.get(mRecyclerView.getContext());
         mSlop = vc.getScaledTouchSlop();
+        mTouchSlop = vc.getScaledTouchSlop();//sesl
+        mPagingTouchSlop = vc.getScaledPagingTouchSlop();//sesl
         mRecyclerView.addItemDecoration(this);
         mRecyclerView.addOnItemTouchListener(mOnItemTouchListener);
         mRecyclerView.addOnChildAttachStateChangeListener(this);
@@ -630,6 +659,14 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
                         targetTranslateY = 0;
                 }
                 if (prevActionState == ACTION_STATE_DRAG) {
+                    //Sesl
+                    if (mEndDraggingText != null && !mEndDraggingText.isEmpty()) {
+                        mSelected.itemView.announceForAccessibility(mEndDraggingText);
+                    } else {
+                        String accessibilityMsg = mRecyclerView.getContext().getString(R.string.dragndroplist_drag_release, mSelected.getLayoutPosition() + 1);
+                        mSelected.itemView.announceForAccessibility(accessibilityMsg);
+                    }
+                    //sesl
                     animationType = ANIMATION_TYPE_DRAG;
                 } else if (swipeDir > 0) {
                     animationType = ANIMATION_TYPE_SWIPE_SUCCESS;
@@ -652,6 +689,8 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
                             // this is a drag or failed swipe. recover immediately
                             mCallback.clearView(mRecyclerView, prevSelected);
                             // full cleanup will happen on onDrawOver
+                        } else if (!prevSelected.itemView.isAttachedToWindow()) {//sesl
+                            mCallback.clearView(mRecyclerView, prevSelected);
                         } else {
                             // wait until remove animation is complete.
                             mPendingCleanup.add(prevSelected.itemView);
@@ -690,6 +729,15 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
 
             if (actionState == ACTION_STATE_DRAG) {
                 mSelected.itemView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                //Sesl
+                if (mStartDraggingText != null && !mStartDraggingText.isEmpty()) {
+                    mSelected.itemView.announceForAccessibility(mStartDraggingText);
+                } else {
+                    mSelected.itemView.announceForAccessibility(mRecyclerView.getContext()
+                            .getString(R.string.dragndroplist_drag_start,
+                                    mSelected.getLayoutPosition() + 1));
+                }
+                //sesl
             }
         }
         final ViewParent rvParent = mRecyclerView.getParent();
@@ -700,6 +748,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
             mRecyclerView.getLayoutManager().requestSimpleAnimationsInNextLayout();
         }
         mCallback.onSelectedChanged(mSelected, mActionState);
+
         mRecyclerView.invalidate();
     }
 
@@ -720,9 +769,18 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
                     if ((animator == null || !animator.isRunning(null))
                             && !hasRunningRecoverAnim()) {
                         mCallback.onSwiped(anim.mViewHolder, swipeDir);
+                        endRecoverAnimation(anim.mViewHolder, false);//sesl
                     } else {
                         mRecyclerView.post(this);
                     }
+                } else {
+                    //Sesl
+                    Log.i(TAG, "Failed to call mCallback.onSwiped()!, " +
+                            "call seslOnSwipeFailed, flag = 0x"
+                            + Integer.toHexString(anim.mViewHolder.getFlags()));
+                    mCallback.seslOnSwipeFailed(anim.mViewHolder, swipeDir);
+                    endRecoverAnimation(anim.mViewHolder, false);
+                    //sesl
                 }
             }
         });
@@ -892,6 +950,15 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
             // keep target visible
             mCallback.onMoved(mRecyclerView, viewHolder, fromPosition,
                     target, toPosition, x, y);
+            //Sesl
+            if (mMoveDraggingText != null && !mMoveDraggingText.isEmpty()) {
+                mSelected.itemView.announceForAccessibility(mMoveDraggingText);
+            } else {
+                mSelected.itemView.announceForAccessibility(mRecyclerView.getContext()
+                        .getString(R.string.dragndroplist_drag_move,
+                                toPosition + 1));
+            }
+            //sesl
         }
     }
 
@@ -1102,6 +1169,11 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
     public void startDrag(@NonNull ViewHolder viewHolder) {
         if (!mCallback.hasDragFlag(mRecyclerView, viewHolder)) {
             Log.e(TAG, "Start drag has been called but dragging is not enabled");
+            //Sesl
+            viewHolder.itemView.announceForAccessibility(mRecyclerView.getContext()
+                    .getString(R.string.dragndroplist_item_cannot_be_dragged,
+                            viewHolder.getLayoutPosition() + 1));
+            //sesl
             return;
         }
         if (viewHolder.itemView.getParent() != mRecyclerView) {
@@ -1891,6 +1963,9 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
          */
         public abstract void onSwiped(@NonNull ViewHolder viewHolder, int direction);
 
+        public void seslOnSwipeFailed(@NonNull ViewHolder viewHolder, int direction) {
+        }
+
         /**
          * Called when the ViewHolder swiped or dragged by the ItemTouchHelper is changed.
          * <p/>
@@ -2352,6 +2427,11 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
                 ViewHolder vh = mRecyclerView.getChildViewHolder(child);
                 if (vh != null) {
                     if (!mCallback.hasDragFlag(mRecyclerView, vh)) {
+                        //Sesl
+                        vh.itemView.announceForAccessibility(mRecyclerView.getContext()
+                                .getString(R.string.dragndroplist_item_cannot_be_dragged,
+                                        vh.getLayoutPosition() + 1));
+                        //sesl
                         return;
                     }
                     int pointerId = e.getPointerId(0);
@@ -2376,6 +2456,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
                 }
             }
         }
+
     }
 
     @VisibleForTesting
@@ -2491,4 +2572,26 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
 
         }
     }
+
+    //Sesl
+    public void seslSetPagingTouchSlopForStylus(boolean enabled) {
+        mUsePagingTouchSlopForStylus = enabled;
+    }
+
+    public boolean seslIsPagingTouchSlopForStylusEnabled() {
+        return mUsePagingTouchSlopForStylus;
+    }
+
+    public void setStartDraggingText(String text) {
+        mStartDraggingText = text;
+    }
+
+    public void setMoveDraggingText(String text) {
+        mMoveDraggingText = text;
+    }
+
+    public void setEndDraggingText(String text) {
+        mEndDraggingText = text;
+    }
+    //sesl
 }

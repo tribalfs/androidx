@@ -17,12 +17,16 @@
 package androidx.recyclerview.widget;
 
 import android.graphics.PointF;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * Implementation of the {@link SnapHelper} supporting snapping in either vertical or horizontal
  * orientation.
  * <p>
@@ -31,6 +35,12 @@ import androidx.annotation.Nullable;
  * {@link SnapHelper#calculateDistanceToFinalSnap}.
  */
 public class LinearSnapHelper extends SnapHelper {
+    // Sesl
+    private final DecelerateInterpolator mDecelerateInterpolator = new DecelerateInterpolator();
+    private float mVelocityRatio = 0.5f;
+    private int mDeccelateTimeRatio = 1;
+    private float mMillisecondsPerInch = 100.0f;
+    // Sesl
 
     private static final float INVALID_DISTANCE = 1f;
 
@@ -39,6 +49,62 @@ public class LinearSnapHelper extends SnapHelper {
     private OrientationHelper mVerticalHelper;
     @Nullable
     private OrientationHelper mHorizontalHelper;
+
+    //Sesl
+    public LinearSnapHelper() {
+        setSnapValue(0.5f, 100.0f, 1);
+    }
+
+    public LinearSnapHelper(float velocityRatio) {
+        setSnapValue(velocityRatio, 100.0f, 1);
+    }
+
+    public LinearSnapHelper(float velocityRatio, float msPerInch) {
+        setSnapValue(velocityRatio, msPerInch, 1);
+    }
+
+    public LinearSnapHelper(float velocityRatio, float msPerInch, int decelerateTimeRatio) {
+        setSnapValue(velocityRatio, msPerInch, decelerateTimeRatio);
+    }
+
+    private void setSnapValue(float velocityRatio, float msPerInch, int decelerateTimeRatio) {
+        mMillisecondsPerInch = msPerInch;
+        mVelocityRatio = velocityRatio;
+        mDeccelateTimeRatio = decelerateTimeRatio;
+    }
+
+    @Override
+    @Nullable
+    protected RecyclerView.SmoothScroller createScroller(
+            @NonNull RecyclerView.LayoutManager layoutManager) {
+        if (!(layoutManager instanceof RecyclerView.SmoothScroller.ScrollVectorProvider)) {
+            return null;
+        }
+        return new LinearSmoothScroller(mRecyclerView.getContext()) {
+            @Override
+            protected void onTargetFound(View targetView, RecyclerView.State state, Action action) {
+                if (mRecyclerView == null) {
+                    // The associated RecyclerView has been removed so there is no action to take.
+                    return;
+                }
+                int[] snapDistances = calculateDistanceToFinalSnap(mRecyclerView.getLayoutManager(),
+                        targetView);
+                final int dx = snapDistances[0];
+                final int dy = snapDistances[1];
+                final int time = calculateTimeForDeceleration(
+                        Math.max(Math.abs(mDeccelateTimeRatio * dx), Math.abs(mDeccelateTimeRatio * dy)));
+                if (time > 0) {
+                    action.update(dx, dy, time, mDecelerateInterpolator);
+                }
+            }
+
+            @Override
+            protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                return mMillisecondsPerInch / displayMetrics.densityDpi;
+            }
+        };
+    }
+    //sesl
 
     @Override
     public int[] calculateDistanceToFinalSnap(
@@ -63,6 +129,10 @@ public class LinearSnapHelper extends SnapHelper {
     @Override
     public int findTargetSnapPosition(RecyclerView.LayoutManager layoutManager, int velocityX,
             int velocityY) {
+        //Sesl
+        velocityX = (int) (velocityX * mVelocityRatio);
+        velocityY = (int) (velocityY * mVelocityRatio);
+        //sesl
         if (!(layoutManager instanceof RecyclerView.SmoothScroller.ScrollVectorProvider)) {
             return RecyclerView.NO_POSITION;
         }
@@ -94,9 +164,10 @@ public class LinearSnapHelper extends SnapHelper {
         }
 
         int vDeltaJump, hDeltaJump;
+        int[] snapDistances = calculateDistanceToFinalSnap(layoutManager, currentView);//sesl
         if (layoutManager.canScrollHorizontally()) {
             hDeltaJump = estimateNextPositionDiffForFling(layoutManager,
-                    getHorizontalHelper(layoutManager), velocityX, 0);
+                    getHorizontalHelper(layoutManager), velocityX, 0, snapDistances);//sesl
             if (vectorForEnd.x < 0) {
                 hDeltaJump = -hDeltaJump;
             }
@@ -105,7 +176,7 @@ public class LinearSnapHelper extends SnapHelper {
         }
         if (layoutManager.canScrollVertically()) {
             vDeltaJump = estimateNextPositionDiffForFling(layoutManager,
-                    getVerticalHelper(layoutManager), 0, velocityY);
+                    getVerticalHelper(layoutManager), 0, velocityY, snapDistances);//sesl
             if (vectorForEnd.y < 0) {
                 vDeltaJump = -vDeltaJump;
             }
@@ -156,16 +227,23 @@ public class LinearSnapHelper extends SnapHelper {
      *
      * @return The diff between the target scroll position and the current position.
      */
+    //sesl
     private int estimateNextPositionDiffForFling(RecyclerView.LayoutManager layoutManager,
-            OrientationHelper helper, int velocityX, int velocityY) {
-        int[] distances = calculateScrollDistance(velocityX, velocityY);
+             OrientationHelper helper, int velocityX, int velocityY, int[] snapDistances) {
+        int[] distances = seslCalculateScrollDistanceForLinear(velocityX, velocityY);
+        distances[0] -= snapDistances[0];
+        distances[1] -= snapDistances[1];
         float distancePerChild = computeDistancePerChild(layoutManager, helper);
         if (distancePerChild <= 0) {
             return 0;
         }
         int distance =
                 Math.abs(distances[0]) > Math.abs(distances[1]) ? distances[0] : distances[1];
-        return (int) Math.round(distance / distancePerChild);
+        final int diff = (int) Math.round(distance / distancePerChild);
+        if (diff != 0) {
+            return diff;
+        }
+        return diff < 0 ? -1 : 1;
     }
 
     /**

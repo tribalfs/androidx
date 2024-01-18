@@ -20,12 +20,15 @@ import android.annotation.SuppressLint;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.OverScroller;
 import android.widget.Scroller;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * Class intended to support snapping for a {@link RecyclerView}.
  * <p>
  * SnapHelper tries to handle fling as well but for this to work properly, the
@@ -38,6 +41,7 @@ public abstract class SnapHelper extends RecyclerView.OnFlingListener {
 
     RecyclerView mRecyclerView;
     private Scroller mGravityScroller;
+    private OverScroller mOverScroller;//sesl
 
     // Handles the snap on scroll case.
     private final RecyclerView.OnScrollListener mScrollListener =
@@ -102,6 +106,7 @@ public abstract class SnapHelper extends RecyclerView.OnFlingListener {
             setupCallbacks();
             mGravityScroller = new Scroller(mRecyclerView.getContext(),
                     new DecelerateInterpolator());
+            mOverScroller = new OverScroller(mRecyclerView.getContext());//sesl
             snapToTargetExistingView();
         }
     }
@@ -141,6 +146,17 @@ public abstract class SnapHelper extends RecyclerView.OnFlingListener {
                 Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE);
         outDist[0] = mGravityScroller.getFinalX();
         outDist[1] = mGravityScroller.getFinalY();
+        return outDist;
+    }
+
+    //sesl
+    public int[] seslCalculateScrollDistanceForLinear(int velocityX, int velocityY) {
+        int[] outDist = new int[2];
+        mOverScroller.computeScrollOffset();
+        mOverScroller.fling(0, 0, velocityX, velocityY,
+                Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        outDist[0] = mOverScroller.getFinalX();
+        outDist[1] = mOverScroller.getFinalY();
         return outDist;
     }
 

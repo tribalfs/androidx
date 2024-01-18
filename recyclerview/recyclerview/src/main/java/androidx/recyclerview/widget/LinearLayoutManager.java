@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package androidx.recyclerview.widget;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY;
+import static androidx.core.view.accessibility.AccessibilityNodeInfoCompat.*;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -37,11 +38,12 @@ import androidx.annotation.RestrictTo;
 import androidx.core.os.TraceCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat;
 
 import java.util.List;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * A {@link RecyclerView.LayoutManager} implementation which provides
  * similar functionality to {@link android.widget.ListView}.
  */
@@ -96,7 +98,8 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      *
      * @see #mShouldReverseLayout
      */
-    private boolean mReverseLayout = false;
+//    @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
+    boolean mReverseLayout = false;//sesl
 
     /**
      * This keeps the final value for how LayoutManager should start laying out views.
@@ -110,7 +113,8 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
      * it supports both orientations.
      * see {@link android.widget.AbsListView#setStackFromBottom(boolean)}
      */
-    private boolean mStackFromEnd = false;
+    @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
+    boolean mStackFromEnd = false;//sesl
 
     /**
      * Works the same way as {@link android.widget.AbsListView#setSmoothScrollbarEnabled(boolean)}.
@@ -179,8 +183,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             // commonly used constructor, for no benefit: the context parameter is unused
             @SuppressLint("UnknownNullness") Context context,
             @RecyclerView.Orientation int orientation,
-            boolean reverseLayout
-    ) {
+            boolean reverseLayout) {
         setOrientation(orientation);
         setReverseLayout(reverseLayout);
     }
@@ -288,7 +291,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
 
             if (mOrientation == VERTICAL) {
                 final int rowArg = args.getInt(
-                        AccessibilityNodeInfoCompat.ACTION_ARGUMENT_ROW_INT, -1);
+                        ACTION_ARGUMENT_ROW_INT, -1);
                 if (rowArg < 0) {
                     return false;
                 }
@@ -296,7 +299,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
                         mRecyclerView.mState) - 1);
             } else { // horizontal
                 final int columnArg = args.getInt(
-                        AccessibilityNodeInfoCompat.ACTION_ARGUMENT_COLUMN_INT, -1);
+                        ACTION_ARGUMENT_COLUMN_INT, -1);
                 if (columnArg < 0) {
                     return false;
                 }
@@ -581,6 +584,7 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             int position) {
         LinearSmoothScroller linearSmoothScroller =
                 new LinearSmoothScroller(recyclerView.getContext());
+        recyclerView.showGoToTop();//sesl
         linearSmoothScroller.setTargetPosition(position);
         startSmoothScroll(linearSmoothScroller);
     }
@@ -1160,6 +1164,13 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         if (mPendingSavedState != null) {
             mPendingSavedState.invalidateAnchor();
         }
+
+        //sesl
+        if (mRecyclerView != null) {
+            mRecyclerView.showGoToTop();
+        }
+        //sesl
+
         requestLayout();
     }
 
@@ -1188,6 +1199,13 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
         if (mPendingSavedState != null) {
             mPendingSavedState.invalidateAnchor();
         }
+
+        //sesl
+        if (mRecyclerView != null) {
+            mRecyclerView.showGoToTop();
+        }
+        //sesl
+
         requestLayout();
     }
 
@@ -1495,6 +1513,11 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             Log.d(TAG, "scroll req: " + delta + " scrolled: " + scrolled);
         }
         mLayoutState.mLastScrollDelta = scrolled;
+        //Sesl
+        if (state.mLayoutStep != RecyclerView.State.STEP_LAYOUT) {
+            mRecyclerView.showGoToTop();
+        }
+        //sesl
         return scrolled;
     }
 

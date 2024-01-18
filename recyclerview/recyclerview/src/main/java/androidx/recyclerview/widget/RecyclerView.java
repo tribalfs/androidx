@@ -17,40 +17,66 @@
 
 package androidx.recyclerview.widget;
 
+
+import static android.view.MotionEvent.ACTION_HOVER_ENTER;
+import static android.view.MotionEvent.ACTION_HOVER_EXIT;
+import static android.view.MotionEvent.ACTION_HOVER_MOVE;
+import static android.view.MotionEvent.BUTTON_SECONDARY;
+import static android.view.MotionEvent.BUTTON_STYLUS_PRIMARY;
+import static android.view.MotionEvent.TOOL_TYPE_MOUSE;
+import static android.view.MotionEvent.TOOL_TYPE_STYLUS;
+
 import static androidx.annotation.RestrictTo.Scope.LIBRARY;
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 import static androidx.core.util.Preconditions.checkArgument;
 import static androidx.core.view.ViewCompat.TYPE_NON_TOUCH;
 import static androidx.core.view.ViewCompat.TYPE_TOUCH;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.AnimatorSet;
 import android.animation.LayoutTransition;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Observable;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
 import android.os.Trace;
+import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.FocusFinder;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.SoundEffectConstants;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -59,17 +85,27 @@ import android.view.ViewParent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.PathInterpolator;
 import android.widget.EdgeEffect;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.OverScroller;
+import android.widget.SectionIndexer;
 
 import androidx.annotation.CallSuper;
+import androidx.annotation.ColorInt;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
 import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.animation.SeslAnimationUtils;
+import androidx.appcompat.util.SeslMisc;
+import androidx.appcompat.util.SeslRoundedCorner;
+import androidx.appcompat.util.SeslSubheaderRoundedCorner;
 import androidx.core.os.TraceCompat;
 import androidx.core.util.Preconditions;
 import androidx.core.view.AccessibilityDelegateCompat;
@@ -80,6 +116,7 @@ import androidx.core.view.MotionEventCompat;
 import androidx.core.view.NestedScrollingChild2;
 import androidx.core.view.NestedScrollingChild3;
 import androidx.core.view.NestedScrollingChildHelper;
+import androidx.core.view.NestedScrollingParent2;
 import androidx.core.view.ScrollingView;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.ViewConfigurationCompat;
@@ -91,6 +128,11 @@ import androidx.customview.poolingcontainer.PoolingContainerListener;
 import androidx.customview.view.AbsSavedState;
 import androidx.recyclerview.R;
 import androidx.recyclerview.widget.RecyclerView.ItemAnimator.ItemHolderInfo;
+import androidx.reflect.provider.SeslSettingsReflector;
+import androidx.reflect.view.SeslInputDeviceReflector;
+import androidx.reflect.view.SeslPointerIconReflector;
+import androidx.reflect.widget.SeslOverScrollerReflector;
+import androidx.reflect.widget.SeslTextViewReflector;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -104,6 +146,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * A flexible view for providing a limited window into a large data set.
  *
  * <h3>Glossary of terms:</h3>
@@ -220,6 +264,365 @@ import java.util.Set;
  */
 public class RecyclerView extends ViewGroup implements ScrollingView,
         NestedScrollingChild2, NestedScrollingChild3 {
+
+    // Sesl
+    private static final Interpolator LINEAR_INTERPOLATOR;
+    private static final float FRAME_LATENCY_LIMIT = 16.66f;
+    private final int ON_ABSORB_VELOCITY = 10000;
+    private static final int FOCUS_MOVE_UP = 0;
+    private static final int FOCUS_MOVE_DOWN = 1;
+    private static final int FOCUS_MOVE_FULL_UP = 2;
+    private static final int FOCUS_MOVE_FULL_DOWN = 3;
+    private static final int HOVERSCROLL_DELAY = 0;
+    private static final int HOVERSCROLL_UP = 1;
+    private static final int HOVERSCROLL_DOWN = 2;
+    private static final float  HOVERSCROLL_SPEED = 10.0f;
+    private static final int HOVERSCROLL_HEIGHT_TOP_DP = 25;
+    private static final int HOVERSCROLL_HEIGHT_BOTTOM_DP = 25;
+    private static final int GTP_STATE_NONE = 0;
+    private static final int GTP_STATE_SHOWN = 1;
+    private static final int GTP_STATE_PRESSED = 2;
+    private static final int GO_TO_TOP_HIDE = 1500;
+    private static final int LASTITEM_ADD_REMOVE_DURATION = 330;
+    private static final int MOTION_EVENT_ACTION_PEN_DOWN = 211;
+    private static final int MOTION_EVENT_ACTION_PEN_MOVE = 213;
+    private static final int MOTION_EVENT_ACTION_PEN_UP = 212;
+    private static final int MSG_HOVERSCROLL_MOVE = 0;
+    private static final int STATISTICS_MAX_COUNT = 5;
+    Rect mChildBound = new Rect();
+    final View mCloseChildByTop = null;
+    final View mCloseChildByBottom = null;
+    final Context mContext;
+    SeslRecyclerViewFastScroller mFastScroller;
+    private SeslFastScrollerEventListener mFastScrollerEventListener;
+    private ValueAnimator mGoToTopFadeInAnimator;
+    private ValueAnimator mGoToTopFadeOutAnimator;
+    private Drawable mGoToTopImage;
+    private Drawable mGoToTopImageLight;
+    private final Rect mGoToTopRect = new Rect();
+    ImageView mGoToTopView;
+    IndexTip mIndexTip;
+    @Nullable
+    ValueAnimator mLastItemAddRemoveAnim = null;
+    Rect mListPadding = new Rect();
+    private SeslLongPressMultiSelectionListener mLongPressMultiSelectionListener;
+    private SeslOnGoToTopClickListener mOnGoToTopClickListener = null;
+    private SeslOnMultiSelectedListener mOnMultiSelectedListener;
+    private final Drawable mPenDragBlockImage;
+    private final Rect mPenDragBlockRect = new Rect();
+    private ArrayList<Integer> mPenDragSelectedItemArray;
+    @Nullable
+    protected View mPenTrackedChild = null;
+    private final Paint mRectPaint = new Paint();
+    private final SeslSubheaderRoundedCorner mRoundedCorner;
+    float mApproxLatency = 0f;
+    int mAnimatedBlackTop = -1;
+    int mBlackTop = -1;
+    private int mGoToTopBottomPadding;
+    private int mGoToTopElevation;
+    private int mGoToTopImmersiveBottomPadding;
+    private int mGoToTopLastState = GTP_STATE_NONE;
+    private int mGoToTopSize;
+    private int mGoToTopState = GTP_STATE_NONE;
+    private int mHoverBottomAreaHeight = 0;
+    int mHoverScrollDirection = -1;
+    int mHoverScrollStateForListener = HOVERSCROLL_DELAY;
+    private int mHoverTopAreaHeight = 0;
+    private int mInitialTopOffsetOfScreen = 0;
+    private int mLastBlackTop = -1;
+    private int mLastItemAnimTop = -1;
+    private int mNestedScrollRange = 0;
+    int mOldHoverScrollDirection = -1;
+    private int mPagingTouchSlop = 0;
+    int mPenDistanceFromTrackedChildTop = 0;
+    private int mPenDragBlockLeft = 0;
+    private int mPenDragBlockTop = 0;
+    private int mPenDragBlockRight = 0;
+    private int mPenDragBlockBottom = 0;
+    private int mPenDragStartX = 0;
+    private int mPenDragStartY = 0;
+    int mPenDragEndX = 0;
+    int mPenDragEndY = 0;
+    private int mPenDragSelectedViewPosition = NO_POSITION;
+    int mPenTrackedChildPosition = NO_POSITION;
+    private int mRectColor;
+    private final int[] mRecyclerViewOffsets = new int[2];
+    int mRemainNestedScrollRange = 0;
+    int mShowFadeOutGTP = 0;
+    private int mStatisticalCount = 0;
+    private int mTouchSlop2 = 0;
+    private final int[] mWindowOffsets = new int[2];
+    long mHoverRecognitionStartTime = 0;
+    long mHoverScrollStartTime = 0;
+    private long mPrevLatencyTime;
+    private boolean mDrawLastRoundedCorner = true;
+    private boolean mDrawRect = false;
+    private boolean mDrawReverse = false;
+    boolean mEdgeEffectByDragging = false;
+    private boolean mEnableGoToTop = false;
+    private boolean mFastScrollerEnabled = false;
+    boolean mGoToToping = false;
+    private boolean mHasNestedScrollRange = false;
+    private boolean mHoverAreaEnter = false;
+    private boolean mHoverScrollEnable = true;
+    private boolean mHoverScrollStateChanged = false;
+    private boolean mIndexTipEnabled = false;
+    private boolean mIsArrowKeyPressed;
+    protected boolean mIsCloseChildSetted = false;
+    private boolean mIsCtrlKeyPressed = false;
+    private boolean mIsCtrlMultiSelection = false;
+    private final boolean mIsEnabledPaddingInHoverScroll = false;
+    private boolean mIsFirstMultiSelectionMove = true;
+    private boolean mIsFirstPenMoveEvent = true;
+    boolean mIsHoverOverscrolled = false;
+    boolean mIsLongPressMultiSelection = false;
+    private boolean mIsNeedCheckLatency = false;
+    private boolean mIsNeedPenSelection = false;
+    private final boolean mIsPenDragBlockEnabled = true;
+    boolean mIsPenHovered = false;
+    boolean mIsPenPressed = false;
+    private boolean mIsPenSelectPointerSetted = false;
+    private boolean mIsPenSelectionEnabled = true;
+    boolean mIsSendHoverScrollState = false;
+    boolean mIsSetOnlyAddAnim = false;
+    boolean mIsSetOnlyRemoveAnim = false;
+    boolean mIsSkipMoveEvent = false;
+    private boolean mNeedsHoverScroll = false;
+    private boolean mIsTextViewHoveredState = false;
+    private boolean mOldTextViewHoverState = false;
+    private boolean mPreventFirstGlow = false;
+    private boolean mSizeChnage = false;
+    private boolean mUsePagingTouchSlopForStylus = false;
+    static {
+        LINEAR_INTERPOLATOR = new LinearInterpolator();
+    }
+    private final AnimatorListener mAnimListener = new AnimatorListener() {
+        @Override
+        public void onAnimationStart(@NonNull Animator animator) {
+        }
+
+        @Override
+        public void onAnimationEnd(@NonNull Animator animator) {
+            mLastItemAddRemoveAnim = null;
+            mIsSetOnlyAddAnim = false;
+            mIsSetOnlyRemoveAnim = false;
+            if (getItemAnimator() instanceof DefaultItemAnimator) {
+                ((DefaultItemAnimator) getItemAnimator()).clearPendingAnimFlag();
+            }
+            invalidate();
+        }
+
+        @Override
+        public void onAnimationCancel(@NonNull Animator animator) {
+        }
+
+        @Override
+        public void onAnimationRepeat(@NonNull Animator animator) {
+        }
+    };
+
+    private final Runnable mGoToToFadeOutRunnable = this::playGotoToFadeOut;
+
+    private final Runnable mGoToToFadeInRunnable = this::playGotoToFadeIn;
+
+    private final Runnable mAutoHide = () -> setupGoToTop(GTP_STATE_NONE);
+
+    final Handler mHoverHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == MSG_HOVERSCROLL_MOVE) {
+                if (mAdapter == null) {
+                    Log.e(TAG, "No adapter attached; skipping MSG_HOVERSCROLL_MOVE");
+                    return;
+                }
+
+                long mHoverRecognitionCurrentTime = System.currentTimeMillis();
+                long mHoverRecognitionDurationTime =
+                        (mHoverRecognitionCurrentTime - mHoverRecognitionStartTime) / 1000;
+                long mHoverScrollTimeInterval = 300;
+                if (mIsPenHovered
+                        && mHoverRecognitionCurrentTime - mHoverScrollStartTime < mHoverScrollTimeInterval) {
+                    return;
+                }
+
+                long mPenDragScrollTimeInterval = 500;
+                if (!mIsPenPressed || mHoverRecognitionCurrentTime - mHoverScrollStartTime >= mPenDragScrollTimeInterval) {
+                    if (mIsPenHovered && !mIsSendHoverScrollState) {
+                        if (mScrollListener != null) {
+                            mHoverScrollStateForListener = HOVERSCROLL_UP;
+                            mScrollListener.onScrollStateChanged(RecyclerView.this,
+                                    HOVERSCROLL_UP);
+                        }
+                        mIsSendHoverScrollState = true;
+                    }
+
+                    final boolean canScrollVertically = mLayout.canScrollVertically();
+                    final boolean canScrollHorizontally = mLayout.canScrollHorizontally();
+
+                    final boolean isRtl = mLayout.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+
+                    final int count = getChildCount();
+
+                    boolean canScrollDown =
+                            findFirstChildPosition() + count < mAdapter.getItemCount();
+                    if (!canScrollDown && count > 0) {
+                        View child = getChildAt(count - 1);
+                        getDecoratedBoundsWithMargins(child, mChildBound);
+                        canScrollDown = !canScrollHorizontally ?
+                                mChildBound.bottom > getBottom() - mListPadding.bottom
+                                        || mChildBound.bottom > getHeight() - mListPadding.bottom
+                                : (!isRtl ?
+                                        mChildBound.right > getRight() - mListPadding.right
+                                                || mChildBound.right > getWidth() - mListPadding.right
+                                        : mChildBound.left < mListPadding.left);
+                    }
+
+                    boolean canScrollUp = findFirstChildPosition() > 0;
+                    if (!canScrollUp && count > 0) {
+                        getDecoratedBoundsWithMargins(getChildAt(0), mChildBound);
+                        canScrollUp = !canScrollHorizontally ?
+                                mChildBound.top < mListPadding.top
+                                : (!isRtl ?
+                                        mChildBound.left < mListPadding.left
+                                        : mChildBound.right > getRight() - mListPadding.right
+                                                || mChildBound.right > getWidth() - mListPadding.right);
+                    }
+
+                    int mHoverScrollSpeed =
+                            (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                            HOVERSCROLL_SPEED, mContext.getResources().getDisplayMetrics()) + 0.5f);
+                    if (mHoverRecognitionDurationTime == 3) {
+                        mHoverScrollSpeed += (int) (mHoverScrollSpeed * 0.1d);
+                    } else if (mHoverRecognitionDurationTime == 4) {
+                        mHoverScrollSpeed += (int) (mHoverScrollSpeed * 0.2d);
+                    } else if (mHoverRecognitionDurationTime >= 5) {
+                        mHoverScrollSpeed += (int) (mHoverScrollSpeed * 0.3d);
+                    }
+
+                    int offset;
+
+                    if (mHoverScrollDirection == HOVERSCROLL_DOWN) {
+                        if (!canScrollHorizontally || !isRtl) {
+                            offset = mHoverScrollSpeed * -1;
+                        } else {
+                            offset = mHoverScrollSpeed;
+                        }
+                        //noinspection ConstantValue
+                        if ((mPenTrackedChild == null && mCloseChildByBottom != null)
+                                || (mOldHoverScrollDirection != mHoverScrollDirection && mIsCloseChildSetted)
+                        ) {
+                            mPenTrackedChild = null;
+                            mPenDistanceFromTrackedChildTop = 0;
+                            mPenTrackedChildPosition = NO_POSITION;
+                            mOldHoverScrollDirection = mHoverScrollDirection;
+                            //noinspection DataFlowIssue
+                            mIsCloseChildSetted = true;
+                        }
+                    } else {
+                        if (!canScrollHorizontally || !isRtl) {
+                            offset = mHoverScrollSpeed;
+                        } else {
+                            offset = mHoverScrollSpeed * -1;
+                        }
+                        //noinspection ConstantValue
+                        if ((mPenTrackedChild == null && mCloseChildByTop != null)
+                                || (mOldHoverScrollDirection != mHoverScrollDirection && mIsCloseChildSetted)) {
+                            mPenTrackedChild = null;
+                            mPenDistanceFromTrackedChildTop = 0;
+                            mPenTrackedChildPosition = NO_POSITION;
+                            mOldHoverScrollDirection = mHoverScrollDirection;
+                            //noinspection DataFlowIssue
+                            mIsCloseChildSetted = true;
+                        }
+                    }
+
+                    if (getChildAt(getChildCount() - 1) != null) {
+                        if ((offset >= 0 || !canScrollUp) && (offset <= 0 || !canScrollDown)) {
+                            final int overScrollMode = getOverScrollMode();
+                            final boolean canOverScroll = overScrollMode == OVER_SCROLL_ALWAYS
+                                    || (overScrollMode == OVER_SCROLL_IF_CONTENT_SCROLLS
+                                    && !contentFits());
+                            if (canOverScroll && !mIsHoverOverscrolled) {
+                                if (canScrollHorizontally) {
+                                    ensureLeftGlow();
+                                    ensureRightGlow();
+                                } else {
+                                    ensureTopGlow();
+                                    ensureBottomGlow();
+                                }
+                                if (mHoverScrollDirection == HOVERSCROLL_DOWN) {
+                                    if (canScrollHorizontally) {
+                                        mLeftGlow.onAbsorb(ON_ABSORB_VELOCITY);
+                                        if (!mRightGlow.isFinished()) {
+                                            mRightGlow.onRelease();
+                                        }
+                                    } else {
+                                        mTopGlow.onAbsorb(ON_ABSORB_VELOCITY);
+                                        if (!mBottomGlow.isFinished()) {
+                                            mBottomGlow.onRelease();
+                                        }
+                                    }
+                                } else if (mHoverScrollDirection == HOVERSCROLL_UP) {
+                                    if (canScrollHorizontally) {
+                                        mRightGlow.onAbsorb(ON_ABSORB_VELOCITY);
+                                        if (!mLeftGlow.isFinished()) {
+                                            mLeftGlow.onRelease();
+                                        }
+                                    } else {
+                                        mBottomGlow.onAbsorb(ON_ABSORB_VELOCITY);
+                                        setupGoToTop(GTP_STATE_SHOWN);
+                                        autoHide(GTP_STATE_SHOWN);
+                                        if (!mTopGlow.isFinished()) {
+                                            mTopGlow.onRelease();
+                                        }
+                                    }
+                                }
+                                invalidate();
+                                mIsHoverOverscrolled = true;
+                            }
+
+                            if (mScrollState == SCROLL_STATE_DRAGGING) {
+                                setScrollState(SCROLL_STATE_IDLE);
+                            }
+
+                            if (!canOverScroll && !mIsHoverOverscrolled) {
+                                mIsHoverOverscrolled = true;
+                            }
+                        } else {
+                            startNestedScroll(canScrollHorizontally
+                                    ? ViewCompat.SCROLL_AXIS_HORIZONTAL
+                                    : ViewCompat.SCROLL_AXIS_VERTICAL, TYPE_NON_TOUCH);
+
+                            final int dx = canScrollHorizontally ? (isRtl ? -offset : offset) : 0;
+                            final int dy = canScrollVertically ? offset : 0;
+                            if (!dispatchNestedPreScroll(dx, dy, null, null,
+                                    TYPE_NON_TOUCH)) {
+                                scrollByInternal(dx, dy, null, TYPE_TOUCH);
+                                setScrollState(SCROLL_STATE_DRAGGING);
+                                if (mIsLongPressMultiSelection) {
+                                    updateLongPressMultiSelection(mPenDragEndX, mPenDragEndY,
+                                            false);
+                                }
+                            } else {
+                                adjustNestedScrollRangeBy(offset);
+                            }
+                            mHoverHandler.sendEmptyMessageDelayed(MSG_HOVERSCROLL_MOVE, 0);
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    private final Runnable mGoToTopEdgeEffectRunnable = new Runnable() {
+        @Override
+        public void run() {
+            ensureTopGlow();
+            mTopGlow.onAbsorb(ON_ABSORB_VELOCITY);
+            invalidate();
+        }
+    };
+    // sesl
 
     static final String TAG = "RecyclerView";
 
@@ -543,7 +946,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     @NonNull
     private EdgeEffectFactory mEdgeEffectFactory = sDefaultEdgeEffectFactory;
-    private EdgeEffect mLeftGlow, mTopGlow, mRightGlow, mBottomGlow;
+    EdgeEffect mLeftGlow, mTopGlow, mRightGlow, mBottomGlow; //sesl visibility
 
     ItemAnimator mItemAnimator = new DefaultItemAnimator();
 
@@ -575,7 +978,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     // Touch/scrolling handling
 
-    private int mScrollState = SCROLL_STATE_IDLE;
+    int mScrollState = SCROLL_STATE_IDLE;//sesl visibility
     private int mScrollPointerId = INVALID_POINTER;
     private VelocityTracker mVelocityTracker;
     private int mInitialTouchX;
@@ -584,8 +987,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     private int mLastTouchY;
     private int mTouchSlop;
     private OnFlingListener mOnFlingListener;
-    private final int mMinFlingVelocity;
-    private final int mMaxFlingVelocity;
+    private int mMinFlingVelocity;//mutable in sesl
+    private int mMaxFlingVelocity;//mutable in sesl
 
     // This value is used when handling rotary encoder generic motion events.
     float mScaledHorizontalScrollFactor = Float.MIN_VALUE;
@@ -601,7 +1004,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     final State mState = new State();
 
-    private OnScrollListener mScrollListener;
+    OnScrollListener mScrollListener;//sesl visibilitu
     private List<OnScrollListener> mScrollListeners;
 
     // For use in item animations
@@ -618,7 +1021,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     private final int[] mMinMaxLayoutPositions = new int[2];
 
     private NestedScrollingChildHelper mScrollingChildHelper;
-    private final int[] mScrollOffset = new int[2];
+    final int[] mScrollOffset = new int[2];//sesl visibility
     private final int[] mNestedOffsets = new int[2];
 
     // Reusable int array to be passed to method calls that mutate it in order to "return" two ints.
@@ -779,6 +1182,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         setScrollContainer(true);
         setFocusableInTouchMode(true);
 
+        //Sesl
+        mContext = context;
+        seslInitConfigurations(context);
+        setWillNotDraw(getOverScrollMode() == View.OVER_SCROLL_NEVER);
+        //sesl
+
         final ViewConfiguration vc = ViewConfiguration.get(context);
         mTouchSlop = vc.getScaledTouchSlop();
         mScaledHorizontalScrollFactor =
@@ -850,6 +1259,36 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             nestedScrollingEnabled = a.getBoolean(0, true);
             a.recycle();
         }
+
+        //Sesl
+        final Resources resources = context.getResources();
+        TypedValue outValue = new TypedValue();
+
+        mPenDragBlockImage =
+                resources.getDrawable(androidx.appcompat.R.drawable.sesl_pen_block_selection);
+
+        if (context.getTheme().resolveAttribute(androidx.appcompat.R.attr.goToTopStyle, outValue,
+         true)) {
+            mGoToTopImageLight = resources.getDrawable(outValue.resourceId);
+        }
+
+        context.getTheme().resolveAttribute(androidx.appcompat.R.attr.roundedCornerColor,
+         outValue, true);
+        if (outValue.resourceId > 0) {
+            mRectColor = resources.getColor(outValue.resourceId);
+        }
+        mRectPaint.setColor(mRectColor);
+        mRectPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+        mItemAnimator.setHostView(this);
+
+        mRoundedCorner = new SeslSubheaderRoundedCorner(getContext());
+        mRoundedCorner.setRoundedCorners(SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_LEFT
+                | SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_RIGHT);
+        mRoundedCorner.setRoundedCornerColor(SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_LEFT
+                | SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_RIGHT, mRectColor);
+        //sesl
+
         // Re-set whether nested scrolling is enabled so that it is set on all API levels
         setNestedScrollingEnabled(nestedScrollingEnabled);
         PoolingContainer.setPoolingContainer(this, true);
@@ -1252,6 +1691,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
      */
     public void setScrollingTouchSlop(int slopConstant) {
         final ViewConfiguration vc = ViewConfiguration.get(getContext());
+        seslSetPagingTouchSlopForStylus(false);//sesl
         switch (slopConstant) {
             default:
                 Log.w(TAG, "setScrollingTouchSlop(): bad argument constant "
@@ -1487,6 +1927,13 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         if (layout == mLayout) {
             return;
         }
+
+        //Sesl
+        final boolean isLinearLayoutManager = layout instanceof LinearLayoutManager;
+        mDrawRect = mDrawRect && isLinearLayoutManager;
+        mDrawLastRoundedCorner = mDrawLastRoundedCorner && isLinearLayoutManager;
+        //sesl
+
         stopScroll();
         // TODO We should do this switch a dispatchLayout pass and animate children. There is a good
         // chance that LayoutManagers will re-use views.
@@ -1549,6 +1996,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     @Override
     protected Parcelable onSaveInstanceState() {
+        //Sesl
+        mApproxLatency = 0;
+        mStatisticalCount = 0;
+        mIsNeedCheckLatency = false;
+        //sesl
         SavedState state = new SavedState(super.onSaveInstanceState());
         if (mPendingSavedState != null) {
             state.copyFrom(mPendingSavedState);
@@ -1726,6 +2178,26 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             stopScrollersInternal();
         }
         dispatchOnScrollStateChanged(state);
+
+        //Sesl
+        switch(state){
+            case SCROLL_STATE_DRAGGING:
+                mEdgeEffectByDragging = false;
+                mIsNeedCheckLatency = true;
+                break;
+
+            case SCROLL_STATE_IDLE:
+                if (mIndexTipEnabled && mIndexTip != null) {
+                    mIndexTip.hide();
+                }
+                if (mEnableGoToTop && mGoToToping) {
+                    ensureTopGlow();
+                    mTopGlow.onAbsorb(ON_ABSORB_VELOCITY);
+                    invalidate();
+                }
+                break;
+        }
+        //sesl
     }
 
     /**
@@ -1927,6 +2399,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         }
         mLayout.scrollToPosition(position);
         awakenScrollBars();
+        //Sesl
+        if (mFastScroller != null && mAdapter != null) {
+            mFastScroller.onScroll(findFirstVisibleItemPosition(),
+                    getChildCount(), mAdapter.getItemCount());
+        }
+        //sesl
     }
 
     void jumpToPositionForSmoothScroller(int position) {
@@ -2158,6 +2636,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         }
         if (dy != 0) {
             consumedY = mLayout.scrollVerticallyBy(dy, mRecycler, mState);
+            //Sesl
+            if (mGoToTopState == GTP_STATE_NONE) {
+                setupGoToTop(GTP_STATE_SHOWN);
+                autoHide(GTP_STATE_SHOWN);
+            }
+            //sesl
         }
 
         TraceCompat.endSection();
@@ -2280,7 +2764,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         mNestedOffsets[0] += mScrollOffset[0];
         mNestedOffsets[1] += mScrollOffset[1];
 
-        if (getOverScrollMode() != View.OVER_SCROLL_NEVER) {
+        if (!mPreventFirstGlow/*sesl*/ && getOverScrollMode() != View.OVER_SCROLL_NEVER) {
             if (ev != null && !MotionEventCompat.isFromSource(ev, InputDevice.SOURCE_MOUSE)) {
                 pullGlows(ev.getX(), unconsumedX, ev.getY(), unconsumedY);
                 // For rotary encoders, we release stretch EdgeEffects after they are pulled, to
@@ -2298,6 +2782,13 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         if (!awakenScrollBars()) {
             invalidate();
         }
+        //Sesl
+        if ((mLayout instanceof StaggeredGridLayoutManager)
+                && (!canScrollVertically(-1) || !canScrollVertically(1))) {
+            mLayout.onScrollStateChanged(SCROLL_STATE_IDLE);
+        }
+        mPreventFirstGlow = false;
+        //sesl
         return consumedNestedScroll || consumedX != 0 || consumedY != 0;
     }
 
@@ -2803,6 +3294,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     startNestedScroll(nestedScrollAxis, TYPE_NON_TOUCH);
                 }
                 mViewFlinger.smoothScrollBy(dx, dy, duration, interpolator);
+
+                showGoToTop();//sesl
             } else {
                 scrollBy(dx, dy);
             }
@@ -3084,6 +3577,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             invalidate = true;
         }
 
+        mEdgeEffectByDragging = invalidate;//sesl
         if (invalidate || overscrollX != 0 || overscrollY != 0) {
             ViewCompat.postInvalidateOnAnimation(this);
         }
@@ -3346,8 +3840,25 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             requestChildOnScreen(result, null);
             return focused;
         }
-        return isPreferredNextFocus(focused, result, direction)
-                ? result : super.focusSearch(focused, direction);
+        //Sesl
+        if (!isPreferredNextFocus(focused, result, direction)) {
+            result = super.focusSearch(focused, direction);
+        }
+
+        if (mIsArrowKeyPressed && result == null
+                && (mLayout instanceof StaggeredGridLayoutManager)) {
+            int dt = 0;
+            if (direction == View.FOCUS_DOWN) {
+                dt = getFocusedChild().getBottom() - getBottom();
+            } else if (direction == View.FOCUS_UP) {
+                dt = getFocusedChild().getTop() - getTop();
+            }
+            ((StaggeredGridLayoutManager) mLayout).scrollBy(dt, mRecycler, mState);
+            mIsArrowKeyPressed = false;
+        }
+
+        return result;
+        //sesl
     }
 
     /**
@@ -3518,6 +4029,14 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 GapWorker.sGapWorker.set(mGapWorker);
             }
             mGapWorker.add(this);
+
+            //Sesl
+            if (mLayout != null && mLayout.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                if (mFastScroller != null) {
+                    mFastScroller.setScrollbarPosition(getVerticalScrollbarPosition());
+                }
+            }
+            //sesl
         }
     }
 
@@ -3544,6 +4063,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             mGapWorker.remove(this);
             mGapWorker = null;
         }
+
+        //Sesl
+        if (mIndexTipEnabled && mIndexTip != null) {
+            mIndexTip.forcedHide();
+        }
+        //sesl
     }
 
     /**
@@ -3723,6 +4248,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         final int action = e.getActionMasked();
         final int actionIndex = e.getActionIndex();
 
+        //Sesl
+        if (mFastScroller != null && mFastScroller.onInterceptTouchEvent(e)) {
+            return true;
+        }
+        //sesl
+
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (mIgnoreMotionEventTillDown) {
@@ -3731,7 +4262,15 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 mScrollPointerId = e.getPointerId(0);
                 mInitialTouchX = mLastTouchX = (int) (e.getX() + 0.5f);
                 mInitialTouchY = mLastTouchY = (int) (e.getY() + 0.5f);
-
+                //Sesl
+                if (mUsePagingTouchSlopForStylus) {
+                    if (e.isFromSource(InputDeviceCompat.SOURCE_STYLUS)) {
+                        mTouchSlop = mPagingTouchSlop;
+                    } else {
+                        mTouchSlop = mTouchSlop2;
+                    }
+                }
+                //sesl
                 if (stopGlowAnimations(e) || mScrollState == SCROLL_STATE_SETTLING) {
                     getParent().requestDisallowInterceptTouchEvent(true);
                     setScrollState(SCROLL_STATE_DRAGGING);
@@ -3740,8 +4279,15 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
                 // Clear the nested offsets
                 mNestedOffsets[0] = mNestedOffsets[1] = 0;
+                //Sesl
+                if (mHasNestedScrollRange) {
+                    adjustNestedScrollRange();
+                }
+                mPreventFirstGlow = false;
+                //sesl
 
                 startNestedScrollForType(TYPE_TOUCH);
+                mIsSkipMoveEvent = false;//sesl
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -3760,15 +4306,22 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
                 final int x = (int) (e.getX(index) + 0.5f);
                 final int y = (int) (e.getY(index) + 0.5f);
+
+                int lastTouchXDiff = mLastTouchX - x;//sesl
+                int lastTouchYDiff = mLastTouchY - y;//sesl
+
                 if (mScrollState != SCROLL_STATE_DRAGGING) {
-                    final int dx = x - mInitialTouchX;
-                    final int dy = y - mInitialTouchY;
+                    //final int dx = x - mInitialTouchX;
+                    //final int dy = y - mInitialTouchY;
                     boolean startScroll = false;
-                    if (canScrollHorizontally && Math.abs(dx) > mTouchSlop) {
+                    if (canScrollHorizontally && Math.abs(lastTouchXDiff) > mTouchSlop) {//sesl
+                        lastTouchXDiff = lastTouchXDiff + (lastTouchXDiff > 0 ? -mTouchSlop : mTouchSlop);//sesl
                         mLastTouchX = x;
                         startScroll = true;
                     }
-                    if (canScrollVertically && Math.abs(dy) > mTouchSlop) {
+                    if (canScrollVertically && Math.abs(lastTouchYDiff) > mTouchSlop) {//sesl
+                        lastTouchYDiff = lastTouchYDiff + (lastTouchYDiff > 0 ? -mTouchSlop :  mTouchSlop);//sesl
+                        mPreventFirstGlow = true;//sesl
                         mLastTouchY = y;
                         startScroll = true;
                     }
@@ -3776,6 +4329,23 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                         setScrollState(SCROLL_STATE_DRAGGING);
                     }
                 }
+                //Sesl
+                if (mScrollState == SCROLL_STATE_DRAGGING) {
+                    final MotionEvent obtain = MotionEvent.obtain(e);
+                    mLastTouchX = x - mScrollOffset[0];
+                    mLastTouchY = y - mScrollOffset[1];
+                    if (scrollByInternal(
+                            canScrollHorizontally ? lastTouchXDiff : 0,
+                            canScrollVertically ? lastTouchYDiff : 0, obtain, 0
+                    )) {
+                        getParent().requestDisallowInterceptTouchEvent(true);
+                    }
+                    if (mGapWorker != null && (lastTouchXDiff != 0 || lastTouchYDiff != 0)) {
+                        mGapWorker.postFromTraversal(this, lastTouchXDiff, lastTouchYDiff);
+                    }
+                }
+                adjustNestedScrollRangeBy(lastTouchYDiff);
+                //sesl
             }
             break;
 
@@ -3792,6 +4362,14 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
             case MotionEvent.ACTION_CANCEL: {
                 cancelScroll();
+            }
+            break;
+
+            //sesl
+            case MOTION_EVENT_ACTION_PEN_DOWN: {
+                if (mIgnoreMotionEventTillDown) {
+                    mIgnoreMotionEventTillDown = false;
+                }
             }
         }
         return mScrollState == SCROLL_STATE_DRAGGING;
@@ -3874,11 +4452,39 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         final MotionEvent vtev = MotionEvent.obtain(e);
         vtev.offsetLocation(mNestedOffsets[0], mNestedOffsets[1]);
 
+        //Sesl
+        if (mFastScroller != null && mFastScroller.onTouchEvent(e)) {
+            if (mFastScrollerEventListener != null) {
+                if (e.getActionMasked() == MotionEvent.ACTION_DOWN
+                        || e.getActionMasked() == MotionEvent.ACTION_MOVE) {
+                    final int effectState = mFastScroller.getEffectState();
+                    if (effectState == SeslRecyclerViewFastScroller.EFFECT_STATE_OPEN) {
+                        mFastScrollerEventListener.onPressed(mFastScroller.getScrollY());
+                    }
+                }
+                if (e.getActionMasked() == MotionEvent.ACTION_UP) {
+                    final int effectState = mFastScroller.getEffectState();
+                    if (effectState == SeslRecyclerViewFastScroller.EFFECT_STATE_CLOSE) {
+                        mFastScrollerEventListener.onReleased(mFastScroller.getScrollY());
+                    }
+                }
+            }
+
+            vtev.recycle();
+            return true;
+        }
+        //sesl
+
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
                 mScrollPointerId = e.getPointerId(0);
                 mInitialTouchX = mLastTouchX = (int) (e.getX() + 0.5f);
                 mInitialTouchY = mLastTouchY = (int) (e.getY() + 0.5f);
+                //Sesl
+                if (mHasNestedScrollRange) {
+                    adjustNestedScrollRange();
+                }
+                //sesl
 
                 startNestedScrollForType(TYPE_TOUCH);
             }
@@ -3953,6 +4559,15 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
                     mLastTouchX = x - mScrollOffset[0];
                     mLastTouchY = y - mScrollOffset[1];
+
+                    //Sesl
+                    int mMotionEventUpPendingFlag = 0x2000000;
+                    if ((e.getFlags() & mMotionEventUpPendingFlag) != 0) {
+                        mVelocityTracker.addMovement(vtev);
+                        mIsSkipMoveEvent = true;
+                        return false;
+                    }
+                    //sesl
 
                     if (scrollByInternal(
                             canScrollHorizontally ? dx : 0,
@@ -4075,22 +4690,40 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 hScroll = 0f;
             }
 
-            int scaledVScroll = (int) (vScroll * mScaledVerticalScrollFactor);
-            int scaledHScroll = (int) (hScroll * mScaledHorizontalScrollFactor);
-            if (useSmoothScroll) {
-                OverScroller overScroller = mViewFlinger.mOverScroller;
-                // Account for any remaining scroll from a previous generic motion event.
-                scaledVScroll += overScroller.getFinalY() - overScroller.getCurrY();
-                scaledHScroll += overScroller.getFinalX() - overScroller.getCurrX();
-                smoothScrollBy(scaledHScroll, scaledVScroll, /* interpolator= */ null,
-                        UNDEFINED_DURATION, /* withNestedScrolling= */ true);
-            } else {
-                nestedScrollByInternal(scaledHScroll, scaledVScroll, event, TYPE_NON_TOUCH);
-            }
+            //Sesl
+//            int scaledVScroll = (int) (vScroll * mScaledVerticalScrollFactor);
+//            int scaledHScroll = (int) (hScroll * mScaledHorizontalScrollFactor);
+//            if (useSmoothScroll) {
+//                OverScroller overScroller = mViewFlinger.mOverScroller;
+//                // Account for any remaining scroll from a previous generic motion event.
+//                scaledVScroll += overScroller.getFinalY() - overScroller.getCurrY();
+//                scaledHScroll += overScroller.getFinalX() - overScroller.getCurrX();
+//                smoothScrollBy(scaledHScroll, scaledVScroll, /* interpolator= */ null,
+//                        UNDEFINED_DURATION, /* withNestedScrolling= */ true);
+//            } else {
+//                nestedScrollByInternal(scaledHScroll, scaledVScroll, event, TYPE_NON_TOUCH);
+//            }
 
+
+            if (vScroll != 0 || hScroll != 0) {
+                int nestedScrollAxis = ViewCompat.SCROLL_AXIS_NONE;
+                if (vScroll == 0) {
+                    nestedScrollAxis |= ViewCompat.SCROLL_AXIS_HORIZONTAL;
+                } else {
+                    nestedScrollAxis |= ViewCompat.SCROLL_AXIS_VERTICAL;
+                }
+                int scaledVScroll = (int) (vScroll * mScaledVerticalScrollFactor);
+                int scaledHScroll = (int) (hScroll * mScaledHorizontalScrollFactor);
+                startNestedScroll(nestedScrollAxis, TYPE_NON_TOUCH);
+                if (!dispatchNestedPreScroll(scaledHScroll, scaledVScroll, null, null,
+                        TYPE_NON_TOUCH)) {
+                    nestedScrollByInternal(scaledHScroll, scaledVScroll, event, TYPE_NON_TOUCH);
+                }
+            }
             if (flingAxis != 0 && !useSmoothScroll) {
                 mDifferentialMotionFlingController.onMotionEvent(event, flingAxis);
             }
+            //sesl
         }
         return false;
     }
@@ -4101,6 +4734,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             defaultOnMeasure(widthSpec, heightSpec);
             return;
         }
+        mListPadding.set(getPaddingLeft(), getPaddingTop(),
+                getPaddingRight(), getPaddingBottom());//sesl
         if (mLayout.isAutoMeasureEnabled()) {
             final int widthMode = MeasureSpec.getMode(widthSpec);
             final int heightMode = MeasureSpec.getMode(heightSpec);
@@ -4212,6 +4847,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         if (w != oldw || h != oldh) {
+            //Sesl
+            if (mFastScroller != null) {
+                mFastScroller.onSizeChanged(w, h, oldw, oldh);
+            }
+            //sesl
             invalidateGlows();
             // layout's w/h are updated during measure/layout steps.
         }
@@ -4236,6 +4876,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         mItemAnimator = animator;
         if (mItemAnimator != null) {
             mItemAnimator.setListener(mItemAnimatorListener);
+            mItemAnimator.setHostView(this);//sesl
         }
     }
 
@@ -4805,6 +5446,30 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             mViewInfoStore.process(mViewInfoProcessCallback);
         }
 
+        //Sesl
+        mLastBlackTop = mBlackTop;
+        mBlackTop = -1;
+        if (mDrawRect && !canScrollVertically(-1) && !canScrollVertically(1)) {
+            int pos = -1;
+            final int itemCount = mAdapter.getItemCount() - 1;
+            LinearLayoutManager manager = (LinearLayoutManager) mLayout;
+            if (manager.mReverseLayout && manager.mStackFromEnd) {
+                mDrawReverse = true;
+                pos = 0;
+            } else if (manager.mReverseLayout || manager.mStackFromEnd) {
+                mDrawRect = false;
+            } else {
+                pos = itemCount;
+            }
+            if (pos >= 0 && pos <= findLastVisibleItemPosition()) {
+                View child = mChildHelper.getChildAt(pos);
+                if (child != null) {
+                    mBlackTop = child.getBottom();
+                }
+            }
+        }
+        //sesl
+
         mLayout.removeAndRecycleScrapInt(mRecycler);
         mState.mPreviousLayoutItemCount = mState.mItemCount;
         mDataSetHasChangedAfterLayout = false;
@@ -5010,6 +5675,53 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         dispatchLayout();
         TraceCompat.endSection();
         mFirstLayoutComplete = true;
+
+        //Sesl
+        if (mFastScroller != null && mAdapter != null) {
+            mFastScroller.onItemCountChanged(getChildCount(), mAdapter.getItemCount());
+        }
+
+        if (changed) {
+            mSizeChnage = true;
+            seslSetImmersiveScrollBottomPadding(0);
+            setupGoToTop(-1);
+            autoHide(GTP_STATE_SHOWN);
+            if (mLayout != null && !mLayout.canScrollHorizontally()) {
+                mHasNestedScrollRange = false;
+                ViewParent parent = getParent();
+                while (parent != null && parent instanceof ViewGroup) {
+                    if (parent instanceof NestedScrollingParent2
+                            && findSuperClass(parent, "CoordinatorLayout")) {
+                        ViewGroup viewGroup = (ViewGroup) parent;
+                        viewGroup.getLocationInWindow(mWindowOffsets);
+                        int height = mWindowOffsets[1] + viewGroup.getHeight();
+                        getLocationInWindow(mWindowOffsets);
+                        mInitialTopOffsetOfScreen = mWindowOffsets[1];
+                        mRemainNestedScrollRange =
+                         getHeight() - (height - mInitialTopOffsetOfScreen);
+                        if (mRemainNestedScrollRange < 0) {
+                            mRemainNestedScrollRange = 0;
+                        }
+                        mNestedScrollRange = mRemainNestedScrollRange;
+                        mHasNestedScrollRange = true;
+                        break;
+                    } else {
+                        parent = parent.getParent();
+                    }
+                }
+
+                if (!mHasNestedScrollRange) {
+                    mInitialTopOffsetOfScreen = 0;
+                    mRemainNestedScrollRange = 0;
+                    mNestedScrollRange = 0;
+                }
+            }
+
+            if (mIndexTipEnabled && mIndexTip != null) {
+                mIndexTip.setLayout(0, 0, r, b, getPaddingLeft(), getPaddingRight());
+            }
+        }
+        //sesl
     }
 
     @Override
@@ -5089,6 +5801,40 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         if (needsInvalidate) {
             ViewCompat.postInvalidateOnAnimation(this);
         }
+        //Sesl
+        if (mEnableGoToTop) {
+            drawGoToTop();
+        }
+
+        if (isTalkBackIsRunning()) {
+            if (mGoToTopView != null && mGoToTopView.getAlpha() != 0.0f) {
+                mGoToTopView.setAlpha(0.0f);
+            }
+        }
+
+        if (mIsPenDragBlockEnabled && !mIsLongPressMultiSelection && mLayout != null) {
+            if (mPenDragBlockLeft != 0 || mPenDragBlockTop != 0) {
+                final int firstVisibleItemPosition = findFirstVisibleItemPosition();
+                final int lastVisibleItemPosition = findLastVisibleItemPosition();
+                final int trackedChildPos = mPenTrackedChildPosition;
+                if (trackedChildPos >= firstVisibleItemPosition
+                        && trackedChildPos <= lastVisibleItemPosition) {
+                    mPenTrackedChild = mLayout.findViewByPosition(trackedChildPos);
+                    int childTop = 0;
+                    if (mPenTrackedChild != null) {
+                        childTop = mPenTrackedChild.getTop();
+                    }
+                    mPenDragStartY = childTop + mPenDistanceFromTrackedChildTop;
+                }
+
+                mPenDragBlockTop = Math.min(mPenDragStartY, mPenDragEndY);
+                mPenDragBlockBottom = Math.max(mPenDragEndY, mPenDragStartY);
+                mPenDragBlockRect.set(mPenDragBlockLeft, mPenDragBlockTop, mPenDragBlockRight, mPenDragBlockBottom);
+                mPenDragBlockImage.setBounds(mPenDragBlockRect);
+                mPenDragBlockImage.draw(c);
+            }
+        }
+        //sesl
     }
 
     @Override
@@ -5099,6 +5845,25 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         for (int i = 0; i < count; i++) {
             mItemDecorations.get(i).onDraw(c, this, mState);
         }
+
+        //Sesl
+        if (mStatisticalCount <= STATISTICS_MAX_COUNT && mIsNeedCheckLatency) {
+            if (mStatisticalCount != 0) {
+                float currentTimeMillis = (float) (System.currentTimeMillis()
+                        - mPrevLatencyTime);
+                final float prevLatency = mApproxLatency;
+                if (currentTimeMillis > FRAME_LATENCY_LIMIT) {
+                    currentTimeMillis = FRAME_LATENCY_LIMIT;
+                }
+                mApproxLatency = prevLatency + currentTimeMillis;
+            }
+            mPrevLatencyTime = System.currentTimeMillis();
+            if (mStatisticalCount == STATISTICS_MAX_COUNT) {
+                mApproxLatency /= 5.0f;
+            }
+            mStatisticalCount += 1;
+        }
+        //sesl
     }
 
     @Override
@@ -5769,6 +6534,22 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         // Pass the real deltas to onScrolled, the RecyclerView-specific method.
         onScrolled(hresult, vresult);
 
+        //Sesl
+        if (mFastScroller != null && mAdapter != null) {
+            if (hresult != 0 || vresult != 0) {
+                mFastScroller.onScroll(findFirstVisibleItemPosition(),
+                        getChildCount(), mAdapter.getItemCount());
+            }
+        }
+
+        if (mIndexTipEnabled && mIndexTip != null) {
+            if (mScrollState != SCROLL_STATE_IDLE) {
+                mIndexTip.show(mScrollState, vresult);
+            }
+            mIndexTip.invalidate();
+        }
+        //sesl
+
         // Invoke listeners last. Subclassed view methods always handle the event first.
         // All internal state is consistent by the time listeners are invoked.
         if (mScrollListener != null) {
@@ -5911,6 +6692,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                         TYPE_NON_TOUCH)) {
                     unconsumedX -= mReusableIntPair[0];
                     unconsumedY -= mReusableIntPair[1];
+                    adjustNestedScrollRangeBy(mReusableIntPair[1]);//sesl
+                } else {
+                    adjustNestedScrollRangeBy(unconsumedY);//sesl
                 }
 
                 // Based on movement, we may want to trigger the hiding of existing over scroll
@@ -5953,8 +6737,21 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 // Nested Post Scroll
                 mReusableIntPair[0] = 0;
                 mReusableIntPair[1] = 0;
-                dispatchNestedScroll(consumedX, consumedY, unconsumedX, unconsumedY, null,
-                        TYPE_NON_TOUCH, mReusableIntPair);
+                //Sesl
+                //dispatchNestedScroll(consumedX, consumedY, unconsumedX, unconsumedY, null,
+                //        TYPE_NON_TOUCH, mReusableIntPair);
+                if (seslDispatchNestedScroll(consumedX, consumedY, unconsumedX, unconsumedY, null,
+                        TYPE_NON_TOUCH, mReusableIntPair)) {
+                    mScrollOffset[0] = 0;
+                    mScrollOffset[1] = 0;
+                }
+
+                if (mScrollOffset[0] < 0 || mScrollOffset[1] < 0) {
+                    mScrollOffset[0] = 0;
+                    mScrollOffset[1] = 0;
+                }
+                //sesl
+
                 unconsumedX -= mReusableIntPair[0];
                 unconsumedY -= mReusableIntPair[1];
 
@@ -5988,7 +6785,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     // If we are done scrolling and the layout's SmoothScroller is not pending,
                     // do the things we do at the end of a scroll and don't postOnAnimation.
 
-                    if (getOverScrollMode() != View.OVER_SCROLL_NEVER) {
+                    if (getOverScrollMode() != View.OVER_SCROLL_NEVER && !mEdgeEffectByDragging/*sesl*/) {
                         final int vel = (int) scroller.getCurrVelocity();
                         int velX = unconsumedX < 0 ? -vel : unconsumedX > 0 ? vel : 0;
                         int velY = unconsumedY < 0 ? -vel : unconsumedY > 0 ? vel : 0;
@@ -6046,8 +6843,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 mInterpolator = sQuinticInterpolator;
                 mOverScroller = new OverScroller(getContext(), sQuinticInterpolator);
             }
-            mOverScroller.fling(0, 0, velocityX, velocityY,
-                    Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            SeslOverScrollerReflector.fling(mOverScroller, 0, 0, velocityX, velocityY,
+                    Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MAX_VALUE,
+                    mIsSkipMoveEvent, mApproxLatency);//sesl
             postOnAnimation();
         }
 
@@ -6074,28 +6872,36 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 interpolator = sQuinticInterpolator;
             }
 
-            // If the Interpolator has changed, create a new OverScroller with the new
-            // interpolator.
-            if (mInterpolator != interpolator) {
-                mInterpolator = interpolator;
-                mOverScroller = new OverScroller(getContext(), interpolator);
+            startNestedScroll(dx != 0 ?
+                    ViewCompat.SCROLL_AXIS_VERTICAL :
+                    ViewCompat.SCROLL_AXIS_HORIZONTAL, TYPE_NON_TOUCH);//sesl
+
+            if (!dispatchNestedPreScroll(dx, dy, null,
+                    null, TYPE_NON_TOUCH)) {//sesl
+                // If the Interpolator has changed, create a new OverScroller with the new
+                // interpolator.
+                if (mInterpolator != interpolator) {
+                    mInterpolator = interpolator;
+                    mOverScroller = new OverScroller(getContext(), interpolator);
+                }
+
+                // Reset the last fling information.
+                mLastFlingX = mLastFlingY = 0;
+
+                // Set to settling state and start scrolling.
+                setScrollState(SCROLL_STATE_SETTLING);
+                mOverScroller.startScroll(0, 0, dx, dy, duration);
+
+                if (Build.VERSION.SDK_INT < 23) {
+                    // b/64931938 before API 23, startScroll() does not reset getCurX()/getCurY()
+                    // to start values, which causes fillRemainingScrollValues() put in obsolete
+                    // values
+                    // for LayoutManager.onLayoutChildren().
+                    mOverScroller.computeScrollOffset();
+                }
+
+                postOnAnimation();
             }
-
-            // Reset the last fling information.
-            mLastFlingX = mLastFlingY = 0;
-
-            // Set to settling state and start scrolling.
-            setScrollState(SCROLL_STATE_SETTLING);
-            mOverScroller.startScroll(0, 0, dx, dy, duration);
-
-            if (Build.VERSION.SDK_INT < 23) {
-                // b/64931938 before API 23, startScroll() does not reset getCurX()/getCurY()
-                // to start values, which causes fillRemainingScrollValues() put in obsolete values
-                // for LayoutManager.onLayoutChildren().
-                mOverScroller.computeScrollOffset();
-            }
-
-            postOnAnimation();
         }
 
         /**
@@ -6155,6 +6961,14 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             if (!mAdapterHelper.hasPendingUpdates()) {
                 requestLayout();
             }
+            //Sesl
+            if (mFastScroller != null) {
+                mFastScroller.onSectionsChanged();
+            }
+            if (mIndexTip != null) {
+                mIndexTip.updateSections();
+            }
+            //sesl
         }
 
         @Override
@@ -7033,7 +7847,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                             ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES);
                 }
                 if (mAccessibilityDelegate == null) {
-                    return;
+                    setAccessibilityDelegateCompat(new RecyclerViewAccessibilityDelegate(RecyclerView.this));//sesl
+                    Log.d(TAG, "attachAccessibilityDelegate: mAccessibilityDelegate is null, so "
+                    + "re create");//sesl
                 }
                 AccessibilityDelegateCompat itemDelegate = mAccessibilityDelegate.getItemDelegate();
                 if (itemDelegate instanceof RecyclerViewAccessibilityDelegate.ItemDelegate) {
@@ -8454,6 +9270,20 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
              */
             PREVENT
         }
+
+        //Sesl
+        public boolean seslUseCustomAccessibilityPosition() {
+            return false;
+        }
+
+        public int seslGetAccessibilityItemPosition(int pos) {
+            return pos;
+        }
+
+        public int seslGetAccessibilityItemCount() {
+            return getItemCount();
+        }
+        //sesl
     }
 
     @SuppressWarnings("unchecked")
@@ -11727,6 +12557,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent) {
         }
 
+        //sesl
+        public void seslOnDispatchDraw(@NonNull Canvas c, @NonNull RecyclerView parent,
+                State state) {
+        }
 
         /**
          * @deprecated Use {@link #getItemOffsets(Rect, View, RecyclerView, State)}
@@ -12540,6 +13374,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
         boolean isUpdated() {
             return (mFlags & FLAG_UPDATE) != 0;
+        }
+
+        //sesl
+        int getFlags() {
+            return mFlags;
         }
     }
 
@@ -13930,6 +14769,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         private long mMoveDuration = 250;
         private long mChangeDuration = 250;
 
+        private View mHostView = null;//sesl
+
         /**
          * Gets the current duration for which all move animations will run.
          *
@@ -14590,6 +15431,16 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 return this;
             }
         }
+
+        //Sesl
+        void setHostView(View view) {
+            mHostView = view;
+        }
+
+        View getHostView() {
+            return mHostView;
+        }
+        //sesl
     }
 
     @Override
@@ -14629,4 +15480,2190 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         }
         return mScrollingChildHelper;
     }
+
+    //Sesl
+    public interface SeslFastScrollerEventListener {
+        void onPressed(float scrollY);
+
+        void onReleased(float scrollY);
+    }
+
+    public interface SeslLongPressMultiSelectionListener {
+        void onItemSelected(@NonNull RecyclerView view, @NonNull View child, int position, long id);
+
+        void onLongPressMultiSelectionEnded(int endX, int endY);
+
+        void onLongPressMultiSelectionStarted(int startX, int startY);
+    }
+
+    public interface SeslOnGoToTopClickListener {
+        boolean onGoToTopClick(@NonNull RecyclerView view);
+    }
+
+    public interface SeslOnMultiSelectedListener {
+        void onMultiSelectStart(int startX, int startY);
+
+        void onMultiSelectStop(int endX, int endY);
+
+        void onMultiSelected(@NonNull RecyclerView view, @NonNull View child, int position,
+                long id);
+    }
+
+    private boolean isSupportGotoTop() {
+        return !isTalkBackIsRunning() && mEnableGoToTop;
+    }
+
+    private boolean isTalkBackIsRunning() {
+        AccessibilityManager accessibilityManager = (AccessibilityManager) getContext()
+                .getSystemService(Context.ACCESSIBILITY_SERVICE);
+        String services = Settings.Secure.getString(getContext().getContentResolver(),
+                "enabled_accessibility_services");
+
+        if (accessibilityManager != null && accessibilityManager.isEnabled() && services != null) {
+            return services.matches("(?i).*com.samsung.accessibility/" +
+                    "com.samsung.android.app.talkback.TalkBackService.*")
+                    ||services.matches("(?i).*com.samsung.android.accessibility.talkback/" +
+                    "com.samsung.android.marvin.talkback.TalkBackService.*")
+                    || services.matches("(?i).*com.google.android.marvin.talkback.TalkBackService"
+                    + ".*")
+                    || services.matches("(?i).*com.samsung.accessibility/" +
+                    "com.samsung.accessibility.universalswitch.UniversalSwitchService.*");
+        }
+
+        return false;
+    }
+
+    private void playGotoToFadeOut() {
+        if (!mGoToTopFadeOutAnimator.isRunning()) {
+            if (mGoToTopFadeInAnimator.isRunning()) {
+                mGoToTopFadeOutAnimator.cancel();
+            }
+            mGoToTopFadeOutAnimator.setFloatValues(mGoToTopView.getAlpha(), 0.0f);
+            mGoToTopFadeOutAnimator.start();
+        }
+    }
+
+    private void playGotoToFadeIn() {
+        if (!mGoToTopFadeInAnimator.isRunning()) {
+            if (mGoToTopFadeOutAnimator.isRunning()) {
+                mGoToTopFadeOutAnimator.cancel();
+            }
+            mGoToTopFadeInAnimator.setFloatValues(mGoToTopView.getAlpha(), 1.0f);
+            mGoToTopFadeInAnimator.start();
+        }
+    }
+
+    void autoHide(int when) {
+        if (mEnableGoToTop) {
+            if (when == GTP_STATE_NONE) {
+                if (!seslIsFastScrollerEnabled()) {
+                    removeCallbacks(mAutoHide);
+                    postDelayed(mAutoHide, GO_TO_TOP_HIDE);
+                }
+            } else if (when == GTP_STATE_SHOWN) {
+                removeCallbacks(mAutoHide);
+                postDelayed(mAutoHide, GO_TO_TOP_HIDE);
+            }
+        }
+    }
+
+    void setupGoToTop(int where) {
+        if (!isTalkBackIsRunning() && mEnableGoToTop) {
+            removeCallbacks(mAutoHide);
+            if (where == GTP_STATE_SHOWN && !canScrollUp()) {
+                where = GTP_STATE_NONE;
+            }
+
+            if (where != -1 || !mSizeChnage) {
+                if (where == -1 && (canScrollUp() || canScrollDown())) {
+                    where = GTP_STATE_SHOWN;
+                }
+            } else if (canScrollUp() || canScrollDown()) {
+                where = mGoToTopLastState;
+            } else {
+                where = GTP_STATE_NONE;
+            }
+
+            if (where != GTP_STATE_NONE) {
+                removeCallbacks(mGoToToFadeOutRunnable);
+            } else if (where != GTP_STATE_SHOWN) {
+                removeCallbacks(mGoToToFadeInRunnable);
+            }
+
+            if (mShowFadeOutGTP == GTP_STATE_NONE
+                    && where == GTP_STATE_NONE && mGoToTopLastState != GTP_STATE_NONE) {
+                post(mGoToToFadeOutRunnable);
+            }
+
+            if (where != GTP_STATE_PRESSED) {
+                mGoToTopView.setPressed(false);
+            }
+
+            mGoToTopState = where;
+
+            int padding =
+            getPaddingLeft() + ((getWidth() - getPaddingLeft() - getPaddingRight()) / 2);
+            if (where != GTP_STATE_NONE) {
+                if (where == GTP_STATE_SHOWN || where == GTP_STATE_PRESSED) {
+                    removeCallbacks(mGoToToFadeOutRunnable);
+                    mGoToTopRect.set(padding - (mGoToTopSize / 2),
+                            ((getHeight() - mGoToTopSize) - mGoToTopBottomPadding) - mGoToTopImmersiveBottomPadding,
+                            padding + (mGoToTopSize / 2),
+                            (getHeight() - mGoToTopBottomPadding) - mGoToTopImmersiveBottomPadding);
+                }
+            } else if (mShowFadeOutGTP == GTP_STATE_PRESSED) {
+                mGoToTopRect.set(0, 0, 0, 0);
+            }
+
+            if (mShowFadeOutGTP == GTP_STATE_PRESSED) {
+                mShowFadeOutGTP = GTP_STATE_NONE;
+            }
+
+            mGoToTopView.layout(mGoToTopRect.left, mGoToTopRect.top, mGoToTopRect.right,
+             mGoToTopRect.bottom);
+
+            if (where == GTP_STATE_SHOWN
+                    && (mGoToTopLastState == GTP_STATE_NONE || mGoToTopView.getAlpha() == 0.0f || mSizeChnage)) {
+                post(mGoToToFadeInRunnable);
+            }
+            mSizeChnage = false;
+
+            mGoToTopLastState = mGoToTopState;
+        }
+    }
+
+    private void drawGoToTop() {
+        mGoToTopView.setTranslationY((float) getScrollY());
+        if (mGoToTopState != GTP_STATE_NONE && !canScrollUp()) {
+            setupGoToTop(GTP_STATE_NONE);
+        }
+    }
+
+    boolean canScrollUp() {
+        boolean canScrollUp = findFirstChildPosition() > 0;
+        if (!canScrollUp && getChildCount() > 0) {
+            View child = getChildAt(0);
+            return child.getTop() < getPaddingTop();
+        }
+        return canScrollUp;
+    }
+
+    private boolean canScrollDown() {
+        final int count = getChildCount();
+        if (mAdapter == null) {
+            Log.e(TAG, "No adapter attached; skipping canScrollDown");
+            return false;
+        }
+        boolean canScrollDown = findFirstChildPosition() + count < mAdapter.getItemCount();
+        if (!canScrollDown && count > 0) {
+            View child = getChildAt(count - 1);
+            canScrollDown = child.getBottom() > getBottom() - mListPadding.bottom;
+        }
+        return canScrollDown;
+    }
+
+    int findFirstChildPosition() {
+        int firstPosition = 0;
+        if (mLayout instanceof LinearLayoutManager) {
+            firstPosition = ((LinearLayoutManager) mLayout).findFirstVisibleItemPosition();
+        } else if (mLayout instanceof StaggeredGridLayoutManager) {
+            firstPosition =
+             ((StaggeredGridLayoutManager) mLayout).findFirstVisibleItemPositions(null)
+                    [mLayout.getLayoutDirection() == ViewCompat.LAYOUT_DIRECTION_RTL
+                    ? ((StaggeredGridLayoutManager) mLayout).getSpanCount() - 1
+                    : 0];
+        }
+        if (firstPosition == NO_POSITION) {
+            return 0;
+        }
+        return firstPosition;
+    }
+
+    public void seslInitConfigurations(@NonNull Context context) {
+        final ViewConfiguration vc = ViewConfiguration.get(context);
+        final Resources resources = context.getResources();
+        mTouchSlop = vc.getScaledTouchSlop();
+        mTouchSlop2 = vc.getScaledTouchSlop();
+        mPagingTouchSlop = vc.getScaledPagingTouchSlop();
+        mScaledHorizontalScrollFactor = ViewConfigurationCompat
+                .getScaledHorizontalScrollFactor(vc, context);
+        mScaledVerticalScrollFactor = ViewConfigurationCompat
+                .getScaledVerticalScrollFactor(vc, context);
+        mMinFlingVelocity = vc.getScaledMinimumFlingVelocity();
+        mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
+
+        mHoverTopAreaHeight = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                HOVERSCROLL_HEIGHT_TOP_DP, resources.getDisplayMetrics()) + 0.5f);
+        mHoverBottomAreaHeight = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                HOVERSCROLL_HEIGHT_BOTTOM_DP, resources.getDisplayMetrics()) + 0.5f);
+        mGoToTopBottomPadding =
+         resources.getDimensionPixelSize(androidx.appcompat.R.dimen.sesl_go_to_top_scrollable_view_gap);
+        mGoToTopImmersiveBottomPadding = 0;
+        mGoToTopSize =
+         resources.getDimensionPixelSize(androidx.appcompat.R.dimen.sesl_go_to_top_scrollable_view_size);
+        mGoToTopElevation =
+        resources.getDimensionPixelSize(androidx.appcompat.R.dimen.sesl_go_to_top_elevation);
+    }
+
+    boolean seslDispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed,
+            int dyUnconsumed, int[] offsetInWindow, int type, @NonNull int[] consumed) {
+        return getScrollingChildHelper().seslDispatchNestedScroll(dxConsumed, dyConsumed,
+                dxUnconsumed, dyUnconsumed, offsetInWindow, type, consumed);
+    }
+
+
+    public void seslSetLastRoundedCorner(boolean draw) {
+        mDrawLastRoundedCorner = draw;
+    }
+
+    public void seslSetFillBottomEnabled(boolean draw) {
+        if (mLayout instanceof LinearLayoutManager) {
+            mDrawRect = draw;
+            requestLayout();
+        }
+    }
+
+    public void seslSetFillBottomColor(@ColorInt int color) {
+        mRectPaint.setColor(color);
+    }
+
+    private void runLastItemAddDeleteAnim(View view) {
+        if (mLastItemAddRemoveAnim == null) {
+            ItemAnimator itemAnimator = getItemAnimator();
+            if (itemAnimator instanceof DefaultItemAnimator && mLastItemAnimTop == -1) {
+                mLastItemAnimTop = ((DefaultItemAnimator) itemAnimator).getLastItemBottom();
+            }
+            if (mIsSetOnlyAddAnim) {
+                mLastItemAddRemoveAnim = ValueAnimator.ofInt(mLastItemAnimTop,
+                        ((int) view.getY()) + view.getHeight());
+            } else if (mIsSetOnlyRemoveAnim) {
+                mLastItemAddRemoveAnim = ValueAnimator.ofInt(mLastItemAnimTop, view.getBottom());
+            }
+            mLastItemAddRemoveAnim.setDuration(LASTITEM_ADD_REMOVE_DURATION);
+            mLastItemAddRemoveAnim.addListener(mAnimListener);
+            mLastItemAddRemoveAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    mAnimatedBlackTop = (Integer) animation.getAnimatedValue();
+                    invalidate();
+                }
+            });
+            mLastItemAddRemoveAnim.start();
+        }
+    }
+
+    private int getPendingAnimFlag() {
+        ItemAnimator itemAnimator = getItemAnimator();
+        if (itemAnimator instanceof DefaultItemAnimator) {
+            return ((DefaultItemAnimator) itemAnimator).getPendingAnimFlag();
+        } else {
+            return 0;
+        }
+    }
+
+    private boolean findSuperClass(ViewParent parent, String className) {
+        for (Class<?> cls = parent.getClass(); cls != null; cls = cls.getSuperclass()) {
+            if (cls.getSimpleName().equals(className)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void adjustNestedScrollRange() {
+        getLocationInWindow(mWindowOffsets);
+        mRemainNestedScrollRange =
+         mNestedScrollRange - (mInitialTopOffsetOfScreen - mWindowOffsets[1]);
+        if (mInitialTopOffsetOfScreen - mWindowOffsets[1] < 0) {
+            mNestedScrollRange = mRemainNestedScrollRange;
+            mInitialTopOffsetOfScreen = mWindowOffsets[1];
+        }
+    }
+
+    void adjustNestedScrollRangeBy(int offset) {
+        if (mHasNestedScrollRange) {
+            if (!canScrollUp() || mRemainNestedScrollRange != 0) {
+                mRemainNestedScrollRange = mRemainNestedScrollRange - offset;
+                if (mRemainNestedScrollRange < 0) {
+                    mRemainNestedScrollRange = 0;
+                } else if (mRemainNestedScrollRange > mNestedScrollRange) {
+                    mRemainNestedScrollRange = mNestedScrollRange;
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean verifyDrawable(@NonNull Drawable drawable) {
+        return mGoToTopImage == drawable || super.verifyDrawable(drawable);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (mLayout == null) {
+            Log.d(TAG, "No layout manager attached; " +
+                    "skipping gototop & multiselection");
+            return super.dispatchTouchEvent(ev);
+        }
+
+        final int action = ev.getActionMasked();
+
+        final int touchX = (int) (ev.getX() + 0.5f);
+        final int touchY = (int) (ev.getY() + 0.5f);
+
+        if (mPenDragSelectedItemArray == null) {
+            mPenDragSelectedItemArray = new ArrayList<>();
+        }
+
+        final int contentTop;
+        final int contentBottom;
+        if (mIsEnabledPaddingInHoverScroll) {
+            contentTop = mListPadding.top;
+            contentBottom = getHeight() - mListPadding.bottom;
+        } else {
+            contentTop = 0;
+            contentBottom = getHeight();
+        }
+
+        mIsNeedPenSelection = mIsPenSelectionEnabled
+                && !SeslTextViewReflector.semIsTextSelectionProgressing();
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN: {
+                if (isSupportGotoTop()) {
+                    mGoToToping = false;
+                }
+
+                if (isSupportGotoTop() && mGoToTopState != GTP_STATE_PRESSED
+                        && mGoToTopRect.contains(touchX, touchY)) {
+                    setupGoToTop(GTP_STATE_PRESSED);
+                    mGoToTopView.setPressed(true);
+                    return true;
+                }
+
+                if (mIsCtrlKeyPressed
+                        && ev.getToolType(0) == TOOL_TYPE_MOUSE) {
+                    mIsCtrlMultiSelection = true;
+                    mIsNeedPenSelection = true;
+                    multiSelection(touchX, touchY, contentTop, contentBottom, false);
+                    return true;
+                }
+
+                if (mIsLongPressMultiSelection) {
+                    mIsLongPressMultiSelection = false;
+                }
+
+                return super.dispatchTouchEvent(ev);
+            }
+
+            case MotionEvent.ACTION_UP: {
+                if (mIsCtrlMultiSelection) {
+                    multiSelectionEnd(touchX, touchY);
+                    mIsCtrlMultiSelection = false;
+                    return true;
+                }
+
+                if (mIsLongPressMultiSelection) {
+                    if (mLongPressMultiSelectionListener != null) {
+                        mLongPressMultiSelectionListener
+                                .onLongPressMultiSelectionEnded(touchX, touchY);
+                    }
+
+                    mIsFirstMultiSelectionMove = true;
+                    mPenDragSelectedViewPosition = NO_POSITION;
+                    mPenDragStartX = 0;
+                    mPenDragStartY = 0;
+                    mPenDragEndX = 0;
+                    mPenDragEndY = 0;
+                    mPenDragBlockLeft = 0;
+                    mPenDragBlockTop = 0;
+                    mPenDragBlockRight = 0;
+                    mPenDragBlockBottom = 0;
+                    mPenDragSelectedItemArray.clear();
+                    mPenTrackedChild = null;
+                    mPenDistanceFromTrackedChildTop = 0;
+
+                    if (mHoverHandler.hasMessages(MSG_HOVERSCROLL_MOVE)) {
+                        mHoverHandler.removeMessages(MSG_HOVERSCROLL_MOVE);
+                        if (mScrollState == SCROLL_STATE_DRAGGING) {
+                            setScrollState(SCROLL_STATE_IDLE);
+                        }
+                    }
+
+                    mIsHoverOverscrolled = false;
+                    invalidate();
+                    mIsLongPressMultiSelection = false;
+                }
+            }
+            break;
+
+            case MotionEvent.ACTION_MOVE: {
+                if (mIsCtrlMultiSelection) {
+                    multiSelection(touchX, touchY, contentTop, contentBottom, false);
+                    return true;
+                }
+
+                if (mIsLongPressMultiSelection) {
+                    updateLongPressMultiSelection(touchX, touchY, true);
+                    return true;
+                }
+
+                if (isSupportGotoTop() && mGoToTopState == GTP_STATE_PRESSED) {
+                    if (!mGoToTopRect.contains(touchX, touchY)) {
+                        mGoToTopState = GTP_STATE_SHOWN;
+                        mGoToTopView.setPressed(false);
+                        autoHide(GTP_STATE_SHOWN);
+                    }
+
+                    return true;
+                }
+
+                return super.dispatchTouchEvent(ev);
+            }
+
+            case MotionEvent.ACTION_CANCEL: {
+                if (isSupportGotoTop()) {
+                    if (mGoToTopState != GTP_STATE_NONE) {
+                        if (mGoToTopState == GTP_STATE_PRESSED) {
+                            mGoToTopState = GTP_STATE_SHOWN;
+                        }
+                        mGoToTopView.setPressed(false);
+                    }
+                }
+            }
+            break;
+
+            case MOTION_EVENT_ACTION_PEN_DOWN: {
+                if (mPenDragSelectedItemArray == null) {
+                    mPenDragSelectedItemArray = new ArrayList<>();
+                }
+                return super.dispatchTouchEvent(ev);
+            }
+
+            case MOTION_EVENT_ACTION_PEN_UP:
+                break;
+
+            case MOTION_EVENT_ACTION_PEN_MOVE: {
+                multiSelection(touchX, touchY, contentTop, contentBottom, false);
+                return super.dispatchTouchEvent(ev);
+            }
+
+            default: {
+                return super.dispatchTouchEvent(ev);
+            }
+        }
+
+        if (isSupportGotoTop() && mGoToTopState == GTP_STATE_PRESSED) {
+            if (canScrollUp()) {
+                if (mOnGoToTopClickListener != null
+                        && mOnGoToTopClickListener.onGoToTopClick(this)) {
+                    return true;
+                }
+
+                Log.d("SeslRecyclerView", " can scroll top ");
+
+                int childCount = getChildCount();
+
+                if (computeVerticalScrollOffset() != 0) {
+                    stopScroll();
+
+                    if (mLayout instanceof StaggeredGridLayoutManager) {
+                        StaggeredGridLayoutManager sglm = (StaggeredGridLayoutManager) mLayout;
+                        sglm.scrollToPositionWithOffset(0, 0);
+                    } else {
+                        mGoToToping = true;
+
+                        if (childCount > 0 && childCount < findFirstVisibleItemPosition()) {
+                            if (mLayout instanceof LinearLayoutManager) {
+                                if (mLayout instanceof GridLayoutManager) {
+                                    GridLayoutManager glm = (GridLayoutManager) mLayout;
+                                    final int spanCount = glm.getSpanCount();
+                                    if (childCount < spanCount) {
+                                        childCount = spanCount;
+                                    }
+                                }
+
+                                LinearLayoutManager llm = (LinearLayoutManager) mLayout;
+                                llm.scrollToPositionWithOffset(childCount, 0);
+                            } else {
+                                scrollToPosition(childCount);
+                            }
+                        }
+
+                        post(new Runnable() {
+                            @Override
+                            public void run() {
+                                smoothScrollToPosition(0);
+                            }
+                        });
+                    }
+                }
+            }
+
+            autoHide(GTP_STATE_NONE);
+            playSoundEffect(SoundEffectConstants.CLICK);
+            return true;
+        }
+
+        multiSelectionEnd(touchX, touchY);
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    protected void dispatchDraw(@NonNull Canvas canvas) {
+        super.dispatchDraw(canvas);
+
+        final int count = mItemDecorations.size();
+        for (int i = 0; i < count; i++) {
+            mItemDecorations.get(i).seslOnDispatchDraw(canvas, this, mState);
+        }
+
+        if (mDrawRect && (mBlackTop != -1 || mLastBlackTop != -1) && !canScrollVertically(-1)
+                && (!canScrollVertically(1) || isAnimating())) {
+            if (mLastItemAddRemoveAnim == null || !mLastItemAddRemoveAnim.isRunning()) {
+                mAnimatedBlackTop = mBlackTop;
+            }
+
+            if (isAnimating()) {
+                final int pendingAnimFlag = getPendingAnimFlag();
+                if (pendingAnimFlag == ViewHolder.FLAG_REMOVED) {
+                    mIsSetOnlyAddAnim = true;
+                } else if (pendingAnimFlag == ViewHolder.FLAG_BOUND) {
+                    mIsSetOnlyRemoveAnim = true;
+                }
+
+                final View child;
+                if (mDrawReverse) {
+                    child = mBlackTop != -1 ?
+                            mChildHelper.getChildAt(0) : getChildAt(0);
+                } else if (mBlackTop != -1) {
+                    child = mChildHelper.getChildAt(mChildHelper.getChildCount() - 1);
+                } else {
+                    child = getChildAt(getChildCount() - 1);
+                }
+
+                if (child != null) {
+                    if (mIsSetOnlyAddAnim || mIsSetOnlyRemoveAnim) {
+                        runLastItemAddDeleteAnim(child);
+                    } else {
+                        mAnimatedBlackTop = Math.round(child.getY()) + child.getHeight();
+                    }
+                }
+                invalidate();
+            }
+
+            if (mBlackTop != -1 || mAnimatedBlackTop != mBlackTop || mIsSetOnlyAddAnim) {
+                canvas.drawRect(0.0f, (float) mAnimatedBlackTop, (float) getWidth(),
+                        (float) getBottom(), mRectPaint);
+                if (mDrawLastRoundedCorner) {
+                    mRoundedCorner.drawRoundedCorner(0, mAnimatedBlackTop, getWidth(),
+                            getBottom(), canvas);
+                }
+            }
+        }
+
+        mLastItemAnimTop = mBlackTop;
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    public void seslSetFastScrollerEnabled(boolean enabled) {
+        if (mLayout instanceof StaggeredGridLayoutManager) {
+            Log.e(TAG, "FastScroller cannot be used with StaggeredGridLayoutManager.");
+            return;
+        }
+
+        if (mFastScroller != null) {
+            mFastScroller.setEnabled(enabled);
+        } else if (enabled) {
+            mFastScroller = new SeslRecyclerViewFastScroller(this);
+            mFastScroller.setEnabled(true);
+            mFastScroller.setScrollbarPosition(getVerticalScrollbarPosition());
+        }
+
+        mFastScrollerEnabled = enabled;
+
+        if (mFastScroller != null) {
+            mFastScroller.updateLayout();
+        }
+    }
+
+    public boolean seslIsFastScrollerEnabled() {
+        return mFastScrollerEnabled;
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    public void seslSetFastScrollerThreshold(float threshold) {
+        if (mFastScroller != null && threshold >= 0) {
+            mFastScroller.setThreshold(threshold);
+        }
+    }
+
+    @Override
+    public boolean isVerticalScrollBarEnabled() {
+        return !mFastScrollerEnabled && super.isVerticalScrollBarEnabled();
+    }
+
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    boolean isInScrollingContainer() {
+        ViewParent p = getParent();
+        while (p != null && p instanceof ViewGroup) {
+            if (((ViewGroup) p).shouldDelayChildPressedState()) {
+                return true;
+            }
+            p = p.getParent();
+        }
+        return false;
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    public void seslSetFastScrollerEventListener(@Nullable SeslFastScrollerEventListener l) {
+        mFastScrollerEventListener = l;
+    }
+
+    public void seslSetGoToTopEnabled(boolean enable) {
+        seslSetGoToTopEnabled(enable, true);
+    }
+
+    public void seslSetGoToTopEnabled(boolean enable, boolean isWhite) {
+        mGoToTopImage = isWhite
+                ? mGoToTopImageLight :
+                 mContext.getResources().getDrawable(androidx.appcompat.R.drawable.sesl_list_go_to_top_dark, mContext.getTheme());
+
+        if (mGoToTopImage != null) {
+            if (enable) {
+                if (mGoToTopView == null) {
+                    mGoToTopView = new ImageView(mContext);
+
+                    final boolean isLightTheme = SeslMisc.isLightTheme(mContext);
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        Drawable background;
+                        if (isLightTheme && isWhite) {
+                            background = mContext.getResources().getDrawable(
+                                    R.drawable.sesl_go_to_top_background_light,
+                                     mContext.getTheme());
+                        } else {
+                            background = mContext.getResources().getDrawable(
+                                    R.drawable.sesl_go_to_top_background_dark, mContext.getTheme());
+                        }
+                        mGoToTopView.setBackground(background);
+                        mGoToTopView.setElevation(mGoToTopElevation);
+                    }
+
+                    mGoToTopView.setImageDrawable(mGoToTopImage);
+                }
+
+                mGoToTopView.setAlpha(0.0f);
+                if (!mEnableGoToTop) {
+                    getOverlay().add(mGoToTopView);
+                }
+            } else if (mEnableGoToTop) {
+                getOverlay().remove(mGoToTopView);
+            }
+
+            mEnableGoToTop = enable;
+
+            mGoToTopFadeInAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
+            mGoToTopFadeInAnimator.setDuration(333);
+            mGoToTopFadeInAnimator.setInterpolator(SeslAnimationUtils.SINE_IN_OUT_70);
+            mGoToTopFadeInAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(@NonNull ValueAnimator animator) {
+                    try {
+                        mGoToTopView.setAlpha((Float) animator.getAnimatedValue());
+                    } catch (Exception ignored) { }
+                }
+            });
+            mGoToTopFadeOutAnimator = ValueAnimator.ofFloat(1.0f, 0.0f);
+            mGoToTopFadeOutAnimator.setDuration(150);
+            mGoToTopFadeOutAnimator.setInterpolator(LINEAR_INTERPOLATOR);
+            mGoToTopFadeOutAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    try {
+                        mGoToTopView.setAlpha((Float) animator.getAnimatedValue());
+                    } catch (Exception ignored) { }
+                }
+            });
+            mGoToTopFadeOutAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    try {
+                        mShowFadeOutGTP = GTP_STATE_SHOWN;
+                    } catch (Exception ignored) { }
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    try {
+                        mShowFadeOutGTP = GTP_STATE_PRESSED;
+                        setupGoToTop(GTP_STATE_NONE);
+                    } catch (Exception ignored) { }
+                }
+            });
+        }
+    }
+
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    void showGoToTop() {
+        if (mEnableGoToTop && canScrollUp() && mGoToTopState != GTP_STATE_PRESSED) {
+            setupGoToTop(GTP_STATE_SHOWN);
+            autoHide(GTP_STATE_SHOWN);
+        }
+    }
+
+    public void seslSnapScrollToPosition(int position) {
+        final float snapRange = computeHorizontalScrollRange() * 0.2f;
+
+        LinearSmoothScroller smoothScroller = new LinearSmoothScroller(mContext) {
+            @Override
+            protected int getHorizontalSnapPreference() {
+                return SNAP_TO_END;
+            }
+
+            @Override
+            protected int getVerticalSnapPreference() {
+                return SNAP_TO_END;
+            }
+
+            @Override
+            protected float calculateSpeedPerPixel(DisplayMetrics metrics) {
+                return snapRange / computeHorizontalScrollRange();
+            }
+        };
+
+        smoothScroller.setTargetPosition(position);
+
+        if (getLayoutManager() != null) {
+            getLayoutManager().startSmoothScroll(smoothScroller);
+        }
+    }
+
+    public int seslGetHoverBottomPadding() {
+        return mHoverBottomAreaHeight;
+    }
+
+    public void seslSetHoverBottomPadding(int padding) {
+        mHoverBottomAreaHeight = padding;
+    }
+
+    public int seslGetHoverTopPadding() {
+        return mHoverTopAreaHeight;
+    }
+
+    public void seslSetHoverTopPadding(int padding) {
+        mHoverTopAreaHeight = padding;
+    }
+
+    public int seslGetGoToTopBottomPadding() {
+        return mGoToTopBottomPadding;
+    }
+
+    public void seslSetGoToTopBottomPadding(int padding) {
+        mGoToTopBottomPadding = padding;
+    }
+
+    public void seslSetOnGoToTopClickListener(@Nullable SeslOnGoToTopClickListener listener) {
+        mOnGoToTopClickListener = listener;
+    }
+
+    public void seslShowGoToTopEdge(float deltaDistance, float displacement, int delayTime) {
+        removeCallbacks(mGoToTopEdgeEffectRunnable);
+        postDelayed(mGoToTopEdgeEffectRunnable, (long) delayTime);
+    }
+
+
+    @SuppressLint("NewApi")
+    public void seslSetImmersiveScrollBottomPadding(int padding) {
+        if (padding >= 0) {
+            if (mEnableGoToTop) {
+                int immersiveBottom = getHeight() - mGoToTopSize - mGoToTopBottomPadding - padding;
+                if (immersiveBottom < 0) {
+                    mGoToTopImmersiveBottomPadding = 0;
+                    Log.e(TAG, "The Immersive padding value (" + padding +
+                            ") was too large to draw GoToTop.");
+                    return;
+                }
+                mGoToTopImmersiveBottomPadding = padding;
+
+                if (mGoToTopState != GTP_STATE_NONE) {
+                    final int value = getPaddingLeft() +
+                            (((getWidth() - getPaddingLeft()) - getPaddingRight()) / 2);
+                    mGoToTopRect.set(value - (mGoToTopSize / 2),
+                            immersiveBottom,
+                            value + (mGoToTopSize / 2),
+                            mGoToTopSize + immersiveBottom);
+                    mGoToTopView.layout(mGoToTopRect.left,
+                            mGoToTopRect.top,
+                            mGoToTopRect.right,
+                            mGoToTopRect.bottom);
+                }
+            }
+
+            if (mFastScroller != null && mAdapter != null) {
+                mFastScroller.setImmersiveBottomPadding(padding);
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void seslSetFastScrollerAdditionalPadding(int top, int bottom) {
+        if (mFastScroller != null) {
+            mFastScroller.setAdditionalPadding(top, bottom);
+        }
+    }
+
+    public void seslSetIndexTipEnabled(boolean enabled) {
+        if (mAdapter instanceof SectionIndexer) {
+            if (enabled) {
+                if (mIndexTip == null) {
+                    mIndexTip = new IndexTip(mContext);
+                } else {
+                    mIndexTip.hide();
+                }
+
+                if (!mIndexTipEnabled) {
+                    getOverlay().add(mIndexTip);
+                }
+                mIndexTip.setLayout(0, 0, getRight(), getBottom(),
+                        getPaddingLeft(), getPaddingRight());
+            } else {
+                if (mIndexTipEnabled) {
+                    getOverlay().remove(mIndexTip);
+                }
+            }
+            mIndexTipEnabled = enabled;
+        } else {
+            throw new IllegalStateException("In order to use Index Tip, your Adapter has to " +
+                    "implements SectionIndexer. or check if setAdapter is preceded.");
+        }
+    }
+
+    public boolean seslIsIndexTipEnabled() {
+        return mIndexTipEnabled;
+    }
+
+    public void seslUpdateIndexTipPosition() {
+        if (mIndexTip != null) {
+            if (mIndexTip.mCurrentOrientation
+                    == Configuration.ORIENTATION_PORTRAIT) {
+                mIndexTip.mIsNeedUpdate = true;
+                mIndexTip.invalidate();
+            } else {
+                mIndexTip.mIsNeedUpdate = false;
+            }
+        }
+    }
+
+    int getRecyclerViewScreenLocationY() {
+        getLocationOnScreen(mRecyclerViewOffsets);
+        return mRecyclerViewOffsets[1];
+    }
+
+    public void seslStartLongPressMultiSelection() {
+        mIsLongPressMultiSelection = true;
+    }
+
+    public void seslSetCtrlkeyPressed(boolean pressed) {
+        mIsCtrlKeyPressed = pressed;
+    }
+
+    void updateLongPressMultiSelection(int x, int y, boolean fromUserTouch) {
+        if (mIsFirstMultiSelectionMove) {
+            mPenDragStartX = x;
+            mPenDragStartY = y;
+
+            mPenTrackedChild = findChildViewUnder(x, y);
+            if (mPenTrackedChild == null) {
+                mPenTrackedChild = seslFindNearChildViewUnder(x, y);
+                if (mPenTrackedChild == null) {
+                    Log.e("SeslRecyclerView",
+                            "updateLongPressMultiSelection, mPenTrackedChild is NULL");
+                    mIsFirstMultiSelectionMove = false;
+                    return;
+                }
+            }
+            if (mLongPressMultiSelectionListener != null) {
+                mLongPressMultiSelectionListener.onLongPressMultiSelectionStarted(x, y);
+            }
+            mPenDragSelectedViewPosition = mPenTrackedChildPosition = getChildLayoutPosition(mPenTrackedChild);
+            mPenDistanceFromTrackedChildTop = mPenDragStartY - mPenTrackedChild.getTop();
+            mIsFirstMultiSelectionMove = false;
+        }
+
+        final int contentTop;
+        final int contentBottom;
+
+        if (mIsEnabledPaddingInHoverScroll) {
+            contentTop = mListPadding.top;
+            contentBottom = getHeight() - mListPadding.bottom;
+        } else {
+            contentTop = 0;
+            contentBottom = getHeight();
+        }
+
+        mPenDragEndX = x;
+        mPenDragEndY = y;
+
+        if (mPenDragEndY < 0) {
+            mPenDragEndY = 0;
+        } else if (mPenDragEndY > contentBottom) {
+            mPenDragEndY = contentBottom;
+        }
+
+        View touchedView = findChildViewUnder(mPenDragEndX, mPenDragEndY);
+        if (touchedView == null) {
+            touchedView = seslFindNearChildViewUnder(mPenDragEndX, mPenDragEndY);
+            if (touchedView == null) {
+                Log.e("SeslRecyclerView",
+                        "updateLongPressMultiSelection, touchedView is NULL");
+                return;
+            }
+        }
+
+        final int touchedPosition = getChildLayoutPosition(touchedView);
+        if (touchedPosition == NO_POSITION) {
+            Log.e("SeslRecyclerView", "touchedPosition is NO_POSITION");
+            return;
+        }
+
+        mPenDragSelectedViewPosition = touchedPosition;
+
+        final int startPosition;
+        final int endPosition;
+        if (mPenTrackedChildPosition < mPenDragSelectedViewPosition) {
+            startPosition = mPenTrackedChildPosition;
+            endPosition = mPenDragSelectedViewPosition;
+        } else {
+            startPosition = mPenDragSelectedViewPosition;
+            endPosition = mPenTrackedChildPosition;
+        }
+
+        mPenDragBlockLeft = Math.min(mPenDragStartX, mPenDragEndX);
+        mPenDragBlockTop = Math.min(mPenDragStartY, mPenDragEndY);
+        mPenDragBlockRight = Math.max(mPenDragEndX, mPenDragStartX);
+        mPenDragBlockBottom = Math.max(mPenDragEndY, mPenDragStartY);
+
+        final int childCount = mChildHelper.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            final View child = getChildAt(i);
+            if (child != null) {
+                mPenDragSelectedViewPosition = getChildLayoutPosition(child);
+
+                if (child.getVisibility() == View.VISIBLE) {
+
+                    final boolean needSelected
+                            = mPenDragSelectedViewPosition >= startPosition
+                            && mPenDragSelectedViewPosition <= endPosition
+                            && mPenDragSelectedViewPosition != mPenTrackedChildPosition;
+
+                    if (needSelected) {
+                        if (mPenDragSelectedViewPosition != NO_POSITION
+                                && !mPenDragSelectedItemArray.contains(mPenDragSelectedViewPosition)) {
+                            mPenDragSelectedItemArray.add(mPenDragSelectedViewPosition);
+                            if (mLongPressMultiSelectionListener != null) {
+                                mLongPressMultiSelectionListener.onItemSelected(this, child,
+                                        mPenDragSelectedViewPosition, getChildItemId(child));
+                            }
+                        }
+                    } else {
+                        if (mPenDragSelectedViewPosition != NO_POSITION
+                                && mPenDragSelectedItemArray.contains(mPenDragSelectedViewPosition)) {
+                            mPenDragSelectedItemArray.remove((Object)mPenDragSelectedViewPosition);
+                            if (mLongPressMultiSelectionListener != null) {
+                                mLongPressMultiSelectionListener.onItemSelected(this, child,
+                                        mPenDragSelectedViewPosition, getChildItemId(child));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (fromUserTouch) {
+            final int touchYDiff = mLastTouchY - y;
+            if (Math.abs(touchYDiff) >= mTouchSlop) {
+                if (y > contentTop + mHoverTopAreaHeight || touchYDiff <= 0) {
+                    if (y >= contentBottom - mHoverBottomAreaHeight - mRemainNestedScrollRange
+                            && touchYDiff < 0) {
+                        if (!mHoverAreaEnter) {
+                            mHoverAreaEnter = true;
+                            mHoverScrollStartTime = System.currentTimeMillis();
+                            if (mScrollListener != null) {
+                                mScrollListener.onScrollStateChanged(this,
+                                        SCROLL_STATE_DRAGGING);
+                            }
+                        }
+
+                        if (!mHoverHandler.hasMessages(MSG_HOVERSCROLL_MOVE)) {
+                            mHoverRecognitionStartTime = System.currentTimeMillis();
+                            mHoverScrollDirection = HOVERSCROLL_UP;
+                            mHoverHandler.sendEmptyMessage(MSG_HOVERSCROLL_MOVE);
+                        }
+                    } else {
+                        if (mHoverAreaEnter) {
+                            if (mScrollListener != null) {
+                                mScrollListener.onScrollStateChanged(this,
+                                        SCROLL_STATE_IDLE);
+                            }
+                        }
+
+                        mHoverScrollStartTime = 0;
+                        mHoverRecognitionStartTime = 0;
+                        mHoverAreaEnter = false;
+                        if (mHoverHandler.hasMessages(MSG_HOVERSCROLL_MOVE)) {
+                            mHoverHandler.removeMessages(MSG_HOVERSCROLL_MOVE);
+                            if (mScrollState == SCROLL_STATE_DRAGGING) {
+                                setScrollState(SCROLL_STATE_IDLE);
+                            }
+                        }
+
+                        mIsHoverOverscrolled = false;
+                    }
+                } else {
+                    if (!mHoverAreaEnter) {
+                        mHoverAreaEnter = true;
+                        mHoverScrollStartTime = System.currentTimeMillis();
+                        if (mScrollListener != null) {
+                            mScrollListener.onScrollStateChanged(this,
+                                    SCROLL_STATE_DRAGGING);
+                        }
+                    }
+
+                    if (!mHoverHandler.hasMessages(MSG_HOVERSCROLL_MOVE)) {
+                        mHoverRecognitionStartTime = System.currentTimeMillis();
+                        mHoverScrollDirection = HOVERSCROLL_DOWN;
+                        mHoverHandler.sendEmptyMessage(MSG_HOVERSCROLL_MOVE);
+                    }
+                }
+            }
+        }
+
+        invalidate();
+    }
+
+    private void multiSelection(int x, int y, int contentTop, int contentBottom,
+            boolean needToScroll) {
+        if (mIsNeedPenSelection) {
+            if (mIsFirstPenMoveEvent) {
+                mPenDragStartX = x;
+                mPenDragStartY = y;
+                mIsPenPressed = true;
+
+                mPenTrackedChild = findChildViewUnder(x, y);
+                if (mPenTrackedChild == null) {
+                    mPenTrackedChild = seslFindNearChildViewUnder(x, y);
+                    if (mPenTrackedChild == null) {
+                        Log.e("SeslRecyclerView",
+                                "multiSelection, mPenTrackedChild is NULL");
+                        mIsPenPressed = false;
+                        mIsFirstPenMoveEvent = false;
+                        return;
+                    }
+                }
+
+                if (mOnMultiSelectedListener != null) {
+                    mOnMultiSelectedListener.onMultiSelectStart(x, y);
+                }
+
+                mPenTrackedChildPosition = getChildLayoutPosition(mPenTrackedChild);
+                mPenDistanceFromTrackedChildTop = mPenDragStartY - mPenTrackedChild.getTop();
+                mIsFirstPenMoveEvent = false;
+            }
+
+            if (mPenDragStartX == 0 && mPenDragStartY == 0) {
+                mPenDragStartX = x;
+                mPenDragStartY = y;
+
+                if (mOnMultiSelectedListener != null) {
+                    mOnMultiSelectedListener.onMultiSelectStart(x, y);
+                }
+
+                mIsPenPressed = true;
+            }
+
+            mPenDragEndX = x;
+            mPenDragEndY = y;
+
+            if (mPenDragEndY < 0) {
+                mPenDragEndY = 0;
+            } else if (mPenDragEndY > contentBottom) {
+                mPenDragEndY = contentBottom;
+            }
+
+            mPenDragBlockLeft = Math.min(mPenDragStartX, mPenDragEndX);
+            mPenDragBlockTop = Math.min(mPenDragStartY, mPenDragEndY);
+            mPenDragBlockRight = Math.max(mPenDragEndX, mPenDragStartX);
+            mPenDragBlockBottom = Math.max(mPenDragEndY, mPenDragStartY);
+
+            needToScroll = true;
+        }
+
+        if (needToScroll) {
+            if (y > contentTop + mHoverTopAreaHeight) {
+                if (y < contentBottom - mHoverBottomAreaHeight - mRemainNestedScrollRange) {
+                    if (mHoverAreaEnter) {
+                        if (mScrollListener != null) {
+                            mScrollListener.onScrollStateChanged(this,
+                                    SCROLL_STATE_IDLE);
+                        }
+                    }
+
+                    mHoverScrollStartTime = 0;
+                    mHoverRecognitionStartTime = 0;
+                    mHoverAreaEnter = false;
+                    if (mHoverHandler.hasMessages(MSG_HOVERSCROLL_MOVE)) {
+                        mHoverHandler.removeMessages(MSG_HOVERSCROLL_MOVE);
+                        if (mScrollState == SCROLL_STATE_DRAGGING) {
+                            setScrollState(SCROLL_STATE_IDLE);
+                        }
+                    }
+
+                    mIsHoverOverscrolled = false;
+                } else {
+                    if (!mHoverAreaEnter) {
+                        mHoverAreaEnter = true;
+                        mHoverScrollStartTime = System.currentTimeMillis();
+                        if (mScrollListener != null) {
+                            mScrollListener.onScrollStateChanged(this,
+                                    SCROLL_STATE_DRAGGING);
+                        }
+                    }
+
+                    if (!mHoverHandler.hasMessages(MSG_HOVERSCROLL_MOVE)) {
+                        mHoverRecognitionStartTime = System.currentTimeMillis();
+                        mHoverScrollDirection = HOVERSCROLL_UP;
+                        mHoverHandler.sendEmptyMessage(MSG_HOVERSCROLL_MOVE);
+                    }
+                }
+            } else {
+                if (!mHoverAreaEnter) {
+                    mHoverAreaEnter = true;
+                    mHoverScrollStartTime = System.currentTimeMillis();
+                    if (mScrollListener != null) {
+                        mScrollListener.onScrollStateChanged(this,
+                                SCROLL_STATE_DRAGGING);
+                    }
+                }
+
+                if (!mHoverHandler.hasMessages(MSG_HOVERSCROLL_MOVE)) {
+                    mHoverRecognitionStartTime = System.currentTimeMillis();
+                    mHoverScrollDirection = HOVERSCROLL_DOWN;
+                    mHoverHandler.sendEmptyMessage(MSG_HOVERSCROLL_MOVE);
+                }
+            }
+
+            if (mIsPenDragBlockEnabled) {
+                invalidate();
+            }
+        }
+    }
+
+    private void multiSelectionEnd(int x, int y) {
+        if (mIsPenPressed && mOnMultiSelectedListener != null) {
+            mOnMultiSelectedListener.onMultiSelectStop(x, y);
+        }
+
+        mIsPenPressed = false;
+        mIsFirstPenMoveEvent = true;
+        mPenDragSelectedViewPosition = NO_POSITION;
+        mPenDragSelectedItemArray.clear();
+        mPenDragStartX = 0;
+        mPenDragStartY = 0;
+        mPenDragEndX = 0;
+        mPenDragEndY = 0;
+        mPenDragBlockLeft = 0;
+        mPenDragBlockTop = 0;
+        mPenDragBlockRight = 0;
+        mPenDragBlockBottom = 0;
+        mPenTrackedChild = null;
+        mPenDistanceFromTrackedChildTop = 0;
+
+        if (mIsPenDragBlockEnabled) {
+            invalidate();
+        }
+
+        if (mHoverHandler.hasMessages(MSG_HOVERSCROLL_MOVE)) {
+            mHoverHandler.removeMessages(MSG_HOVERSCROLL_MOVE);
+        }
+    }
+
+    public View seslFindNearChildViewUnder(float x, float y) {
+        int childCount = mChildHelper.getChildCount();
+        int xBound = Math.round(x);
+        int yBound = Math.round(y);
+
+        int nearestIndex = -1;
+        int minDistanceX = Integer.MAX_VALUE;
+        int minDistanceY = Integer.MAX_VALUE;
+
+        for (int i = childCount - 1; i >= 0; i--) {
+            View child = getChildAt(i);
+
+            if (child != null) {
+                int centerY = (child.getTop() + child.getBottom()) / 2;
+                int distanceY = Math.abs(yBound - centerY);
+
+                if (distanceY < minDistanceY) {
+                    int distanceX = Math.abs(xBound - child.getLeft());
+                    if (distanceX < minDistanceX) {
+                        nearestIndex = i;
+                        minDistanceX = distanceX;
+                        minDistanceY = distanceY;
+                    }
+                }
+            }
+        }
+
+        if (nearestIndex < 0) {
+            Log.e("SeslRecyclerView",
+             "findNearChildViewUnder didn't find valid child view! " + x + ", " + y);
+            return null;
+        }
+
+        return mChildHelper.getChildAt(nearestIndex);
+    }
+
+    @Override
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_PAGE_UP: {
+                if (event.hasNoModifiers()) {
+                    pageScroll(FOCUS_MOVE_UP);
+                }
+            }
+            break;
+
+            case KeyEvent.KEYCODE_PAGE_DOWN: {
+                if (event.hasNoModifiers()) {
+                    pageScroll(FOCUS_MOVE_DOWN);
+                }
+            }
+            break;
+
+            case KeyEvent.KEYCODE_CTRL_LEFT:
+            case KeyEvent.KEYCODE_CTRL_RIGHT: {
+                mIsCtrlKeyPressed = true;
+            }
+            break;
+
+            case KeyEvent.KEYCODE_MOVE_HOME: {
+                if (event.hasNoModifiers()) {
+                    pageScroll(FOCUS_MOVE_FULL_UP);
+                }
+            }
+            break;
+
+            case KeyEvent.KEYCODE_MOVE_END: {
+                if (event.hasNoModifiers()) {
+                    pageScroll(FOCUS_MOVE_FULL_DOWN);
+                }
+            }
+            break;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    private boolean pageScroll(int direction) {
+        if (mAdapter == null) {
+            Log.e(TAG, "No adapter attached; skipping pageScroll");
+            return false;
+        }
+
+        final int itemCount = mAdapter.getItemCount();
+        if (itemCount <= 0) {
+            return false;
+        }
+
+        int pos;
+        switch (direction) {
+            case FOCUS_MOVE_UP:
+                pos = findFirstVisibleItemPosition() - getChildCount();
+                break;
+            case FOCUS_MOVE_DOWN:
+                pos = findLastVisibleItemPosition() + getChildCount();
+                break;
+            case FOCUS_MOVE_FULL_UP:
+                pos = 0;
+                break;
+            case FOCUS_MOVE_FULL_DOWN:
+                pos = itemCount - 1;
+                break;
+            default:
+                return false;
+        }
+
+        if (pos > itemCount - 1) {
+            pos = itemCount - 1;
+        } else if (pos < 0) {
+            pos = 0;
+        }
+
+        mLayout.mRecyclerView.scrollToPosition(pos);
+        mLayout.mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                View child = getChildAt(0);
+                if (child != null) {
+                    child.requestFocus();
+                }
+            }
+        });
+        return true;
+    }
+
+    @Override
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_CTRL_LEFT:
+            case KeyEvent.KEYCODE_CTRL_RIGHT:
+                mIsCtrlKeyPressed = false;
+                break;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
+    public void seslSetPenSelectionEnabled(boolean enabled) {
+        mIsPenSelectionEnabled = enabled;
+    }
+
+    public void seslSetOnMultiSelectedListener(@Nullable SeslOnMultiSelectedListener listener) {
+        mOnMultiSelectedListener = listener;
+    }
+
+    @Nullable
+    public final SeslOnMultiSelectedListener seslGetOnMultiSelectedListener() {
+        return mOnMultiSelectedListener;
+    }
+
+    public void seslSetLongPressMultiSelectionListener(@Nullable SeslLongPressMultiSelectionListener listener) {
+        mLongPressMultiSelectionListener = listener;
+    }
+
+    @Nullable
+    public final SeslLongPressMultiSelectionListener getLongPressMultiSelectionListener() {
+        return mLongPressMultiSelectionListener;
+    }
+
+    boolean contentFits() {
+        final int childCount = getChildCount();
+        if (childCount == 0) {
+            return true;
+        }
+        if (childCount != mAdapter.getItemCount()) {
+            return false;
+        }
+
+        return getChildAt(0).getTop() >= mListPadding.top
+                && getChildAt(childCount - 1).getBottom() <= getHeight() - mListPadding.bottom;
+    }
+
+    private boolean showPointerIcon(MotionEvent ev, int iconId) {
+        SeslInputDeviceReflector.semSetPointerType(ev.getDevice(), iconId);
+        return true;
+    }
+
+    private boolean isLockScreenMode() {
+        KeyguardManager manager = (KeyguardManager)
+                mContext.getSystemService(Context.KEYGUARD_SERVICE);
+        return manager.inKeyguardRestrictedInputMode();
+    }
+
+    public void seslSetHoverScrollEnabled(boolean enabled) {
+        mHoverScrollEnable = enabled;
+        mHoverScrollStateChanged = true;
+    }
+
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    int findFirstVisibleItemPosition() {
+        if (mLayout instanceof LinearLayoutManager) {
+            return ((LinearLayoutManager) mLayout).findFirstVisibleItemPosition();
+        }
+        if (mLayout instanceof StaggeredGridLayoutManager) {
+            return ((StaggeredGridLayoutManager) mLayout).findFirstVisibleItemPositions(null)[0];
+        }
+        return NO_POSITION;
+    }
+
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    int findLastVisibleItemPosition() {
+        if (mLayout instanceof LinearLayoutManager) {
+            return ((LinearLayoutManager) mLayout).findLastVisibleItemPosition();
+        }
+        if (mLayout instanceof StaggeredGridLayoutManager) {
+            return ((StaggeredGridLayoutManager) mLayout).findLastVisibleItemPositions(null)[0];
+        }
+        return NO_POSITION;
+    }
+
+    @Override
+    protected boolean dispatchHoverEvent(MotionEvent event) {
+        if (mAdapter == null) {
+            Log.d("SeslRecyclerView", "No adapter attached; skipping hover scroll");
+            return super.dispatchHoverEvent(event);
+        }
+
+        final int action = event.getAction();
+        final int toolType = event.getToolType(0);
+        final int buttonState = event.getButtonState();
+        final boolean isUsingStylus =  toolType == TOOL_TYPE_STYLUS;
+
+        mIsPenHovered =
+         ((action ==  ACTION_HOVER_MOVE || action == ACTION_HOVER_ENTER) && isUsingStylus);
+        mIsTextViewHoveredState = SeslTextViewReflector.semIsTextViewHovered();
+
+        final boolean mIsNeedPenSelectIconSet =
+         (!mIsTextViewHoveredState && mOldTextViewHoverState && mIsPenDragBlockEnabled
+                && (buttonState == BUTTON_STYLUS_PRIMARY || buttonState == BUTTON_SECONDARY));
+
+        mOldTextViewHoverState = mIsTextViewHoveredState;
+
+        switch (action){
+            case ACTION_HOVER_MOVE://7
+                if(!mHoverScrollStateChanged) {
+                    if ((!mIsPenDragBlockEnabled
+                            || mIsPenSelectPointerSetted
+                            || toolType != TOOL_TYPE_STYLUS
+                            || buttonState != BUTTON_STYLUS_PRIMARY && buttonState != BUTTON_SECONDARY)
+                            && !mIsNeedPenSelectIconSet) {
+
+                        if (mIsPenDragBlockEnabled
+                                && mIsPenSelectPointerSetted
+                                && buttonState != BUTTON_STYLUS_PRIMARY
+                                && buttonState != BUTTON_SECONDARY) {
+                            showPointerIcon(event,
+                             SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT());
+                            mIsPenSelectPointerSetted = false;
+                        }
+                    } else {
+                        showPointerIcon(event,
+                         SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_PEN_SELECT());
+                        mIsPenSelectPointerSetted = true;
+                    }
+                    break;
+                }
+            case ACTION_HOVER_EXIT://10
+                if (mIsPenSelectPointerSetted) {
+                    showPointerIcon(event,
+                     SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT());
+                    mIsPenSelectPointerSetted = false;
+                }
+                break;
+
+            case ACTION_HOVER_ENTER://9
+                mHoverScrollStateChanged = false;
+
+                if (mHasNestedScrollRange) {
+                    adjustNestedScrollRange();
+                }
+
+                mNeedsHoverScroll = mHoverScrollEnable;
+
+                if (mNeedsHoverScroll && toolType == TOOL_TYPE_STYLUS) {
+                    String SEM_PEN_HOVERING =
+                     SeslSettingsReflector.SeslSystemReflector.getField_SEM_PEN_HOVERING();
+                    boolean isPenHoverEnabled = android.provider.Settings.System.getInt(mContext.getContentResolver(),
+                      SEM_PEN_HOVERING, 0) == 1;
+
+                    boolean isCarMode;
+                    try {
+                        isCarMode =
+                        android.provider.Settings.System.getInt(mContext.getContentResolver(),
+                         "car_mode_on") == 1;
+                    } catch (Settings.SettingNotFoundException var14) {
+                        Log.i("SeslRecyclerView", "dispatchHoverEvent car_mode_on "
+                                + "SettingNotFoundException");
+                        isCarMode = false;
+                    }
+
+                    if (!isPenHoverEnabled || isCarMode) {
+                        mNeedsHoverScroll = false;
+                    }
+
+                    if (isPenHoverEnabled
+                            && mIsPenDragBlockEnabled
+                            && !mIsPenSelectPointerSetted
+                            && (buttonState == BUTTON_STYLUS_PRIMARY || buttonState == BUTTON_SECONDARY)
+                    ) {
+                        showPointerIcon(event,
+                         SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_PEN_SELECT());
+                        mIsPenSelectPointerSetted = true;
+                    }
+                }
+
+                if (toolType == TOOL_TYPE_MOUSE) {
+                    mNeedsHoverScroll = false;
+                }
+                break;
+
+        }
+
+        if (!mNeedsHoverScroll) return super.dispatchHoverEvent(event);
+
+        final boolean scrollHorizontally = mLayout.canScrollHorizontally();
+
+        final int hoverPointLeft;
+        final int hoverPointTop;
+        if (scrollHorizontally) {
+            hoverPointLeft = (int) event.getY();
+            hoverPointTop = (int) event.getX();
+        } else {
+            hoverPointLeft = (int) event.getX();
+            hoverPointTop = (int) event.getY();
+        }
+
+        final int count = getChildCount();
+
+        final int maxHoverScrollRange;
+        final int mExtraPaddingInBottomHoverArea;
+
+        if (mIsEnabledPaddingInHoverScroll) {
+            mExtraPaddingInBottomHoverArea = mListPadding.top;
+            maxHoverScrollRange = getHeight() - mListPadding.bottom;
+        } else {
+            mExtraPaddingInBottomHoverArea = 0;
+            if (scrollHorizontally) {
+                maxHoverScrollRange = getWidth();
+            } else {
+                maxHoverScrollRange = getHeight();
+            }
+        }
+
+        boolean canScroll = findFirstChildPosition() + count < mAdapter.getItemCount();
+
+        if (!canScroll && count > 0) {
+            getDecoratedBoundsWithMargins(getChildAt(count - 1), mChildBound);
+            if (scrollHorizontally) {
+                if (mChildBound.right > getRight() - mListPadding.right
+                        || mChildBound.right > getWidth() - mListPadding.right) {
+                    canScroll = true;
+                }
+            } else if (mChildBound.bottom > getBottom() - mListPadding.bottom
+                    || mChildBound.bottom > getHeight() - mListPadding.bottom) {
+                canScroll = true;
+            }
+
+        }
+
+        if (!canScroll) {
+            boolean canHoverScrollUp = findFirstChildPosition() > 0;
+            if (!canHoverScrollUp) {
+                if (count > 0) {
+                    getDecoratedBoundsWithMargins(getChildAt(0), mChildBound);
+                    if (scrollHorizontally) {
+                        if (mChildBound.left < mListPadding.left) {
+                            canHoverScrollUp = true;
+                        }
+                    } else if (mChildBound.top < mListPadding.top) {
+                        canHoverScrollUp = true;
+                    }
+                }
+            }
+
+            if (canHoverScrollUp) {
+                canScroll = canHoverScrollUp;
+            }
+        }
+
+        RecyclerView.OnScrollListener scrollListener;
+
+        if ((hoverPointTop <= mHoverTopAreaHeight + mExtraPaddingInBottomHoverArea
+                || hoverPointTop >= maxHoverScrollRange - mHoverBottomAreaHeight - mRemainNestedScrollRange)
+                && hoverPointLeft > 0
+        ) {
+
+            int hoverScrollEnd;
+            if (scrollHorizontally) {
+                hoverScrollEnd = getBottom();
+            } else {
+                hoverScrollEnd = getRight();
+            }
+
+            if (hoverPointLeft <= hoverScrollEnd && canScroll) {
+                if ((!isUsingStylus
+                        || buttonState != BUTTON_STYLUS_PRIMARY
+                        && buttonState != BUTTON_SECONDARY)
+                        && isUsingStylus && !isLockScreenMode()) {
+
+                    if (mHasNestedScrollRange) {
+                        if (mRemainNestedScrollRange > 0 && mRemainNestedScrollRange != mNestedScrollRange) {
+                            adjustNestedScrollRange();
+                        }
+                    }
+
+                    if (!mHoverAreaEnter) {
+                        mHoverScrollStartTime = System.currentTimeMillis();
+                    }
+
+                    switch (action){
+                        case ACTION_HOVER_MOVE: //7
+                            if (!mHoverAreaEnter) {
+                                mHoverAreaEnter = true;
+                                event.setAction(ACTION_HOVER_EXIT);
+                                return super.dispatchHoverEvent(event);
+                            }
+
+                            if (hoverPointTop >= mExtraPaddingInBottomHoverArea
+                                    && hoverPointTop <= mExtraPaddingInBottomHoverArea + mHoverTopAreaHeight) {
+
+                                if (!mHoverHandler.hasMessages(0)) {
+                                    mHoverRecognitionStartTime = System.currentTimeMillis();
+
+                                    if (!mIsHoverOverscrolled || mHoverScrollDirection == HOVERSCROLL_UP) {
+                                        final int pointerIcon;
+                                        if (scrollHorizontally) {
+                                            pointerIcon =
+                                             SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_LEFT();
+                                        } else {
+                                            pointerIcon =
+                                             SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_UP();
+                                        }
+                                        showPointerIcon(event, pointerIcon);
+                                    }
+
+                                    mHoverScrollDirection = HOVERSCROLL_DOWN;
+                                    mHoverHandler.sendEmptyMessage(0);
+                                }
+                            } else {
+                                if (hoverPointTop >= maxHoverScrollRange - mHoverBottomAreaHeight - mRemainNestedScrollRange
+                                        && hoverPointTop <= maxHoverScrollRange - mRemainNestedScrollRange
+                                ) {
+                                    if (!mHoverHandler.hasMessages(0)) {
+                                        mHoverRecognitionStartTime = System.currentTimeMillis();
+                                        if (!mIsHoverOverscrolled || mHoverScrollDirection == HOVERSCROLL_DOWN) {
+                                            final int pointerIcon = getPointerIcon(scrollHorizontally);
+                                            showPointerIcon(event, pointerIcon);
+                                        }
+
+                                        mHoverScrollDirection = HOVERSCROLL_UP;
+                                        mHoverHandler.sendEmptyMessage(0);
+                                    }
+                                } else {
+                                    if (mHoverHandler.hasMessages(0)) {
+                                        mHoverHandler.removeMessages(0);
+                                        if (mScrollState == SCROLL_STATE_DRAGGING) {
+                                            setScrollState(SCROLL_STATE_IDLE);
+                                        }
+                                    }
+
+                                    final int pointerIcon =
+                                     SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT();
+                                    showPointerIcon(event, pointerIcon);
+                                    mHoverRecognitionStartTime = 0L;
+                                    mHoverScrollStartTime = 0L;
+                                    mIsHoverOverscrolled = false;
+                                    mHoverAreaEnter = false;
+                                    mIsSendHoverScrollState = false;
+                                }
+                            }
+                            break;
+                        case ACTION_HOVER_ENTER: //9
+                            mHoverAreaEnter = true;
+                            if (hoverPointTop >= mExtraPaddingInBottomHoverArea
+                                    && hoverPointTop <= mExtraPaddingInBottomHoverArea + mHoverTopAreaHeight
+                            ) {
+                                if (!mHoverHandler.hasMessages(0)) {
+                                    mHoverRecognitionStartTime = System.currentTimeMillis();
+
+                                    final int pointerIcon;
+                                    if (scrollHorizontally) {
+                                        pointerIcon =
+                                         SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_LEFT();
+                                    } else {
+                                        pointerIcon =
+                                         SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_UP();
+                                    }
+                                    showPointerIcon(event, pointerIcon);
+
+                                    mHoverScrollDirection =  HOVERSCROLL_DOWN;
+                                    mHoverHandler.sendEmptyMessage(0);
+                                }
+                            } else {
+
+                                if (hoverPointTop >= maxHoverScrollRange - mHoverBottomAreaHeight - mRemainNestedScrollRange
+                                        && hoverPointTop <= maxHoverScrollRange - mRemainNestedScrollRange
+                                        && !mHoverHandler.hasMessages(0)
+                                ) {
+                                    mHoverRecognitionStartTime = System.currentTimeMillis();
+
+                                    final int pointerIcon = getPointerIcon(scrollHorizontally);
+                                    showPointerIcon(event, pointerIcon);
+
+                                    mHoverScrollDirection = HOVERSCROLL_UP;
+                                    mHoverHandler.sendEmptyMessage(0);
+                                }
+                            }
+                            break;
+                        case ACTION_HOVER_EXIT://10
+                            if (mHoverHandler.hasMessages(0)) {
+                                mHoverHandler.removeMessages(0);
+                            }
+
+                            if (mScrollState == SCROLL_STATE_DRAGGING) {
+                                setScrollState(SCROLL_STATE_IDLE);
+                            }
+
+                            final int pointerIcon =
+                              SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT();
+                            showPointerIcon(event, pointerIcon);
+
+                            mHoverRecognitionStartTime = 0L;
+                            mHoverScrollStartTime = 0L;
+                            mIsHoverOverscrolled = false;
+                            mHoverAreaEnter = false;
+                            mIsSendHoverScrollState = false;
+
+                            if (mHoverScrollStateForListener != HOVERSCROLL_DELAY) {
+                                mHoverScrollStateForListener = HOVERSCROLL_DELAY;
+                                scrollListener = mScrollListener;
+                                if (scrollListener != null) {
+                                    scrollListener.onScrollStateChanged(this, SCROLL_STATE_IDLE);
+                                }
+                            }
+
+                            return super.dispatchHoverEvent(event);
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        if (mHasNestedScrollRange) {
+            if (mRemainNestedScrollRange > 0 && mRemainNestedScrollRange != mNestedScrollRange) {
+                adjustNestedScrollRange();
+            }
+        }
+
+        if (mHoverHandler.hasMessages(0)) {
+            mHoverHandler.removeMessages(0);
+            showPointerIcon(event, SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT());
+            if (mScrollState == SCROLL_STATE_DRAGGING) {
+                setScrollState(SCROLL_STATE_IDLE);
+            }
+        }
+
+        if ((hoverPointTop <= mExtraPaddingInBottomHoverArea + mHoverTopAreaHeight
+                || hoverPointTop >= maxHoverScrollRange - mHoverBottomAreaHeight - mRemainNestedScrollRange)
+                && hoverPointLeft > 0) {
+
+            final int hoverScrollEnd;
+            if (scrollHorizontally) {
+                hoverScrollEnd = getBottom();
+            } else {
+                hoverScrollEnd = getRight();
+            }
+            if (hoverPointLeft > hoverScrollEnd) {
+                mIsHoverOverscrolled = false;
+            }
+        }
+
+        if (mHoverAreaEnter || mHoverScrollStartTime != 0L) {
+            final int pointerIcon = SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT();
+            showPointerIcon(event, pointerIcon);
+        }
+
+        mHoverRecognitionStartTime = 0L;
+        mHoverScrollStartTime = 0L;
+        mHoverAreaEnter = false;
+        mIsSendHoverScrollState = false;
+
+        if (action == ACTION_HOVER_EXIT) {
+            if (mHoverScrollStateForListener != HOVERSCROLL_DELAY) {
+                mHoverScrollStateForListener = HOVERSCROLL_DELAY;
+                if (mScrollListener != null) {
+                    mScrollListener.onScrollStateChanged(this, SCROLL_STATE_IDLE);
+                }
+            } else {
+                mIsHoverOverscrolled = false;
+            }
+        }
+
+        return super.dispatchHoverEvent(event);
+
+    }
+
+    private static int getPointerIcon(boolean scrollHorizontally) {
+        final int pointerIcon;
+        if (scrollHorizontally) {
+            pointerIcon =
+             SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_RIGHT();
+        } else {
+            pointerIcon =
+             SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_DOWN();
+        }
+        return pointerIcon;
+    }
+
+    public void seslSetSmoothScrollEnabled(boolean enabled) {
+        if (mViewFlinger != null) {
+            SeslOverScrollerReflector.setSmoothScrollEnabled(
+                    mViewFlinger.mOverScroller, enabled);
+        }
+    }
+
+    public void seslSetPagingTouchSlopForStylus(boolean enabled) {
+        mUsePagingTouchSlopForStylus = enabled;
+    }
+
+    public boolean seslIsPagingTouchSlopForStylusEnabled() {
+        return mUsePagingTouchSlopForStylus;
+    }
+
+
+    class IndexTip extends View {
+        @SuppressLint("NewApi")
+        private final PathInterpolator ALPHA_INTERPOLATOR =
+                new PathInterpolator(0.0f, 0.0f, 1.0f, 1.0f);
+        @SuppressLint("NewApi")
+        private final PathInterpolator SCALE_INTERPOLATOR =
+                new PathInterpolator(0.22f, 0.25f, 0.0f, 1.0f);
+
+        private static final int ALPHA_DURATION = 150;
+        private static final int FADE_DURATION = 300;
+        private static final int SCALE_DURATION = 200;
+        private static final int CHANGE_TEXT_DELAY = 90;
+        private static final float SHAPE_COLOR_ALPHA_RATIO = 0.9f;
+
+        private String mPrevText;
+        private SectionIndexer mSectionIndexer;
+        private Object[] mSections;
+        private Paint mShapePaint;
+        String mShowingText;
+        String mTargetText;
+        private String mText;
+        private Rect mTextBounds;
+        private Paint mTextPaint;
+        private ValueAnimator mValueAnimator;
+        private int mCenterX;
+        private int mCenterY;
+        int mCurrentOrientation;
+        private int mHeight;
+        private int mMaxWidth;
+        private int mMinWidth;
+        private int mParentPosY;
+        private int mSidePadding;
+        private int mStatusBarHeight;
+        private int mTopMargin;
+        float mAnimatingWidth;
+        private float mPrevWidth;
+        private float mRadius;
+        private boolean mForcedHide = false;
+        boolean mIsNeedUpdate = false;
+        boolean mIsShowing = false;
+
+        private final Runnable mShapeDelayRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (mIndexTip != null && mIsShowing) {
+                    startAnimation();
+                    mIsShowing = false;
+                }
+            }
+        };
+
+        private final Runnable mTextDelayRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (mIndexTip != null) {
+                    mShowingText = mTargetText;
+                    invalidate();
+                }
+            }
+        };
+
+        IndexTip(Context context) {
+            super(context);
+            init();
+        }
+
+        private void init() {
+            mSectionIndexer = (SectionIndexer) mAdapter;
+            updateSections();
+
+            final Resources res = mContext.getResources();
+            final int indexTipColor;
+            if (SeslMisc.isLightTheme(RecyclerView.this.mContext)) {
+                indexTipColor =
+                        res.getColor(androidx.appcompat.R.color.sesl_scrollbar_index_tip_color);
+            } else {
+                indexTipColor =
+                        res.getColor(androidx.appcompat.R.color.sesl_scrollbar_index_tip_color_dark);
+            }
+
+            mShapePaint = new Paint();
+            mShapePaint.setStyle(Paint.Style.FILL);
+            mShapePaint.setAntiAlias(true);
+            mShapePaint.setColor(getColorWithAlpha(indexTipColor, SHAPE_COLOR_ALPHA_RATIO));
+
+            mTextPaint = new Paint();
+            mTextPaint.setAntiAlias(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P/*originally 33(T)*/) {
+                mTextPaint.setTypeface( Typeface.create(Typeface.create("sec", Typeface.NORMAL),
+                        400, false));
+            } else {
+                mTextPaint.setTypeface(Typeface.create(mContext.getString(androidx.appcompat.R.string.sesl_font_family_regular), Typeface.NORMAL));
+            }
+            mTextPaint.setTextAlign(Paint.Align.CENTER);
+            mTextPaint.setTextSize(res.getDimensionPixelSize(R.dimen.sesl_index_tip_text_size));
+            mTextPaint.setColor(res.getColor(androidx.appcompat.R.color.sesl_white,
+                    mContext.getTheme()));
+
+            mTextBounds = new Rect();
+
+            mText = "";
+            mShowingText = "";
+            mPrevText = "";
+
+            mPrevWidth = 0f;
+            mAnimatingWidth = 0f;
+            mHeight = res.getDimensionPixelSize(R.dimen.sesl_index_tip_height);
+            mSidePadding = res.getDimensionPixelSize(R.dimen.sesl_index_tip_padding);
+            mMinWidth = res.getDimensionPixelSize(R.dimen.sesl_index_tip_min_width);
+            mMaxWidth = res.getDimensionPixelSize(R.dimen.sesl_index_tip_max_width);
+            mTopMargin = res.getDimensionPixelSize(R.dimen.sesl_index_tip_margin_top);
+            mRadius = res.getDimension(R.dimen.sesl_index_tip_radius);
+
+            mCenterY = mTopMargin + Math.round(mHeight / 2f);
+            mParentPosY = 0;
+
+            @SuppressLint({"InternalInsetResource", "DiscouragedApi"})
+            final int resId = res.getIdentifier("status_bar_height", "dimen", "android");
+            if (resId > 0) {
+                mStatusBarHeight = mContext.getResources().getDimensionPixelSize(resId);
+            } else {
+                mStatusBarHeight = 0;
+            }
+
+            setAlpha(0f);
+        }
+
+        void setLayout(int l, int t, int r, int b, int left, int right) {
+            layout(l, t, r, b);
+            mCenterX = left + Math.round((r - l - left - right) / 2.0f);
+            mCurrentOrientation = mContext.getResources().getConfiguration().orientation;
+            if (mCurrentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mIsNeedUpdate = false;
+            }
+            hide();
+        }
+
+        private int getColorWithAlpha(int color, float ratio) {
+            int newColor = 0;
+            int alpha = Math.round(Color.alpha(color) * ratio);
+            int r = Color.red(color);
+            int g = Color.green(color);
+            int b = Color.blue(color);
+            newColor = Color.argb(alpha, r, g, b);
+            return newColor;
+        }
+
+        void updateSections() {
+            if (mSectionIndexer != null) {
+                mSections = mSectionIndexer.getSections();
+                if (mSections != null) {
+                    hide();
+                } else {
+                    throw new IllegalStateException("Section is null. This array, or its " +
+                            "contents should be non-null");
+                }
+            }
+        }
+
+        private void updateText() {
+            mText = "";
+            final int itemPos = findFirstVisibleItemPosition();
+            if (itemPos == NO_POSITION) {
+                Log.e(TAG, "First visible item was null.");
+            } else {
+                final int section
+                        = mSectionIndexer.getSectionForPosition(itemPos);
+                if (section >= 0) {
+                    if (section < mSections.length
+                            && mSections[section] != null) {
+                        mText = mSections[section].toString();
+                    }
+                }
+            }
+        }
+
+        private void subString(String text) {
+            for (int i = text.length(); i > 0; i--) {
+                text = text.substring(0, i) + "...";
+                if ((mTextPaint.measureText(text) / 2f) + mSidePadding < mMaxWidth) {
+                    mText = text;
+                    break;
+                }
+            }
+        }
+
+        @Override
+        protected void onDraw(@NonNull Canvas canvas) {
+            super.onDraw(canvas);
+            updateText();
+
+            if (mShowingText.isEmpty()) {
+                mShowingText = mText;
+                mTargetText = mText;
+            }
+
+            if (mText.isEmpty()) {
+                if (mPrevText.isEmpty()) return;
+
+                if (!mForcedHide && mIsShowing) {
+                    startAnimation();
+                    mIsShowing = false;
+                    mForcedHide = true;
+                }
+                mText = mPrevText;
+            } else {
+                mForcedHide = false;
+            }
+
+            float tipWidth = mTextPaint.measureText(mText) / 2.0F + mSidePadding;
+            if (tipWidth < mMinWidth) {
+                tipWidth = mMinWidth;
+            } else {
+                if (tipWidth > mMaxWidth) {
+                    subString(mText);
+                    tipWidth = mMaxWidth;
+                }
+            }
+
+            if (mCenterX < tipWidth) {
+                tipWidth = mCenterX;
+            }
+
+            if (mPrevWidth != 0.0F && mPrevWidth != tipWidth) {
+                animating(tipWidth);
+            }
+
+            if (mAnimatingWidth == 0.0F) {
+                mAnimatingWidth = tipWidth;
+            }
+
+            int topOffset = 0;
+            if (mIsNeedUpdate) {
+                mParentPosY = getRecyclerViewScreenLocationY();
+                topOffset = mStatusBarHeight;
+                if (mParentPosY < topOffset) {
+                    topOffset -= mParentPosY;
+                }
+            }
+
+            canvas.drawRoundRect(
+                    (float)mCenterX - mAnimatingWidth,
+                    (float)(mTopMargin + topOffset),
+                    (float)mCenterX + mAnimatingWidth,
+                    (float)(mTopMargin + mHeight + topOffset),
+                    mRadius,
+                    mRadius,
+                    mShapePaint
+            );
+
+            canvas.drawText(mShowingText,
+                    (float)mCenterX,
+                    (float)mCenterY + (float)topOffset - (mTextPaint.descent() + mTextPaint.ascent()) / 2.0F ,
+                    mTextPaint);
+
+            if (!mText.equals(mTargetText)) {
+                if (mText.length() > mTargetText.length()) {
+                    changeText();
+                } else {
+                    mTargetText = mText;
+                    mShowingText = mText;
+                }
+            }
+
+            if (!mText.equals(mPrevText)) {
+                mPrevText = mText;
+                mPrevWidth = tipWidth;
+            }
+        }
+
+
+        private void changeText() {
+            mTargetText = mText;
+            removeCallbacks(mTextDelayRunnable);
+            postDelayed(mTextDelayRunnable, CHANGE_TEXT_DELAY);
+        }
+
+        private void animating(float toWidth) {
+            if (mValueAnimator != null) {
+                mValueAnimator.cancel();
+            }
+
+            mValueAnimator = ValueAnimator.ofFloat(mAnimatingWidth, toWidth);
+            mValueAnimator.setDuration(SCALE_DURATION);
+            mValueAnimator.setInterpolator(SCALE_INTERPOLATOR);
+            mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(@NonNull ValueAnimator animator) {
+                    mAnimatingWidth = (Float) animator.getAnimatedValue();
+                    invalidate();
+                }
+            });
+
+            mValueAnimator.start();
+        }
+
+        void show(int state, int vresult) {
+            if (state == SCROLL_STATE_DRAGGING
+                    && mRemainNestedScrollRange != 0 && vresult >= 0) {
+                adjustNestedScrollRange();
+            } else if (vresult != 0) {
+                if (!mIsShowing && canScrollUp() && !mGoToToping && !mForcedHide) {
+                    startAnimation();
+                    mIsShowing = true;
+                }
+            }
+        }
+
+        void hide() {
+            if (mIsShowing) {
+                removeCallbacks(mShapeDelayRunnable);
+                postDelayed(mShapeDelayRunnable, FADE_DURATION);
+            } else {
+                forcedHide();
+            }
+        }
+
+        void forcedHide() {
+            mIsShowing = false;
+            removeCallbacks(mShapeDelayRunnable);
+            setAlpha(0f);
+            invalidate();
+        }
+
+        void startAnimation() {
+            ObjectAnimator animator;
+            if (mIsShowing) {
+                animator = ObjectAnimator.ofFloat(mIndexTip, ALPHA,
+                        mIndexTip.getAlpha(), 0f);
+            } else {
+                animator = ObjectAnimator.ofFloat(mIndexTip, ALPHA,
+                        mIndexTip.getAlpha(), 1f);
+            }
+            animator.setDuration(ALPHA_DURATION);
+            animator.setInterpolator(ALPHA_INTERPOLATOR);
+
+            AnimatorSet set = new AnimatorSet();
+            set.play(animator);
+            set.start();
+        }
+    }
+    //sesl
 }

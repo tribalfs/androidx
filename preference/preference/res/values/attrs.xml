@@ -62,6 +62,26 @@
         <attr name="switchPreferenceCompatStyle" format="reference" />
         <!-- Default style for seekbar preferences. -->
         <attr name="seekBarPreferenceStyle" format="reference" />
+
+        <!--Sesl-->
+        <!-- Default style for the PreferenceActivity. -->
+        <attr name="preferenceActivityStyle" format="reference" />
+        <!-- Default style for YesNoPreference. -->
+        <attr name="yesNoPreferenceStyle" format="reference" />
+        <!-- Default style for RingtonePreference. -->
+        <attr name="ringtonePreferenceStyle" format="reference" />
+        <!-- The preference layout that has the child/tabbed effect. -->
+        <attr name="preferenceLayoutChild" format="reference" />
+        <!-- Preference panel style -->
+        <attr name="preferencePanelStyle" format="reference" />
+        <!-- Preference headers panel style -->
+        <attr name="preferenceHeaderPanelStyle" format="reference" />
+        <!-- Preference list style -->
+        <attr name="preferenceListStyle" format="reference" />
+        <!-- Preference fragment padding side -->
+        <attr name="preferenceFragmentPaddingSide" format="dimension" />
+        <attr name="seekBarDialogPreferenceStyle" format="reference" />
+        <!--sesl-->
     </declare-styleable>
 
     <!-- Base attributes available to PreferenceFragment. -->
@@ -176,6 +196,8 @@
         <!-- Whether the summary of this preference can be copied to the clipboard by long pressing
              on the preference. By default, this is set to false. -->
         <attr name="enableCopying" format="boolean"/>
+        <!-- Whether to show dot badge or not (sesl)-->
+        <attr name="isDotVisible" format="boolean"/>
     </declare-styleable>
 
     <!-- Base attributes available to CheckBoxPreference. -->
@@ -354,4 +376,12 @@
         <!-- Whether a divider is allowed to draw after the last item -->
         <attr name="allowDividerAfterLastItem" />
     </declare-styleable>
+
+    <!--Sesl-->
+    <declare-styleable name="RingtonePreference">
+        <attr name="android:ringtoneType" />
+        <attr name="android:showDefault" />
+        <attr name="android:showSilent" />
+    </declare-styleable>
+    <!--sesl-->
 </resources>

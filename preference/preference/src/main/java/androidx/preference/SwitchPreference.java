@@ -17,22 +17,31 @@
 package androidx.preference;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY;
+import static androidx.appcompat.widget.SwitchCompat.SUPPORT_TOUCH_FEEDBACK;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Checkable;
 import android.widget.CompoundButton;
-import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.res.TypedArrayUtils;
+import androidx.core.view.ViewCompat;
+import androidx.reflect.view.SeslHapticFeedbackConstantsReflector;
+import androidx.reflect.view.SeslViewReflector;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * A {@link Preference} that provides a two-state toggleable option.
  *
  * <p>This preference will save a boolean value to {@link android.content.SharedPreferences}.
@@ -49,6 +58,14 @@ public class SwitchPreference extends TwoStatePreference {
     // Switch text for on and off states
     private CharSequence mSwitchOn;
     private CharSequence mSwitchOff;
+
+    //Sesl
+    private int mIsLargeLayout = 0;
+    private int mWidth = 0;
+    private static final int SWITCH_PREFERENCE_LAYOUT = 2;
+    private static final int SWITCH_PREFERENCE_LAYOUT_LARGE = 1;
+    private final DummyClickListener mClickListener = new DummyClickListener();
+    //sesl
 
     /**
      * Construct a new SwitchPreference with the given style options.
@@ -129,7 +146,7 @@ public class SwitchPreference extends TwoStatePreference {
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
         View switchView = holder.findViewById(AndroidResources.ANDROID_R_SWITCH_WIDGET);
-        syncSwitchView(switchView);
+        if (mIsLargeLayout != SWITCH_PREFERENCE_LAYOUT_LARGE) syncSwitchView(switchView);//sesl
         syncSummaryView(holder);
     }
 
@@ -209,25 +226,36 @@ public class SwitchPreference extends TwoStatePreference {
         }
 
         View switchView = view.findViewById(AndroidResources.ANDROID_R_SWITCH_WIDGET);
-        syncSwitchView(switchView);
+        if (mIsLargeLayout != 1) syncSwitchView(switchView);//sesl
+        if (isTalkBackIsRunning()) return;//sesl
 
         View summaryView = view.findViewById(android.R.id.summary);
         syncSummaryView(summaryView);
     }
 
     private void syncSwitchView(View view) {
-        if (view instanceof Switch) {
-            final Switch switchView = (Switch) view;
+        if (view instanceof SwitchCompat) {//sesl
+            final SwitchCompat switchView = (SwitchCompat) view;//sesl
             switchView.setOnCheckedChangeListener(null);
         }
         if (view instanceof Checkable) {
             ((Checkable) view).setChecked(mChecked);
         }
-        if (view instanceof Switch) {
-            final Switch switchView = (Switch) view;
+        if (view instanceof SwitchCompat) {//sesl
+            final SwitchCompat switchView = (SwitchCompat) view;//sesl
             switchView.setTextOn(mSwitchOn);
             switchView.setTextOff(mSwitchOff);
             switchView.setOnCheckedChangeListener(mListener);
+            //Sesl
+            if (switchView.isClickable()) {
+                switchView.setOnClickListener(mClickListener);
+            }
+
+            if (isTalkBackIsRunning()) {
+                ViewCompat.setBackground(switchView, null);
+                switchView.setClickable(false);
+            }
+            //sesl
         }
     }
 
@@ -246,4 +274,107 @@ public class SwitchPreference extends TwoStatePreference {
             SwitchPreference.this.setChecked(isChecked);
         }
     }
+
+    //Sesl
+    @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
+    public void onBindViewHolder(@NonNull PreferenceViewHolder preferenceViewHolder, int i10) {
+        mWidth = i10;
+        onBindViewHolder(preferenceViewHolder);
+        updateLayout(preferenceViewHolder.itemView);
+    }
+
+    private void updateLayout(View view) {
+        View widgetFrame = view.findViewById(R.id.widget_frame);
+        @SuppressLint("CutPasteId")
+        View androidWidgetFrame = view.findViewById(android.R.id.widget_frame);
+
+        View switchWidget = view.findViewById(R.id.switch_widget);
+        View androidSwitchWidget = view.findViewById(AndroidResources.ANDROID_R_SWITCH_WIDGET);
+
+        Configuration configuration = getContext().getResources().getConfiguration();
+        final int swDp = configuration.screenWidthDp;
+        final int isLargeLayout = ((swDp > 320 || configuration.fontScale < 1.1f)
+                && (swDp >= 411 || configuration.fontScale < 1.3f)) ? SWITCH_PREFERENCE_LAYOUT :
+                SWITCH_PREFERENCE_LAYOUT_LARGE;
+
+        TextView titleView = (TextView) view.findViewById(android.R.id.title);
+
+        if (isLargeLayout != 1) {
+            if (mIsLargeLayout != isLargeLayout) {
+                mIsLargeLayout = isLargeLayout;
+
+                androidWidgetFrame.setVisibility(View.VISIBLE);
+                widgetFrame.setVisibility(View.GONE);
+                titleView.requestLayout();
+            }
+            syncSwitchView(androidSwitchWidget);
+            return;
+        }
+
+        mIsLargeLayout = isLargeLayout;
+        float titleLen = titleView.getPaint().measureText(titleView.getText().toString());
+
+        TextView summaryView = (TextView) view.findViewById(android.R.id.summary);
+        float summaryLen = summaryView.getPaint().measureText(summaryView.getText().toString());
+
+        if (summaryView.getVisibility() == View.GONE) {
+            summaryLen = 0.0f;
+        }
+        final int switchSize =
+                getContext().getResources().getDimensionPixelSize(R.dimen.sesl_preference_item_switch_size);
+        float availableWidth =
+                ((mWidth - view.getPaddingEnd()) - view.getPaddingStart()) - switchSize;
+
+        if (titleLen >= availableWidth || summaryLen >= availableWidth) {
+            widgetFrame.setVisibility(View.VISIBLE);
+            androidWidgetFrame.setVisibility(View.GONE);
+            titleView.requestLayout();
+
+            SwitchCompat switchCompat = (SwitchCompat) switchWidget;
+            if (!switchCompat.canHapticFeedback(this.mChecked)
+                    && canHapticFeedback(this.mChecked, view, switchCompat)) {
+                switchCompat.performHapticFeedback(SeslHapticFeedbackConstantsReflector.semGetVibrationIndex(27));
+            }
+
+            syncSwitchView(switchWidget);
+
+            SwitchCompat androidSwitch = (SwitchCompat) androidSwitchWidget;
+            androidSwitch.setOnCheckedChangeListener(null);
+            androidSwitch.setCheckedWithoutAnimation(mChecked);
+            return;
+        }
+
+        androidWidgetFrame.setVisibility(View.VISIBLE);
+        widgetFrame.setVisibility(View.GONE);
+        titleView.requestLayout();
+        SwitchCompat switchCompatAndroidSwitch = (SwitchCompat) androidSwitchWidget;
+        if (!switchCompatAndroidSwitch.canHapticFeedback(mChecked)
+                && canHapticFeedback(this.mChecked, view, switchCompatAndroidSwitch)) {
+            switchCompatAndroidSwitch.performHapticFeedback(SeslHapticFeedbackConstantsReflector.semGetVibrationIndex(27));
+        }
+        syncSwitchView(androidSwitchWidget);
+        SwitchCompat switchCompatWidget = (SwitchCompat) switchWidget;
+        switchCompatWidget.setOnCheckedChangeListener(null);
+        switchCompatWidget.setCheckedWithoutAnimation(mChecked);
+    }
+
+    @SuppressLint("NewApi")
+    private boolean canHapticFeedback(boolean isChecked, View view, SwitchCompat switchCompat) {
+        return SUPPORT_TOUCH_FEEDBACK
+                && isChecked != switchCompat.isChecked()
+                && view.hasWindowFocus()
+                && SeslViewReflector.isVisibleToUser(view)
+                && !view.isTemporarilyDetached();
+    }
+
+    private class DummyClickListener implements View.OnClickListener {
+        DummyClickListener() {
+        }
+
+        @Override
+        public void onClick(View view) {
+            callClickListener();
+        }
+    }
+    //sesl
 }

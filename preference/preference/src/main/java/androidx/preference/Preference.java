@@ -23,29 +23,38 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.AbsSavedState;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.util.SeslRoundedCorner;
 import androidx.core.content.res.TypedArrayUtils;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
@@ -55,6 +64,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * <p><b>SESL variant</b></p><br>
  * The basic building block that represents an individual setting displayed to a user in the
  * preference hierarchy. This class provides the data that will be displayed to the user and has
  * a reference to the {@link SharedPreferences} or {@link PreferenceDataStore} instance that
@@ -90,6 +100,32 @@ import java.util.Set;
  * @attr name android:iconSpaceReserved
  */
 public class Preference implements Comparable<Preference> {
+
+    //Sesl
+    private static final String TAG = "SeslPreference";
+
+    protected static final float FONT_SCALE_LARGE = 1.3f;
+    protected static final float FONT_SCALE_MEDIUM = 1.1f;
+
+    private View mItemView;
+    private ColorStateList mSummaryColorStateList;
+    private ColorStateList mTextColorSecondary;
+
+    private boolean mChangedSummaryColor = false;
+    private boolean mChangedSummaryColorStateList = false;
+    private boolean mIsPreferenceRoundedBg = false;
+    boolean mIsRoundChanged = false;
+    private boolean mSubheaderRound = false;
+
+    int mSubheaderColor;
+    private int mSummaryColor;
+    private int mWhere = SeslRoundedCorner.ROUNDED_CORNER_NONE;
+
+    private boolean mIsDotVisible;
+
+    private String mDotDescription;
+    //sesl
+
     /**
      * Specify for {@link #setOrder(int)} if a specific order is not required.
      */
@@ -162,7 +198,7 @@ public class Preference implements Comparable<Preference> {
      */
     private boolean mShouldDisableView = true;
 
-    private int mLayoutResId = R.layout.preference;
+    private int mLayoutResId = R.layout.sesl_preference;//sesl
     private int mWidgetLayoutResId;
 
     private OnPreferenceChangeInternalListener mListener;
@@ -277,7 +313,18 @@ public class Preference implements Comparable<Preference> {
         mCopyingEnabled = TypedArrayUtils.getBoolean(a, R.styleable.Preference_enableCopying,
                 R.styleable.Preference_enableCopying, false);
 
+        mIsDotVisible = TypedArrayUtils.getBoolean(a, R.styleable.Preference_isDotVisible,
+                R.styleable.Preference_isDotVisible, false);//sesl5
+
         a.recycle();
+
+        //Sesl
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.textColorSecondary, outValue, true);
+        if (outValue.resourceId > 0) {
+            mTextColorSecondary = context.getResources().getColorStateList(outValue.resourceId);
+        }
+        //sesl
     }
 
     /**
@@ -519,12 +566,27 @@ public class Preference implements Comparable<Preference> {
             final CharSequence summary = getSummary();
             if (!TextUtils.isEmpty(summary)) {
                 summaryView.setText(summary);
+                //Sesl
+                if (mChangedSummaryColor) {
+                    summaryView.setTextColor(mSummaryColor);
+                    Log.d(TAG, "set Summary Color : " + mSummaryColor);
+                } else if (mChangedSummaryColorStateList) {
+                    summaryView.setTextColor(mSummaryColorStateList);
+                    Log.d(TAG, "set Summary ColorStateList : " + mSummaryColorStateList);
+                } else {
+                    if (mTextColorSecondary != null) {
+                        summaryView.setTextColor(mTextColorSecondary);
+                    }
+                }
+                //sesl
                 summaryView.setVisibility(View.VISIBLE);
                 summaryTextColor = summaryView.getCurrentTextColor();
             } else {
                 summaryView.setVisibility(View.GONE);
             }
         }
+
+        holder.setPreferenceBackgroundType(mIsPreferenceRoundedBg, mWhere, mSubheaderRound);//sesl
 
         final TextView titleView = (TextView) holder.findViewById(android.R.id.title);
         if (titleView != null) {
@@ -541,7 +603,16 @@ public class Preference implements Comparable<Preference> {
                     titleView.setTextColor(summaryTextColor);
                 }
             } else {
-                titleView.setVisibility(View.GONE);
+                //Sesl
+                if (!TextUtils.isEmpty(title) || !(this instanceof PreferenceCategory)) {
+                    titleView.setVisibility(View.GONE);
+                } else {
+                    titleView.setVisibility(View.VISIBLE);
+                    if (mHasSingleLineTitleAttr) {
+                        titleView.setSingleLine(mSingleLineTitle);
+                    }
+                }
+                //sesl
             }
         }
 
@@ -601,6 +672,7 @@ public class Preference implements Comparable<Preference> {
         if (copyingEnabled && !selectable) {
             ViewCompat.setBackground(itemView, null);
         }
+        mItemView = itemView;//sesl
     }
 
     /**
@@ -2275,11 +2347,91 @@ public class Preference implements Comparable<Preference> {
             // T has a clipboard overlay that automatically shows copied text, so only show a Toast
             // below T.
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-                Toast.makeText(mPreference.getContext(),
-                        mPreference.getContext().getString(R.string.preference_copied, summary),
-                        Toast.LENGTH_SHORT).show();
+            Toast.makeText(mPreference.getContext(),
+                    mPreference.getContext().getString(R.string.preference_copied,
+                            summary),
+                    Toast.LENGTH_SHORT).show();
             }
             return true;
         }
     }
+
+    //Sesl
+    boolean isTalkBackIsRunning() {
+        AccessibilityManager accessibilityManager
+                = (AccessibilityManager) getContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
+        String enabledServices = Settings.Secure.getString(getContext().getContentResolver(), "enabled_accessibility_services");
+
+        if (accessibilityManager != null && accessibilityManager.isEnabled() && enabledServices != null) {
+            return enabledServices.matches("(?i).*com.samsung.accessibility/com.samsung.android.app.talkback.TalkBackService.*")
+                    || enabledServices.matches("(?i).*com.samsung.android.accessibility.talkback/com.samsung.android.marvin.talkback.TalkBackService.*")
+                    || enabledServices.matches("(?i).*com.google.android.marvin.talkback.TalkBackService.*")
+                    || enabledServices.matches("(?i).*com.samsung.accessibility/com.samsung.accessibility.universalswitch.UniversalSwitchService.*");
+        }
+        return false;
+    }
+
+    void callClickListener() {
+        if (mOnClickListener != null) {
+            mOnClickListener.onPreferenceClick(this);
+        }
+    }
+
+    public void seslGetPreferenceBounds(Rect bounds) {
+        if (mItemView != null) {
+            mItemView.getGlobalVisibleRect(bounds);
+        }
+    }
+
+
+    public void seslSetSummaryColor(@ColorInt int color) {
+        mSummaryColor = color;
+        mChangedSummaryColor = true;
+        mChangedSummaryColorStateList = false;
+    }
+
+    public void seslSetSummaryColor(ColorStateList color) {
+        mSummaryColorStateList = color;
+        mChangedSummaryColorStateList = true;
+        mChangedSummaryColor = false;
+    }
+
+    public void seslSetRoundedBg(int where) {
+        mIsPreferenceRoundedBg = true;
+        mWhere = where;
+        mSubheaderRound = false;
+        mIsRoundChanged = true;
+    }
+
+    public void seslSetSubheaderRoundedBackground(int where) {
+        mIsPreferenceRoundedBg = true;
+        mWhere = where;
+        mSubheaderRound = true;
+        mIsRoundChanged = true;
+    }
+
+    public void seslSetSubheaderColor(@ColorInt int color) {
+        mSubheaderColor = color;
+    }
+
+    public final boolean getDotVisibility() {//sesl5
+        return mIsDotVisible;
+    }
+
+    public void setDotVisibility(boolean isVisible) {//sesl5
+        if (mIsDotVisible != isVisible) {
+            mIsDotVisible = isVisible;
+            notifyChanged();
+        }
+    }
+
+    public void setDotContentDescription(@Nullable String str) {//sesl5
+        mDotDescription = str;
+        notifyChanged();
+    }
+
+    public final String getDotContentDescription() {//sesl5
+        return mDotDescription;
+    }
+    //sesl
 }

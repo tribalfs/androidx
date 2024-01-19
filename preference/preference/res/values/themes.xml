@@ -15,28 +15,31 @@
   ~ limitations under the License
   -->
 
+<!--SESL variant-->
 <resources>
     <style name="PreferenceThemeOverlay" parent="BasePreferenceThemeOverlay">
         <!-- When binding the view we attempt to resolve colorAccent and set that instead - we only
         end up using this color if we are not inside an AppCompat theme. -->
-        <item name="preferenceCategoryTitleTextColor">@color/preference_fallback_accent_color</item>
+        <item name="preferenceCategoryTitleTextColor">?android:attr/colorAccent<!--sesl--></item>
     </style>
 
     <style name="BasePreferenceThemeOverlay">
-        <item name="android:scrollbars">vertical</item>
-        <item name="checkBoxPreferenceStyle">@style/Preference.CheckBoxPreference.Material</item>
-        <item name="dialogPreferenceStyle">@style/Preference.DialogPreference.Material</item>
-        <item name="dropdownPreferenceStyle">@style/Preference.DropDown.Material</item>
-        <item name="editTextPreferenceStyle">@style/Preference.DialogPreference.EditTextPreference.Material</item>
-        <item name="preferenceCategoryStyle">@style/Preference.Category.Material</item>
-        <item name="preferenceFragmentCompatStyle">@style/PreferenceFragment.Material</item>
-        <item name="preferenceFragmentListStyle">@style/PreferenceFragmentList.Material</item>
-        <item name="preferenceFragmentStyle">@style/PreferenceFragment.Material</item>
-        <item name="preferenceScreenStyle">@style/Preference.PreferenceScreen.Material</item>
-        <item name="preferenceStyle">@style/Preference.Material</item>
-        <item name="seekBarPreferenceStyle">@style/Preference.SeekBarPreference.Material</item>
-        <item name="switchPreferenceCompatStyle">@style/Preference.SwitchPreferenceCompat.Material</item>
-        <item name="switchPreferenceStyle">@style/Preference.SwitchPreference.Material</item>
+        <!--<item name="android:scrollbars">vertical</item>--><!--sesl-->
+        <item name="checkBoxPreferenceStyle">@style/Preference.CheckBoxPreference<!--sesl--></item>
+        <item name="dialogPreferenceStyle">@style/Preference.DialogPreference<!--sesl--></item>
+        <item name="dropdownPreferenceStyle">@style/Preference.DropDown<!--sesl--></item>
+        <item name="editTextPreferenceStyle">@style/Preference.DialogPreference.EditTextPreference<!--sesl--></item>
+        <item name="preferenceCategoryStyle">@style/Preference.Category<!--sesl--></item>
+        <item name="preferenceFragmentCompatStyle">@style/PreferenceFragment<!--sesl--></item>
+        <item name="preferenceFragmentListStyle">@style/PreferenceFragmentList<!--sesl--></item>
+        <item name="preferenceFragmentStyle">@style/PreferenceFragment<!--sesl--></item>
+        <item name="preferenceScreenStyle">@style/Preference.PreferenceScreen<!--sesl--></item>
+        <item name="preferenceStyle">@style/Preference<!--sesl--></item>
+        <item name="ringtonePreferenceStyle">@style/Preference.RingtonePreference<!--sesl--></item>
+        <item name="seekBarDialogPreferenceStyle">@style/Preference.DialogPreference.SeekBarPreferenceCompat<!--sesl--></item>
+        <item name="seekBarPreferenceStyle">@style/Preference.SeekBarPreference<!--sesl--></item>
+        <item name="switchPreferenceCompatStyle">@style/Preference.SwitchPreferenceCompat<!--sesl--></item>
+        <item name="switchPreferenceStyle">@style/Preference.SwitchPreference<!--sesl--></item>
         <item name="preferenceCategoryTitleTextAppearance">@style/TextAppearance.AppCompat.Body2</item>
     </style>
 

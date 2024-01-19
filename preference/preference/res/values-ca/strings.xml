@@ -8,4 +8,6 @@
     <string name="copy" msgid="6083905920877235314">"Copia"</string>
     <string name="preference_copied" msgid="6685851473431805375">"\"<xliff:g id="SUMMARY">%1$s</xliff:g>\" s\'ha copiat al porta-retalls"</string>
     <string name="not_set" msgid="6573031135582639649">"No definit"</string>
+
+    <string name="sesl_preferencecategory_added_title">Encapçalament</string>
 </resources>

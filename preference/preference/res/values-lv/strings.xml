@@ -8,4 +8,6 @@
     <string name="copy" msgid="6083905920877235314">"Kopēt"</string>
     <string name="preference_copied" msgid="6685851473431805375">"Preference “<xliff:g id="SUMMARY">%1$s</xliff:g>” ir kopēta starpliktuvē."</string>
     <string name="not_set" msgid="6573031135582639649">"Nav iestatīts"</string>
+
+    <string name="sesl_preferencecategory_added_title">Galvene</string>
 </resources>

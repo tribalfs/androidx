@@ -8,4 +8,7 @@
     <string name="copy" msgid="6083905920877235314">"Скопіювати"</string>
     <string name="preference_copied" msgid="6685851473431805375">"\"<xliff:g id="SUMMARY">%1$s</xliff:g>\": скопійовано в буфер обміну."</string>
     <string name="not_set" msgid="6573031135582639649">"Не налаштовано"</string>
+
+    <string name="sesl_preferencecategory_added_title">Заголовок</string>
+    <string name="sesl_preferecne_badge_description">Нове сповіщення</string>
 </resources>

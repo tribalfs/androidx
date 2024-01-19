@@ -8,4 +8,6 @@
     <string name="copy" msgid="6083905920877235314">"복사"</string>
     <string name="preference_copied" msgid="6685851473431805375">"\'<xliff:g id="SUMMARY">%1$s</xliff:g>\'이(가) 클립보드에 복사되었습니다."</string>
     <string name="not_set" msgid="6573031135582639649">"설정되지 않음"</string>
+
+    <string name="sesl_preferencecategory_added_title">머리글</string>
 </resources>

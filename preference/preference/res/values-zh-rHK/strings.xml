@@ -8,4 +8,6 @@
     <string name="copy" msgid="6083905920877235314">"複製"</string>
     <string name="preference_copied" msgid="6685851473431805375">"「<xliff:g id="SUMMARY">%1$s</xliff:g>」已複製到剪貼簿。"</string>
     <string name="not_set" msgid="6573031135582639649">"未設定"</string>
+
+    <string name="sesl_preferencecategory_added_title">標題</string>
 </resources>

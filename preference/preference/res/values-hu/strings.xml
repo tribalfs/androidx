@@ -8,4 +8,6 @@
     <string name="copy" msgid="6083905920877235314">"Másolás"</string>
     <string name="preference_copied" msgid="6685851473431805375">"„<xliff:g id="SUMMARY">%1$s</xliff:g>” a vágólapra lett másolva."</string>
     <string name="not_set" msgid="6573031135582639649">"Nincs beállítva"</string>
+
+    <string name="sesl_preferencecategory_added_title">Fejléc</string>
 </resources>

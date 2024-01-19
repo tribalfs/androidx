@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="v7_preference_on" msgid="89551595707643515">"AAN"</string>
@@ -8,4 +7,6 @@
     <string name="copy" msgid="6083905920877235314">"Kopiëren"</string>
     <string name="preference_copied" msgid="6685851473431805375">"\'<xliff:g id="SUMMARY">%1$s</xliff:g>\' is gekopieerd naar het klembord."</string>
     <string name="not_set" msgid="6573031135582639649">"Niet ingesteld"</string>
+
+    <string name="sesl_preferencecategory_added_title">Koptekst</string>
 </resources>

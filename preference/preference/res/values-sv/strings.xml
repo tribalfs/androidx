@@ -8,4 +8,6 @@
     <string name="copy" msgid="6083905920877235314">"Kopiera"</string>
     <string name="preference_copied" msgid="6685851473431805375">"<xliff:g id="SUMMARY">%1$s</xliff:g> har kopierats till Urklipp."</string>
     <string name="not_set" msgid="6573031135582639649">"Inte angett"</string>
+
+    <string name="sesl_preferencecategory_added_title">Sidhuvud</string>
 </resources>

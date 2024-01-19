@@ -8,4 +8,7 @@
     <string name="copy" msgid="6083905920877235314">"复制"</string>
     <string name="preference_copied" msgid="6685851473431805375">"已将“<xliff:g id="SUMMARY">%1$s</xliff:g>”复制到剪贴板。"</string>
     <string name="not_set" msgid="6573031135582639649">"未设置"</string>
+
+    <string name="sesl_preferencecategory_added_title">标题</string>
+    <string name="sesl_preferecne_badge_description">新通知</string>
 </resources>

@@ -8,4 +8,7 @@
     <string name="copy" msgid="6083905920877235314">"Kopyahin"</string>
     <string name="preference_copied" msgid="6685851473431805375">"Nakopya sa clipboard ang \"<xliff:g id="SUMMARY">%1$s</xliff:g>.\""</string>
     <string name="not_set" msgid="6573031135582639649">"Hindi nakatakda"</string>
+
+    <string name="sesl_preferencecategory_added_title">Header</string>
+    <string name="sesl_preferecne_badge_description">Bagong notification</string>
 </resources>

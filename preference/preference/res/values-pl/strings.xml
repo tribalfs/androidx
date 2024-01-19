@@ -8,4 +8,6 @@
     <string name="copy" msgid="6083905920877235314">"Kopiuj"</string>
     <string name="preference_copied" msgid="6685851473431805375">"Skopiowano „<xliff:g id="SUMMARY">%1$s</xliff:g>” do schowka."</string>
     <string name="not_set" msgid="6573031135582639649">"Nie ustawiono"</string>
+
+    <string name="sesl_preferencecategory_added_title">Nagłówek</string>
 </resources>

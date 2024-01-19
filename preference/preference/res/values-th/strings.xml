@@ -8,4 +8,7 @@
     <string name="copy" msgid="6083905920877235314">"คัดลอก"</string>
     <string name="preference_copied" msgid="6685851473431805375">"คัดลอก \"<xliff:g id="SUMMARY">%1$s</xliff:g>\" ไปยังคลิปบอร์ดแล้ว"</string>
     <string name="not_set" msgid="6573031135582639649">"ไม่ได้ตั้งค่า"</string>
+
+    <string name="sesl_preferencecategory_added_title">ส่วนหัว</string>
+    <string name="sesl_preferecne_badge_description">การแจ้งเตือนใหม่</string>
 </resources>

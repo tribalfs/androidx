@@ -8,4 +8,6 @@
     <string name="copy" msgid="6083905920877235314">"Kopioi"</string>
     <string name="preference_copied" msgid="6685851473431805375">"<xliff:g id="SUMMARY">%1$s</xliff:g> kopioitiin leikepöydälle."</string>
     <string name="not_set" msgid="6573031135582639649">"Ei asetettu"</string>
+
+    <string name="sesl_preferencecategory_added_title">Otsikko</string>
 </resources>

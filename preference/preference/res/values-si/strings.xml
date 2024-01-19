@@ -8,4 +8,6 @@
     <string name="copy" msgid="6083905920877235314">"පිටපත් කරන්න"</string>
     <string name="preference_copied" msgid="6685851473431805375">"\"<xliff:g id="SUMMARY">%1$s</xliff:g>\" පසුරු පුවරුවට පිටපත් කරන ලදී."</string>
     <string name="not_set" msgid="6573031135582639649">"සකසා නැත"</string>
+
+    <string name="sesl_preferencecategory_added_title">ශීර්ෂකය</string>
 </resources>

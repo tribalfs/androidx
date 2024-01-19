@@ -27,8 +27,10 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatSpinner;
 
 /**
+ * <p><b>SESL variant</b></p><br>
  * A {@link ListPreference} that presents the options in a drop down menu rather than a dialog.
  */
 public class DropDownPreference extends ListPreference {
@@ -36,7 +38,7 @@ public class DropDownPreference extends ListPreference {
     private final Context mContext;
     private final ArrayAdapter mAdapter;
 
-    private Spinner mSpinner;
+    private AppCompatSpinner mSpinner;//sesl
 
     private final OnItemSelectedListener mItemSelectedListener = new OnItemSelectedListener() {
         @Override
@@ -99,7 +101,7 @@ public class DropDownPreference extends ListPreference {
      */
     @NonNull
     protected ArrayAdapter createAdapter() {
-        return new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_dropdown_item);
+        return new ArrayAdapter<>(mContext, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);//sesl
     }
 
     @SuppressWarnings("unchecked")
@@ -130,7 +132,15 @@ public class DropDownPreference extends ListPreference {
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         mSpinner = holder.itemView.findViewById(R.id.spinner);
-        mSpinner.setAdapter(mAdapter);
+        //Sesl
+        mSpinner.setSoundEffectsEnabled(false);
+        mSpinner.setDropDownHorizontalOffset(getContext().getResources()
+                .getDimensionPixelOffset(androidx.appcompat.R.dimen.sesl_list_dropdown_item_start_padding));
+
+        if (!mAdapter.equals(mSpinner.getAdapter())) {
+            mSpinner.setAdapter(mAdapter);
+        }
+        //sesl
         mSpinner.setOnItemSelectedListener(mItemSelectedListener);
         mSpinner.setSelection(findSpinnerIndexOfValue(getValue()));
         super.onBindViewHolder(holder);
@@ -146,6 +156,11 @@ public class DropDownPreference extends ListPreference {
             }
         }
         return Spinner.INVALID_POSITION;
+    }
+
+    //sesl
+    public AppCompatSpinner seslGetSpinner() {
+        return mSpinner;
     }
 }
 

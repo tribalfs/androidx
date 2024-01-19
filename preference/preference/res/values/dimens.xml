@@ -12,7 +12,20 @@
     <dimen name="preference_seekbar_value_minWidth">36dp</dimen>
     <!-- The padding at the start of the dropdown menu within a DropDownPreference
     TODO: Pending UX discussion in b/110975540 - keeping old behaviour for now.-->
-    <dimen name="preference_dropdown_padding_start">0dp</dimen>
+    <dimen name="preference_dropdown_padding_start">72dp<!--sesl--></dimen>
+<!--
     <dimen name="preferences_header_width">384dp</dimen>
     <dimen name="preferences_detail_width">300dp</dimen>
+-->
+
+    <!--Sesl-->
+    <dimen name="sesl_preference_dot_frame_size">10dp</dimen>
+    <dimen name="sesl_preference_item_icon_size">36dp</dimen>
+    <dimen name="sesl_preference_item_padding_vertical">14dp</dimen>
+    <dimen name="sesl_preference_item_switch_size">69dp</dimen>
+    <dimen name="sesl_preference_screen_item_switch_size">74dp</dimen>
+    <dimen name="sesl_preference_seekbar_value_width">36dp</dimen>
+    <dimen name="sesl_preference_switch_padding_vertical">12dp</dimen>
+    <dimen name="sesl_list_switch_sreen_start_padding">2dp</dimen>
+    <!--sesl-->
 </resources>

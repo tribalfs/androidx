@@ -18,11 +18,10 @@ package androidx.preference;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +29,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * An adapter that connects a {@link RecyclerView} to the {@link Preference}s contained in
  * an associated {@link PreferenceGroup}.
  *
@@ -49,6 +48,17 @@ import java.util.List;
 public class PreferenceGroupAdapter extends RecyclerView.Adapter<PreferenceViewHolder>
         implements Preference.OnPreferenceChangeInternalListener,
         PreferenceGroup.PreferencePositionCallback {
+
+    //Sesl
+    private static final String TAG = "PreferenceGroupAdapter";
+    private final int mCategoryLayoutId = R.layout.sesl_preference_category;
+    private boolean mIsCategoryAfter = false;
+    private Preference mNextGroupPreference = null;
+
+    private List<Integer> mAccessibilityPositionTable;
+    private ViewGroup mParent;
+    private int mParentWidth = 0;
+    //sesl
 
     /**
      * The {@link PreferenceGroup} that we build a list of preferences from. This should
@@ -96,6 +106,7 @@ public class PreferenceGroupAdapter extends RecyclerView.Adapter<PreferenceViewH
         mPreferences = new ArrayList<>();
         mVisiblePreferences = new ArrayList<>();
         mPreferenceResourceDescriptors = new ArrayList<>();
+        mAccessibilityPositionTable = new ArrayList<>();//sesl
 
         if (mPreferenceGroup instanceof PreferenceScreen) {
             setHasStableIds(((PreferenceScreen) mPreferenceGroup).shouldUseGeneratedIds());
@@ -132,6 +143,7 @@ public class PreferenceGroupAdapter extends RecyclerView.Adapter<PreferenceViewH
 
         mVisiblePreferences = visiblePreferenceList;
 
+        mAccessibilityPositionTable = createAccessibilityPositionTable();//sesl
         final PreferenceManager preferenceManager = mPreferenceGroup.getPreferenceManager();
         if (preferenceManager != null
                 && preferenceManager.getPreferenceComparisonCallback() != null) {
@@ -187,6 +199,29 @@ public class PreferenceGroupAdapter extends RecyclerView.Adapter<PreferenceViewH
         for (int i = 0; i < groupSize; i++) {
             final Preference preference = group.getPreference(i);
 
+            //Sesl
+            Preference mNextPreference;
+            if (i == groupSize - 1) {
+                mNextPreference = null;
+                if (mIsCategoryAfter && preference == mNextGroupPreference) {
+                    mNextGroupPreference = null;
+                }
+            } else {
+                mNextPreference = group.getPreference(i + 1);
+                if (preference == mNextGroupPreference) {
+                    mNextGroupPreference = null;
+                }
+            }
+            boolean isPreferenceCategory = preference instanceof PreferenceCategory;
+            if (isPreferenceCategory && !preference.mIsRoundChanged) {
+                preference.seslSetSubheaderRoundedBackground(15);
+            }
+            if (isPreferenceCategory && TextUtils.isEmpty(preference.getTitle())
+                    && mCategoryLayoutId == preference.getLayoutResource()) {
+                preference.setLayoutResource(R.layout.sesl_preference_category_empty);
+            }
+            //sesl
+
             preferences.add(preference);
 
             final PreferenceResourceDescriptor descriptor = new PreferenceResourceDescriptor(
@@ -198,6 +233,7 @@ public class PreferenceGroupAdapter extends RecyclerView.Adapter<PreferenceViewH
             if (preference instanceof PreferenceGroup) {
                 final PreferenceGroup nestedGroup = (PreferenceGroup) preference;
                 if (nestedGroup.isOnSameScreenAsChildren()) {
+                    mNextGroupPreference = mNextPreference;//sesl
                     flattenPreferenceGroup(preferences, nestedGroup);
                 }
             }
@@ -384,23 +420,25 @@ public class PreferenceGroupAdapter extends RecyclerView.Adapter<PreferenceViewH
     @Override
     @NonNull
     public PreferenceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        mParent = parent;//sesl
+
         final PreferenceResourceDescriptor descriptor = mPreferenceResourceDescriptors.get(
                 viewType);
         final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        TypedArray a
-                = parent.getContext().obtainStyledAttributes(null, R.styleable.BackgroundStyle);
-        Drawable background
-                = a.getDrawable(R.styleable.BackgroundStyle_android_selectableItemBackground);
-        if (background == null) {
-            background = AppCompatResources.getDrawable(parent.getContext(),
-                    android.R.drawable.list_selector_background);
-        }
-        a.recycle();
+//        TypedArray a
+//                = parent.getContext().obtainStyledAttributes(null, R.styleable.BackgroundStyle);
+//        Drawable background
+//                = a.getDrawable(R.styleable.BackgroundStyle_android_selectableItemBackground);
+//        if (background == null) {
+//            background = AppCompatResources.getDrawable(parent.getContext(),
+//                    android.R.drawable.list_selector_background);
+//        }
+//        a.recycle();
 
         final View view = inflater.inflate(descriptor.mLayoutResId, parent, false);
-        if (view.getBackground() == null) {
-            ViewCompat.setBackground(view, background);
-        }
+//        if (view.getBackground() == null) {
+//            ViewCompat.setBackground(view, background);
+//        }
 
         final ViewGroup widgetFrame = view.findViewById(android.R.id.widget_frame);
         if (widgetFrame != null) {
@@ -411,6 +449,19 @@ public class PreferenceGroupAdapter extends RecyclerView.Adapter<PreferenceViewH
             }
         }
 
+        //Sesl
+        View badgeFrame = view.findViewById(R.id.badge_frame);
+        if (badgeFrame != null) {
+            if (descriptor.mIsDotVisibled) {
+                badgeFrame.setVisibility(View.VISIBLE);
+            } else {
+                badgeFrame.setVisibility(View.GONE);
+            }
+            if (descriptor.mDotDescription != null) {
+                badgeFrame.setContentDescription(descriptor.mDotDescription);
+            }
+        }
+        //sesl
         return new PreferenceViewHolder(view);
     }
 
@@ -418,6 +469,22 @@ public class PreferenceGroupAdapter extends RecyclerView.Adapter<PreferenceViewH
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder, int position) {
         final Preference preference = getItem(position);
         holder.resetState();
+        //Sesl
+        if (isSwitchLayout(preference)) {
+            int width = mParent.getWidth();
+            mParentWidth = width;
+            if (preference instanceof SwitchPreference) {
+                ((SwitchPreference) preference).onBindViewHolder(holder, width);
+                return;
+            } else if (preference instanceof SwitchPreferenceCompat) {
+                ((SwitchPreferenceCompat) preference).onBindViewHolder(holder, width);
+                return;
+            } else {
+                preference.onBindViewHolder(holder);
+                return;
+            }
+        }
+        //sesl
         preference.onBindViewHolder(holder);
     }
 
@@ -456,11 +523,15 @@ public class PreferenceGroupAdapter extends RecyclerView.Adapter<PreferenceViewH
         int mLayoutResId;
         int mWidgetLayoutResId;
         String mClassName;
+        String mDotDescription;//sesl
+        boolean mIsDotVisibled;//sesl
 
         PreferenceResourceDescriptor(@NonNull Preference preference) {
             mClassName = preference.getClass().getName();
             mLayoutResId = preference.getLayoutResource();
             mWidgetLayoutResId = preference.getWidgetLayoutResource();
+            mIsDotVisibled = preference.getDotVisibility();//sesl
+            mDotDescription = preference.getDotContentDescription();//sesl
         }
 
         @Override
@@ -471,16 +542,84 @@ public class PreferenceGroupAdapter extends RecyclerView.Adapter<PreferenceViewH
             final PreferenceResourceDescriptor other = (PreferenceResourceDescriptor) o;
             return mLayoutResId == other.mLayoutResId
                     && mWidgetLayoutResId == other.mWidgetLayoutResId
-                    && TextUtils.equals(mClassName, other.mClassName);
+                    && TextUtils.equals(mClassName, other.mClassName)
+                    && mIsDotVisibled == other.mIsDotVisibled//sesl
+                    && TextUtils.equals(mDotDescription, other.mDotDescription);//sesl
         }
 
         @Override
         public int hashCode() {
-            int result = 17;
+            int result = 527/*COLUMN_RULE_STYLE*/;
             result = 31 * result + mLayoutResId;
             result = 31 * result + mWidgetLayoutResId;
             result = 31 * result + mClassName.hashCode();
             return result;
         }
     }
+
+    //Sesl
+    final List<Integer> createAccessibilityPositionTable() {
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        int i = 0;
+        for (Preference preference : this.mVisiblePreferences) {
+            arrayList.add(i);
+            if (preference.getLayoutResource() != R.layout.sesl_preference_category_empty) {
+                i++;
+            }
+        }
+        if (arrayList.size() > 0
+                && ( arrayList.get(arrayList.size() - 1) >= mVisiblePreferences.size())) {
+            Log.w(TAG,
+                    "accessibilityPosition over visible size | last " + arrayList.get(arrayList.size() - 1) +
+                            " vsize " + mVisiblePreferences.size());
+
+            for (int j = 0; j < arrayList.size(); j++) {
+                arrayList.set(j, j);
+            }
+        }
+        return arrayList;
+    }
+
+    @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
+    public boolean isSwitchLayout(@NonNull Preference preference) {
+        if (preference.getLayoutResource() == R.layout.sesl_preference_switch
+                && preference.getWidgetLayoutResource() == R.layout.sesl_preference_widget_switch) {
+            return true;
+        }
+        return preference.getLayoutResource() == R.layout.sesl_preference_switch_screen
+                && preference.getWidgetLayoutResource() == R.layout.sesl_switch_preference_screen_widget_divider;
+    }
+
+    @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
+    public int getListWidth() {
+        return mParentWidth;
+    }
+
+    @Override
+    public int seslGetAccessibilityItemCount() {
+        if (mAccessibilityPositionTable != null && mAccessibilityPositionTable.size() > 0) {
+            return  mAccessibilityPositionTable.get(mAccessibilityPositionTable.size() - 1) + 1;
+        }
+        int i = 0;
+        for (Preference preference : mVisiblePreferences) {
+            if (preference.getLayoutResource() == R.layout.sesl_preference_category_empty) {
+                i++;
+            }
+        }
+        return getItemCount() - i;
+    }
+
+    @Override
+    public boolean seslUseCustomAccessibilityPosition() {
+        return true;
+    }
+
+    @Override
+    public int seslGetAccessibilityItemPosition(int i) {
+        if (mAccessibilityPositionTable == null || i >= mAccessibilityPositionTable.size()) {
+            return -1;
+        }
+        return this.mAccessibilityPositionTable.get(i);
+    }
+    //sesl
 }

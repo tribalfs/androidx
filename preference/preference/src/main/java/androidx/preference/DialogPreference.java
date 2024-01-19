@@ -17,17 +17,24 @@
 package androidx.preference;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.TextView;
 
+import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.TypedArrayUtils;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * A base class for {@link Preference}s that are dialog-based. When clicked, these
  * preferences will open a dialog showing the actual preference controls.
  *
@@ -281,4 +288,56 @@ public abstract class DialogPreference extends Preference {
         @Nullable
         <T extends Preference> T findPreference(@NonNull CharSequence key);
     }
+
+    //Sesl
+    /**
+     * Binds views in the content View of the dialog to data.
+     * <p>
+     * Make sure to call through to the superclass implementation.
+     *
+     * @param view The content View of the dialog, if it is custom.
+     */
+    @CallSuper
+    protected void onBindDialogView(View view) {
+        View dialogMessageView = view.findViewById(android.R.id.message);
+
+        if (dialogMessageView != null) {
+            final CharSequence message = getDialogMessage();
+            int newVisibility = View.GONE;
+
+            if (!TextUtils.isEmpty(message)) {
+                if (dialogMessageView instanceof TextView) {
+                    ((TextView) dialogMessageView).setText(message);
+                }
+
+                newVisibility = View.VISIBLE;
+            }
+
+            if (dialogMessageView.getVisibility() != newVisibility) {
+                dialogMessageView.setVisibility(newVisibility);
+            }
+        }
+    }
+
+
+    /**
+     * Prepares the dialog builder to be shown when the preference is clicked.
+     * Use this to set custom properties on the dialog.
+     * <p>
+     * Do not {@link AlertDialog.Builder#create()} or
+     * {@link AlertDialog.Builder#show()}.
+     */
+    protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
+    }
+
+    /**
+     * Called when the dialog is dismissed and should be used to save data to
+     * the {@link SharedPreferences}.
+     *
+     * @param positiveResult Whether the positive button was clicked (true), or
+     *            the negative button was clicked or the dialog was canceled (false).
+     */
+    protected void onDialogClosed(boolean positiveResult) {
+    }
+    //sesl
 }

@@ -16,6 +16,8 @@
 
 package androidx.preference;
 
+import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
+
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
@@ -31,6 +33,8 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * A {@link RecyclerView.ViewHolder} class which caches views associated with the default
  * {@link Preference} layouts. Cached views can be retrieved by calling {@link #findViewById(int)}.
  */
@@ -41,6 +45,12 @@ public class PreferenceViewHolder extends RecyclerView.ViewHolder {
     private final SparseArray<View> mCachedViews = new SparseArray<>(4);
     private boolean mDividerAllowedAbove;
     private boolean mDividerAllowedBelow;
+    //Sesl
+    int mDividerStartOffset = 0;
+    private int mDrawCorners;
+    private boolean mDrawBackground = false;
+    private boolean mSubheaderRound = false;
+    //sesl
 
     PreferenceViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -154,4 +164,37 @@ public class PreferenceViewHolder extends RecyclerView.ViewHolder {
             }
         }
     }
+
+    //Sesl
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    void setPreferenceBackgroundType(boolean drawBackground,
+            int drawCorners, boolean subheaderRound) {
+        mDrawBackground = drawBackground;
+        mDrawCorners = drawCorners;
+        mSubheaderRound = subheaderRound;
+    }
+
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    int getDrawCorners() {
+        return mDrawCorners;
+    }
+
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    boolean isBackgroundDrawn() {
+        return mDrawBackground;
+    }
+
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    boolean isDrawSubheaderRound() {
+        return mSubheaderRound;
+    }
+
+    public void seslSetDividerStartOffset(int i) {
+        mDividerStartOffset = i;
+    }
+
+    public int seslGetDividerLeftOffset() {
+        return mDividerStartOffset;
+    }
+    //sesl
 }

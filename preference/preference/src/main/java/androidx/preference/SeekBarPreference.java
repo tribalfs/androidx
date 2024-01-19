@@ -1,19 +1,3 @@
-/*
- * Copyright 2018 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package androidx.preference;
 
 import android.content.Context;
@@ -24,27 +8,25 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
+import androidx.appcompat.widget.SeslSeekBar;
+import androidx.appcompat.widget.SeslSeekBar.OnSeekBarChangeListener;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * Preference based on android.preference.SeekBarPreference but uses support preference as a base
- * . It contains a title and a {@link SeekBar} and an optional SeekBar value {@link TextView}.
+ * . It contains a title and a {@link SeslSeekBar}
  * The actual preference layout is customizable by setting {@code android:layout} on the
  * preference widget layout or {@code seekBarPreferenceStyle} attribute.
  *
- * <p>The {@link SeekBar} within the preference can be defined adjustable or not by setting {@code
+ * <p>The {@link SeslSeekBar} within the preference can be defined adjustable or not by setting {@code
  * adjustable} attribute. If adjustable, the preference will be responsive to DPAD left/right keys.
  * Otherwise, it skips those keys.
  *
- * <p>The {@link SeekBar} value view can be shown or disabled by setting {@code showSeekBarValue}
- * attribute to true or false, respectively.
- *
- * <p>Other {@link SeekBar} specific attributes (e.g. {@code title, summary, defaultValue, min,
+ * <p>Other {@link SeslSeekBar} specific attributes (e.g. {@code title, summary, defaultValue, min,
  * max})
  * can be set directly on the preference widget layout.
  */
@@ -52,16 +34,17 @@ public class SeekBarPreference extends Preference {
 
     private static final String TAG = "SeekBarPreference";
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    int mSeekBarValue;
+            int mSeekBarValue;
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    int mMin;
+            int mMin;
     private int mMax;
     private int mSeekBarIncrement;
     @SuppressWarnings("WeakerAccess") /* synthetic access */
     boolean mTrackingTouch;
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    SeekBar mSeekBar;
-    private TextView mSeekBarValueTextView;
+    SeslSeekBar mSeekBar;//sesl
+    //private TextView mSeekBarValueTextView;//sesl
+    OnSeekBarPreferenceChangeListener mOnSeekBarPreferenceChangeListener;//sesl
     // Whether the SeekBar should respond to the left/right keys
     @SuppressWarnings("WeakerAccess") /* synthetic access */
     boolean mAdjustable;
@@ -72,36 +55,51 @@ public class SeekBarPreference extends Preference {
     @SuppressWarnings("WeakerAccess") /* synthetic access */
     boolean mUpdatesContinuously;
     /**
-     * Listener reacting to the {@link SeekBar} changing value by the user
+     * Listener reacting to the {@link SeslSeekBar} changing value by the user
      */
     private final OnSeekBarChangeListener mSeekBarChangeListener = new OnSeekBarChangeListener() {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        public void onProgressChanged(SeslSeekBar seekBar, int progress, boolean fromUser) {//sesl
             if (fromUser && (mUpdatesContinuously || !mTrackingTouch)) {
                 syncValueInternal(seekBar);
-            } else {
+            } /*else {//sesl
                 // We always want to update the text while the seekbar is being dragged
                 updateLabelValue(progress + mMin);
+            }*/
+            //Sesl
+            if (mOnSeekBarPreferenceChangeListener != null) {
+                mOnSeekBarPreferenceChangeListener.onProgressChanged(seekBar, progress, fromUser);
             }
+            //sesl
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
+        public void onStartTrackingTouch(SeslSeekBar seekBar) {
             mTrackingTouch = true;
+            //Sesl
+            if (mOnSeekBarPreferenceChangeListener != null) {
+                mOnSeekBarPreferenceChangeListener.onStartTrackingTouch(seekBar);
+            }
+            //sesl
         }
 
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
+        public void onStopTrackingTouch(SeslSeekBar seekBar) {
             mTrackingTouch = false;
             if (seekBar.getProgress() + mMin != mSeekBarValue) {
                 syncValueInternal(seekBar);
             }
+            //Sesl
+            if (mOnSeekBarPreferenceChangeListener != null) {
+                mOnSeekBarPreferenceChangeListener.onStopTrackingTouch(seekBar);
+            }
+            //sesl
         }
     };
 
     /**
      * Listener reacting to the user pressing DPAD left/right keys if {@code
-     * adjustable} attribute is set to true; it transfers the key presses to the {@link SeekBar}
+     * adjustable} attribute is set to true; it transfers the key presses to the {@link SeslSeekBar}
      * to be handled accordingly.
      */
     private final View.OnKeyListener mSeekBarKeyListener = new View.OnKeyListener() {
@@ -169,14 +167,15 @@ public class SeekBarPreference extends Preference {
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
         holder.itemView.setOnKeyListener(mSeekBarKeyListener);
-        mSeekBar = (SeekBar) holder.findViewById(R.id.seekbar);
-        mSeekBarValueTextView = (TextView) holder.findViewById(R.id.seekbar_value);
-        if (mShowSeekBarValue) {
-            mSeekBarValueTextView.setVisibility(View.VISIBLE);
-        } else {
-            mSeekBarValueTextView.setVisibility(View.GONE);
-            mSeekBarValueTextView = null;
-        }
+        mSeekBar = (SeslSeekBar) holder.findViewById(R.id.seekbar);//sesl
+//       Removed in sesl
+//        mSeekBarValueTextView = (TextView) holder.findViewById(R.id.seekbar_value);
+//        if (mShowSeekBarValue) {
+//            mSeekBarValueTextView.setVisibility(View.VISIBLE);
+//        } else {
+//            mSeekBarValueTextView.setVisibility(View.GONE);
+//            mSeekBarValueTextView = null;
+//        }
 
         if (mSeekBar == null) {
             Log.e(TAG, "SeekBar view is null in onBindViewHolder.");
@@ -195,7 +194,7 @@ public class SeekBarPreference extends Preference {
         }
 
         mSeekBar.setProgress(mSeekBarValue - mMin);
-        updateLabelValue(mSeekBarValue);
+        //updateLabelValue(mSeekBarValue);//sesl
         mSeekBar.setEnabled(isEnabled());
     }
 
@@ -213,7 +212,7 @@ public class SeekBarPreference extends Preference {
     }
 
     /**
-     * Gets the lower bound set on the {@link SeekBar}.
+     * Gets the lower bound set on the {@link SeslSeekBar}.
      *
      * @return The lower bound set
      */
@@ -222,7 +221,7 @@ public class SeekBarPreference extends Preference {
     }
 
     /**
-     * Sets the lower bound on the {@link SeekBar}.
+     * Sets the lower bound on the {@link SeslSeekBar}.
      *
      * @param min The lower bound to set
      */
@@ -241,7 +240,7 @@ public class SeekBarPreference extends Preference {
      * user's specified increment value if it's not zero. Otherwise, the default value is picked
      * from the default mKeyProgressIncrement value in {@link android.widget.AbsSeekBar}.
      *
-     * @return The amount of increment on the {@link SeekBar} performed after each user's arrow
+     * @return The amount of increment on the {@link SeslSeekBar} performed after each user's arrow
      * key press
      */
     public final int getSeekBarIncrement() {
@@ -249,7 +248,7 @@ public class SeekBarPreference extends Preference {
     }
 
     /**
-     * Sets the increment amount on the {@link SeekBar} for each arrow key press.
+     * Sets the increment amount on the {@link SeslSeekBar} for each arrow key press.
      *
      * @param seekBarIncrement The amount to increment or decrement when the user presses an
      *                         arrow key.
@@ -262,7 +261,7 @@ public class SeekBarPreference extends Preference {
     }
 
     /**
-     * Gets the upper bound set on the {@link SeekBar}.
+     * Gets the upper bound set on the {@link SeslSeekBar}.
      *
      * @return The upper bound set
      */
@@ -271,7 +270,7 @@ public class SeekBarPreference extends Preference {
     }
 
     /**
-     * Sets the upper bound on the {@link SeekBar}.
+     * Sets the upper bound on the {@link SeslSeekBar}.
      *
      * @param max The upper bound to set
      */
@@ -286,29 +285,29 @@ public class SeekBarPreference extends Preference {
     }
 
     /**
-     * Gets whether the {@link SeekBar} should respond to the left/right keys.
+     * Gets whether the {@link SeslSeekBar} should respond to the left/right keys.
      *
-     * @return Whether the {@link SeekBar} should respond to the left/right keys
+     * @return Whether the {@link SeslSeekBar} should respond to the left/right keys
      */
     public boolean isAdjustable() {
         return mAdjustable;
     }
 
     /**
-     * Sets whether the {@link SeekBar} should respond to the left/right keys.
+     * Sets whether the {@link SeslSeekBar} should respond to the left/right keys.
      *
-     * @param adjustable Whether the {@link SeekBar} should respond to the left/right keys
+     * @param adjustable Whether the {@link SeslSeekBar} should respond to the left/right keys
      */
     public void setAdjustable(boolean adjustable) {
         mAdjustable = adjustable;
     }
 
     /**
-     * Gets whether the {@link SeekBarPreference} should continuously save the {@link SeekBar} value
+     * Gets whether the {@link SeekBarPreference} should continuously save the {@link SeslSeekBar} value
      * while it is being dragged. Note that when the value is true,
      * {@link Preference.OnPreferenceChangeListener} will be called continuously as well.
      *
-     * @return Whether the {@link SeekBarPreference} should continuously save the {@link SeekBar}
+     * @return Whether the {@link SeekBarPreference} should continuously save the {@link SeslSeekBar}
      * value while it is being dragged
      * @see #setUpdatesContinuously(boolean)
      */
@@ -317,11 +316,11 @@ public class SeekBarPreference extends Preference {
     }
 
     /**
-     * Sets whether the {@link SeekBarPreference} should continuously save the {@link SeekBar} value
+     * Sets whether the {@link SeekBarPreference} should continuously save the {@link SeslSeekBar} value
      * while it is being dragged.
      *
      * @param updatesContinuously Whether the {@link SeekBarPreference} should continuously save
-     *                            the {@link SeekBar} value while it is being dragged
+     *                            the {@link SeslSeekBar} value while it is being dragged
      * @see #getUpdatesContinuously()
      */
     public void setUpdatesContinuously(boolean updatesContinuously) {
@@ -329,20 +328,27 @@ public class SeekBarPreference extends Preference {
     }
 
     /**
-     * Gets whether the current {@link SeekBar} value is displayed to the user.
+     * Gets whether the current {@link SeslSeekBar} value is displayed to the user.
      *
-     * @return Whether the current {@link SeekBar} value is displayed to the user
+     * @return Whether the current {@link SeslSeekBar} value is displayed to the user
      * @see #setShowSeekBarValue(boolean)
+     *
+     * Note: This is just a placeholder function for successor classes.
+     * Actual showing the seekbar value needs to be implemented by successor classes in {@link #onBindViewHolder}
      */
     public boolean getShowSeekBarValue() {
         return mShowSeekBarValue;
     }
 
     /**
-     * Sets whether the current {@link SeekBar} value is displayed to the user.
+     * Sets whether the current {@link SeslSeekBar} value is displayed to the user.
      *
-     * @param showSeekBarValue Whether the current {@link SeekBar} value is displayed to the user
+     * @param showSeekBarValue Whether the current {@link SeslSeekBar} value is displayed to the user
      * @see #getShowSeekBarValue()
+     *
+     * Note: This is just a placeholder function for successor classes.
+     * Actual showing the seekbar value needs to be implemented by successor classes in {@link #onBindViewHolder}
+     *
      */
     public void setShowSeekBarValue(boolean showSeekBarValue) {
         mShowSeekBarValue = showSeekBarValue;
@@ -359,7 +365,7 @@ public class SeekBarPreference extends Preference {
 
         if (seekBarValue != mSeekBarValue) {
             mSeekBarValue = seekBarValue;
-            updateLabelValue(mSeekBarValue);
+            //updateLabelValue(mSeekBarValue);
             persistInt(seekBarValue);
             if (notifyChanged) {
                 notifyChanged();
@@ -368,51 +374,51 @@ public class SeekBarPreference extends Preference {
     }
 
     /**
-     * Gets the current progress of the {@link SeekBar}.
+     * Gets the current progress of the {@link SeslSeekBar}.
      *
-     * @return The current progress of the {@link SeekBar}
+     * @return The current progress of the {@link SeslSeekBar}
      */
     public int getValue() {
         return mSeekBarValue;
     }
 
     /**
-     * Sets the current progress of the {@link SeekBar}.
+     * Sets the current progress of the {@link SeslSeekBar}.
      *
-     * @param seekBarValue The current progress of the {@link SeekBar}
+     * @param seekBarValue The current progress of the {@link SeslSeekBar}
      */
     public void setValue(int seekBarValue) {
         setValueInternal(seekBarValue, true);
     }
 
     /**
-     * Persist the {@link SeekBar}'s SeekBar value if callChangeListener returns true, otherwise
-     * set the {@link SeekBar}'s value to the stored value.
+     * Persist the {@link SeslSeekBar}'s SeekBar value if callChangeListener returns true, otherwise
+     * set the {@link SeslSeekBar}'s value to the stored value.
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-    void syncValueInternal(@NonNull SeekBar seekBar) {
+    void syncValueInternal(@NonNull SeslSeekBar seekBar) {
         int seekBarValue = mMin + seekBar.getProgress();
         if (seekBarValue != mSeekBarValue) {
             if (callChangeListener(seekBarValue)) {
                 setValueInternal(seekBarValue, false);
             } else {
                 seekBar.setProgress(mSeekBarValue - mMin);
-                updateLabelValue(mSeekBarValue);
+                //updateLabelValue(mSeekBarValue);
             }
         }
     }
 
-    /**
-     * Attempts to update the TextView label that displays the current value.
-     *
-     * @param value the value to display next to the {@link SeekBar}
-     */
-    @SuppressWarnings("WeakerAccess") /* synthetic access */
-    void updateLabelValue(int value) {
-        if (mSeekBarValueTextView != null) {
-            mSeekBarValueTextView.setText(String.valueOf(value));
-        }
-    }
+//    /**
+//     * Attempts to update the TextView label that displays the current value.
+//     *
+//     * @param value the value to display next to the {@link SeekBar}
+//     */
+//    @SuppressWarnings("WeakerAccess") /* synthetic access */
+//    void updateLabelValue(int value) {
+//        if (mSeekBarValueTextView != null) {
+//            mSeekBarValueTextView.setText(String.valueOf(value));
+//        }
+//    }
 
     @Nullable
     @Override
@@ -494,4 +500,23 @@ public class SeekBarPreference extends Preference {
             dest.writeInt(mMax);
         }
     }
+
+    //Sesl
+    @Nullable
+    public SeslSeekBar getSeekBar(){
+        return mSeekBar;
+    }
+
+    public interface OnSeekBarPreferenceChangeListener {
+        void onProgressChanged(SeslSeekBar seekBar, int progress, boolean fromUser);
+
+        void onStartTrackingTouch(SeslSeekBar seslSeekBar);
+
+        void onStopTrackingTouch(SeslSeekBar seslSeekBar);
+    }
+
+    public void setOnSeekBarPreferenceChangeListener(OnSeekBarPreferenceChangeListener onSeekBarPreferenceChangeListener) {
+        mOnSeekBarPreferenceChangeListener = onSeekBarPreferenceChangeListener;
+    }
+    //sesl
 }

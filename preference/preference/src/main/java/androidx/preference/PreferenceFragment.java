@@ -20,28 +20,37 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 import androidx.annotation.XmlRes;
+import androidx.appcompat.util.SeslRoundedCorner;
+import androidx.appcompat.util.SeslSubheaderRoundedCorner;
 import androidx.core.content.res.TypedArrayUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * Shows a hierarchy of {@link Preference} objects as lists. These preferences will automatically
  * save to {@link android.content.SharedPreferences} as the user interacts with them. To retrieve
  * an instance of {@link android.content.SharedPreferences} that the preference hierarchy in this
@@ -99,6 +108,24 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
         PreferenceManager.OnNavigateToScreenListener,
         DialogPreference.TargetFragment {
 
+    //Sesl
+    static final String TAG = "SeslPreferenceFragment";
+
+    private static final float FONT_SCALE_MEDIUM = 1.1f;
+    private static final float FONT_SCALE_LARGE = 1.3f;
+    private static final int SWITCH_PREFERENCE_LAYOUT = 2;
+    private static final int SWITCH_PREFERENCE_LAYOUT_LARGE = 1;
+    private SeslRoundedCorner mListRoundedCorner;
+    ViewTreeObserver.OnPreDrawListener mOnPreDrawListener;
+    SeslRoundedCorner mRoundedCorner;
+    int mScreenWidthDp;
+    SeslSubheaderRoundedCorner mSubheaderRoundedCorner;
+    private boolean mIsReducedMargin;
+    boolean mIsRoundedCorner = true;
+    int mIsLargeLayout;
+    private int mSubheaderColor;
+    //sesl
+
     /**
      * Fragment argument used to specify the tag of the desired root {@link PreferenceScreen}
      * object.
@@ -149,6 +176,16 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
         super.onCreate(savedInstanceState);
         final TypedValue tv = new TypedValue();
         getActivity().getTheme().resolveAttribute(R.attr.preferenceTheme, tv, true);
+
+        //Sesl
+        final Configuration configuration = getResources().getConfiguration();
+        mIsLargeLayout =
+                ((configuration.screenWidthDp > 320 || configuration.fontScale < FONT_SCALE_MEDIUM)
+                && (configuration.screenWidthDp >= 411 || configuration.fontScale < FONT_SCALE_LARGE))
+                ? SWITCH_PREFERENCE_LAYOUT : SWITCH_PREFERENCE_LAYOUT_LARGE;
+        mIsReducedMargin = configuration.screenWidthDp <= 250;
+        //sesl
+
         int theme = tv.resourceId;
         if (theme == 0) {
             // Fallback to default theme.
@@ -202,17 +239,31 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
                 R.styleable.PreferenceFragment_allowDividerAfterLastItem, true);
         a.recycle();
 
+        //Sesl
+        TypedArray a2 = mStyledContext.obtainStyledAttributes(null,
+                androidx.appcompat.R.styleable.View,
+                android.R.attr.listSeparatorTextViewStyle,
+                0);
+        Drawable background =
+                a2.getDrawable(androidx.appcompat.R.styleable.View_android_background);
+        if (background instanceof ColorDrawable) {
+            mSubheaderColor = ((ColorDrawable) background).getColor();
+        }
+        Log.d(TAG, " sub header color = " + mSubheaderColor);
+        a2.recycle();
+        //sesl
+
         final LayoutInflater themedInflater = inflater.cloneInContext(mStyledContext);
 
         final View view = themedInflater.inflate(mLayoutResId, container, false);
 
         final View rawListContainer = view.findViewById(AndroidResources.ANDROID_R_LIST_CONTAINER);
-        if (!(rawListContainer instanceof ViewGroup)) {
+        if (!(rawListContainer instanceof ViewGroup listContainer)) {
             throw new RuntimeException("Content has view with id attribute "
                     + "'android.R.id.list_container' that is not a ViewGroup class");
         }
 
-        final ViewGroup listContainer = (ViewGroup) rawListContainer;
+        // final ViewGroup listContainer = (ViewGroup) rawListContainer;
 
         final RecyclerView listView = onCreateRecyclerView(themedInflater, listContainer,
                 savedInstanceState);
@@ -228,6 +279,19 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
             setDividerHeight(dividerHeight);
         }
         mDividerDecoration.setAllowDividerAfterLastItem(allowDividerAfterLastItem);
+
+        //Sesl
+        mList.setItemAnimator(null);
+        mRoundedCorner = new SeslRoundedCorner(mStyledContext);
+        mSubheaderRoundedCorner = new SeslSubheaderRoundedCorner(mStyledContext);
+        if (mIsRoundedCorner) {
+            listView.seslSetFillBottomEnabled(true);
+            listView.seslSetFillBottomColor(mSubheaderColor);
+            mListRoundedCorner = new SeslRoundedCorner(mStyledContext, true);
+            mListRoundedCorner.setRoundedCorners(SeslRoundedCorner.ROUNDED_CORNER_TOP_LEFT
+                    | SeslRoundedCorner.ROUNDED_CORNER_TOP_RIGHT);
+        }
+        //sesl
 
         // If mList isn't present in the view hierarchy, add it. mList is automatically inflated
         // on an Auto device so don't need to add it.
@@ -558,7 +622,7 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
             }
         }
         RecyclerView recyclerView = (RecyclerView) inflater.inflate(
-                R.layout.preference_recyclerview, parent, false);
+                R.layout.sesl_preference_recyclerview, parent, false);//sesl
 
         recyclerView.setLayoutManager(onCreateLayoutManager());
         recyclerView.setAccessibilityDelegateCompat(
@@ -591,7 +655,7 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
      */
     @Deprecated
     @NonNull
-    protected RecyclerView.Adapter onCreateAdapter(@NonNull PreferenceScreen preferenceScreen) {
+    protected RecyclerView.Adapter<?> onCreateAdapter(@NonNull PreferenceScreen preferenceScreen) {
         return new PreferenceGroupAdapter(preferenceScreen);
     }
 
@@ -823,30 +887,73 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
 
         DividerDecoration() {}
 
+//        @Override
+//        public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent,
+//                @NonNull RecyclerView.State state) {
+//            if (mDivider == null) {
+//                return;
+//            }
+//            final int childCount = parent.getChildCount();
+//            final int width = parent.getWidth();
+//            for (int childViewIndex = 0; childViewIndex < childCount; childViewIndex++) {
+//                final View view = parent.getChildAt(childViewIndex);
+//                if (shouldDrawDividerBelow(view, parent)) {
+//                    int top = (int) view.getY() + view.getHeight();
+//                    mDivider.setBounds(0, top, width, top + mDividerHeight);
+//                    mDivider.draw(c);
+//                }
+//            }
+//        }
+//
+//        @Override
+//        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
+//                @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+//            if (shouldDrawDividerBelow(view, parent)) {
+//                outRect.bottom = mDividerHeight;
+//            }
+//        }
+
+        //sesl
         @Override
-        public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent,
-                @NonNull RecyclerView.State state) {
-            if (mDivider == null) {
-                return;
-            }
+        public void seslOnDispatchDraw(@NonNull Canvas c, @NonNull RecyclerView parent,
+                RecyclerView.State state) {
+            super.seslOnDispatchDraw(c, parent, state);
+
             final int childCount = parent.getChildCount();
             final int width = parent.getWidth();
-            for (int childViewIndex = 0; childViewIndex < childCount; childViewIndex++) {
-                final View view = parent.getChildAt(childViewIndex);
-                if (shouldDrawDividerBelow(view, parent)) {
-                    int top = (int) view.getY() + view.getHeight();
-                    mDivider.setBounds(0, top, width, top + mDividerHeight);
+            for (int i = 0; i < childCount; i++) {
+                final View view = parent.getChildAt(i);
+                final RecyclerView.ViewHolder holder = parent.getChildViewHolder(view);
+                final PreferenceViewHolder preferenceHolder =
+                        holder instanceof PreferenceViewHolder ?
+                        (PreferenceViewHolder) holder : null;
+
+                int top = (int) view.getY() + view.getHeight();
+                if (mDivider != null && shouldDrawDividerBelow(view, parent)) {
+                    mDivider.setBounds(0, top, width, mDividerHeight + top);
                     mDivider.draw(c);
                 }
-            }
-        }
 
-        @Override
-        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
-                @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-            if (shouldDrawDividerBelow(view, parent)) {
-                outRect.bottom = mDividerHeight;
+                //Sesl
+                if (mIsRoundedCorner) {
+                    if (preferenceHolder != null && preferenceHolder.isBackgroundDrawn()) {
+                        if (preferenceHolder.isDrawSubheaderRound()) {
+                            mSubheaderRoundedCorner.setRoundedCorners(preferenceHolder.getDrawCorners());
+                            mSubheaderRoundedCorner.drawRoundedCorner(view, c);
+                        } else {
+                            mRoundedCorner.setRoundedCorners(preferenceHolder.getDrawCorners());
+                            mRoundedCorner.drawRoundedCorner(view, c);
+                        }
+                    }
+                }
+                //sesl
             }
+
+            //sesl
+            if (mIsRoundedCorner) {
+                mListRoundedCorner.drawRoundedCorner(c);
+            }
+            //sesl
         }
 
         private boolean shouldDrawDividerBelow(@NonNull View view, @NonNull RecyclerView parent) {
@@ -886,4 +993,81 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
             mAllowDividerAfterLastItem = allowDividerAfterLastItem;
         }
     }
+
+    //Sesl
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        if (getListView() != null) {
+            if (mOnPreDrawListener == null) {
+                ViewTreeObserver viewTreeObserver = getListView().getViewTreeObserver();
+                createOnPreDrawListner();
+                viewTreeObserver.addOnPreDrawListener(mOnPreDrawListener);
+            }
+            RecyclerView.Adapter<?> adapter = getListView().getAdapter();
+            RecyclerView.LayoutManager layoutManager = getListView().getLayoutManager();
+            boolean isSmallScreenWidth = newConfig.screenWidthDp <= 250;
+            if (isSmallScreenWidth != mIsReducedMargin && (adapter instanceof PreferenceGroupAdapter) && layoutManager != null) {
+                mIsReducedMargin = isSmallScreenWidth;
+                TypedArray obtainStyledAttributes =  mStyledContext.obtainStyledAttributes(null,
+                        R.styleable.PreferenceFragmentCompat,
+                        R.attr.preferenceFragmentCompatStyle, 0);
+                try {
+                    setDivider(obtainStyledAttributes.getDrawable(R.styleable.PreferenceFragment_android_divider));
+                    Parcelable onSaveInstanceState = layoutManager.onSaveInstanceState();
+                    getListView().setAdapter(getListView().getAdapter());
+                    layoutManager.onRestoreInstanceState(onSaveInstanceState);
+                } finally {
+                    obtainStyledAttributes.recycle();
+                }
+            }
+        }
+        super.onConfigurationChanged(newConfig);
+    }
+
+    public final void createOnPreDrawListner() {
+        if (mList != null) {
+            mOnPreDrawListener = new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    RecyclerView recyclerView = mList;
+                    if (recyclerView != null) {
+                        RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
+                        Configuration configuration = getResources().getConfiguration();
+                        int i = configuration.screenWidthDp;
+                        int i2 =
+                                ((i > 320 || configuration.fontScale < FONT_SCALE_MEDIUM) && (i >= 411 || configuration.fontScale < FONT_SCALE_LARGE)) ? 2 : 1;
+                        if (adapter instanceof PreferenceGroupAdapter pgAdapter) {
+                            if (needToRefeshSwitch(pgAdapter, i2, i)) {
+                                mIsLargeLayout = i2;
+                                for (int i3 = 0; i3 < pgAdapter.getItemCount(); i3++) {
+                                    Preference item = pgAdapter.getItem(i3);
+                                    if (item != null && pgAdapter.isSwitchLayout(item) && (item instanceof SwitchPreferenceCompat)) {
+                                        adapter.notifyItemChanged(i3);
+                                    }
+                                }
+                            }
+                        }
+                        mScreenWidthDp = configuration.screenWidthDp;
+                        mList.getViewTreeObserver().removeOnPreDrawListener(this);
+                        mOnPreDrawListener = null;
+                    }
+                    return false;
+                }
+            };
+        }
+    }
+
+    public final boolean needToRefeshSwitch(PreferenceGroupAdapter preferenceGroupAdapter, int i,
+            int i2) {
+        if (i == mIsLargeLayout) {
+            return i == 1 && (mScreenWidthDp != i2 || preferenceGroupAdapter.getListWidth() == 0);
+        }
+        return true;
+    }
+
+
+    public void seslSetRoundedCorner(boolean enabled) {
+        mIsRoundedCorner = enabled;
+    }
+    //sesl
 }

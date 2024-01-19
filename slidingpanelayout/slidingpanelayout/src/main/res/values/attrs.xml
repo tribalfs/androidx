@@ -24,6 +24,15 @@
             <enum name="relayoutWhenComplete" value="0"/>
             <enum name="relayoutWhenMoved" value="1"/>
         </attr>
+
+        <attr name="seslIsSinglePanel"  format="boolean" />
+        <attr name="seslDrawRoundedCorner" format="boolean"  />
+        <attr name="seslDrawRoundedCornerColor" format="color"  />
+        <attr name="seslResizeOff" format="boolean"/>
+        <attr name="seslDrawerMarginTop" format="dimension"/>
+        <attr name="seslDrawerMarginBottom"  format="dimension"/>
+        <attr name="seslPrefDrawerWidthSize"  format="float|dimension"/>
+        <attr name="seslPrefContentWidthSize"  format="float|dimension"/>
     </declare-styleable>
     <declare-styleable name="SlidingPaneLayout_Layout">
         <attr name="android:layout_weight"/>

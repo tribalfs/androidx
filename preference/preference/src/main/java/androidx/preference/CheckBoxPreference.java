@@ -32,6 +32,7 @@ import androidx.annotation.RestrictTo;
 import androidx.core.content.res.TypedArrayUtils;
 
 /**
+ * <p><b>SESL variant</b></p><br>
  * A {@link Preference} that provides checkbox widget functionality.
  *
  * <p>This preference saves a boolean value.
@@ -103,6 +104,8 @@ public class CheckBoxPreference extends TwoStatePreference {
 
         View checkboxView = view.findViewById(android.R.id.checkbox);
         syncCheckboxView(checkboxView);
+
+        if (isTalkBackIsRunning()) return;//sesl
 
         View summaryView = view.findViewById(android.R.id.summary);
         syncSummaryView(summaryView);

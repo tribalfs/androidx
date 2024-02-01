@@ -59,7 +59,7 @@ subprojects {
 
                 if (isAndroidLibrary) {
                     defaultConfig.versionName = "${version_info[0]}+${version_info[1]}+${version_info[2]}"
-                    println "set versionName=$defaultConfig.versionName"
+                    println "set versionName=${defaultConfig.versionName}"
 
                     android {
                         lint {

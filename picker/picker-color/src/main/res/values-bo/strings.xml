@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Copyright 2024 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<resources>
+  <string name="sesl_color_picker_black">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_light_spring_green">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_option">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_recently_used_colors">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_white">গাঢ় সবজে নীল</string>
+  <string name="sesl_picker_done">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_dark_green">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_opacity_text">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_light_gray">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_hue_and_saturation">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_light_green">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_light_magenta">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_opacity">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_dark_magenta">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_yellow">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_gray">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_magenta">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_slider">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_light_orange">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_color_wheel">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_swatches_text">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_dark_orange">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_spring_green">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_light_cyan">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_color_one">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_dark_gray">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_green_text">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_red">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_current">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_dark_blue">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_new">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_violet">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_color_six">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_dark_red">গাঢ় সবজে নীল</string>
+  <string name="sesl_picker_cancel">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_light_violet">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_green">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_dark_yellow">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_dark_spring_green">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_double_tap_to_select">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_light_yellow">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_color_two">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_dark_violet">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_cyan">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_blue_text">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_red_text">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_saturation_text">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_light_red">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_color_five">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_light_azure">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_brightness">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_blue">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_dark_azure">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_orange">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_color_three">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_hex_text">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_color_four">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_spectrum_text">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_light_blue">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_azure">গাঢ় সবজে নীল</string>
+  <string name="sesl_color_picker_dark_cyan">গাঢ় সবজে নীল</string>
+</resources>

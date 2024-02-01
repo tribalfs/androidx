@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2024 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#ffffff"
+        android:fillType="nonZero"
+        android:pathData="M20.2497,16.8882L4.4997,16.8882L4.4997,9.3882C4.4997,8.9732 4.1637,8.6382 3.7497,8.6382C3.3357,8.6382 2.9997,8.9732 2.9997,9.3882L2.9997,19.8882C2.9997,20.3022 3.3357,20.6382 3.7497,20.6382C4.1637,20.6382 4.4997,20.3022 4.4997,19.8882L4.4997,18.3882L19.4997,18.3882L19.4997,19.8882C19.4997,20.3022 19.8357,20.6382 20.2497,20.6382C20.6637,20.6382 20.9997,20.3022 20.9997,19.8882L20.9997,17.6382C20.9997,17.2232 20.6637,16.8882 20.2497,16.8882M18.2497,12.3882L7.9997,12.3882C6.6187,12.3882 5.4997,13.5072 5.4997,14.8882L5.4997,15.8882L20.7497,15.8882L20.7497,14.8882C20.7497,13.5072 19.6307,12.3882 18.2497,12.3882M17.5144,3.3511C17.5074,3.3481 17.5034,3.3511 17.5054,3.3571L17.5084,3.3631C17.6384,3.7221 17.7084,4.1101 17.7084,4.5151C17.7084,6.3721 16.2144,7.8761 14.3704,7.8761C13.9234,7.8761 13.4964,7.7881 13.1074,7.6261L13.1024,7.6251C13.0974,7.6221 13.0954,7.6261 13.0984,7.6341L13.1004,7.6401C13.5764,8.9111 14.7954,9.8151 16.2244,9.8151C18.0684,9.8151 19.5624,8.3091 19.5624,6.4531C19.5624,5.0591 18.7204,3.8631 17.5204,3.3541L17.5144,3.3511Z"
+        android:strokeWidth="1"
+        android:strokeColor="#00000000" />
+</vector>

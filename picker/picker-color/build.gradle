@@ -1,0 +1,31 @@
+plugins {
+    id ("com.android.library")
+    id ("maven-publish")
+    id ("signing")
+}
+
+android {
+    namespace = "androidx.picker"
+    
+    sourceSets {
+        main.resources.srcDir "$buildDir/javaResources"
+        main.res.srcDirs += "src/main/res-public"
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation(project(":appcompat:appcompat"))
+    implementation("sesl.com.google.android.material:material:1.12.0-alpha03+1.0.18-sesl6+rev0")
+    api(project(":core:core"))
+    api(project(":fragment:fragment"))
+}
+
+ext {
+    POM_NAME = "SESL Color Picker"
+    POM_DESCRIPTION = "SESL androidxpicker:picker-color Library."
+}

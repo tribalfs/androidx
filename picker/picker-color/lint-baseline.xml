@@ -1,0 +1,1692 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2024 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<issues format="6" by="lint 8.1.2" type="baseline" client="gradle" dependencies="false" name="AGP (8.1.2)" variant="all" version="8.1.2">
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="        mColorPickerHexEditText.setText(&quot;&quot; + colorStr.substring(2, colorStr.length()).toUpperCase());"
+        errorLine2="                                                                                      ~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="782"
+            column="87"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
+        errorLine1="            mColorPickerHexEditText.setText(&quot;&quot; + colorStr.toUpperCase());"
+        errorLine2="                                                          ~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="798"
+            column="59"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        message="The id &quot;sesl_color_picker_main_content_container&quot; in layout &quot;sesl_color_picker_layout&quot; is missing from the following layout configurations: layout-land (present in layout)"
+        errorLine1="            android:id=&quot;@+id/sesl_color_picker_main_content_container&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_layout.xml"
+            line="25"
+            column="13"
+            message="Occurrence in layout"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        message="The id &quot;sesl_color_picker_main_content_container&quot; in layout &quot;sesl_color_picker_oneui_3_layout&quot; is missing from the following layout configurations: layout-land (present in layout, layout-sw600dp)"
+        errorLine1="            android:id=&quot;@+id/sesl_color_picker_main_content_container&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_layout.xml"
+            line="26"
+            column="13"
+            message="Occurrence in layout"/>
+        <location
+            file="src/main/res/layout-sw600dp/sesl_color_picker_oneui_3_layout.xml"
+            line="25"
+            column="13"
+            message="Occurrence in layout-sw600dp"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        message="The id &quot;sesl_color_picker_used_color_divider_text&quot; in layout &quot;sesl_color_picker_oneui_3_layout&quot; is missing from the following layout configurations: layout, layout-sw600dp (present in layout-land)"
+        errorLine1="                            android:id=&quot;@+id/sesl_color_picker_used_color_divider_text&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/sesl_color_picker_oneui_3_layout.xml"
+            line="182"
+            column="29"
+            message="Occurrence in layout-land"/>
+    </issue>
+
+    <issue
+        id="InconsistentLayout"
+        message="The id &quot;sesl_color_picker_recently_divider&quot; in layout &quot;sesl_color_picker_oneui_3_layout&quot; is missing from the following layout configurations: layout, layout-sw600dp (present in layout-land)"
+        errorLine1="                            android:id=&quot;@+id/sesl_color_picker_recently_divider&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/sesl_color_picker_oneui_3_layout.xml"
+            line="189"
+            column="29"
+            message="Occurrence in layout-land"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 24 (current min is 23): `android.graphics.drawable.GradientDrawable#getColor`"
+        errorLine1="            updateHexAndRGBValues(mCurrentColorBackground.getColor().getDefaultColor());"
+        errorLine2="                                                          ~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="878"
+            column="59"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 24 (current min is 23): `android.graphics.drawable.GradientDrawable#getColor`"
+        errorLine1="            updateHexAndRGBValues(mCurrentColorBackground.getColor().getDefaultColor());"
+        errorLine2="                                                          ~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="885"
+            column="59"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 24 (current min is 23): `android.graphics.drawable.GradientDrawable#getColor`"
+        errorLine1="            updateHexAndRGBValues(mSelectedColorBackground.getColor().getDefaultColor());"
+        errorLine2="                                                           ~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="892"
+            column="60"/>
+    </issue>
+
+    <issue
+        id="InflateParams"
+        message="Avoid passing `null` as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
+        errorLine1="        View view = inflater.inflate(R.layout.sesl_color_picker_oneui_3_dialog, null);"
+        errorLine2="                                                                                ~~~~">
+        <location
+            file="src/main/java/androidx/picker3/app/SeslColorPickerDialog.java"
+            line="52"
+            column="81"/>
+    </issue>
+
+    <issue
+        id="InflateParams"
+        message="Avoid passing `null` as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
+        errorLine1="        View view = inflater.inflate(R.layout.sesl_color_picker_dialog, null);"
+        errorLine2="                                                                        ~~~~">
+        <location
+            file="src/main/java/androidx/picker/app/SeslColorPickerDialog.java"
+            line="52"
+            column="73"/>
+    </issue>
+
+    <issue
+        id="InflateParams"
+        message="Avoid passing `null` as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
+        errorLine1="        mColorPicker = (SeslColorPicker) inflater.inflate(R.layout.sesl_color_picker_dialog, null);"
+        errorLine2="                                                                                             ~~~~">
+        <location
+            file="src/main/java/androidx/picker/app/SeslColorPickerDialogFragment.java"
+            line="129"
+            column="94"/>
+    </issue>
+
+    <issue
+        id="InflateParams"
+        message="Avoid passing `null` as the view root (needed to resolve layout parameters on the inflated layout&apos;s root element)"
+        errorLine1="        mColorPicker = (SeslColorPicker) inflater.inflate(R.layout.sesl_color_picker_oneui_3_dialog, null);"
+        errorLine2="                                                                                                     ~~~~">
+        <location
+            file="src/main/java/androidx/picker3/app/SeslColorPickerDialogFragment.java"
+            line="152"
+            column="102"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@color/sesl_dialog_body_text_color_light` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="            mColorPickerTabSwatchesText.setTextColor(getResources().getColor(androidx.appcompat.R.color.sesl_dialog_body_text_color_light));"
+        errorLine2="                                                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="251"
+            column="105"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@color/sesl_dialog_body_text_color_dark` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="            mColorPickerTabSwatchesText.setTextColor(getResources().getColor(androidx.appcompat.R.color.sesl_dialog_body_text_color_dark));"
+        errorLine2="                                                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="253"
+            column="105"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@color/sesl_secondary_text_color_light` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="            mColorPickerTabSpectrumText.setTextColor(getResources().getColor(androidx.appcompat.R.color.sesl_secondary_text_color_light));"
+        errorLine2="                                                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="256"
+            column="105"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@color/sesl_secondary_text_color_dark` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="            mColorPickerTabSpectrumText.setTextColor(getResources().getColor(androidx.appcompat.R.color.sesl_secondary_text_color_dark));"
+        errorLine2="                                                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="258"
+            column="105"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@color/sesl_dialog_body_text_color_light` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="                mColorPickerTabSwatchesText.setTextColor(getResources().getColor(androidx.appcompat.R.color.sesl_dialog_body_text_color_light));"
+        errorLine2="                                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="346"
+            column="109"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@color/sesl_dialog_body_text_color_dark` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="                mColorPickerTabSwatchesText.setTextColor(getResources().getColor(androidx.appcompat.R.color.sesl_dialog_body_text_color_dark));"
+        errorLine2="                                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="348"
+            column="109"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@color/sesl_secondary_text_color_light` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="                mColorPickerTabSpectrumText.setTextColor(getResources().getColor(androidx.appcompat.R.color.sesl_secondary_text_color_light));"
+        errorLine2="                                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="353"
+            column="109"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@color/sesl_secondary_text_color_dark` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="                mColorPickerTabSpectrumText.setTextColor(getResources().getColor(androidx.appcompat.R.color.sesl_secondary_text_color_dark));"
+        errorLine2="                                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="355"
+            column="109"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@color/sesl_dialog_body_text_color_light` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="                mColorPickerTabSpectrumText.setTextColor(getResources().getColor(androidx.appcompat.R.color.sesl_dialog_body_text_color_light));"
+        errorLine2="                                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="383"
+            column="109"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@color/sesl_dialog_body_text_color_dark` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="                mColorPickerTabSpectrumText.setTextColor(getResources().getColor(androidx.appcompat.R.color.sesl_dialog_body_text_color_dark));"
+        errorLine2="                                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="385"
+            column="109"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@color/sesl_secondary_text_color_light` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="                mColorPickerTabSwatchesText.setTextColor(getResources().getColor(androidx.appcompat.R.color.sesl_secondary_text_color_light));"
+        errorLine2="                                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="391"
+            column="109"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@color/sesl_secondary_text_color_dark` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="                mColorPickerTabSwatchesText.setTextColor(getResources().getColor(androidx.appcompat.R.color.sesl_secondary_text_color_dark));"
+        errorLine2="                                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="393"
+            column="109"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@string/sesl_font_family_regular` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="        android:fontFamily=&quot;@string/sesl_font_family_regular&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_group.xml"
+            line="30"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@string/sesl_font_family_regular` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="        android:fontFamily=&quot;@string/sesl_font_family_regular&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_group.xml"
+            line="82"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@string/sesl_font_family_regular` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="        android:fontFamily=&quot;@string/sesl_font_family_regular&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_group.xml"
+            line="29"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@string/sesl_font_family_regular` is marked as private in io.github.oneuiproject.sesl:appcompat:unspecified"
+        errorLine1="        android:fontFamily=&quot;@string/sesl_font_family_regular&quot;"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_group.xml"
+            line="81"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes (`@dimen/sesl_color_picker_oneui_3_selected_color_text_size` is defined as `12.0dip` in `values\dimens.xml`"
+        errorLine1="        android:textSize=&quot;@dimen/sesl_color_picker_oneui_3_selected_color_text_size&quot; />"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_group.xml"
+            line="34"
+            column="9"/>
+        <location
+            file="src/main/res/values/dimens.xml"
+            line="61"
+            column="70"
+            message="This dp dimension is used as a text size"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes (`@dimen/sesl_color_picker_oneui_3_selected_color_text_size` is defined as `12.0dip` in `values\dimens.xml`"
+        errorLine1="        android:textSize=&quot;@dimen/sesl_color_picker_oneui_3_selected_color_text_size&quot; />"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_group.xml"
+            line="86"
+            column="9"/>
+        <location
+            file="src/main/res/values/dimens.xml"
+            line="61"
+            column="70"
+            message="This dp dimension is used as a text size"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes (`@dimen/sesl_color_picker_edit_text_size` is defined as `14.0dip` in `values\dimens.xml`"
+        errorLine1="            android:textSize=&quot;@dimen/sesl_color_picker_edit_text_size&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="71"
+            column="13"/>
+        <location
+            file="src/main/res/values/dimens.xml"
+            line="33"
+            column="52"
+            message="This dp dimension is used as a text size"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes (`@dimen/sesl_color_picker_edit_text_size` is defined as `14.0dip` in `values\dimens.xml`"
+        errorLine1="            android:textSize=&quot;@dimen/sesl_color_picker_edit_text_size&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="97"
+            column="13"/>
+        <location
+            file="src/main/res/values/dimens.xml"
+            line="33"
+            column="52"
+            message="This dp dimension is used as a text size"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes (`@dimen/sesl_color_picker_edit_text_size` is defined as `14.0dip` in `values\dimens.xml`"
+        errorLine1="            android:textSize=&quot;@dimen/sesl_color_picker_edit_text_size&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="123"
+            column="13"/>
+        <location
+            file="src/main/res/values/dimens.xml"
+            line="33"
+            column="52"
+            message="This dp dimension is used as a text size"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes (`@dimen/sesl_color_picker_edit_text_size` is defined as `14.0dip` in `values\dimens.xml`"
+        errorLine1="            android:textSize=&quot;@dimen/sesl_color_picker_edit_text_size&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="149"
+            column="13"/>
+        <location
+            file="src/main/res/values/dimens.xml"
+            line="33"
+            column="52"
+            message="This dp dimension is used as a text size"/>
+    </issue>
+
+    <issue
+        id="PxUsage"
+        message="Avoid using `&quot;px&quot;` as units; use `&quot;dp&quot;` instead"
+        errorLine1="    &lt;dimen name=&quot;sesl_color_picker_oneui_3_current_view_stroke&quot;>1.0px&lt;/dimen>"
+        errorLine2="                                                                ~~~~~">
+        <location
+            file="src/main/res/values/dimens.xml"
+            line="47"
+            column="65"/>
+    </issue>
+
+    <issue
+        id="PxUsage"
+        message="Avoid using `&quot;px&quot;` as units; use `&quot;dp&quot;` instead"
+        errorLine1="    &lt;dimen name=&quot;sesl_color_picker_used_color_item_stroke_size&quot;>1.0px&lt;/dimen>"
+        errorLine2="                                                                ~~~~~">
+        <location
+            file="src/main/res/values/dimens.xml"
+            line="116"
+            column="65"/>
+    </issue>
+
+    <issue
+        id="MissingTranslation"
+        message="&quot;sesl_color_picker_color_seven&quot; is not translated in &quot;de&quot; (German), &quot;hi&quot; (Hindi), &quot;lo&quot; (Lao), &quot;pt&quot; (Portuguese), &quot;lt&quot; (Lithuanian), &quot;hr&quot; (Croatian), &quot;lv&quot; (Latvian), &quot;hu&quot; (Hungarian), &quot;hy&quot; (Armenian), &quot;ug&quot; (Uyghur), &quot;uk&quot; (Ukrainian), &quot;ur&quot; (Urdu), &quot;mk&quot; (Macedonian), &quot;ml&quot; (Malayalam), &quot;mn&quot; (Mongolian), &quot;in&quot; (Indonesian), &quot;mr&quot; (Marathi), &quot;uz&quot; (Uzbek), &quot;ms&quot; (Malay), &quot;el&quot; (Greek), &quot;en&quot; (English), &quot;is&quot; (Icelandic), &quot;it&quot; (Italian), &quot;my&quot; (Burmese), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;et&quot; (Estonian), &quot;eu&quot; (Basque), &quot;ar&quot; (Arabic), &quot;as&quot; (Assamese), &quot;vi&quot; (Vietnamese), &quot;nb&quot; (Norwegian Bokmål), &quot;ja&quot; (Japanese), &quot;ne&quot; (Nepali), &quot;az&quot; (Azerbaijani), &quot;fa&quot; (Persian), &quot;ro&quot; (Romanian), &quot;nl&quot; (Dutch), &quot;be&quot; (Belarusian), &quot;fi&quot; (Finnish), &quot;ru&quot; (Russian), &quot;bg&quot; (Bulgarian), &quot;bn&quot; (Bangla), &quot;fr&quot; (French), &quot;bo&quot; (Tibetan), &quot;bs&quot; (Bosnian), &quot;ka&quot; (Georgian), &quot;si&quot; (Sinhala), &quot;sk&quot; (Slovak), &quot;sl&quot; (Slovenian), &quot;ga&quot; (Irish), &quot;ca&quot; (Catalan), &quot;sq&quot; (Albanian), &quot;sr&quot; (Serbian), &quot;kk&quot; (Kazakh), &quot;km&quot; (Khmer), &quot;kn&quot; (Kannada), &quot;or&quot; (Odia), &quot;sv&quot; (Swedish), &quot;ko&quot; (Korean), &quot;gl&quot; (Galician), &quot;ta&quot; (Tamil), &quot;gu&quot; (Gujarati), &quot;ky&quot; (Kyrgyz), &quot;cs&quot; (Czech), &quot;pa&quot; (Punjabi), &quot;te&quot; (Telugu), &quot;tg&quot; (Tajik), &quot;th&quot; (Thai), &quot;tk&quot; (Turkmen), &quot;tl&quot; (Tagalog), &quot;pl&quot; (Polish), &quot;da&quot; (Danish), &quot;tr&quot; (Turkish)"
+        errorLine1="    &lt;string name=&quot;sesl_color_picker_color_seven&quot;>Color Seven&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="33"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw operations: Use `Canvas.getClipBounds(Rect)` instead of `Canvas.getClipBounds()` which allocates a temporary `Rect`"
+        errorLine1="        mSpectrumRect = canvas.getClipBounds();"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSpectrumView.java"
+            line="158"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="        mHuePaint = new Paint(Paint.ANTI_ALIAS_FLAG);"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSpectrumView.java"
+            line="160"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="                new LinearGradient((float) mSpectrumRect.right,"
+        errorLine2="                ^">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSpectrumView.java"
+            line="162"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="        mSaturationPaint = new Paint(Paint.ANTI_ALIAS_FLAG);"
+        errorLine2="                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSpectrumView.java"
+            line="172"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="                new LinearGradient((float) mSpectrumRect.left,"
+        errorLine2="                ^">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSpectrumView.java"
+            line="174"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="        Paint paint = new Paint();"
+        errorLine2="                      ~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker/widget/SeslColorSwatchView.java"
+            line="149"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="        Paint paint = new Paint();"
+        errorLine2="                      ~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSwatchView.java"
+            line="203"
+            column="23"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="                    corners = new float[] {"
+        errorLine2="                              ^">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSwatchView.java"
+            line="214"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="                    Path path = new Path();"
+        errorLine2="                                ~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSwatchView.java"
+            line="225"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="                    corners = new float[] {"
+        errorLine2="                              ^">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSwatchView.java"
+            line="234"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="                    Path path = new Path();"
+        errorLine2="                                ~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSwatchView.java"
+            line="245"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="                    corners = new float[] {"
+        errorLine2="                              ^">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSwatchView.java"
+            line="254"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="                    Path path = new Path();"
+        errorLine2="                                ~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSwatchView.java"
+            line="265"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="                    corners = new float[] {"
+        errorLine2="                              ^">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSwatchView.java"
+            line="274"
+            column="31"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="                    Path path = new Path();"
+        errorLine2="                                ~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSwatchView.java"
+            line="285"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="ObsoleteLayoutParam"
+        message="Invalid layout param in a `LinearLayout`: `layout_centerVertical`"
+        errorLine1="            android:layout_centerVertical=&quot;true&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_layout.xml"
+            line="35"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteLayoutParam"
+        message="Invalid layout param in a `LinearLayout`: `layout_toStartOf`"
+        errorLine1="            android:layout_toStartOf=&quot;@id/pivot&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_layout.xml"
+            line="36"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteLayoutParam"
+        message="Invalid layout param in a `LinearLayout`: `layout_centerVertical`"
+        errorLine1="            android:layout_centerVertical=&quot;true&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_layout.xml"
+            line="43"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteLayoutParam"
+        message="Invalid layout param in a `LinearLayout`: `layout_toEndOf`"
+        errorLine1="            android:layout_toEndOf=&quot;@id/pivot&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_layout.xml"
+            line="45"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteLayoutParam"
+        message="Invalid layout param in a `LinearLayout`: `layout_centerVertical`"
+        errorLine1="            android:layout_centerVertical=&quot;true&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="34"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteLayoutParam"
+        message="Invalid layout param in a `LinearLayout`: `layout_toStartOf`"
+        errorLine1="            android:layout_toStartOf=&quot;@+id/pivot&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="35"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteLayoutParam"
+        message="Invalid layout param in a `LinearLayout`: `layout_centerVertical`"
+        errorLine1="            android:layout_centerVertical=&quot;true&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="42"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteLayoutParam"
+        message="Invalid layout param in a `LinearLayout`: `layout_toEndOf`"
+        errorLine1="            android:layout_toEndOf=&quot;@+id/pivot&quot;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="43"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DisableBaselineAlignment"
+        message="Set `android:baselineAligned=&quot;false&quot;` on this element for better performance"
+        errorLine1="                        &lt;LinearLayout"
+        errorLine2="                         ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/sesl_color_picker_oneui_3_layout.xml"
+            line="92"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="DisableBaselineAlignment"
+        message="Set `android:baselineAligned=&quot;false&quot;` on this element for better performance"
+        errorLine1="                &lt;LinearLayout"
+        errorLine2="                 ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/sesl_color_picker_oneui_3_layout.xml"
+            line="92"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="DisableBaselineAlignment"
+        message="Set `android:baselineAligned=&quot;false&quot;` on this element for better performance"
+        errorLine1="                &lt;LinearLayout"
+        errorLine2="                 ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_layout.xml"
+            line="92"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="DisableBaselineAlignment"
+        message="Set `android:baselineAligned=&quot;false&quot;` on this element for better performance"
+        errorLine1="                        &lt;LinearLayout"
+        errorLine2="                         ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/sesl_color_picker_oneui_3_layout.xml"
+            line="137"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="DisableBaselineAlignment"
+        message="Set `android:baselineAligned=&quot;false&quot;` on this element for better performance"
+        errorLine1="                &lt;LinearLayout"
+        errorLine2="                 ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/sesl_color_picker_oneui_3_layout.xml"
+            line="145"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="DisableBaselineAlignment"
+        message="Set `android:baselineAligned=&quot;false&quot;` on this element for better performance"
+        errorLine1="                &lt;LinearLayout"
+        errorLine2="                 ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_layout.xml"
+            line="145"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="DisableBaselineAlignment"
+        message="Set `android:baselineAligned=&quot;false&quot;` on this element for better performance"
+        errorLine1="&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
+        errorLine2=" ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="16"
+            column="2"/>
+    </issue>
+
+    <issue
+        id="UselessParent"
+        message="This `LinearLayout` layout or its `LinearLayout` parent is possibly unnecessary"
+        errorLine1="    &lt;LinearLayout"
+        errorLine2="     ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-sw600dp/sesl_color_picker_oneui_3_used_color_group.xml"
+            line="23"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="UselessParent"
+        message="This `LinearLayout` layout or its `LinearLayout` parent is possibly unnecessary"
+        errorLine1="    &lt;LinearLayout"
+        errorLine2="     ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_used_color_group.xml"
+            line="23"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="UselessParent"
+        message="This `LinearLayout` layout or its `LinearLayout` parent is possibly unnecessary"
+        errorLine1="    &lt;LinearLayout"
+        errorLine2="     ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-land/sesl_color_picker_oneui_3_used_color_group.xml"
+            line="25"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="UselessParent"
+        message="This `LinearLayout` layout or its `LinearLayout` parent is unnecessary"
+        errorLine1="    &lt;LinearLayout"
+        errorLine2="     ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-iw/sesl_color_picker_opacity_edittext_layout.xml"
+            line="23"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="UselessParent"
+        message="This `LinearLayout` layout or its `LinearLayout` parent is unnecessary"
+        errorLine1="    &lt;LinearLayout"
+        errorLine2="     ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-tr/sesl_color_picker_opacity_edittext_layout.xml"
+            line="23"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="UselessParent"
+        message="This `LinearLayout` layout or its `LinearLayout` parent is unnecessary"
+        errorLine1="    &lt;LinearLayout"
+        errorLine2="     ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-iw/sesl_color_picker_saturation_edittext_layout.xml"
+            line="23"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="UselessParent"
+        message="This `LinearLayout` layout or its `LinearLayout` parent is unnecessary"
+        errorLine1="    &lt;LinearLayout"
+        errorLine2="     ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-tr/sesl_color_picker_saturation_edittext_layout.xml"
+            line="23"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="UselessParent"
+        message="This `LinearLayout` layout or its `LinearLayout` parent is possibly unnecessary"
+        errorLine1="    &lt;LinearLayout"
+        errorLine2="     ~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_used_color_group.xml"
+            line="22"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="IconDuplicatesConfig"
+        message="The `sesl_color_picker_opacity_seekbar_background.png` icon has identical contents in the following configuration folders: drawable-land-xxhdpi, drawable-land, drawable-sw360dp-land, drawable-sw411dp-land">
+        <location
+            file="src/main/res/drawable-sw411dp-land/sesl_color_picker_opacity_seekbar_background.png"/>
+        <location
+            file="src/main/res/drawable-sw360dp-land/sesl_color_picker_opacity_seekbar_background.png"/>
+        <location
+            file="src/main/res/drawable-land/sesl_color_picker_opacity_seekbar_background.png"/>
+        <location
+            file="src/main/res/drawable-land-xxhdpi/sesl_color_picker_opacity_seekbar_background.png"/>
+    </issue>
+
+    <issue
+        id="IconLocation"
+        message="Found bitmap drawable `res/drawable/sesl_color_picker_opacity_background.png` in densityless folder">
+        <location
+            file="src/main/res/drawable/sesl_color_picker_opacity_background.png"/>
+    </issue>
+
+    <issue
+        id="IconLocation"
+        message="Found bitmap drawable `res/drawable/sesl_color_picker_opacity_seekbar_background.png` in densityless folder">
+        <location
+            file="src/main/res/drawable/sesl_color_picker_opacity_seekbar_background.png"/>
+    </issue>
+
+    <issue
+        id="TextFields"
+        message="This text field does not specify an `inputType`"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="62"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_layout.xml"
+            line="100"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_layout.xml"
+            line="130"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_layout.xml"
+            line="160"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="    &lt;EditText"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_opacity_edittext_layout.xml"
+            line="22"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout-iw/sesl_color_picker_opacity_edittext_layout.xml"
+            line="28"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout-tr/sesl_color_picker_opacity_edittext_layout.xml"
+            line="28"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="    &lt;EditText"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_saturation_edittext_layout.xml"
+            line="22"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout-iw/sesl_color_picker_saturation_edittext_layout.xml"
+            line="28"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout-tr/sesl_color_picker_saturation_edittext_layout.xml"
+            line="28"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="62"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="89"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="115"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="141"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ClickableViewAccessibility"
+        message="Custom view ``SeslOpacitySeekBar`` has `setOnTouchListener` called on it but does not override `performClick`"
+        errorLine1="        mOpacitySeekBar.setOnTouchListener(new View.OnTouchListener() {"
+        errorLine2="        ^">
+        <location
+            file="src/main/java/androidx/picker/widget/SeslColorPicker.java"
+            line="253"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ClickableViewAccessibility"
+        message="`onTouch` should call `View#performClick` when a click is detected"
+        errorLine1="            public boolean onTouch(View view, MotionEvent event) {"
+        errorLine2="                           ~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker/widget/SeslColorPicker.java"
+            line="255"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="ClickableViewAccessibility"
+        message="Custom view ``SeslGradientColorSeekBar`` has `setOnTouchListener` called on it but does not override `performClick`"
+        errorLine1="        mGradientColorSeekBar.setOnTouchListener(new View.OnTouchListener() {"
+        errorLine2="        ^">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="562"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ClickableViewAccessibility"
+        message="`onTouch` should call `View#performClick` when a click is detected"
+        errorLine1="            public boolean onTouch(View view, MotionEvent event) {"
+        errorLine2="                           ~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="564"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="ClickableViewAccessibility"
+        message="Custom view ``SeslOpacitySeekBar`` has `setOnTouchListener` called on it but does not override `performClick`"
+        errorLine1="        mOpacitySeekBar.setOnTouchListener(new View.OnTouchListener() {"
+        errorLine2="        ^">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="638"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="ClickableViewAccessibility"
+        message="`onTouch` should call `View#performClick` when a click is detected"
+        errorLine1="            public boolean onTouch(View view, MotionEvent event) {"
+        errorLine2="                           ~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="640"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="ClickableViewAccessibility"
+        message="Custom view `SeslColorSpectrumView` overrides `onTouchEvent` but not `performClick`"
+        errorLine1="    public boolean onTouchEvent(MotionEvent event) {"
+        errorLine2="                   ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSpectrumView.java"
+            line="103"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="ClickableViewAccessibility"
+        message="Custom view `SeslColorSwatchView` overrides `onTouchEvent` but not `performClick`"
+        errorLine1="    public boolean onTouchEvent(MotionEvent event) {"
+        errorLine2="                   ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker/widget/SeslColorSwatchView.java"
+            line="176"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="ClickableViewAccessibility"
+        message="Custom view `SeslColorSwatchView` overrides `onTouchEvent` but not `performClick`"
+        errorLine1="    public boolean onTouchEvent(MotionEvent event) {"
+        errorLine2="                   ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorSwatchView.java"
+            line="325"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_group.xml"
+            line="36"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_group.xml"
+            line="68"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_layout.xml"
+            line="31"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_oneui_3_selected_color_layout.xml"
+            line="39"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_group.xml"
+            line="35"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="    &lt;ImageView"
+        errorLine2="     ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_group.xml"
+            line="67"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="30"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image"
+        errorLine1="        &lt;ImageView"
+        errorLine2="         ~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="38"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
+        errorLine1="    &lt;EditText"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_opacity_edittext_layout.xml"
+            line="22"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout-iw/sesl_color_picker_opacity_edittext_layout.xml"
+            line="28"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout-tr/sesl_color_picker_opacity_edittext_layout.xml"
+            line="28"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
+        errorLine1="    &lt;EditText"
+        errorLine2="     ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_saturation_edittext_layout.xml"
+            line="22"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout-iw/sesl_color_picker_saturation_edittext_layout.xml"
+            line="28"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout-tr/sesl_color_picker_saturation_edittext_layout.xml"
+            line="28"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="62"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="89"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="115"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`"
+        errorLine1="        &lt;EditText"
+        errorLine2="         ~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_selected_color_layout.xml"
+            line="141"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                                &quot;&quot; + String.format(Locale.getDefault(), &quot;%d&quot;, progress));"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="128"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                                &quot;&quot; + String.format(Locale.getDefault(), &quot;%d&quot;, 100));"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="298"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                            &quot;&quot; + String.format(Locale.getDefault(), &quot;%d&quot;, 0));"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="313"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                &quot;&quot; + String.format(Locale.getDefault(), &quot;%d&quot;, mGradientColorSeekBar.getProgress()));"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="430"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                                    &quot;&quot; + String.format(Locale.getDefault(), &quot;%d&quot;, 100));"
+        errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="481"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                            &quot;&quot; + String.format(Locale.getDefault(), &quot;%d&quot;, 0));"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="497"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                            &quot;&quot; + String.format(Locale.getDefault(), &quot;%d&quot;, progress));"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="520"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                            &quot;&quot; + String.format(Locale.getDefault(), &quot;%d&quot;, progress));"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="527"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                            &quot;&quot; + String.format(Locale.getDefault(), &quot;%d&quot;, ((int) Math.ceil((progress * 100) / 255.0f))));"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="615"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                        mColorPickerRedEditText.setText(&quot;&quot; + Color.red(parsedColor));"
+        errorLine2="                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="691"
+            column="57"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                        mColorPickerGreenEditText.setText(&quot;&quot; + Color.green(parsedColor));"
+        errorLine2="                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="696"
+            column="59"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                        mColorPickerBlueEditText.setText(&quot;&quot; + Color.blue(parsedColor));"
+        errorLine2="                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="701"
+            column="58"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                                mColorPickerRedEditText.setText(&quot;255&quot;);"
+        errorLine2="                                                                ~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="736"
+            column="65"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                                mColorPickerGreenEditText.setText(&quot;255&quot;);"
+        errorLine2="                                                                  ~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="739"
+            column="67"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="String literal in `setText` can not be translated. Use Android resources instead."
+        errorLine1="                                mColorPickerBlueEditText.setText(&quot;255&quot;);"
+        errorLine2="                                                                 ~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="742"
+            column="66"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="        mColorPickerHexEditText.setText(&quot;&quot; + colorStr.substring(2, colorStr.length()).toUpperCase());"
+        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="782"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="            mColorPickerHexEditText.setText(&quot;&quot; + colorStr.toUpperCase());"
+        errorLine2="                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="798"
+            column="45"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="            mColorPickerRedEditText.setText(&quot;&quot; + Color.red(parsedColor));"
+        errorLine2="                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="802"
+            column="45"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="            mColorPickerBlueEditText.setText(&quot;&quot; + Color.blue(parsedColor));"
+        errorLine2="                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="803"
+            column="46"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="            mColorPickerGreenEditText.setText(&quot;&quot; + Color.green(parsedColor));"
+        errorLine2="                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="804"
+            column="47"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                        &quot;&quot; + String.format(Locale.getDefault(), &quot;%d&quot;, progress));"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="915"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                        &quot;&quot; + String.format(Locale.getDefault(), &quot;%d&quot;, progress));"
+        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="938"
+            column="25"/>
+    </issue>
+
+    <issue
+        id="SetTextI18n"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
+        errorLine1="                    &quot;&quot; + String.format(Locale.getDefault(), &quot;%d&quot;, progress));"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/picker3/widget/SeslColorPicker.java"
+            line="998"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;%&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;%&quot; />"
+        errorLine2="        ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_opacity_edittext_layout.xml"
+            line="40"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;%&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;%&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-iw/sesl_color_picker_opacity_edittext_layout.xml"
+            line="43"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;%&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;%&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-tr/sesl_color_picker_opacity_edittext_layout.xml"
+            line="43"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;%&quot;, should use `@string` resource"
+        errorLine1="        android:text=&quot;%&quot; />"
+        errorLine2="        ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout/sesl_color_picker_saturation_edittext_layout.xml"
+            line="40"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;%&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;%&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-iw/sesl_color_picker_saturation_edittext_layout.xml"
+            line="43"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="HardcodedText"
+        message="Hardcoded string &quot;%&quot;, should use `@string` resource"
+        errorLine1="            android:text=&quot;%&quot; />"
+        errorLine2="            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/layout-tr/sesl_color_picker_saturation_edittext_layout.xml"
+            line="43"
+            column="13"/>
+    </issue>
+
+</issues>

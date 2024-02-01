@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2024 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<!-- Original code by Samsung, all rights reserved to the original author. -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+<!--  <dimen name="sesl_color_picker_color_one_ui_3_swatch_view_container_margin_left">1dp</dimen>-->
+<!--  <dimen name="sesl_color_picker_color_one_ui_3_swatch_view_container_margin_right">21dp</dimen>-->
+<!--  <dimen name="sesl_color_picker_oneui_3_color_swatch_view_margin_right_background">20dp</dimen>-->
+  <dimen name="sesl_color_picker_color_swatch_view_height">194dp</dimen>
+  <dimen name="sesl_color_picker_color_swatch_view_width">194dp</dimen>
+  <dimen name="sesl_color_picker_main_content_width">520dp</dimen>
+  <dimen name="sesl_color_picker_oneui_3_color_spectrum_view_height">200dp</dimen>
+  <dimen name="sesl_color_picker_oneui_3_color_spectrum_view_width">218dp</dimen>
+  <dimen name="sesl_color_picker_oneui_3_color_swatch_view_height">188dp</dimen>
+  <dimen name="sesl_color_picker_oneui_3_color_swatch_view_height_background">212dp</dimen>
+  <dimen name="sesl_color_picker_oneui_3_color_swatch_view_width">194dp</dimen>
+  <dimen name="sesl_color_picker_oneui_3_color_swatch_view_width_background">238dp</dimen>
+  <dimen name="sesl_color_picker_oneui_3_main_content_width">600dp</dimen>
+  <dimen name="sesl_color_picker_oneui_3_used_color_item_gap_margin">14dp</dimen>
+  <dimen name="sesl_color_picker_opacity_seekbar_background_width">257.5dp</dimen>
+  <dimen name="sesl_color_picker_seekbar_width">268dp</dimen>
+  <dimen name="sesl_color_picker_selected_color_focus_width">129dp</dimen>
+  <dimen name="sesl_color_picker_selected_color_group_width">258dp</dimen>
+  <dimen name="sesl_color_picker_selected_color_item_margin">18dp</dimen>
+  <dimen name="sesl_color_picker_selected_color_text_width">71dp</dimen>
+  <dimen name="sesl_color_picker_used_color_group_width">260dp</dimen>
+  <dimen name="sesl_color_picker_used_color_item_gap_margin">8.4dp</dimen>
+  <dimen name="sesl_color_picker_used_color_item_size">36dp</dimen>
+  <dimen name="sesl_spectrum_rect_top">12dp</dimen>
+  <dimen name="sesl_swatch_rect_top">11dp</dimen>
+
+
+</resources>

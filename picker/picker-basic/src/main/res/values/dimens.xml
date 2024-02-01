@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2024 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<!-- Original code by Samsung, all rights reserved to the original author. -->
+<resources>
+  <dimen name="sesl_picker_dialog_width">-1px</dimen>
+  <dimen name="sesl_picker_spinner_height">144dp</dimen>
+  <dimen name="sesl_number_picker_spinner_edit_text_height">48dp</dimen>
+  <item type="dimen" name="sesl_number_picker_spinner_height">@dimen/sesl_picker_spinner_height</item>
+  <dimen name="sesl_number_picker_spinner_width">90dp</dimen>
+  <dimen name="sesl_spinning_date_picker_date_spinner_text_size">21dp</dimen>
+  <dimen name="sesl_spinning_date_picker_height">277dp</dimen>
+  <dimen name="sesl_spinning_date_picker_height_dialog">277dp</dimen>
+  <dimen name="sesl_spinning_date_picker_margin_top">44dp</dimen>
+  <dimen name="sesl_time_picker_dialog_min_width">400dp</dimen>
+  <dimen name="sesl_time_picker_divider_padding_bottom">6dp</dimen>
+  <item type="dimen" name="sesl_time_picker_inner_circle_container_ratio">0.77</item>
+  <dimen name="sesl_time_picker_spinner_am_pm_text_size">22dp</dimen>
+  <dimen name="sesl_time_picker_spinner_dialog_padding_bottom">16dp</dimen>
+  <dimen name="sesl_time_picker_spinner_dialog_padding_top">18dp</dimen>
+  <dimen name="sesl_time_picker_spinner_divider_text_size">32dp</dimen>
+  <item type="dimen" name="sesl_time_picker_spinner_height">@dimen/sesl_picker_spinner_height</item>
+  <dimen name="sesl_time_picker_spinner_text_size">28dp</dimen>
+  <dimen name="sesl_custom_toast_padding_bottom">9dp</dimen>
+  <dimen name="sesl_custom_toast_padding_end">20dp</dimen>
+  <dimen name="sesl_custom_toast_padding_start">20dp</dimen>
+  <dimen name="sesl_custom_toast_padding_top">9dp</dimen>
+  <dimen name="sesl_date_picker_calendar_day_height">32dp</dimen>
+  <dimen name="sesl_date_picker_calendar_header_button_height">36dp</dimen>
+  <dimen name="sesl_date_picker_calendar_header_button_width">36dp</dimen>
+  <dimen name="sesl_date_picker_calendar_header_height">36dp</dimen>
+  <dimen name="sesl_date_picker_calendar_header_layout_padding_left">8dp</dimen>
+  <dimen name="sesl_date_picker_calendar_header_layout_padding_right">2dp</dimen>
+  <dimen name="sesl_date_picker_calendar_header_month_text_size">16dp</dimen>
+  <dimen name="sesl_date_picker_calendar_header_spinner_height">24dp</dimen>
+  <dimen name="sesl_date_picker_calendar_header_spinner_width">22dp</dimen>
+  <dimen name="sesl_date_picker_calendar_view_height">192dp</dimen>
+  <dimen name="sesl_date_picker_calendar_view_margin">15dp</dimen>
+  <dimen name="sesl_date_picker_calendar_view_margin_bottom">12dp</dimen>
+  <dimen name="sesl_date_picker_calendar_view_padding">0dp</dimen>
+  <dimen name="sesl_date_picker_calendar_view_width">328dp</dimen>
+  <dimen name="sesl_date_picker_calendar_week_height">32dp</dimen>
+  <dimen name="sesl_date_picker_day_number_text_size">15dp</dimen>
+  <dimen name="sesl_date_picker_dialog_min_height">205dp</dimen>
+  <dimen name="sesl_date_picker_dialog_min_width">400dp</dimen>
+  <dimen name="sesl_date_picker_dialog_padding_bottom">4dp</dimen>
+  <dimen name="sesl_date_picker_dialog_padding_top">20dp</dimen>
+  <dimen name="sesl_date_picker_gap_between_header_and_weekend">10dp</dimen>
+  <dimen name="sesl_date_picker_gap_between_weekend_and_calender">7dp</dimen>
+  <dimen name="sesl_date_picker_lunar_calendar_header_margin">10dp</dimen>
+  <dimen name="sesl_date_picker_month_day_label_text_size">11dp</dimen>
+  <dimen name="sesl_date_picker_selected_day_circle_radius">14dp</dimen>
+  <dimen name="sesl_date_picker_selected_day_circle_stroke">1.5dp</dimen>
+  <item type="dimen" name="sesl_date_picker_spinner_height">@dimen/sesl_picker_spinner_height</item>
+
+  <dimen name="sesl_sleep_goal_margin_bottom">4dp</dimen>
+  <dimen name="sesl_sleep_goal_wheel_width">16dp</dimen>
+  <dimen name="sesl_sleep_picker_margin_numeric_18_6">3dp</dimen>
+  <dimen name="sesl_sleep_record_bed_image_icon_size">21dp</dimen>
+  <dimen name="sesl_sleep_record_bed_image_margin_right">4dp</dimen>
+  <dimen name="sesl_sleep_record_clock_dimen">14dp</dimen>
+  <dimen name="sesl_sleep_time_am_pm_size">14dp</dimen>
+  <dimen name="sesl_sleep_time_duration_text_size">14sp</dimen>
+  <dimen name="sesl_sleep_time_icon_touch_width">5dp</dimen>
+  <dimen name="sesl_sleep_time_pointer_size">30dp</dimen>
+  <dimen name="sesl_sleep_time_text_size">30dp</dimen>
+  <dimen name="sesl_sleep_visual_edit_inner_circle_dimens">226dp</dimen>
+  <dimen name="sesl_sleep_visual_edit_inner_circle_size">150dp</dimen>
+  <dimen name="sesl_sleep_visual_edit_outer_circle_min_size">246dp</dimen>
+  <dimen name="sesl_sleep_visual_edit_outer_circle_size">311dp</dimen>
+  <dimen name="sesl_dot_line_gap_width">1.5dp</dimen>
+  <dimen name="sesl_dot_line_stroke_width">3dp</dimen>
+</resources>

@@ -1,0 +1,34 @@
+plugins {
+    id ("com.android.library")
+    id ("maven-publish")
+    id ("signing")
+}
+
+android {
+    namespace = "androidx.picker"
+
+    sourceSets {
+        main.resources.srcDir "$buildDir/javaResources"
+        main.res.srcDirs += "src/main/res-public"
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+}
+
+dependencies {
+    api("androidx.annotation:annotation:1.7.1")
+    implementation(project(":appcompat:appcompat"))
+    api(project(":core:core"))
+    api("androidx.dynamicanimation:dynamicanimation:1.0.0")
+    api(project(":viewpager:viewpager"))
+}
+
+
+ext {
+    POM_NAME = "SESL Picker Basic"
+    POM_DESCRIPTION = "SESL androidxpicker:picker-basic Library."
+}

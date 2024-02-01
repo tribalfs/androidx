@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Copyright 2024 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<resources>
+  <string name="sesl_color_picker_black">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_light_spring_green">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_option">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_recently_used_colors">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_white">Koyu camgöbeği</string>
+  <string name="sesl_picker_done">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_dark_green">Koyu camgöbeği</string>
+  <string name="sesl_color_opacity_text">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_light_gray">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_hue_and_saturation">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_light_green">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_light_magenta">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_opacity">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_dark_magenta">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_yellow">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_gray">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_magenta">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_slider">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_light_orange">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_color_wheel">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_swatches_text">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_dark_orange">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_spring_green">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_light_cyan">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_color_one">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_dark_gray">Koyu camgöbeği</string>
+  <string name="sesl_color_green_text">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_red">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_current">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_dark_blue">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_new">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_violet">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_color_six">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_dark_red">Koyu camgöbeği</string>
+  <string name="sesl_picker_cancel">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_light_violet">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_green">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_dark_yellow">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_dark_spring_green">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_double_tap_to_select">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_light_yellow">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_color_two">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_dark_violet">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_cyan">Koyu camgöbeği</string>
+  <string name="sesl_color_blue_text">Koyu camgöbeği</string>
+  <string name="sesl_color_red_text">Koyu camgöbeği</string>
+  <string name="sesl_color_saturation_text">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_light_red">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_color_five">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_light_azure">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_brightness">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_blue">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_dark_azure">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_orange">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_color_three">Koyu camgöbeği</string>
+  <string name="sesl_color_hex_text">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_color_four">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_spectrum_text">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_light_blue">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_azure">Koyu camgöbeği</string>
+  <string name="sesl_color_picker_dark_cyan">Koyu camgöbeği</string>
+</resources>

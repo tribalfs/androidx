@@ -1,0 +1,30 @@
+plugins {
+    id("com.android.library")
+    id("maven-publish")
+    id("signing")
+}
+
+android {
+    namespace = "androidx.apppickerview"
+
+    sourceSets {
+        main.resources.srcDir "$buildDir/javaResources"
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    api("androidx.annotation:annotation:1.7.0")
+    api(project(":appcompat:appcompat"))
+    api(project(":core:core"))
+    api(project(":recyclerview:recyclerview"))
+}
+
+ext {
+    POM_NAME = "SESL AppPickerView"
+    POM_DESCRIPTION = "SESL androidx:apppickerview Library."
+}

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.1.2" type="baseline" client="gradle" dependencies="false" name="AGP (8.1.2)" variant="all" version="8.1.2">
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 21 (current min is 19): `android.content.res.Resources#getDrawable`"
+        errorLine1="                        = getResources().getDrawable(R.drawable.sesl_index_bar_textmode_bg,"
+        errorLine2="                                         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="319"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 21 (current min is 19): `android.content.res.Resources#getDrawable`"
+        errorLine1="                        = getResources().getDrawable(R.drawable.sesl_index_bar_textmode_thumb_shape,"
+        errorLine2="                                         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="324"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 21 (current min is 19): `android.content.res.Resources#getDrawable`"
+        errorLine1="                        = getResources().getDrawable(R.drawable.sesl_index_bar_bg,"
+        errorLine2="                                         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="328"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 21 (current min is 19): `android.content.res.Resources#getDrawable`"
+        errorLine1="                        = getResources().getDrawable(R.drawable.sesl_index_bar_thumb_shape,"
+        errorLine2="                                         ~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="333"
+            column="42"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 21 (current min is 19): `android.content.res.Resources#getDrawable`"
+        errorLine1="            mScrollThumbBgDrawable = rsrc.getDrawable(R.drawable.sesl_index_bar_thumb_shape,"
+        errorLine2="                                          ~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="886"
+            column="43"/>
+    </issue>
+
+    <issue
+        id="NewApi"
+        message="Call requires API level 21 (current min is 19): `android.content.res.Resources#getDrawable`"
+        errorLine1="            mBgDrawableDefault = rsrc.getDrawable(R.drawable.sesl_index_bar_bg, theme);"
+        errorLine2="                                      ~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="903"
+            column="39"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of androidx.annotation:annotation than 1.7.0 is available: 1.7.1"
+        errorLine1="    api(&quot;androidx.annotation:annotation:1.7.0&quot;)"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="build.gradle"
+            line="19"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@string/sesl_index_selected` is marked as private in sesl.androidx.appcompat:appcompat:unspecified"
+        errorLine1="                            + &quot;, &quot; + getResources().getString(androidx.appcompat.R.string.sesl_index_selected));"
+        errorLine2="                                                                                          ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="469"
+            column="91"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@string/sesl_font_family_regular` is marked as private in sesl.androidx.appcompat:appcompat:unspecified"
+        errorLine1="                        .getString(androidx.appcompat.R.string.sesl_font_family_regular),"
+        errorLine2="                                                               ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="848"
+            column="64"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@string/sesl_index_section` is marked as private in sesl.androidx.appcompat:appcompat:unspecified"
+        errorLine1="                        = new StringBuilder(res.getString(androidx.appcompat.R.string.sesl_index_section));"
+        errorLine2="                                                                                      ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="1509"
+            column="87"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@string/sesl_index_scrollbar` is marked as private in sesl.androidx.appcompat:appcompat:unspecified"
+        errorLine1="                contentDescription.append(res.getString(androidx.appcompat.R.string.sesl_index_scrollbar));"
+        errorLine2="                                                                                    ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="1511"
+            column="85"/>
+    </issue>
+
+    <issue
+        id="PrivateResource"
+        message="The resource `@string/sesl_index_assistant_text` is marked as private in sesl.androidx.appcompat:appcompat:unspecified"
+        errorLine1="                contentDescription.append(res.getString(androidx.appcompat.R.string.sesl_index_assistant_text));"
+        errorLine2="                                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="1513"
+            column="85"/>
+    </issue>
+
+    <issue
+        id="DrawAllocation"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
+        errorLine1="                    Paint charPaint = new Paint();"
+        errorLine2="                                      ~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="1457"
+            column="39"/>
+    </issue>
+
+    <issue
+        id="IconDensities"
+        message="Missing the following drawables in `drawable-mdpi`: sesl_index_bar_textmode_bg.9.png (found in drawable-xxhdpi)">
+        <location
+            file="src/main/res/drawable-mdpi"/>
+    </issue>
+
+    <issue
+        id="IconMissingDensityFolder"
+        message="Missing density variation folders in `src\main\res`: drawable-hdpi, drawable-xhdpi">
+        <location
+            file="src/main/res"/>
+    </issue>
+
+    <issue
+        id="ClickableViewAccessibility"
+        message="Custom view `SeslIndexScrollView` overrides `onTouchEvent` but not `performClick`"
+        errorLine1="    public boolean onTouchEvent(MotionEvent ev) {"
+        errorLine2="                   ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/androidx/indexscroll/widget/SeslIndexScrollView.java"
+            line="431"
+            column="20"/>
+    </issue>
+
+</issues>

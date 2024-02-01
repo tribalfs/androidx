@@ -1,0 +1,29 @@
+plugins {
+    id ("com.android.library")
+    id ("maven-publish")
+    id ("signing")
+}
+
+android {
+    namespace = "androidx.indexscroll"
+    sourceSets.main.resources.srcDir "$buildDir/javaResources"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+}
+
+dependencies {
+    api("androidx.annotation:annotation:1.7.0")
+    api project(path: ':appcompat:appcompat')
+    api project(path: ':core:core')
+    api project(path: ':customview:customview')
+    implementation project(path: ':recyclerview:recyclerview')
+}
+
+ext {
+    POM_NAME = "SESL IndexScroll"
+    POM_DESCRIPTION = "SESL androidx.indexscroll Library."
+}

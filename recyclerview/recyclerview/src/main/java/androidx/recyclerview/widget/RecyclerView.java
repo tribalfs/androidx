@@ -15856,10 +15856,6 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     return true;
                 }
 
-                if (mIsLongPressMultiSelection) {
-                    mIsLongPressMultiSelection = false;
-                }
-
                 return super.dispatchTouchEvent(ev);
             }
 
@@ -15936,6 +15932,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                         }
                         mGoToTopView.setPressed(false);
                     }
+                }
+                if (mIsLongPressMultiSelection) {
+                    mIsLongPressMultiSelection = false;
                 }
             }
             break;
@@ -16378,6 +16377,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     public void seslStartLongPressMultiSelection() {
         mIsLongPressMultiSelection = true;
+        //Immediately return `onLongPressMultiSelectionStarted` callback
+        //without waiting for MotionEvent.ACTION_MOVE to occur.
+        //Not triggering immediately may cause skipping of views on positions
+        //in between the initial coordinates when long press is detected and
+        //the coordinates when MotionEvent.ACTION_MOVE is detected.
+        updateLongPressMultiSelection(mInitialTouchX, mInitialTouchY, true);
     }
 
     public void seslSetCtrlkeyPressed(boolean pressed) {

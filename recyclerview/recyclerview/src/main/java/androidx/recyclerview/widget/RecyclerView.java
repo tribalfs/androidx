@@ -6960,14 +6960,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             if (!mAdapterHelper.hasPendingUpdates()) {
                 requestLayout();
             }
-            //Sesl
-            if (mFastScroller != null) {
-                mFastScroller.onSectionsChanged();
-            }
-            if (mIndexTip != null) {
-                mIndexTip.updateSections();
-            }
-            //sesl
+            updateSections();//sesl
         }
 
         @Override
@@ -6976,6 +6969,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             if (mAdapterHelper.onItemRangeChanged(positionStart, itemCount, payload)) {
                 triggerUpdateProcessor();
             }
+            updateSections();//custom
         }
 
         @Override
@@ -6984,6 +6978,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             if (mAdapterHelper.onItemRangeInserted(positionStart, itemCount)) {
                 triggerUpdateProcessor();
             }
+            updateSections();//custom
         }
 
         @Override
@@ -6992,6 +6987,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             if (mAdapterHelper.onItemRangeRemoved(positionStart, itemCount)) {
                 triggerUpdateProcessor();
             }
+            updateSections();//custom
         }
 
         @Override
@@ -7000,6 +6996,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             if (mAdapterHelper.onItemRangeMoved(fromPosition, toPosition, itemCount)) {
                 triggerUpdateProcessor();
             }
+            updateSections();//custom
         }
 
         void triggerUpdateProcessor() {
@@ -7024,6 +7021,18 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 requestLayout();
             }
         }
+
+        //Sesl
+        private void updateSections(){
+            if (mFastScroller != null) {
+                mFastScroller.onSectionsChanged();
+            }
+            if (mIndexTip != null) {
+                mIndexTip.updateSections();
+            }
+        }
+        //sesl
+
     }
 
     /**

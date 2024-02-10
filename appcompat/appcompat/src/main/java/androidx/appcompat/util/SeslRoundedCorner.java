@@ -176,19 +176,20 @@ public class SeslRoundedCorner {
             mBottomRightRound = ResourcesCompat.getDrawable(mRes, R.drawable.sesl_bottom_right_round, theme);
         }
 
-        if (darkTheme) {
-            final int roundColor = mRes.getColor(R.color.sesl_round_and_bgcolor_dark);
-            mBottomRightRoundColor = roundColor;
-            mBottomLeftRoundColor = roundColor;
-            mTopRightRoundColor = roundColor;
-            mTopLeftRoundColor = roundColor;
-        } else {
-            final int roundColor = mRes.getColor(R.color.sesl_round_and_bgcolor_light);
-            mBottomRightRoundColor = roundColor;
-            mBottomLeftRoundColor = roundColor;
-            mTopRightRoundColor = roundColor;
-            mTopLeftRoundColor = roundColor;
+        TypedValue typedValue = new TypedValue();
+        mContext.getTheme().resolveAttribute(androidx.appcompat.R.attr.roundedCornerColor,
+                typedValue, true);
+        final int roundColor;
+        if (typedValue.resourceId > 0) {
+            roundColor = ResourcesCompat.getColor(mContext.getResources(), typedValue.resourceId, theme);
+        }else {
+            roundColor = mRes.getColor(darkTheme? R.color.sesl_round_and_bgcolor_dark : R.color.sesl_round_and_bgcolor_light);
         }
+
+        mBottomRightRoundColor = roundColor;
+        mBottomLeftRoundColor = roundColor;
+        mTopRightRoundColor = roundColor;
+        mTopLeftRoundColor = roundColor;
 
         PorterDuffColorFilter pdcf = new PorterDuffColorFilter(mTopLeftRoundColor, PorterDuff.Mode.SRC_IN);
         mTopLeftRound.setColorFilter(pdcf);

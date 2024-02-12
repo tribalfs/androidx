@@ -10,7 +10,7 @@ dependencies {
     api("androidx.annotation:annotation:1.1.0")
     implementation project(":core:core-ktx")
     api project(":customview:customview")
-    implementation("androidx.window:window:1.2.0-rc01")
+    implementation("androidx.window:window:1.2.0")
     implementation("androidx.transition:transition:1.4.1")
 
     api project(":appcompat:appcompat")

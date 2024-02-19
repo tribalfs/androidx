@@ -51,7 +51,7 @@ class ListAdapter extends AbsAdapter {
             switch (mType) {
                 case AppPickerView.TYPE_LIST: {
                     holder.getWidgetContainer().setVisibility(View.GONE);
-                    holder.getLeftConatiner().setVisibility(View.GONE);
+                    holder.getLeftContainer().setVisibility(View.GONE);
                 }
                 break;
 
@@ -63,7 +63,7 @@ class ListAdapter extends AbsAdapter {
 
                 case AppPickerView.TYPE_LIST_CHECKBOX:
                 case AppPickerView.TYPE_LIST_CHECKBOX_WITH_ALL_APPS: {
-                    holder.getLeftConatiner().setVisibility(View.VISIBLE);
+                    holder.getLeftContainer().setVisibility(View.VISIBLE);
                     holder.getWidgetContainer().setVisibility(View.GONE);
 
                     holder.getItem().setOnClickListener(new View.OnClickListener() {
@@ -85,7 +85,7 @@ class ListAdapter extends AbsAdapter {
                 break;
 
                 case AppPickerView.TYPE_LIST_RADIOBUTTON: {
-                    holder.getLeftConatiner().setVisibility(View.VISIBLE);
+                    holder.getLeftContainer().setVisibility(View.VISIBLE);
                     holder.getWidgetContainer().setVisibility(View.GONE);
 
                     holder.getItem().setOnClickListener(new View.OnClickListener() {
@@ -108,7 +108,7 @@ class ListAdapter extends AbsAdapter {
 
                 case AppPickerView.TYPE_LIST_SWITCH:
                 case AppPickerView.TYPE_LIST_SWITCH_WITH_ALL_APPS: {
-                    holder.getLeftConatiner().setVisibility(View.GONE);
+                    holder.getLeftContainer().setVisibility(View.GONE);
                     holder.getWidgetContainer().setVisibility(View.VISIBLE);
 
                     holder.getItem().setOnClickListener(new View.OnClickListener() {

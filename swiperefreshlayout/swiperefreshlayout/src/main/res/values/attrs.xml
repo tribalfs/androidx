@@ -15,11 +15,19 @@
   limitations under the License.
   -->
 
+<!-- SESL variant -->
+
 <resources>
 
     <declare-styleable name="SwipeRefreshLayout">
         <!-- Background color for SwipeRefreshLayout progress spinner. -->
         <attr name="swipeRefreshLayoutProgressSpinnerBackgroundColor" format="color" />
+        <attr name="swipeRefreshLayoutTheme" format="reference" /><!--sesl-->
     </declare-styleable>
 
+    <!--Sesl-->
+    <declare-styleable name="SwipeRefreshLayoutProgress">
+        <attr name="swipeRefreshCircleDotColor1" format="color" />
+        <attr name="swipeRefreshCircleDotColor2" format="color" />
+    </declare-styleable>
 </resources>

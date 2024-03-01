@@ -74,7 +74,6 @@ import androidx.appcompat.view.menu.MenuView;
 import androidx.appcompat.view.menu.SubMenuBuilder;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MarginLayoutParamsCompat;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuHostHelper;
 import androidx.core.view.MenuProvider;
@@ -2444,8 +2443,7 @@ public class Toolbar extends ViewGroup implements MenuHost {
 
     private int getHorizontalMargins(View v) {
         final MarginLayoutParams mlp = (MarginLayoutParams) v.getLayoutParams();
-        return MarginLayoutParamsCompat.getMarginStart(mlp) +
-                MarginLayoutParamsCompat.getMarginEnd(mlp);
+        return mlp.getMarginStart() + mlp.getMarginEnd();
     }
 
     private int getVerticalMargins(View v) {

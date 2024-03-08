@@ -195,7 +195,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
      * Currently selected view holder
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-            ViewHolder mSelected = null;
+    ViewHolder mSelected = null;
 
     /**
      * The reference coordinates for the action start. For drag & drop, this is the time long
@@ -235,7 +235,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
      * The pointer we are tracking.
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-            int mActivePointerId = ACTIVE_POINTER_ID_NONE;
+    int mActivePointerId = ACTIVE_POINTER_ID_NONE;
 
     /**
      * Developer callback which controls the behavior of ItemTouchHelper.
@@ -254,7 +254,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
      * action state.
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-            int mSelectedFlags;
+    int mSelectedFlags;
 
     /**
      * When a View is dragged or swiped and needs to go back to where it was, we create a Recover
@@ -310,7 +310,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
      * that it can be drawn above other children.
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-            View mOverdrawChild = null;
+    View mOverdrawChild = null;
 
     /**
      * We cache the position of the overdraw child to avoid recalculating it each time child
@@ -318,13 +318,13 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
      * detached.
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-            int mOverdrawChildPosition = -1;
+    int mOverdrawChildPosition = -1;
 
     /**
      * Used to detect long press.
      */
     @SuppressWarnings("WeakerAccess") /* synthetic access */
-            GestureDetectorCompat mGestureDetector;
+    GestureDetector mGestureDetector;
 
     /**
      * Callback for when long press occurs.
@@ -542,7 +542,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
 
     private void startGestureDetection() {
         mItemTouchHelperGestureListener = new ItemTouchHelperGestureListener();
-        mGestureDetector = new GestureDetectorCompat(mRecyclerView.getContext(),
+        mGestureDetector = new GestureDetector(mRecyclerView.getContext(),
                 mItemTouchHelperGestureListener);
     }
 
@@ -748,7 +748,6 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
             mRecyclerView.getLayoutManager().requestSimpleAnimationsInNextLayout();
         }
         mCallback.onSelectedChanged(mSelected, mActionState);
-
         mRecyclerView.invalidate();
     }
 
@@ -2456,7 +2455,6 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
                 }
             }
         }
-
     }
 
     @VisibleForTesting

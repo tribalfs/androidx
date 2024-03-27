@@ -723,7 +723,9 @@ internal class DefaultSpecialEffectsController(
                     Build.VERSION.SDK_INT >= 34 &&
                         it.transition != null &&
                         transitionImpl.isSeekingSupported(it.transition)
-                }
+                } &&
+                (sharedElementTransition == null ||
+                transitionImpl.isSeekingSupported(sharedElementTransition))
 
         val transitioning: Boolean
             get() = transitionInfos.all {

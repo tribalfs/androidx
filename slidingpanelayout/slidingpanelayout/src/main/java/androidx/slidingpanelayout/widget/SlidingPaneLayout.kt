@@ -1128,18 +1128,18 @@ open class SlidingPaneLayout @JvmOverloads constructor(
                 if (child.visibility == GONE) return@forEachIndexed
                 val lp = child.spLayoutParams
                 val skippedFirstPass = !lp.canInfluenceParentSize || lp.weightOnlyWidth
-                val measuredWidth = if (skippedFirstPass) 0 else child.measuredWidth
+                val firstPassMeasuredWidth = if (skippedFirstPass) 0 else child.measuredWidth
                 val newWidth = when {
                     // Child view consumes available space if the combined width cannot fit into
                     // the layout available width.
                     canSlide -> {//sesl
                         if (child == mDrawerPanel) {
-                            if (lp.width < 0 && (measuredWidth > widthSize || lp.weight > 0)) {
+                            if (lp.width < 0 && (firstPassMeasuredWidth /*sesl*/ > widthSize || lp.weight > 0)) {
                                 // Drawer panel in a sliding configuration should
                                 // be clamped to the widthSize.
                                 widthSize
                             }else{
-                                measuredWidth
+                                firstPassMeasuredWidth/*sesl*/
                             }
                         }else{
                             widthAvailable - lp.horizontalMargin
@@ -1152,7 +1152,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
                             val widthToDistribute = widthRemaining.coerceAtLeast(0)
                             val addedWidth =
                                 (lp.weight * widthToDistribute / weightSum).roundToInt()
-                            measuredWidth + addedWidth
+                            firstPassMeasuredWidth + addedWidth
                         } else { // Explicit dividing line is defined
                             val clampedPos = dividerPos.coerceAtMost(width - paddingRight)
                                 .coerceAtLeast(paddingLeft)
@@ -1170,9 +1170,9 @@ open class SlidingPaneLayout @JvmOverloads constructor(
                         widthAvailable - lp.horizontalMargin - totalMeasuredWidth
                     }
                     lp.width > 0 -> lp.width
-                    else -> measuredWidth
+                    else -> firstPassMeasuredWidth
                 }
-                if (measuredWidth != newWidth) {
+                if (newWidth != child.measuredWidth) {
                     val childWidthSpec = MeasureSpec.makeMeasureSpec(newWidth, MeasureSpec.EXACTLY)
                     val childHeightSpec = getChildHeightMeasureSpec(
                         child,

@@ -19,7 +19,6 @@ plugins {
     id ("com.android.library")
     id ("maven-publish")
     id ("kotlin-android")
-    id ("signing")
 }
 
 

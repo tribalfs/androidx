@@ -22,6 +22,11 @@ plugins {
 
 apply from: new File("manifest.gradle")
 
+/**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
+def githubProperties = new Properties()
+githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
+
+
 allprojects {
     tasks.withType(Javadoc).tap {
         configureEach {
@@ -48,8 +53,8 @@ subprojects {
                 compileSdk = rootProject.ext.compile_sdk
                 defaultConfig.minSdk = rootProject.ext.min_sdk
                 defaultConfig.targetSdk = rootProject.ext.target_sdk
-                def projectDir = "androidx." + project.projectDir.getName()
-                def version_info = rootProject.ext.versions_metadata[projectDir]
+                def versionInfoKey = "androidx." + project.projectDir.getName()
+                def version_info = rootProject.ext.versions_metadata[versionInfoKey]
                 defaultConfig.minSdk = version_info[3]
 
                 if (isAndroidLibrary) {
@@ -89,51 +94,34 @@ subprojects {
 
                 }
             }
-
         }
         if (isAndroidLibrary) {
 
             project.afterEvaluate {
                 publishing {
                     publications {
-                        release(MavenPublication) {
-                            group = "$groupId"
+                        gpr(MavenPublication) {
                             version = android.defaultConfig.versionName
                             afterEvaluate {
                                 from components.release
                             }
 
-                            pom {
-                                name = POM_NAME
-                                description = POM_DESCRIPTION
-                                packaging = POM_PACKAGING
-                                url = POM_URL
-                                inceptionYear = POM_INCEPTION_YEAR
+                        }
+                    }
 
-                                licenses {
-                                    license {
-                                        name = POM_LICENCE_NAME
-                                        url = POM_LICENCE_URL
-                                        distribution = POM_LICENCE_DIST
-                                    }
-                                }
+                    repositories {
+                        maven {
+                            name = "GitHubPackages"
+                            /** Configure path of your package repository on Github
+                             *  Replace GITHUB_USERID with your/organisation Github userID and REPOSITORY with the repository name on GitHub
+                             */
+                            url = uri("https://maven.pkg.github.com/tribalfs/sesl-androidx")
 
-                                developers {
-                                    developer {
-                                        id = POM_DEVELOPER_ID
-                                        name = POM_DEVELOPER_NAME
-                                        url = POM_DEVELOPER_URL
-                                    }
-                                }
-
-                                scm {
-                                    url = POM_SCM_URL
-                                    connection = POM_SCM_CONNECTION
-                                    developerConnection = POM_SCM_DEV_CONNECTION
-                                }
+                            credentials {
+                                /**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
+                                username = githubProperties['gpr.usr'] ?: System.getenv("gpr.usr")
+                                password = githubProperties['gpr.key'] ?: System.getenv("gpr.key")
                             }
-
-                            println "release(MavenPublication) => group:$group | version: $version"
                         }
                     }
                 }

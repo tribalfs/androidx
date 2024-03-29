@@ -4,20 +4,18 @@ ext {
     target_sdk = 34
     compile_sdk = 34
 
-    groupId  = rootProject.name
-
     POM_INCEPTION_YEAR = "2024"
     POM_PACKAGING = "aar"
-    POM_URL = "https://github.com/tribalfs/" + rootProject.name
+    POM_URL = "https://github.com/tribalfs/sesl-androidx"
     POM_SCM_URL = "https://github.com/tribalfs/sesl-androidx"
-    POM_SCM_CONNECTION = "scm:git@github.com:tribalfs/" + rootProject.name + ".git"
-    POM_SCM_DEV_CONNECTION = "scm:git@github.com:tribalfs/" + rootProject.name + ".git"
-    POM_LICENCE_NAME = "MIT License"
-    POM_LICENCE_URL = "https://github.com/tribalfs/" + rootProject.name + "/blob/master/LICENSE"
+    POM_SCM_CONNECTION = "scm:git@github.com:tribalfs/sesl-androidx.git"
+    POM_SCM_DEV_CONNECTION = "scm:git@github.com:tribalfs/sesl-androidx.git"
+    POM_LICENCE_NAME = "Apache-2.0 License"
+    POM_LICENCE_URL = "https://github.com/tribalfs/sesl-androidx/blob/sesl-androidx-main/LICENSE.txt"
     POM_LICENCE_DIST = "repo"
     POM_DEVELOPER_ID = "tribalfs"
     POM_DEVELOPER_NAME = "Tribalfs"
-    POM_DEVELOPER_URL = "https://github.com/tribalfs/sesl-androidx"
+    POM_DEVELOPER_URL = "https://github.com/tribalfs"
 
     // Module versions map
     versions_metadata = [

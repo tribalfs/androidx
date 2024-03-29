@@ -3,7 +3,6 @@ plugins {
     id ("org.jetbrains.kotlin.android")
     id ("kotlin-kapt")
     id ("maven-publish")
-    id ("signing")
 }
 
 

@@ -128,7 +128,7 @@ configurations.implementation {
 }
 ```
 
-
+### [Sample app](https://github.com/tribalfs/oneui-design-sampleapp#one-ui-sample-app-using-sesl6-modules)
 
 # More info
 - About Android JetPack

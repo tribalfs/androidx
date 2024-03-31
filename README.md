@@ -27,7 +27,7 @@ Info: Samsung’s One UI apps are created using heavily modified versions of som
 - [sesl.androidx.picker:picker-color](https://github.com/tribalfs/sesl-androidx/packages/2110031)
 - [sesl.androidx.apppickerview:apppickerview](https://github.com/tribalfs/sesl-androidx/packages/2110022)
 
-#### These modules are intended for use together with [sesl-material-components-android](https://github.com/tribalfs/sesl-material-components-android) library.
+#### These modules are intended for use together with [sesl-material-components-android](https://github.com/tribalfs/sesl-material-components-android?tab=readme-ov-file#sesloneui-material-components-for-android-unofficial) library.
 
 ### Group id and versioning scheme
 In order to provide direct information about the equivalent official Android Jetpack module and the applied SESL version, $`\textcolor{orange}{\text{sesl.}}`$ is prepended to the existing group id. 
@@ -42,7 +42,7 @@ Example:
 
 ## Usage
 To use these libraries in your project, set compileSdk to at least 34 and use Java 8 or higher. Then:
-#### 1. Depending on your app's setup, add the following either to _allprojects_ section of the project-level _build.gradle(.kts)_ or to the _dependencyResolutionManagement_ section of _settings.gradle(.kts)_. This will authenticate to the GitHub Packages registry using a _personal access token_ with at least `read:packages` scope. If you don’t have a personal access token yet, you can [generate your access token](https://github.com/settings/tokens/new) one.
+#### 1. Depending on your app's setup, add the following either to _allprojects_ section of the project-level _build.gradle(.kts)_ or to the _dependencyResolutionManagement_ section of _settings.gradle(.kts)_. This will authenticate to the GitHub Packages registry using a _personal access token_ with at least `read:packages` scope. If you don’t have a personal access token yet, you can [generate one](https://github.com/settings/tokens/new).
 ```
 repositories {
     maven {

@@ -128,9 +128,12 @@ configurations.implementation {
 }
 ```
 
-### [Sample app](https://github.com/tribalfs/oneui-design-sampleapp#one-ui-sample-app-using-sesl6-modules)
+## [Sample app](https://github.com/tribalfs/oneui-design-sampleapp#one-ui-sample-app-using-sesl6-modules)
 
-# More info
+## [Android studio layout editor preview fix](https://github.com/tribalfs/android-studio-sec-fonts#android-studio-sec-fonts)
+
+
+## More info
 - About Android JetPack
 
   Jetpack is a suite of libraries, tools, and guidance to help developers write high-quality apps easier. These components help you follow best practices, free you from writing boilerplate code, and simplify complex tasks, so you can focus on the code you care about.
@@ -143,7 +146,7 @@ configurations.implementation {
 - [Material Components](https://material.io/components?platform=android)
 - [One UI design guidelines](https://developer.samsung.com/one-ui/index.html)
 
-# Credits
+## Credits
 - [Google](https://developer.android.com/jetpack) for their Jetpack and Material Components libraries.
 - [Samsung](https://www.samsung.com/) for their awesome OneUI Design.
 - [Yanndroid](https://github.com/Yanndroid) and BlackMesa123 for their [OneUI4 sesl library](https://github.com/OneUIProject/oneui-core) that highly inspired this project. Some commits are straightly cherry-picked from this project.

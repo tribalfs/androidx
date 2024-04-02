@@ -41,7 +41,7 @@ Example:
 
 
 ## Usage
-To use these libraries in your project, set compileSdk to at least 34 and use Java 8 or higher. Then:
+To use these libraries in your project, set compileSdk to at least 34 and use Java 8(1.8) or higher. Then:
 #### 1. Depending on your app's setup, add the following either to _allprojects_ section of the project-level _build.gradle(.kts)_ or to the _dependencyResolutionManagement_ section of _settings.gradle(.kts)_. This will authenticate to the GitHub Packages registry using a _personal access token_ with at least `read:packages` scope. If you don’t have a personal access token yet, you can [generate one](https://github.com/settings/tokens/new).
 ```
 repositories {
@@ -61,7 +61,7 @@ repositories {
    } 
 }
 ``` 
-_Note: If you are sharing your project, it's best to save these credentials in a separate file that's excluded from version control and expose them as project properties. Alternatively, you can saved and access them as system env. variables._
+_Note: If you are sharing your project, it's best to save these credentials in a separate file that's excluded from version control and expose them as project properties. Alternatively, you can save and access them as system env. variables._
 
 #### 2. Add the specific modules you need to the _dependencies_ section of the app-level _build.gradle(.kts)_'s (replacing the equivalent Android Jetpack module, if any)
 

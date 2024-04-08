@@ -3,11 +3,11 @@
 
     <issue
         id="ObsoleteSdkInt"
-        message="Unnecessary; SDK_INT is always >= 21"
-        errorLine1="    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        message="Unnecessary; SDK_INT is never &lt; 21"
+        errorLine1="            Build.VERSION.SDK_INT &lt; 20 || Build.VERSION.SDK_INT > 23;"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/main/java/androidx/slidingpanelayout/widget/SlidingPaneLayout.kt"/>
+            file="src/main/java/androidx/print/PrintHelper.java"/>
     </issue>
 
 </issues>

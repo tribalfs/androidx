@@ -29,6 +29,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 import androidx.appcompat.R;
 import androidx.core.content.res.ResourcesCompat;
@@ -41,9 +42,6 @@ import androidx.core.content.res.ResourcesCompat;
  * Samsung Rounded Corners class.
  */
 public class SeslRoundedCorner {
-    static final String TAG = "SeslRoundedCorner";
-
-    private static final int RADIUS = 26;
 
     public static final int ROUNDED_CORNER_NONE = 0;
     public static final int ROUNDED_CORNER_ALL = 15;
@@ -51,11 +49,6 @@ public class SeslRoundedCorner {
     public static final int ROUNDED_CORNER_TOP_RIGHT = 2;
     public static final int ROUNDED_CORNER_BOTTOM_LEFT = 4;
     public static final int ROUNDED_CORNER_BOTTOM_RIGHT = 8;
-
-    private Context mContext;
-    private Resources mRes;
-
-    private boolean mIsMutate = false;
 
     Drawable mTopLeftRound;
     Drawable mTopRightRound;
@@ -72,32 +65,72 @@ public class SeslRoundedCorner {
 
     Rect mRoundedCornerBounds = new Rect();
     int mRoundedCornerMode;
-    int mRoundRadius = -1;
+    int mRoundRadius;
 
-    int mX;
-    int mY;
-
-    public SeslRoundedCorner(Context context) {
-        mContext = context;
-        mRes = context.getResources();
-        initRoundedCorner();
+    public SeslRoundedCorner(@NonNull Context context) {
+        this(context, false);
     }
 
-    public SeslRoundedCorner(Context context, boolean isMutate) {
-        mContext = context;
-        mRes = context.getResources();
-        mIsMutate = isMutate;
-        initRoundedCorner();
+    public SeslRoundedCorner(@NonNull Context context, boolean isMutate) {
+        Resources resources = context.getResources();
+
+        mRoundRadius = resources.getDimensionPixelSize(R.dimen.sesl_rounded_corner_radius);
+
+        final boolean darkTheme = !SeslMisc.isLightTheme(context);
+        final Resources.Theme theme = context.getTheme();
+
+        if (isMutate) {
+            mTopLeftRound = ResourcesCompat.getDrawable(resources,
+                    R.drawable.sesl_top_left_round, theme).mutate();
+            mTopRightRound = ResourcesCompat.getDrawable(resources,
+                    R.drawable.sesl_top_right_round, theme).mutate();
+            mBottomLeftRound = ResourcesCompat.getDrawable(resources,
+                    R.drawable.sesl_bottom_left_round, theme).mutate();
+            mBottomRightRound = ResourcesCompat.getDrawable(resources,
+                    R.drawable.sesl_bottom_right_round, theme).mutate();
+        } else {
+            mTopLeftRound = ResourcesCompat.getDrawable(resources,
+                    R.drawable.sesl_top_left_round
+                    , theme);
+            mTopRightRound = ResourcesCompat.getDrawable(resources,
+                    R.drawable.sesl_top_right_round, theme);
+            mBottomLeftRound = ResourcesCompat.getDrawable(resources,
+                    R.drawable.sesl_bottom_left_round, theme);
+            mBottomRightRound = ResourcesCompat.getDrawable(resources,
+                    R.drawable.sesl_bottom_right_round, theme);
+        }
+
+        TypedValue typedValue = new TypedValue();
+        context.getTheme().resolveAttribute(androidx.appcompat.R.attr.roundedCornerColor,
+                typedValue, true);
+        final int roundColor;
+        if (typedValue.resourceId > 0) {
+            roundColor = ResourcesCompat.getColor(context.getResources(), typedValue.resourceId,
+                    theme);
+        }else {
+            roundColor = resources.getColor(darkTheme? R.color.sesl_round_and_bgcolor_dark :
+                    R.color.sesl_round_and_bgcolor_light);
+        }
+
+        mBottomRightRoundColor = roundColor;
+        mBottomLeftRoundColor = roundColor;
+        mTopRightRoundColor = roundColor;
+        mTopLeftRoundColor = roundColor;
+
+        PorterDuffColorFilter pdcf = new PorterDuffColorFilter(mTopLeftRoundColor,
+                PorterDuff.Mode.SRC_IN);
+        mTopLeftRound.setColorFilter(pdcf);
+        mTopRightRound.setColorFilter(pdcf);
+        mBottomLeftRound.setColorFilter(pdcf);
+        mBottomRightRound.setColorFilter(pdcf);
     }
 
     public void setRoundedCorners(int corners) {
         if ((corners & (-16 )) == 0) {
             mRoundedCornerMode = corners;
-            if (mTopLeftRound == null || mTopRightRound == null || mBottomLeftRound == null || mBottomRightRound == null) {
-                initRoundedCorner();
-            }
         } else {
-            throw new IllegalArgumentException("Use wrong rounded corners to the param, corners = " + corners);
+            throw new IllegalArgumentException("Use wrong rounded corners to the param, corners ="
+                    + " " + corners);
         }
     }
 
@@ -109,10 +142,6 @@ public class SeslRoundedCorner {
         if (corners == ROUNDED_CORNER_NONE) {
             throw new IllegalArgumentException("There is no rounded corner on = " + this);
         } else if ((corners & (-16)) == 0) {
-            if (mTopLeftRound == null || mTopRightRound == null || mBottomLeftRound == null || mBottomRightRound == null) {
-                initRoundedCorner();
-            }
-
             PorterDuffColorFilter pdcf = new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN);
             if ((corners & ROUNDED_CORNER_TOP_LEFT) != 0) {
                 mTopLeftRoundColor = color;
@@ -131,7 +160,8 @@ public class SeslRoundedCorner {
                 mBottomRightRound.setColorFilter(pdcf);
             }
         } else {
-            throw new IllegalArgumentException("Use wrong rounded corners to the param, corners = " + corners);
+            throw new IllegalArgumentException("Use wrong rounded corners to the param, corners ="
+                    + " " + corners);
         }
     }
 
@@ -158,46 +188,6 @@ public class SeslRoundedCorner {
         return mBottomRightRoundColor;
     }
 
-    private void initRoundedCorner() {
-        mRoundRadius = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, RADIUS, mRes.getDisplayMetrics());
-
-        final boolean darkTheme = !SeslMisc.isLightTheme(mContext);
-        final Resources.Theme theme = mContext.getTheme();
-
-        if (mIsMutate) {
-            mTopLeftRound = ResourcesCompat.getDrawable(mRes, R.drawable.sesl_top_left_round, theme).mutate();
-            mTopRightRound = ResourcesCompat.getDrawable(mRes, R.drawable.sesl_top_right_round, theme).mutate();
-            mBottomLeftRound = ResourcesCompat.getDrawable(mRes, R.drawable.sesl_bottom_left_round, theme).mutate();
-            mBottomRightRound = ResourcesCompat.getDrawable(mRes, R.drawable.sesl_bottom_right_round, theme).mutate();
-        } else {
-            mTopLeftRound = ResourcesCompat.getDrawable(mRes, R.drawable.sesl_top_left_round, theme);
-            mTopRightRound = ResourcesCompat.getDrawable(mRes, R.drawable.sesl_top_right_round, theme);
-            mBottomLeftRound = ResourcesCompat.getDrawable(mRes, R.drawable.sesl_bottom_left_round, theme);
-            mBottomRightRound = ResourcesCompat.getDrawable(mRes, R.drawable.sesl_bottom_right_round, theme);
-        }
-
-        TypedValue typedValue = new TypedValue();
-        mContext.getTheme().resolveAttribute(androidx.appcompat.R.attr.roundedCornerColor,
-                typedValue, true);
-        final int roundColor;
-        if (typedValue.resourceId > 0) {
-            roundColor = ResourcesCompat.getColor(mContext.getResources(), typedValue.resourceId, theme);
-        }else {
-            roundColor = mRes.getColor(darkTheme? R.color.sesl_round_and_bgcolor_dark : R.color.sesl_round_and_bgcolor_light);
-        }
-
-        mBottomRightRoundColor = roundColor;
-        mBottomLeftRoundColor = roundColor;
-        mTopRightRoundColor = roundColor;
-        mTopLeftRoundColor = roundColor;
-
-        PorterDuffColorFilter pdcf = new PorterDuffColorFilter(mTopLeftRoundColor, PorterDuff.Mode.SRC_IN);
-        mTopLeftRound.setColorFilter(pdcf);
-        mTopRightRound.setColorFilter(pdcf);
-        mBottomLeftRound.setColorFilter(pdcf);
-        mBottomRightRound.setColorFilter(pdcf);
-    }
-
     @RestrictTo(LIBRARY_GROUP_PREFIX)
     public int getRoundedCornerRadius() {
         return mRoundRadius;
@@ -209,16 +199,18 @@ public class SeslRoundedCorner {
     }
 
     public void drawRoundedCorner(View view, Canvas canvas) {
+        int left;
+        int top;
         if (view.getTranslationY() != 0.0f) {
-            mX = Math.round(view.getX());
-            mY = Math.round(view.getY());
-            canvas.translate(view.getX() - mX + 0.5f, view.getY() - mY + 0.5f);
+            left = Math.round(view.getX());
+            top = Math.round(view.getY());
+            canvas.translate(view.getX() - left + 0.5f, view.getY() - top + 0.5f);
         } else {
-            mX = view.getLeft();
-            mY = view.getTop();
+            left = view.getLeft();
+            top = view.getTop();
         }
 
-        mRoundedCornerBounds.set(mX, mY, view.getWidth() + mX, mY + view.getHeight());
+        mRoundedCornerBounds.set(left, top, view.getWidth() + left, top + view.getHeight());
         drawRoundedCornerInternal(canvas);
     }
 

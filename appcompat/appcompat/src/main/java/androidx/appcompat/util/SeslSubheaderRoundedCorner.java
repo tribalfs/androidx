@@ -22,6 +22,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
 /*
@@ -34,7 +35,7 @@ import androidx.annotation.RestrictTo;
 public class SeslSubheaderRoundedCorner extends SeslRoundedCorner {
     private static final String TAG = "SeslSubheaderRoundedCorner";
 
-    public SeslSubheaderRoundedCorner(Context context) {
+    public SeslSubheaderRoundedCorner(@NonNull Context context) {
         super(context);
     }
 
@@ -45,16 +46,18 @@ public class SeslSubheaderRoundedCorner extends SeslRoundedCorner {
     }
 
     @Override
-    public void drawRoundedCorner(View view, Canvas canvas) {
+    public void drawRoundedCorner(@NonNull View view, @NonNull Canvas canvas) {
+        int left;
+        int top;
         if (view.getTranslationY() != 0.0f) {
-            mX = Math.round(view.getX());
-            mY = Math.round(view.getY());
+            left = Math.round(view.getX());
+            top = Math.round(view.getY());
         } else {
-            mX = view.getLeft();
-            mY = view.getTop();
+            left = view.getLeft();
+            top = view.getTop();
         }
 
-        mRoundedCornerBounds.set(mX, mY, mX + view.getWidth(), mY + view.getHeight());
+        mRoundedCornerBounds.set(left, top, left + view.getWidth(), top + view.getHeight());
         drawRoundedCornerInternal(canvas);
     }
 

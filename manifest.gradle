@@ -27,7 +27,7 @@ ext {
             "androidx.viewpager"         : ["1.1.0-alpha01", "1.0.0-sesl6", "rev0", 19],
             "androidx.fragment"          : ["1.7.0-rc02", "1.0.0-sesl6", "rev0", 19],
             "androidx.coordinatorlayout" : ["1.3.0-alpha02", "1.0.0-sesl6", "rev0", 19],
-            "androidx.appcompat"         : ["1.7.0-alpha03", "1.0.28-sesl6", "rev1", 19],
+            "androidx.appcompat"         : ["1.7.0-beta01", "1.0.28-sesl6", "rev0", 19],
             "androidx.recyclerview"      : ["1.4.0-alpha01", "1.0.13-sesl6", "rev0", 19],
             "androidx.preference"        : ["1.2.1", "1.0.4-sesl6", "rev0", 19],
             "androidx.slidingpanelayout" : ["1.2.0", "1.0.2-sesl6", "rev0", 19],

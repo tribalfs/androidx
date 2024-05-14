@@ -47,7 +47,7 @@ android {
         main.res.srcDirs "res", "res-public"
     }
 
-    buildTypes.all {
+    buildTypes.configureEach {
         consumerProguardFiles("proguard-rules.pro")
     }
 

@@ -77,7 +77,7 @@ dependencies {
 //    testImplementation(libs.testCore)
 //    testImplementation(libs.testRules)
 //    testImplementation(libs.truth)
-//    lintPublish(project(":fragment:fragment-lint"))
+      lintPublish(project(":fragment:fragment-lint"))
 }
 
 ext {

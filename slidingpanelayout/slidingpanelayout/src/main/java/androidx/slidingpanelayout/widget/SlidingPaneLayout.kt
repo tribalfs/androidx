@@ -3356,5 +3356,23 @@ open class SlidingPaneLayout @JvmOverloads constructor(
     fun setOverhangSize(@Dimension size: Int) {
         mOverhangSize = (size * context.resources.displayMetrics.density + 0.5f).toInt()
     }
+
+    /**
+     * Custom added to be able to dynamically update it with [setOnApplyWindowInsetsListener]
+     */
+    fun seslSetDrawerMarginTop(margin: Int){
+        if (mDrawerMarginTop == margin) return
+        mDrawerMarginTop = margin
+        mSlidingPaneRoundedCorner?.setMarginTop(margin)
+    }
+
+    /**
+     * Custom added to be able to dynamically update it with [setOnApplyWindowInsetsListener]
+     */
+    fun seslSetDrawerMarginBottom(margin: Int){
+        if (mDrawerMarginBottom == margin) return
+        mDrawerMarginBottom = margin
+        mSlidingPaneRoundedCorner?.setMarginBottom(margin)
+    }
     //sesl
 }

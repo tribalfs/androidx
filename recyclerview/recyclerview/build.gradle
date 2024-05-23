@@ -52,6 +52,7 @@ android {
     }
 
     defaultConfig {
+        compileSdkPreview "VanillaIceCream"
         multiDexEnabled = true
     }
     namespace = "androidx.recyclerview"

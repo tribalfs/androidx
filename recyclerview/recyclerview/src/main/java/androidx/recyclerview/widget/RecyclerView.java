@@ -107,6 +107,7 @@ import androidx.appcompat.util.SeslMisc;
 import androidx.appcompat.util.SeslRoundedCorner;
 import androidx.appcompat.util.SeslSubheaderRoundedCorner;
 import androidx.core.content.ContextCompat;
+import androidx.core.os.BuildCompat;
 import androidx.core.os.TraceCompat;
 import androidx.core.util.Preconditions;
 import androidx.core.view.AccessibilityDelegateCompat;
@@ -4719,6 +4720,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     nestedScrollByInternal(scaledHScroll, scaledVScroll, event, TYPE_NON_TOUCH);
                 }
             }
+
             if (flingAxis != 0 && !useSmoothScroll) {
                 mDifferentialMotionFlingController.onMotionEvent(event, flingAxis);
             }
@@ -6800,6 +6802,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     if (mGapWorker != null) {
                         mGapWorker.postFromTraversal(RecyclerView.this, consumedX, consumedY);
                     }
+                }
+                if (BuildCompat.isAtLeastV()) {
+                    Api35Impl.setFrameContentVelocity(RecyclerView.this,
+                            Math.abs(scroller.getCurrVelocity()));
                 }
             }
 
@@ -15485,6 +15491,13 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             mScrollingChildHelper = new NestedScrollingChildHelper(this);
         }
         return mScrollingChildHelper;
+    }
+
+    @RequiresApi(35)
+    private static final class Api35Impl {
+        public static void setFrameContentVelocity(View view, float velocity) {
+            view.setFrameContentVelocity(velocity);
+        }
     }
 
     //Sesl

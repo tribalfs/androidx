@@ -95,6 +95,7 @@ import android.widget.SectionIndexer;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.ColorInt;
+import androidx.annotation.DoNotInline;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15495,6 +15496,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     @RequiresApi(35)
     private static final class Api35Impl {
+        @DoNotInline
         public static void setFrameContentVelocity(View view, float velocity) {
             view.setFrameContentVelocity(velocity);
         }

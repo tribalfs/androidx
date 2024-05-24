@@ -33,8 +33,8 @@ private fun TypedArray.checkAttribute(@StyleableRes index: Int) {
 }
 
 /**
- * Retrieve the boolean value for the attribute at [index] or throws [IllegalArgumentException]
- * if not defined.
+ * Retrieve the boolean value for the attribute at [index] or throws [IllegalArgumentException] if
+ * not defined.
  *
  * @see TypedArray.hasValue
  * @see TypedArray.getBoolean
@@ -45,8 +45,8 @@ public fun TypedArray.getBooleanOrThrow(@StyleableRes index: Int): Boolean {
 }
 
 /**
- * Retrieve the color value for the attribute at [index] or throws [IllegalArgumentException]
- * if not defined.
+ * Retrieve the color value for the attribute at [index] or throws [IllegalArgumentException] if not
+ * defined.
  *
  * @see TypedArray.hasValue
  * @see TypedArray.getColor
@@ -72,8 +72,8 @@ public fun TypedArray.getColorStateListOrThrow(@StyleableRes index: Int): ColorS
 }
 
 /**
- * Retrieve the dimension value for the attribute at [index] or throws [IllegalArgumentException]
- * if not defined.
+ * Retrieve the dimension value for the attribute at [index] or throws [IllegalArgumentException] if
+ * not defined.
  *
  * @see TypedArray.hasValue
  * @see TypedArray.getDimension
@@ -110,8 +110,8 @@ public fun TypedArray.getDimensionPixelSizeOrThrow(@StyleableRes index: Int): In
 }
 
 /**
- * Retrieve the drawable value for the attribute at [index] or throws [IllegalArgumentException]
- * if not defined.
+ * Retrieve the drawable value for the attribute at [index] or throws [IllegalArgumentException] if
+ * not defined.
  *
  * @see TypedArray.hasValue
  * @see TypedArray.getDrawable
@@ -122,8 +122,8 @@ public fun TypedArray.getDrawableOrThrow(@StyleableRes index: Int): Drawable {
 }
 
 /**
- * Retrieve the float value for the attribute at [index] or throws [IllegalArgumentException]
- * if not defined.
+ * Retrieve the float value for the attribute at [index] or throws [IllegalArgumentException] if not
+ * defined.
  *
  * @see TypedArray.hasValue
  * @see TypedArray.getFloat
@@ -134,8 +134,8 @@ public fun TypedArray.getFloatOrThrow(@StyleableRes index: Int): Float {
 }
 
 /**
- * Retrieve the font value for the attribute at [index] or throws [IllegalArgumentException]
- * if not defined.
+ * Retrieve the font value for the attribute at [index] or throws [IllegalArgumentException] if not
+ * defined.
  *
  * @see TypedArray.hasValue
  * @see TypedArray.getFont
@@ -147,8 +147,8 @@ public fun TypedArray.getFontOrThrow(@StyleableRes index: Int): Typeface {
 }
 
 /**
- * Retrieve the integer value for the attribute at [index] or throws [IllegalArgumentException]
- * if not defined.
+ * Retrieve the integer value for the attribute at [index] or throws [IllegalArgumentException] if
+ * not defined.
  *
  * @see TypedArray.hasValue
  * @see TypedArray.getInt
@@ -159,8 +159,8 @@ public fun TypedArray.getIntOrThrow(@StyleableRes index: Int): Int {
 }
 
 /**
- * Retrieve the integer value for the attribute at [index] or throws [IllegalArgumentException]
- * if not defined.
+ * Retrieve the integer value for the attribute at [index] or throws [IllegalArgumentException] if
+ * not defined.
  *
  * @see TypedArray.hasValue
  * @see TypedArray.getInteger
@@ -184,36 +184,32 @@ public fun TypedArray.getResourceIdOrThrow(@StyleableRes index: Int): Int {
 }
 
 /**
- * Retrieve the string value for the attribute at [index] or throws [IllegalArgumentException]
- * if not defined.
+ * Retrieve the string value for the attribute at [index] or throws [IllegalArgumentException] if
+ * not defined.
  *
  * @see TypedArray.hasValue
  * @see TypedArray.getString
  */
 public fun TypedArray.getStringOrThrow(@StyleableRes index: Int): String {
     checkAttribute(index)
-    return checkNotNull(getString(index)) {
-        "Attribute value could not be coerced to String."
-    }
+    return checkNotNull(getString(index)) { "Attribute value could not be coerced to String." }
 }
 
 /**
- * Retrieve the text value for the attribute at [index] or throws [IllegalArgumentException]
- * if not defined.
+ * Retrieve the text value for the attribute at [index] or throws [IllegalArgumentException] if not
+ * defined.
  *
  * @see TypedArray.hasValue
  * @see TypedArray.getText
  */
 public fun TypedArray.getTextOrThrow(@StyleableRes index: Int): CharSequence {
     checkAttribute(index)
-    return checkNotNull(getText(index)) {
-        "Attribute value could not be coerced to CharSequence."
-    }
+    return checkNotNull(getText(index)) { "Attribute value could not be coerced to CharSequence." }
 }
 
 /**
- * Retrieve the text array value for the attribute at [index] or throws
- * [IllegalArgumentException] if not defined.
+ * Retrieve the text array value for the attribute at [index] or throws [IllegalArgumentException]
+ * if not defined.
  *
  * @see TypedArray.hasValue
  * @see TypedArray.getTextArray
@@ -229,9 +225,7 @@ public fun TypedArray.getTextArrayOrThrow(@StyleableRes index: Int): Array<CharS
  * @see kotlin.io.use
  */
 public inline fun <R> TypedArray.use(block: (TypedArray) -> R): R {
-    return block(this).also {
-        recycle()
-    }
+    return block(this).also { recycle() }
 }
 
 @RequiresApi(26)

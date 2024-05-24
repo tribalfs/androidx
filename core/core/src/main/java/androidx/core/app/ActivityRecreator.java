@@ -219,7 +219,7 @@ final class ActivityRecreator {
                     && !mStarted
                     // Don't schedule stop if the original instance starting raced with recreate()
                     && queueOnStopIfNecessary(
-                            currentlyRecreatingToken, mRecreatingHashCode, activity)) {
+                    currentlyRecreatingToken, mRecreatingHashCode, activity)) {
                 mStopQueued = true;
                 // Don't retain this object longer than necessary
                 currentlyRecreatingToken = null;

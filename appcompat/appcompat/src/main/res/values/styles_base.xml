@@ -811,7 +811,7 @@
         <item name="android:paddingStart">@dimen/sesl_spinner_item_start_padding</item>
         <item name="android:paddingEnd">@dimen/sesl_spinner_item_end_padding</item>
     </style>
-    <style name="Base.Widget.AppCompat.Toolbar" parent="@style/Base.V26.Widget.AppCompat.Toolbar">
+    <style name="Base.Widget.AppCompat.Toolbar" parent="@style/Base.V7.Widget.AppCompat.Toolbar">
     </style>
     <style name="Base.Widget.AppCompat.Toolbar.Button.Navigation" parent="@android:style/Widget.Material.Toolbar.Button.Navigation">
         <item name="android:background">?attr/actionBarItemBackground</item>

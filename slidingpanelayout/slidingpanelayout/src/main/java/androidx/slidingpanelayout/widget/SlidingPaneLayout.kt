@@ -2152,24 +2152,26 @@ open class SlidingPaneLayout @JvmOverloads constructor(
      */
     interface PanelSlideListener {
         /**
-         * Called when a detail view's position changes.
+         * Called when a detail view's position changes
+         * exposing lesser or more portion of the drawer/list view.
          *
-         * @param panel       The child view that was moved
-         * @param slideOffset The new offset of this sliding pane within its range, from 0-1
+         * @param panel       The child/detail view that was moved
+         * @param slideOffset The new offset of this sliding pane within its range,
+         * from 0-1, 0 = drawer/list completely closed and 1 == drawer/list completely opened.
          */
         fun onPanelSlide(panel: View, slideOffset: Float)
 
         /**
-         * Called when a detail view becomes slid completely open.
+         * Called when a drawer/list view becomes completely opened.
          *
-         * @param panel The detail view that was slid to an open position
+         * @param panel The detail view that was slid to open the drawer/list view
          */
         fun onPanelOpened(panel: View)
 
         /**
-         * Called when a detail view becomes slid completely closed.
+         * Called when a drawer/list view becomes completely closed.
          *
-         * @param panel The detail view that was slid to a closed position
+         * @param panel The detail view that was slid to close the drawer/list view
          */
         fun onPanelClosed(panel: View)
     }
@@ -2791,25 +2793,25 @@ open class SlidingPaneLayout @JvmOverloads constructor(
 
     companion object {
         /**
-         * User can freely swipe between list and detail panes.
+         * User can freely swipe between drawer/list and detail panes.
          */
         const val LOCK_MODE_UNLOCKED = 0
 
         /**
-         * The drawer/list pane is locked in an open position. The user cannot swipe to close the detail
-         * pane, but the app can close the detail pane programmatically.
+         * The drawer/list pane is locked in an open position. The user cannot swipe to close the drawer/list
+         * pane, but the app can close it programmatically.
          */
         const val LOCK_MODE_LOCKED_OPEN = 1
 
         /**
-         * The drawer/list pane is locked in a closed position. The user cannot swipe to open the detail
-         * pane, but the app can open the detail pane programmatically.
+         * The drawer/list pane is locked in a closed position. The user cannot swipe to open the drawer/list
+         * pane, but the app can open it programmatically.
          */
         const val LOCK_MODE_LOCKED_CLOSED = 2
 
         /**
          * The user cannot swipe between list and detail panes, though the app can open or close the
-         * detail pane programmatically.
+         * drawer/list pane programmatically.
          */
         const val LOCK_MODE_LOCKED = 3
 
@@ -3158,6 +3160,12 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         return false
     }
 
+    /**
+     * Open the drawer/list pane
+     *
+     * @param animate
+     * @see seslClosePane
+     */
     fun seslOpenPane(animate: Boolean) {
         mLastValidVelocity = 0
         mIsNeedOpen = true
@@ -3165,6 +3173,12 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         openPane(0, animate)
     }
 
+    /**
+     * Close the drawer/list pane
+     *
+     * @param animate
+     * @see seslOpenPane
+     */
     fun seslClosePane(animate: Boolean) {
         mLastValidVelocity = 0
         mIsNeedOpen = false
@@ -3250,7 +3264,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
 
     /**
      * Specify the child view(s) of details pane which width are to be resized to fit them inside
-     * even when drawer pane is fully expanded.
+     * even when drawer pane is fully opened.
      * Applies only when [seslGetResizeOff] is false.
      *
      * @see [seslSetResizeOff]
@@ -3346,9 +3360,9 @@ open class SlidingPaneLayout @JvmOverloads constructor(
 
     /**
      * Currently, SESL6 version still applies [mOverhangSize] with hard-coded value
-     * in setting the width of the fixed panel. However, [mOverhangSize] is already
+     * in setting the width of the fixed/drawer panel. However, [mOverhangSize] is already
      * deprecated and removed in the latest version of jetpack [SlidingPaneLayout] version.
-     * This method is intended to workaround it instead of hardcoding this value.
+     * This method is intended to workaround this.
      *
      * Set a "physical" edge to grab to pull it closed.
      */

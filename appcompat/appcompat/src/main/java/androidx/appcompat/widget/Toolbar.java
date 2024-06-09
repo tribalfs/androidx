@@ -2545,7 +2545,7 @@ public class Toolbar extends ViewGroup implements MenuHost {
      */
     @VisibleForTesting
     @Nullable
-    final TextView getTitleTextView() {
+    public final TextView getTitleTextView() {
         return mTitleTextView;
     }
 
@@ -2553,7 +2553,7 @@ public class Toolbar extends ViewGroup implements MenuHost {
      */
     @VisibleForTesting
     @Nullable
-    final TextView getSubtitleTextView() {
+    public final TextView getSubtitleTextView() {
         return mSubtitleTextView;
     }
 

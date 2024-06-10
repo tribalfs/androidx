@@ -16,6 +16,8 @@
 
 package androidx.recyclerview.widget;
 
+import static androidx.recyclerview.widget.ItemTouchHelper.ANIMATION_TYPE_SWIPE_CANCEL;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -197,7 +199,7 @@ public class SeslSwipeListAnimator {
         int viewHeight = view.getHeight();
 
         mSwipeRect = new Rect(viewLocation[0] + view.getPaddingLeft(), topOfList,
-                viewLocation[0] + view.getWidth() - view.getPaddingRight(), topOfList + viewHeight);
+                viewLocation[0] + viewWidth - view.getPaddingRight(), topOfList + viewHeight);
 
         if (mSwipeBitmap == null) {
             mSwipeBitmap = Bitmap.createBitmap(viewWidth, viewHeight, Bitmap.Config.ARGB_8888);
@@ -206,7 +208,7 @@ public class SeslSwipeListAnimator {
         Canvas canvas = new Canvas(this.mSwipeBitmap);
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
 
-        float centerX = view.getWidth() / 2.0f;
+        float centerX = viewWidth / 2.0f;
         float absDeltaX = Math.abs(deltaX);
         float alpha = (Math.min(absDeltaX, centerX) / centerX) * 255.0f;
 
@@ -360,8 +362,8 @@ public class SeslSwipeListAnimator {
     }
 
 
-    public long getAnimationDuration(@NonNull RecyclerView recyclerView, int i10, float f10, float f11) {
-        return i10 == 4 ? DEFAULT_ANIMATION_CANCEL_DURATION : DEFAULT_ANIMATION_DURATION;
+    public long getAnimationDuration(@NonNull RecyclerView recyclerView, int animationType, float animateDx, float animateDy) {
+        return animationType == ANIMATION_TYPE_SWIPE_CANCEL ? DEFAULT_ANIMATION_CANCEL_DURATION : DEFAULT_ANIMATION_DURATION;
     }
 
 

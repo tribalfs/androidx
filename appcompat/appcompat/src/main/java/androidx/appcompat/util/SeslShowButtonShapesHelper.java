@@ -65,7 +65,7 @@ public class SeslShowButtonShapesHelper {
 
     public void updateButtonBackground() {
         final boolean show = Settings.System.getInt(mContentResolver, "show_button_background", 0) == 1;
-        ViewCompat.setBackground(mView, show ? mBackgroundOn : mBackgroundOff);
+        mView.setBackground(show ? mBackgroundOn : mBackgroundOff);
     }
 
     public void updateOverflowButtonBackground(Drawable backgroundOn) {

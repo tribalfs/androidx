@@ -25,13 +25,9 @@ dependencies {
 //    androidTestImplementation(project(":recyclerview:recyclerview"), {
 //        exclude group: "androidx.swiperefreshlayout", module: "swiperefreshlayout"
 //    })
-//    androidTestImplementation(libs.multidex)
 }
 
 android {
-    defaultConfig {
-        multiDexEnabled = true
-    }
     namespace = "androidx.swiperefreshlayout"
 
     compileOptions {
@@ -43,6 +39,6 @@ android {
 ext {
     POM_NAME = "SESL Swipe Refresh Layout"
     POM_DESCRIPTION = "SESL variant of android jetpack androidx.swiperefreshlayout:swiperefreshlayout module. " +
-      "Compatible on devices running API 21 or later."
+            "Compatible on devices running API 21 or later."
 }
 

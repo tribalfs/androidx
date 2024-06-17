@@ -52,7 +52,6 @@ dependencies {
 //        exclude group: "androidx.appcompat", module: "appcompat"
 //        exclude group: "androidx.core", module: "core"
 //    })
-//    androidTestImplementation(libs.multidex)
 //
 //    testImplementation(libs.kotlinStdlib)
 //    testImplementation(libs.testCore)
@@ -67,11 +66,10 @@ android {
 
         // This disables the builds tools automatic vector -> PNG generation
         generatedDensities = []
-        multiDexEnabled = true
         vectorDrawables.useSupportLibrary = true
     }
 
-   sourceSets {
+    sourceSets {
         main.res.srcDirs += "src/main/res-public"
     }
 

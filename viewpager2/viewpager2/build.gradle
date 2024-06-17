@@ -27,7 +27,6 @@ dependencies {
     api project(":recyclerview:recyclerview")
     implementation("androidx.collection:collection:1.1.0")
 //
-//    androidTestImplementation(libs.multidex)
 //    androidTestImplementation(libs.testUiautomator)
 //    androidTestImplementation(libs.testExtJunit)
 //    androidTestImplementation(libs.testCore)
@@ -50,9 +49,6 @@ dependencies {
 
 android {
     namespace = "androidx.viewpager2"
-    defaultConfig {
-        multiDexEnabled = true
-    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

@@ -64,7 +64,7 @@ public class SeslShowButtonShapesHelper {
     }
 
     public void updateButtonBackground() {
-        final boolean show = Settings.System.getInt(mContentResolver, "show_button_background", 0) == 1;
+        final boolean show = Settings.Global.getInt(mContentResolver, "show_button_background", 0) == 1;
         mView.setBackground(show ? mBackgroundOn : mBackgroundOff);
     }
 

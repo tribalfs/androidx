@@ -788,7 +788,7 @@ class AlertController {
         int whichButtons = 0;
 
         //sesl
-        boolean isEnabledShowBtnBg = Settings.System.getInt(mContext.getContentResolver(), "show_button_background", 0) == 1;
+        boolean isEnabledShowBtnBg = Settings.Global.getInt(mContext.getContentResolver(), "show_button_background", 0) == 1;
         boolean isThemeApplied = Settings.System.getString(mContext.getContentResolver(), "current_sec_active_themepackage") != null;
 
         TypedValue colorBackground = new TypedValue();

@@ -6,6 +6,8 @@ Any form of contributions, including suggestions, bug reports, corrections, and 
 
 Info: Samsung’s One UI apps are created using heavily modified versions of some [Android Jetpack](https://github.com/androidx/androidx) and [Material Components for Android](https://github.com/material-components/material-components-android) libraries. These include (but are not limited to) custom themes/styles, custom implementations, and additional APIs. These are internally referenced as SESL. Samsung also added its own androidx modules.
 
+<!--- Todo: add latest versions (badges) --->
+
 ## Available modules (as GithubPackages)
 #### SESL6(OneUI 6) Android Jetpack
 - [sesl.androidx.core:core](https://github.com/tribalfs/sesl-androidx/packages/2110024)
@@ -48,15 +50,15 @@ repositories {
     maven {
       url = uri("https://maven.pkg.github.com/tribalfs/sesl-androidx")
       credentials {
-          username = "your_gh_username"
-          password = "your_gh_access_token"
+          username = "<gh_username>"
+          password = "<gh_access_token>"
       }
    } 
    maven {
       url = uri("https://maven.pkg.github.com/tribalfs/sesl-material-components-android")
       credentials {
-          username = "your_gh_username"
-          password = "your_gh_access_token"
+          username = "<gh_username>"
+          password = "<gh_access_token>"
       }
    } 
 }
@@ -70,10 +72,10 @@ Example:
  ```groovy
 dependencies {
   //sesl androidx
-  implementation "sesl.androidx.appcompat:appcompat:1.7.0-alpha03+1.0.28-sesl6+rev0"
-  implementation "sesl.androidx.fragment:fragment:1.7.0-beta01+1.0.0-sesl6+rev0"
+  implementation "sesl.androidx.appcompat:appcompat:1.7.0+1.0.28-sesl6+rev0"
+  implementation "sesl.androidx.fragment:fragment:1.8.0+1.0.0-sesl6+rev0"
   //sesl material
-  implementation "sesl.com.google.android.material.material:1.12.0-beta01+1.0.18-sesl6+rev0"
+  implementation "sesl.com.google.android.material.material:1.12.0+1.0.18-sesl6+rev0"
 }
 ```
 
@@ -81,10 +83,10 @@ dependencies {
 ```kotlin
 dependencies {
   //sesl androidx
-  implementation("sesl.androidx.appcompat:appcompat:1.7.0-alpha03+1.0.28-sesl6+rev0")
-  implementation("sesl.androidx.fragment:fragment:1.7.0-beta01+1.0.0-sesl6+rev0")
+  implementation("sesl.androidx.appcompat:appcompat:1.7.0+1.0.28-sesl6+rev0")
+  implementation("sesl.androidx.fragment:fragment:1.8.0+1.0.0-sesl6+rev0")
   //sesl material
-  implementation ("sesl.com.google.android.material.material:1.12.0-beta01+1.0.18-sesl6+rev0")
+  implementation ("sesl.com.google.android.material.material:1.12.0+1.0.18-sesl6+rev0")
 }
 ```
 

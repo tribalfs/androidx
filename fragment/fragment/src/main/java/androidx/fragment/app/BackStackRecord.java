@@ -307,12 +307,12 @@ final class BackStackRecord extends FragmentTransaction implements
 
     @Override
     public int commit() {
-        return commitInternal(false);
+        return commitInternal(false, true);
     }
 
     @Override
     public int commitAllowingStateLoss() {
-        return commitInternal(true);
+        return commitInternal(true, true);
     }
 
     @Override
@@ -327,7 +327,7 @@ final class BackStackRecord extends FragmentTransaction implements
         mManager.execSingleAction(this, true);
     }
 
-    int commitInternal(boolean allowStateLoss) {
+    int commitInternal(boolean allowStateLoss, boolean commitAction) {
         if (mCommitted) throw new IllegalStateException("commit already called");
         if (FragmentManager.isLoggingEnabled(Log.VERBOSE)) {
             Log.v(TAG, "Commit: " + this);
@@ -342,7 +342,9 @@ final class BackStackRecord extends FragmentTransaction implements
         } else {
             mIndex = -1;
         }
-        mManager.enqueueAction(this, allowStateLoss);
+        if (commitAction) {
+            mManager.enqueueAction(this, allowStateLoss);
+        }
         return mIndex;
     }
 

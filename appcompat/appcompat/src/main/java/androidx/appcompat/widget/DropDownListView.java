@@ -32,7 +32,6 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import androidx.annotation.DoNotInline;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.R;
@@ -795,7 +794,6 @@ class DropDownListView extends ListView {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static void drawableHotspotChanged(View view, float x, float y) {
             view.drawableHotspotChanged(x, y);
         }
@@ -852,12 +850,10 @@ class DropDownListView extends ListView {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static boolean isSelectedChildViewEnabled(AbsListView view) {
             return view.isSelectedChildViewEnabled();
         }
 
-        @DoNotInline
         static void setSelectedChildViewEnabled(AbsListView view, boolean enabled) {
             view.setSelectedChildViewEnabled(enabled);
         }

@@ -55,7 +55,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 
 import androidx.annotation.AttrRes;
-import androidx.annotation.DoNotInline;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -1512,12 +1511,10 @@ public class ListPopupWindow implements ShowableListMenu {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static void setEpicenterBounds(PopupWindow popupWindow, Rect bounds) {
             popupWindow.setEpicenterBounds(bounds);
         }
 
-        @DoNotInline
         static void setIsClippedToScreen(PopupWindow popupWindow, boolean enabled) {
             popupWindow.setIsClippedToScreen(enabled);
         }
@@ -1529,7 +1526,6 @@ public class ListPopupWindow implements ShowableListMenu {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static int getMaxAvailableHeight(PopupWindow popupWindow, View anchor, int yOffset,
                 boolean ignoreBottomDecorations) {
             return popupWindow.getMaxAvailableHeight(anchor, yOffset, ignoreBottomDecorations);

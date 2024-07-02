@@ -35,7 +35,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.TextView;
 
-import androidx.annotation.DoNotInline;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -765,17 +764,14 @@ class AppCompatTextHelper {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static boolean setFontVariationSettings(TextView textView, String fontVariationSettings) {
             return textView.setFontVariationSettings(fontVariationSettings);
         }
 
-        @DoNotInline
         static int getAutoSizeStepGranularity(TextView textView) {
             return textView.getAutoSizeStepGranularity();
         }
 
-        @DoNotInline
         static void setAutoSizeTextTypeUniformWithConfiguration(TextView textView,
                 int autoSizeMinTextSize, int autoSizeMaxTextSize, int autoSizeStepGranularity,
                 int unit) {
@@ -783,7 +779,6 @@ class AppCompatTextHelper {
                     autoSizeMaxTextSize, autoSizeStepGranularity, unit);
         }
 
-        @DoNotInline
         static void setAutoSizeTextTypeUniformWithPresetSizes(TextView textView, int[] presetSizes,
                 int unit) {
             textView.setAutoSizeTextTypeUniformWithPresetSizes(presetSizes, unit);
@@ -796,12 +791,10 @@ class AppCompatTextHelper {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static void setTextLocales(TextView textView, LocaleList locales) {
             textView.setTextLocales(locales);
         }
 
-        @DoNotInline
         static LocaleList forLanguageTags(String list) {
             return LocaleList.forLanguageTags(list);
         }
@@ -813,7 +806,6 @@ class AppCompatTextHelper {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static Locale forLanguageTag(String languageTag) {
             return Locale.forLanguageTag(languageTag);
         }
@@ -826,7 +818,6 @@ class AppCompatTextHelper {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static Typeface create(Typeface family, int weight, boolean italic) {
             return Typeface.create(family, weight, italic);
         }

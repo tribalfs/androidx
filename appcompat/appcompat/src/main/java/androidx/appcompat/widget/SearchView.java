@@ -74,7 +74,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import androidx.annotation.DoNotInline;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -2303,12 +2302,10 @@ public class SearchView extends LinearLayoutCompat implements CollapsibleActionV
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static void setInputMethodMode(SearchAutoComplete searchAutoComplete, int mode) {
             searchAutoComplete.setInputMethodMode(mode);
         }
 
-        @DoNotInline
         static void refreshAutoCompleteResults(AutoCompleteTextView autoCompleteTextView) {
             autoCompleteTextView.refreshAutoCompleteResults();
         }

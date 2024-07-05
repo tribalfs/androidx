@@ -1756,11 +1756,10 @@ public class Toolbar extends ViewGroup implements MenuHost {
         super.onAttachedToWindow();
         updateBackInvokedCallbackState();
         //Sesl
-        if (mUserTopPadding == -1) {
-            mUserTopPadding = getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding);
+        int topPadding = mUserTopPadding;
+        if (topPadding == -1) {
+            topPadding = getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding);
         }
-
-        final int topPadding = getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding);
         setPadding(0, topPadding, 0, 0);
         //noinspection resource
         TypedArray a = getContext().obtainStyledAttributes(R.styleable.AppCompatTheme);

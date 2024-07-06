@@ -66,39 +66,27 @@ public class SeslMenuDivider extends ImageView {
                  R.color.sesl_popup_menu_divider_color_light : R.color.sesl_popup_menu_divider_color_dark, null));
     }
 
-    // TODO rework this method
-    // kang
     @Override
     protected void onDraw(Canvas canvas) {
-        int i;
-        int i2;
         super.onDraw(canvas);
-        int width = (getWidth() - getPaddingStart()) - getPaddingEnd();
+
+        int availableWidth = getWidth() - getPaddingStart() - getPaddingEnd();
         int height = getHeight();
-        int i3 = this.mDiameter;
-        int i4 = ((width - i3) / (this.mInterval + i3)) + 1;
-        int i5 = i4 - 1;
-        int paddingStart = ((int) ((i3 / 2.0f) + 0.5f)) + getPaddingStart();
-        int i6 = this.mDiameter;
-        int i7 = (width - i6) - ((this.mInterval + i6) * i5);
-        if (i6 % 2 != 0) {
-            i7--;
-        }
-        if (i5 > 0) {
-            i = i7 / i5;
-            i2 = i7 % i5;
-        } else {
-            i2 = 0;
-            i = 0;
-        }
-        int i8 = 0;
-        for (int i9 = 0; i9 < i4; i9++) {
-            canvas.drawCircle(paddingStart + i8, height / 2, this.mDiameter / 2.0f, this.mPaint);
-            i8 += this.mDiameter + this.mInterval + i;
-            if (i9 < i2) {
-                i8++;
+        int numCircles = (availableWidth - mDiameter) / (mInterval + mDiameter) + 1;
+        int remainingSpace = availableWidth - (numCircles * mDiameter + (numCircles - 1) * mInterval);
+        int extraSpacePerGap = numCircles > 1 ? remainingSpace / (numCircles - 1) : 0;
+        int extraSpaceRemainder = numCircles > 1 ? remainingSpace % (numCircles - 1) : 0;
+
+        int startX = getPaddingStart() + (int) (mDiameter / 2.0f + 0.5f);
+        int centerY = height / 2;
+        int currentX = startX;
+
+        for (int i = 0; i < numCircles; i++) {
+            canvas.drawCircle(currentX, centerY, mDiameter / 2.0f, mPaint);
+            currentX += mDiameter + mInterval + extraSpacePerGap;
+            if (i < extraSpaceRemainder) {
+                currentX++;
             }
         }
     }
-    // kang
 }

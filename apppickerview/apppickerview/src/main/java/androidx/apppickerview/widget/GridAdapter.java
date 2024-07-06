@@ -17,11 +17,15 @@
 package androidx.apppickerview.widget;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
+import static androidx.apppickerview.widget.AppPickerView.TYPE_GRID;
+import static androidx.apppickerview.widget.AppPickerView.TYPE_GRID_CHECKBOX;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
@@ -63,6 +67,23 @@ class GridAdapter extends AbsAdapter {
 
     @Override
     void onBindViewHolderAction(AppPickerView.ViewHolder holder, int position, String packageName) {
+        TextView appLabel = holder.getAppLabel();
+        int viewType = this.mType;
+        if (viewType == TYPE_GRID) {
+            if (!((AccessibilityManager) mContext.getSystemService(Context.ACCESSIBILITY_SERVICE)).isEnabled() || appLabel == null) {
+                return;
+            }
+            holder.getItem().setContentDescription(appLabel.getText());
+        } else if (viewType == TYPE_GRID_CHECKBOX && ((AccessibilityManager) this.mContext.getSystemService(Context.ACCESSIBILITY_SERVICE)).isEnabled()) {
+            if (holder.getCheckBox() != null) {
+                holder.getCheckBox().setFocusable(false);
+                holder.getCheckBox().setClickable(false);
+            }
+            if (appLabel != null) {
+                holder.getItem().setContentDescription(appLabel.getText());
+            }
+        }
+
     }
 
     @Override

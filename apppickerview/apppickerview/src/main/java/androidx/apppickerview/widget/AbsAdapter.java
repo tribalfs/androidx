@@ -21,6 +21,7 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 import android.content.ComponentName;
 import android.content.Context;
 import android.icu.text.AlphabeticIndex;
+import android.os.Build;
 import android.os.LocaleList;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -116,8 +117,10 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mDataSet.clear();
         mDataSet.addAll(DataManager.resetPackages(mContext, packageNamesList, labelInfoList, activityNamesList));
 
-        if (getAppLabelComparator(mOrder) != null) {
-            mDataSet.sort(getAppLabelComparator(mOrder));
+        if (Build.VERSION.SDK_INT >= 24) {
+            if (getAppLabelComparator(mOrder) != null) {
+                mDataSet.sort(getAppLabelComparator(mOrder));
+            }
         }
 
         if (hasAllAppsInList()) {
@@ -162,11 +165,12 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void setOrder(int order) {
         mOrder = order;
-        if (getAppLabelComparator(order) != null) {
-            mDataSet.sort(getAppLabelComparator(order));
-            mDataSetFiltered.sort(getAppLabelComparator(order));
+        if (Build.VERSION.SDK_INT >= 24) {
+            if (getAppLabelComparator(order) != null) {
+                mDataSet.sort(getAppLabelComparator(order));
+                mDataSetFiltered.sort(getAppLabelComparator(order));
+            }
         }
-
         refreshSectionMap();
         notifyDataSetChanged();
     }
@@ -370,36 +374,39 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     void refreshSectionMap() {
         mSectionMap.clear();
         ArrayList<String> sections = new ArrayList<>();
-        LocaleList locales = mContext.getResources().getConfiguration().getLocales();
-        if (locales.isEmpty()) {
-            locales = new LocaleList(Locale.ENGLISH);
-        }
-
-        AlphabeticIndex<Integer> alphabeticIndex = new AlphabeticIndex<>(locales.get(0));
-        for (int i = 1; i < locales.size(); i++) {
-            alphabeticIndex.addLabels(locales.get(i));
-        }
-        alphabeticIndex.addLabels(Locale.ENGLISH);
-
-        AlphabeticIndex.ImmutableIndex<Integer> immutableIndex = alphabeticIndex.buildImmutableIndex();
-
-        mPositionToSectionIndex = new int[mDataSetFiltered.size()];
-
-        for (int i = 0; i < mDataSetFiltered.size(); i++) {
-            String label = mDataSetFiltered.get(i).getLabel();
-            if (TextUtils.isEmpty(label)) {
-                label = "";
+        if (Build.VERSION.SDK_INT >= 24) {
+            LocaleList locales = mContext.getResources().getConfiguration().getLocales();
+            if (locales.isEmpty()) {
+                locales = new LocaleList(Locale.ENGLISH);
             }
-            label = immutableIndex.getBucket(immutableIndex.getBucketIndex(label)).getLabel();
-            if (!mSectionMap.containsKey(label)) {
-                sections.add(label);
-                mSectionMap.put(label, i);
-            }
-            mPositionToSectionIndex[i] = sections.size() - 1;
-        }
 
-        mSections = new String[sections.size()];
-        sections.toArray(mSections);
+            AlphabeticIndex<Integer> alphabeticIndex = new AlphabeticIndex<>(locales.get(0));
+            for (int i = 1; i < locales.size(); i++) {
+                alphabeticIndex.addLabels(locales.get(i));
+            }
+            alphabeticIndex.addLabels(Locale.ENGLISH);
+
+            AlphabeticIndex.ImmutableIndex<Integer> immutableIndex =
+                    alphabeticIndex.buildImmutableIndex();
+
+            mPositionToSectionIndex = new int[mDataSetFiltered.size()];
+
+            for (int i = 0; i < mDataSetFiltered.size(); i++) {
+                String label = mDataSetFiltered.get(i).getLabel();
+                if (TextUtils.isEmpty(label)) {
+                    label = "";
+                }
+                label = immutableIndex.getBucket(immutableIndex.getBucketIndex(label)).getLabel();
+                if (!mSectionMap.containsKey(label)) {
+                    sections.add(label);
+                    mSectionMap.put(label, i);
+                }
+                mPositionToSectionIndex[i] = sections.size() - 1;
+            }
+
+            mSections = new String[sections.size()];
+            sections.toArray(mSections);
+        }
     }
 
     protected float limitFontScale(@NonNull TextView textView) {

@@ -50,10 +50,15 @@ public class SeslRoundedCorner {
     public static final int ROUNDED_CORNER_BOTTOM_LEFT = 4;
     public static final int ROUNDED_CORNER_BOTTOM_RIGHT = 8;
 
+    @NonNull
     Drawable mTopLeftRound;
+    @NonNull
     Drawable mTopRightRound;
+    @NonNull
     Drawable mBottomLeftRound;
+    @NonNull
     Drawable mBottomRightRound;
+
     @ColorInt
     private int mTopLeftRoundColor;
     @ColorInt

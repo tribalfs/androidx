@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -53,7 +54,12 @@ public class SeslDropDownItemTextView extends SeslCheckedTextView {
     public void setChecked(boolean checked) {
         super.setChecked(checked);
 
-        setTypeface(Typeface.create("sec-roboto-light", checked ? Typeface.BOLD : Typeface.NORMAL));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Typeface sec = Typeface.create("sec", Typeface.NORMAL);
+            setTypeface(Typeface.create(sec, checked ? 600 : 400, false));
+        }else{
+            setTypeface(Typeface.create("sec-roboto-light", checked ? Typeface.BOLD : Typeface.NORMAL));
+        }
 
         if (checked) {
             Context context = getContext();

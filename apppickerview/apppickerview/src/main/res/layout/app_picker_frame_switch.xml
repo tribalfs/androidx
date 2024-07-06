@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2024 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +14,23 @@
   limitations under the License.
   -->
 <!-- Original code by Samsung, all rights reserved to the original author. -->
-<androidx.appcompat.widget.SwitchCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/switch_widget"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:gravity="end|center"
-    android:paddingStart="@dimen/app_picker_list_widget_frame_padding_start" />
+    android:orientation="horizontal">
+
+    <View
+        android:id="@+id/switch_divider_widget"
+        android:layout_width="@dimen/app_picker_list_actionbutton_divider_width"
+        android:layout_height="@dimen/app_picker_list_actionbutton_divider_height"
+        android:layout_gravity="center_vertical"
+        android:background="?attr/listDividerColor"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="end|center_vertical"
+        android:paddingStart="@dimen/app_picker_list_widget_frame_padding_start" />
+</LinearLayout>

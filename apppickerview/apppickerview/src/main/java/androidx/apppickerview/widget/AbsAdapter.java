@@ -78,7 +78,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private int[] mPositionToSectionIndex;
     protected int mType;
 
-    public AbsAdapter(@NonNull Context context, int type, int order, @Nullable AppPickerIconLoader iconLoader) {
+    public AbsAdapter(@NonNull Context context, int type, int order, @Nullable AppPickerIconLoader iconLoader, boolean showDivider) {
         mContext = context;
         mType = type;
         mOrder = order;
@@ -93,12 +93,13 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     static AbsAdapter getAppPickerAdapter(Context context, List<String> packageNamesList, int type,
             int order, List<AppPickerView.AppLabelInfo> labelInfoList,
             AppPickerIconLoader iconLoader,
-            List<ComponentName> activityNamesList) {
+            List<ComponentName> activityNamesList,
+             boolean showDivider) {
         final AbsAdapter adapter;
         if (type >= AppPickerView.TYPE_GRID) {
-            adapter = new GridAdapter(context, type, order, iconLoader);
+            adapter = new GridAdapter(context, type, order, iconLoader, showDivider);
         } else {
-            adapter = new ListAdapter(context, type, order, iconLoader);
+            adapter = new ListAdapter(context, type, order, iconLoader, showDivider);
         }
         adapter.setHasStableIds(true);
         adapter.resetPackages(packageNamesList, false, labelInfoList, activityNamesList);

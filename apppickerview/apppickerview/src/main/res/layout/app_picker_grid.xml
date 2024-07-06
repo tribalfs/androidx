@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2024 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +19,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/grid_background">
+
+    <CheckBox
+        android:id="@+id/check_widget"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="2dp"
+        android:background="@drawable/btn_check_material_background"
+        android:button="@drawable/btn_check_material_anim"
+        android:buttonTint="@color/grid_check_button_tint_selector" />
 
     <ImageView
         android:id="@+id/icon"
@@ -47,14 +55,4 @@
         android:textAlignment="center"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="@dimen/app_picker_grid_icon_title_size" />
-
-    <CheckBox
-        android:id="@+id/check_widget"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="2dp"
-        android:background="@drawable/btn_check_material_background"
-        android:button="@drawable/btn_check_material_anim"
-        android:buttonTint="@color/grid_check_button_tint_selector" />
-
 </RelativeLayout>

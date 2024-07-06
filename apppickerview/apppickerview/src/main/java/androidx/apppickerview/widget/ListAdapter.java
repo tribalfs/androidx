@@ -40,9 +40,12 @@ class ListAdapter extends AbsAdapter {
     private static final int TYPE_SEPARATOR = 259;
     private static final int TYPE_FOOTER = 258;
 
+    public static boolean mIsDividerVisible;
+
     public ListAdapter(Context context, int type, int order,
-                       AppPickerIconLoader iconLoader) {
-        super(context, type, order, iconLoader);
+                       AppPickerIconLoader iconLoader, boolean showDivider) {
+        super(context, type, order, iconLoader, showDivider);
+        mIsDividerVisible = showDivider;
     }
 
     @Override
@@ -110,6 +113,13 @@ class ListAdapter extends AbsAdapter {
                 case AppPickerView.TYPE_LIST_SWITCH_WITH_ALL_APPS: {
                     holder.getLeftContainer().setVisibility(View.GONE);
                     holder.getWidgetContainer().setVisibility(View.VISIBLE);
+                    if (holder.getDividerView() != null) {
+                        if (mIsDividerVisible) {
+                            holder.getDividerView().setVisibility(View.VISIBLE);
+                        } else {
+                            holder.getDividerView().setVisibility(View.GONE);
+                        }
+                    }
 
                     holder.getItem().setOnClickListener(new View.OnClickListener() {
                         @Override

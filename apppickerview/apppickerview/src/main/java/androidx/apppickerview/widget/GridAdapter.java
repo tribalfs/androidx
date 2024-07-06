@@ -39,8 +39,8 @@ class GridAdapter extends AbsAdapter {
     private static final int TYPE_SEPARATOR = 259;
 
     public GridAdapter(Context context, int type, int order,
-                       AppPickerIconLoader iconLoader) {
-        super(context, type, order, iconLoader);
+                       AppPickerIconLoader iconLoader, boolean showDivider) {
+        super(context, type, order, iconLoader, showDivider);
     }
 
     @NonNull

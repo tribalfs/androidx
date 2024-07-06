@@ -97,6 +97,8 @@ public class AppPickerView extends RecyclerView
     public static final int TYPE_LIST_SWITCH_WITH_ALL_APPS = 6;
     public static final int TYPE_GRID = 7;
     public static final int TYPE_GRID_CHECKBOX = 8;
+    public static boolean mIsDividerVisible;
+
 
     @RestrictTo(LIBRARY_GROUP)
     @IntDef({
@@ -119,7 +121,9 @@ public class AppPickerView extends RecyclerView
     private final Context mContext;
     private RecyclerView.ItemDecoration mGridSpacingDecoration;
     SeslSubheaderRoundedCorner mRoundedCorner;
-    public ArrayList<Integer> mSeparators;
+    private ArrayList<Integer> mSeparators;
+    private boolean mIsAppPickerInitialized;
+    boolean mIsCustomViewItemEnabled;
 
     private int mOrder;
     private int mSpanCount = 4;
@@ -145,6 +149,9 @@ public class AppPickerView extends RecyclerView
                          int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
+        mSpanCount = 4;
+        mIsCustomViewItemEnabled = false;
+        mIsAppPickerInitialized = false;
         setRecyclerListener(this);
         mAppPickerIconLoader = new AppPickerIconLoader(mContext);
     }
@@ -154,6 +161,11 @@ public class AppPickerView extends RecyclerView
     }
 
     public void setAppPickerView(@AppPickerType int type,  @AppPickerOrder int order) {
+        setAppPickerView(type, null, order, null);
+    }
+
+    public void setAppPickerView(@AppPickerType int type,  @AppPickerOrder int order, boolean showDivider) {
+        mIsDividerVisible = showDivider;
         setAppPickerView(type, null, order, null);
     }
 
@@ -211,9 +223,12 @@ public class AppPickerView extends RecyclerView
 
         mType = type;
         mOrder = order;
-        mAdapter = AbsAdapter.getAppPickerAdapter(
-                mContext, packageNamesList, type, order, labelInfoList, mAppPickerIconLoader,
-                activityNamesList);
+        if (!mIsCustomViewItemEnabled) {
+            mAdapter = AbsAdapter.getAppPickerAdapter(
+                    mContext, packageNamesList, type, order, labelInfoList, mAppPickerIconLoader,
+                    activityNamesList, mIsDividerVisible);
+        }
+
 
         switch (mType) {
             case TYPE_LIST:
@@ -242,8 +257,8 @@ public class AppPickerView extends RecyclerView
             seslSetFastScrollerEnabled(true);
         }
         seslSetFillBottomEnabled(true);
-
         mSeparators = new ArrayList<>();
+        mIsAppPickerInitialized = true;
     }
 
     public int getType() {
@@ -301,7 +316,7 @@ public class AppPickerView extends RecyclerView
     }
 
     public void addSeparator(int position) {
-        mSeparators.add(Integer.valueOf(position));
+        mSeparators.add(position);
         Collections.sort(mSeparators);
         mAdapter.addSeparator(position);
 
@@ -572,6 +587,8 @@ public class AppPickerView extends RecyclerView
         private final SwitchCompat mSwitch;
         private final ViewGroup mTitleContainer;
         private final ViewGroup mWidgetContainer;
+        public final View mDividerView;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -586,6 +603,7 @@ public class AppPickerView extends RecyclerView
             mWidgetContainer = itemView.findViewById(R.id.widget_frame);
             mSwitch = itemView.findViewById(R.id.switch_widget);
             mActionButton = itemView.findViewById(R.id.image_button);
+            mDividerView = itemView.findViewById(R.id.switch_divider_widget);
         }
 
         public TextView getAppLabel() {
@@ -632,6 +650,7 @@ public class AppPickerView extends RecyclerView
             return mSwitch;
         }
 
+
         @Nullable
         public ImageButton getActionButton() {
             return mActionButton;
@@ -640,6 +659,11 @@ public class AppPickerView extends RecyclerView
         public View getItem() {
             return itemView;
         }
+
+        public View getDividerView() {
+            return mDividerView;
+        }
+
     }
 
     public static class HeaderViewHolder extends ViewHolder {
@@ -677,6 +701,14 @@ public class AppPickerView extends RecyclerView
         public TextView getSeparatorText() {
             return mSeparatorText;
         }
+    }
+
+    public void setCustomViewItemEnabled(boolean enabled) {
+        this.mIsCustomViewItemEnabled = enabled;
+    }
+
+    public void setCustomAdapter(AbsAdapter absAdapter) {
+        this.mAdapter = absAdapter;
     }
 
     public static class AppLabelInfo {

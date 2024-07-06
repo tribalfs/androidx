@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2024 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,13 +20,14 @@
     android:background="?android:attr/listChoiceBackgroundIndicator"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:paddingStart="@dimen/app_picker_list_padding_start"
-    android:paddingEnd="@dimen/app_picker_list_padding_end">
+    android:paddingEnd="@dimen/app_picker_list_padding_end"
+    >
 
     <LinearLayout
         android:id="@+id/left_frame"
         android:layout_width="@dimen/app_picker_list_left_frame_width"
         android:layout_height="match_parent"
-        android:gravity="start|center"
+        android:gravity="start|center_vertical"
         android:orientation="horizontal"
         android:visibility="gone" />
 
@@ -35,7 +35,7 @@
         android:id="@+id/icon_frame"
         android:layout_width="@dimen/app_picker_list_icon_frame_width"
         android:layout_height="match_parent"
-        android:gravity="start|center">
+        android:gravity="start|center_vertical">
 
         <ImageView
             android:id="@+id/icon"
@@ -72,7 +72,7 @@
 
             <TextView
                 android:id="@+id/summary"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewStart"
                 android:textAppearance="?android:attr/textAppearanceListItemSecondary"

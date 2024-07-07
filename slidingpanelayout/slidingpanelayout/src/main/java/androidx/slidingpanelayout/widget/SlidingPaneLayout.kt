@@ -1386,32 +1386,38 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         //Sesl
         when (mPendingAction) {
             PENDING_ACTION_EXPANDED -> {//1
-                if (mIsLock) resizeSlideableView(1.0f)
-                openPane(0, false)
+                if (mIsLock) {
+                    resizeSlideableView(1.0f)
+                    preservedOpenState = true
+                }else {
+                    openPane(0, false)
+                }
                 mPendingAction = PENDING_ACTION_NONE
             }
             PENDING_ACTION_COLLAPSED -> {//2
-                if (mIsLock) resizeSlideableView(0.0f)
-                closePane(0, false)
+                if (mIsLock) {
+                    resizeSlideableView(0.0f)
+                    preservedOpenState = false
+                }else{
+                    closePane(0, false)
+                }
                 mPendingAction = PENDING_ACTION_NONE
             }
             PENDING_ACTION_EXPANDED_LOCK -> {//257
                 mIsLock = false
                 openPane(0, false)
-                mDoubleCheckState = 1
                 mIsLock = true
                 mPendingAction = PENDING_ACTION_NONE
             }
             PENDING_ACTION_COLLAPSED_LOCK -> {//258
                 mIsLock = false
                 closePane(0, false)
-                mDoubleCheckState = 0
                 mIsLock = true
                 mPendingAction = PENDING_ACTION_NONE
             }
         }
-        doubleCheckSettledState()
         updateDispatchSlidingState()
+        doubleCheckSettledState()
         //sesl
     }
 

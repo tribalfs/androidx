@@ -2574,16 +2574,20 @@ open class SlidingPaneLayout @JvmOverloads constructor(
                         velocityTracker!!.computeCurrentVelocity(1000, 2f)
                         val newLeft =
                             if (isLayoutRtl) {
-                                slideableView!!.right = (slideableView!!.right + idx.toInt())
+                                val newRight = (slideableView!!.right + idx.toInt())
                                     .coerceIn(width - mStartMargin - slideRange, width - mStartMargin)
-                                slideableView!!.left = slideableView!!.right - windowWidth + mStartMargin
-                                (slideableView!!.right - windowWidth + mStartMargin)
+
+                                (newRight - windowWidth + mStartMargin)
+                                    .also { newLeft ->
+                                        slideableView!!.left = newLeft
+                                        slideableView!!.right = newRight
+                                    }
                             } else {
                                 (slideableView!!.left + idx * if (scale != 0f) scale else 1f).toInt()
-                                    .coerceAtMost(mStartMargin + slideRange)
+                                    .coerceIn(mStartMargin, mStartMargin + slideRange)
                                     .also {newLeft ->
-                                        slideableView!!.left = newLeft.coerceAtLeast(mStartMargin)
-                                        slideableView!!.right = slideableView!!.left + windowWidth - mStartMargin
+                                        slideableView!!.left = newLeft
+                                        slideableView!!.right = newLeft + windowWidth - mStartMargin
                                     }
                             }
                         onPanelDragged(newLeft)

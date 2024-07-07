@@ -1382,12 +1382,12 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         //Sesl
         when (mPendingAction) {
             PENDING_ACTION_EXPANDED -> {//1
-                if (mIsLock) resizeSlidableView(1.0f)
+                if (mIsLock) resizeSlideableView(1.0f)
                 openPane(0, false)
                 mPendingAction = PENDING_ACTION_NONE
             }
             PENDING_ACTION_COLLAPSED -> {//2
-                if (mIsLock) resizeSlidableView(0.0f)
+                if (mIsLock) resizeSlideableView(0.0f)
                 closePane(0, false)
                 mPendingAction = PENDING_ACTION_NONE
             }
@@ -1466,7 +1466,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
                     slideableView!!.right = newLeft + windowWidth - mStartMargin
                 }
             } else {
-                resizeSlidableView(0.0f)
+                resizeSlideableView(0.0f)
             }
             preservedOpenState = false
             return true
@@ -1500,7 +1500,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
                     slideableView!!.right = newLeft + windowWidth - mStartMargin
                 }
             } else {
-                resizeSlidableView(1.0f)
+                resizeSlideableView(1.0f)
             }
             preservedOpenState = true
             return true
@@ -1631,7 +1631,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
             parallaxOtherViews(currentSlideOffset)
         }
         dispatchOnPanelSlide(slideableView)
-        if (!mResizeOff) resizeSlidableView(currentSlideOffset)//sesl
+        if (!mResizeOff) resizeSlideableView(currentSlideOffset)//sesl
     }
 
     override fun drawChild(
@@ -3037,7 +3037,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
             0
         ) ?: slideableView
 
-    open fun resizeSlidableView(offset: Float) {
+    open fun resizeSlideableView(offset: Float) {
         val sv = resizeableSlideableView
         if (sv is ViewGroup) {
             val maxWidth = width - paddingLeft - paddingRight
@@ -3222,7 +3222,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
     fun seslRequestPreferredDrawerPixelSize(@Px drawerPixelSize: Int) {
         mUserPreferredDrawerSize = drawerPixelSize
         seslSetDrawerPaneWidth()
-        resizeSlidableView(currentSlideOffset)
+        resizeSlideableView(currentSlideOffset)
     }
 
     /**
@@ -3240,7 +3240,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
      */
     fun seslRequestPreferredContentPixelSize(@Px size: Int) {
         mUserPreferredContentSize = size
-        resizeSlidableView(currentSlideOffset)
+        resizeSlideableView(currentSlideOffset)
     }
 
     /**
@@ -3271,7 +3271,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         if (awaitingFirstLayout) return
         if (turnOffResize) {
             unResizeSlideableView()
-        } else resizeSlidableView(currentSlideOffset)
+        } else resizeSlideableView(currentSlideOffset)
     }
 
     /**

@@ -381,8 +381,12 @@ open class SlidingPaneLayout @JvmOverloads constructor(
     /**
      * How far in pixels the slideable panel may move.
      */
-    var slideRange = 0 //public in sesl
-        private set
+    private var slideRange = 0
+
+    /**
+     * How far in pixels the slideable panel may move.
+     */
+    fun getSlideRange() = slideRange //publicly exposed in sesl
 
     private val touchTargetMin =
         (context.resources.displayMetrics.density * MIN_TOUCH_TARGET_SIZE).roundToInt()

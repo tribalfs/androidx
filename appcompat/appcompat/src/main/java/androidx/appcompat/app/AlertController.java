@@ -257,6 +257,7 @@ class AlertController {
         if (mTitleView != null) {
             mTitleView.setText(title);
         }
+        mWindow.setTitle(title);
     }
 
     /**

@@ -2300,6 +2300,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         }
 
         fun dispatchOnPanelOpened(panel: View) {
+            mStartOffset = currentSlideOffset
             for (listener in panelSlideListeners) {
                 listener.onPanelOpened(panel)
             }
@@ -2307,6 +2308,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         }
 
         fun dispatchOnPanelClosed(panel: View) {
+            mStartOffset = currentSlideOffset
             for (listener in panelSlideListeners) {
                 listener.onPanelClosed(panel)
             }
@@ -2345,7 +2347,6 @@ open class SlidingPaneLayout @JvmOverloads constructor(
             dx: Int,
             dy: Int
         ) {
-            //This handles after ACTION_UP but slide is still not finished
             //Sesl
             if (mStartOffset == 0.0f &&
                 mLastValidVelocity > 0 &&

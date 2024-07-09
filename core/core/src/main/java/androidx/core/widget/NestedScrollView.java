@@ -68,7 +68,6 @@ import android.widget.FrameLayout;
 import android.widget.OverScroller;
 import android.widget.ScrollView;
 
-import androidx.annotation.DoNotInline;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -2849,7 +2848,6 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static boolean getClipToPadding(ViewGroup viewGroup) {
             return viewGroup.getClipToPadding();
         }

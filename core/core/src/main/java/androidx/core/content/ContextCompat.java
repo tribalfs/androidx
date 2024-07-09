@@ -143,7 +143,6 @@ import android.view.textservice.TextServicesManager;
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DisplayContext;
-import androidx.annotation.DoNotInline;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
@@ -1056,17 +1055,14 @@ public class ContextCompat {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static Drawable getDrawable(Context obj, int id) {
             return obj.getDrawable(id);
         }
 
-        @DoNotInline
         static File getNoBackupFilesDir(Context obj) {
             return obj.getNoBackupFilesDir();
         }
 
-        @DoNotInline
         static File getCodeCacheDir(Context obj) {
             return obj.getCodeCacheDir();
         }
@@ -1078,17 +1074,14 @@ public class ContextCompat {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static int getColor(Context obj, int id) {
             return obj.getColor(id);
         }
 
-        @DoNotInline
         static <T> T getSystemService(Context obj, Class<T> serviceClass) {
             return obj.getSystemService(serviceClass);
         }
 
-        @DoNotInline
         static String getSystemServiceName(Context obj, Class<?> serviceClass) {
             return obj.getSystemServiceName(serviceClass);
         }
@@ -1100,17 +1093,14 @@ public class ContextCompat {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static File getDataDir(Context obj) {
             return obj.getDataDir();
         }
 
-        @DoNotInline
         static Context createDeviceProtectedStorageContext(Context obj) {
             return obj.createDeviceProtectedStorageContext();
         }
 
-        @DoNotInline
         static boolean isDeviceProtectedStorage(Context obj) {
             return obj.isDeviceProtectedStorage();
         }
@@ -1122,7 +1112,6 @@ public class ContextCompat {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static Intent registerReceiver(Context obj, @Nullable BroadcastReceiver receiver,
                 IntentFilter filter, String broadcastPermission, Handler scheduler, int flags) {
             if ((flags & RECEIVER_NOT_EXPORTED) != 0 && broadcastPermission == null) {
@@ -1135,7 +1124,6 @@ public class ContextCompat {
         }
 
         @SuppressWarnings("UnusedReturnValue")
-        @DoNotInline
         static ComponentName startForegroundService(Context obj, Intent service) {
             return obj.startForegroundService(service);
         }
@@ -1147,7 +1135,6 @@ public class ContextCompat {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static Executor getMainExecutor(Context obj) {
             return obj.getMainExecutor();
         }
@@ -1159,12 +1146,10 @@ public class ContextCompat {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static String getAttributionTag(Context obj) {
             return obj.getAttributionTag();
         }
 
-        @DoNotInline
         static Display getDisplayOrDefault(Context obj) {
             try {
                 return obj.getDisplay();
@@ -1177,7 +1162,6 @@ public class ContextCompat {
             }
         }
 
-        @DoNotInline
         @NonNull
         static Context createAttributionContext(@NonNull Context context,
                 @Nullable String attributionTag) {
@@ -1191,7 +1175,6 @@ public class ContextCompat {
             // This class is not instantiable
         }
 
-        @DoNotInline
         static Intent registerReceiver(Context obj, @Nullable BroadcastReceiver receiver,
                 IntentFilter filter, String broadcastPermission, Handler scheduler, int flags) {
             return obj.registerReceiver(receiver, filter, broadcastPermission, scheduler, flags);

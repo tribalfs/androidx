@@ -26,7 +26,6 @@ import android.widget.EdgeEffect;
 import android.widget.OverScroller;
 import android.widget.Scroller;
 
-import androidx.annotation.DoNotInline;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -312,7 +311,6 @@ public final class EdgeEffectCompat {
     private static class Api31Impl {
         private Api31Impl() {}
 
-        @DoNotInline
         public static EdgeEffect create(Context context, AttributeSet attrs) {
             try {
                 return new EdgeEffect(context, attrs);
@@ -321,7 +319,6 @@ public final class EdgeEffectCompat {
             }
         }
 
-        @DoNotInline
         public static float onPullDistance(
                 EdgeEffect edgeEffect,
                 float deltaDistance,
@@ -335,7 +332,6 @@ public final class EdgeEffectCompat {
             }
         }
 
-        @DoNotInline
         public static float getDistance(EdgeEffect edgeEffect) {
             try {
                 return edgeEffect.getDistance();
@@ -351,7 +347,6 @@ public final class EdgeEffectCompat {
             // This class is not instantiable.
         }
 
-        @DoNotInline
         static void onPull(EdgeEffect edgeEffect, float deltaDistance, float displacement) {
             edgeEffect.onPull(deltaDistance, displacement);
         }

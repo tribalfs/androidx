@@ -19,7 +19,6 @@ package androidx.core.os
 import android.os.Build
 import android.os.ext.SdkExtensions
 import androidx.annotation.ChecksSdkIntAtLeast
-import androidx.annotation.DoNotInline
 import androidx.annotation.RequiresApi
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
@@ -339,7 +338,6 @@ object BuildCompat {
     @RequiresApi(30)
     private object Api30Impl {
 
-        @DoNotInline
         fun getExtensionVersion(extension: Int): Int {
             return SdkExtensions.getExtensionVersion(extension)
         }

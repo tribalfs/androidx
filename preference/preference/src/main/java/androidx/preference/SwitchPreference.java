@@ -22,6 +22,7 @@ import static androidx.appcompat.widget.SwitchCompat.SUPPORT_TOUCH_FEEDBACK;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
@@ -277,8 +278,8 @@ public class SwitchPreference extends TwoStatePreference {
 
     //Sesl
     @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
-    public void onBindViewHolder(@NonNull PreferenceViewHolder preferenceViewHolder, int i10) {
-        mWidth = i10;
+    public void onBindViewHolder(@NonNull PreferenceViewHolder preferenceViewHolder, int width) {
+        mWidth = width;
         onBindViewHolder(preferenceViewHolder);
         updateLayout(preferenceViewHolder.itemView);
     }
@@ -291,13 +292,14 @@ public class SwitchPreference extends TwoStatePreference {
         View switchWidget = view.findViewById(R.id.switch_widget);
         View androidSwitchWidget = view.findViewById(AndroidResources.ANDROID_R_SWITCH_WIDGET);
 
-        Configuration configuration = getContext().getResources().getConfiguration();
+        Resources res = getContext().getResources();
+        Configuration configuration = res.getConfiguration();
         final int swDp = configuration.screenWidthDp;
         final int isLargeLayout = ((swDp > 320 || configuration.fontScale < 1.1f)
                 && (swDp >= 411 || configuration.fontScale < 1.3f)) ? SWITCH_PREFERENCE_LAYOUT :
                 SWITCH_PREFERENCE_LAYOUT_LARGE;
 
-        TextView titleView = (TextView) view.findViewById(android.R.id.title);
+        TextView titleView = view.findViewById(android.R.id.title);
 
         if (isLargeLayout != 1) {
             if (mIsLargeLayout != isLargeLayout) {
@@ -314,14 +316,13 @@ public class SwitchPreference extends TwoStatePreference {
         mIsLargeLayout = isLargeLayout;
         float titleLen = titleView.getPaint().measureText(titleView.getText().toString());
 
-        TextView summaryView = (TextView) view.findViewById(android.R.id.summary);
+        TextView summaryView = view.findViewById(android.R.id.summary);
         float summaryLen = summaryView.getPaint().measureText(summaryView.getText().toString());
 
         if (summaryView.getVisibility() == View.GONE) {
             summaryLen = 0.0f;
         }
-        final int switchSize =
-                getContext().getResources().getDimensionPixelSize(R.dimen.sesl_preference_item_switch_size);
+        final int switchSize = res.getDimensionPixelSize(R.dimen.sesl_preference_item_switch_size);
         float availableWidth =
                 ((mWidth - view.getPaddingEnd()) - view.getPaddingStart()) - switchSize;
 

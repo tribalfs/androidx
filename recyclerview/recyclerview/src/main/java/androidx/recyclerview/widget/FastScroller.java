@@ -128,7 +128,7 @@ class FastScroller extends RecyclerView.ItemDecoration implements RecyclerView.O
     private final RecyclerView.OnScrollListener
             mOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
             updateScrollPosition(recyclerView.computeHorizontalScrollOffset(),
                     recyclerView.computeVerticalScrollOffset());
         }

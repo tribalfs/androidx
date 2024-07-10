@@ -26,6 +26,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -478,7 +479,7 @@ public class ListMenuItemView extends LinearLayout
             mTitleParent.setPaddingRelative(
                     0,
                     0,
-                    badgeLp.width + getResources().getDimensionPixelSize(R.dimen.sesl_list_menu_item_dot_badge_end_margin),
+                    badgeLp.width + res.getDimensionPixelSize(R.dimen.sesl_list_menu_item_dot_badge_end_margin),
                     0
             );
         }

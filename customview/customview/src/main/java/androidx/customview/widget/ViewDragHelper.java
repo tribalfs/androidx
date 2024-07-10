@@ -391,6 +391,7 @@ public class ViewDragHelper {
     }
 
     //Sesl
+    @NonNull
     public static ViewDragHelper seslCreate(@NonNull ViewGroup forParent, float sensitivity,
             @NonNull Callback cb) {
         final ViewDragHelper helper = create(forParent, cb);

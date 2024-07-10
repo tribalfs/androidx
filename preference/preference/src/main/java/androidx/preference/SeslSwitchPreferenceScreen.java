@@ -85,7 +85,7 @@ public class SeslSwitchPreferenceScreen extends SwitchPreferenceCompat {
         TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.Preference, defStyleAttr, defStyleRes);
         final Configuration configuration = context.getResources().getConfiguration();
         String fragment = a.getString(R.styleable.Preference_android_fragment);
-        if (fragment == null || fragment.equals("")) {
+        if (fragment == null || fragment.isEmpty()) {
             Log.w("SwitchPreferenceScreen",
                     "SwitchPreferenceScreen should getfragment property. " +
                             "Fragment property does not exist in SwitchPreferenceScreen");

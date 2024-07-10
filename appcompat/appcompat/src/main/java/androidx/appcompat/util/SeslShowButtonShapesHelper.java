@@ -38,8 +38,8 @@ import androidx.core.view.ViewCompat;
  */
 @RestrictTo(LIBRARY_GROUP_PREFIX)
 public class SeslShowButtonShapesHelper {
-    private ContentResolver mContentResolver;
-    private View mView;
+    private final ContentResolver mContentResolver;
+    private final View mView;
     private Drawable mBackgroundOn;
     private Drawable mBackgroundOff;
 

@@ -26,7 +26,7 @@ public class SeslRecentColorInfo {
     private Integer mSelectedColor = null;
     private Integer mCurrentColor = null;
     private Integer mNewColor = null;
-    private ArrayList<Integer> mRecentColorInfo = new ArrayList<>();
+    private final ArrayList<Integer> mRecentColorInfo = new ArrayList<>();
 
     ArrayList<Integer> getRecentColorInfo() {
         return mRecentColorInfo;

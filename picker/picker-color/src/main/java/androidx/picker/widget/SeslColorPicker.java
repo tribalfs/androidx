@@ -74,9 +74,9 @@ public class SeslColorPicker extends LinearLayout {
     GradientDrawable mSelectedColorBackground;
     private String[] mColorDescription = null;
 
-    private float mCurrentFontScale;
+    private final float mCurrentFontScale;
 
-    private boolean mIsLightTheme;
+    private final boolean mIsLightTheme;
     boolean mIsInputFromUser = false;
     private boolean mIsOpacityBarEnabled = false;
 

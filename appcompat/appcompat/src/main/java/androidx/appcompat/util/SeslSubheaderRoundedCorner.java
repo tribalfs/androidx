@@ -40,7 +40,7 @@ public class SeslSubheaderRoundedCorner extends SeslRoundedCorner {
     }
 
     @RestrictTo(LIBRARY_GROUP_PREFIX)
-    public void drawRoundedCorner(int left, int top, int right, int bottom, Canvas canvas) {
+    public void drawRoundedCorner(int left, int top, int right, int bottom, @NonNull Canvas canvas) {
         mRoundedCornerBounds.set(left, top, right, bottom);
         drawRoundedCornerInternal(canvas);
     }

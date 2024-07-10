@@ -20,8 +20,11 @@ package androidx.appcompat.view.menu;
  * Original code by Samsung, all rights reserved to the original author.
  */
 
+import androidx.annotation.Nullable;
+
 public interface SeslMenuItem {
+    @Nullable
     String getBadgeText();
 
-    void setBadgeText(String text);
+    void setBadgeText(@Nullable String text);
 }

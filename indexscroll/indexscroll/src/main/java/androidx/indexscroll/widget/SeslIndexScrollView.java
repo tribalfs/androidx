@@ -34,7 +34,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -69,6 +68,7 @@ import java.util.List;
  * Original code by Samsung, all rights reserved to the original author.
  */
 
+/** @noinspection unused*/
 public class SeslIndexScrollView extends FrameLayout {
     public static final int GRAVITY_INDEX_BAR_LEFT = 0;
     public static final int GRAVITY_INDEX_BAR_RIGHT = 1;
@@ -83,7 +83,7 @@ public class SeslIndexScrollView extends FrameLayout {
 
     private static final String GROUP_CHAR = "\ud83d\udc65︎";
 
-    private Context mContext;
+    private final Context mContext;
 
     SeslAbsIndexer mIndexer;
     private final IndexerObserver mIndexerObserver = new IndexerObserver();
@@ -191,13 +191,13 @@ public class SeslIndexScrollView extends FrameLayout {
 
     @Override
     @RestrictTo(LIBRARY_GROUP_PREFIX)
-    protected void dispatchDraw(Canvas canvas) {
+    protected void dispatchDraw(@NonNull Canvas canvas) {
         super.dispatchDraw(canvas);
 
         if (mIndexScroll != null) {
             mIndexScroll.setDimensions(getWidth(), getHeight());
             if (mCurrentIndex != null
-                    && mCurrentIndex.length() != 0 && mIndexScrollPreview != null) {
+                    && !mCurrentIndex.isEmpty() && mIndexScrollPreview != null) {
                 mIndexScrollPreview.setLayout(0, 0, getWidth(), getHeight());
                 mIndexScrollPreview.invalidate();
             }
@@ -488,7 +488,7 @@ public class SeslIndexScrollView extends FrameLayout {
                 }
 
                 if (mIndexScroll.isAlphabetInit()
-                        && mCurrentIndex != null && mCurrentIndex.length() != 0) {
+                        && mCurrentIndex != null && !mCurrentIndex.isEmpty()) {
                     mIndexScroll.setEffectText(mCurrentIndex);
                     mIndexScroll.drawEffect(y);
                     mIndexScrollPreview.setLayout(0, 0, getWidth(), getHeight());
@@ -511,17 +511,14 @@ public class SeslIndexScrollView extends FrameLayout {
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
-                postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mCurrentIndex = null;
-                        mIndexScroll.resetSelectedIndex();
-                        mIndexScrollPreview.close();
-                        mIndexScroll.changeThumbAlpha(0);
-                        invalidate();
-                        if (mOnIndexBarEventListener != null) {
-                            mOnIndexBarEventListener.onReleased(y);
-                        }
+                postDelayed(() -> {
+                    mCurrentIndex = null;
+                    mIndexScroll.resetSelectedIndex();
+                    mIndexScrollPreview.close();
+                    mIndexScroll.changeThumbAlpha(0);
+                    invalidate();
+                    if (mOnIndexBarEventListener != null) {
+                        mOnIndexBarEventListener.onReleased(y);
                     }
                 }, 30);
             }
@@ -547,7 +544,7 @@ public class SeslIndexScrollView extends FrameLayout {
                         || calculatedIndexStr.length() >= mCurrentIndex.length()) {
                     mCurrentIndex = mIndexScroll.getIndexByPosition((int) x, (int) y, false);
                     if (mIndexScroll.isAlphabetInit()
-                            && mCurrentIndex != null && mCurrentIndex.length() != 0) {
+                            && mCurrentIndex != null && !mCurrentIndex.isEmpty()) {
                         mIndexScroll.setEffectText(mCurrentIndex);
                         mIndexScroll.drawEffect(y);
                         mTouchY = y;
@@ -639,32 +636,27 @@ public class SeslIndexScrollView extends FrameLayout {
             postDelayed(mUpdateIndex, INDEX_UPDATE_DELAY);
         }
 
-        Runnable mUpdateIndex = new Runnable() {
-            @Override
-            public void run() {
-                mDataInvalid = false;
-            }
-        };
+        Runnable mUpdateIndex = () -> mDataInvalid = false;
     }
 
     class IndexScroll {
         public static final int GRAVITY_INDEX_BAR_LEFT = 0;
         public static final int GRAVITY_INDEX_BAR_RIGHT = 1;
         public static final int NO_SELECTED_INDEX = -1;
-        private Interpolator LINEAR_INTERPOLATOR = new LinearInterpolator();
+        private final Interpolator LINEAR_INTERPOLATOR = new LinearInterpolator();
 
         String[] mAlphabetArray = null;
         Drawable mBgDrawableDefault = null;
         Rect mBgRect;
         private String mBigText;
-        private Context mContext;
+        private final Context mContext;
         IndexBarAttributeValues mIndexBarTextAttrs;
         RecyclerView.LayoutManager mLayout;
         RecyclerView mRecyclerView;
         Drawable mScrollThumbBgDrawable = null;
         private Rect mScrollThumbBgRect;
         private String mSmallText;
-        private Rect mTextBounds = new Rect();
+        private final Rect mTextBounds = new Rect();
         private Paint mTextPaint;
         private ValueAnimator mThumbFadeAnimator;
         private ValueAnimator mThumbPosAnimator;
@@ -703,18 +695,13 @@ public class SeslIndexScrollView extends FrameLayout {
         private int mScrollTopMargin;
         private int mSelectedIndex = NO_SELECTED_INDEX;
         int mTargetThumbAlpha = 255;
-        private int mTextColorDimmed;
+        int mTextColorDimmed;
         private int mTextSize;
         int mThumbColor = Color.TRANSPARENT;
         private int mWidth;
         private int mWidthShift = 0;
 
-        final Runnable mFadeOutRunnable = new Runnable() {
-            @Override
-            public void run() {
-                playThumbFadeAnimator(0);
-            }
-        };
+        final Runnable mFadeOutRunnable = () -> playThumbFadeAnimator(0);
 
         final RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
             @Override
@@ -728,7 +715,7 @@ public class SeslIndexScrollView extends FrameLayout {
             }
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 if (mEnableScrollThumb) {
                     final int position = findFirstChildPosition();
                     if (mCurrentIndex == null && mCurItemPosition != position) {
@@ -906,13 +893,11 @@ public class SeslIndexScrollView extends FrameLayout {
         }
 
         int getColorWithAlpha(int color, float ratio) {
-            int newColor = 0;
             int alpha = Math.round(Color.alpha(color) * ratio);
             int r = Color.red(color);
             int g = Color.green(color);
             int b = Color.blue(color);
-            newColor = Color.argb(alpha, r, g, b);
-            return newColor;
+            return Color.argb(alpha, r, g, b);
         }
 
         public void setAlphabetArray(String[] alphabetArray) {
@@ -1271,13 +1256,10 @@ public class SeslIndexScrollView extends FrameLayout {
                 mThumbFadeAnimator = ValueAnimator.ofInt(mCurThumbAlpha, mTargetThumbAlpha);
                 mThumbFadeAnimator.setDuration(150);
                 mThumbFadeAnimator.setInterpolator(LINEAR_INTERPOLATOR);
-                mThumbFadeAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(@NonNull ValueAnimator animation) {
-                        mCurThumbAlpha = (Integer) animation.getAnimatedValue();
-                        mScrollThumbBgDrawable.setAlpha(mCurThumbAlpha);
-                        invalidate();
-                    }
+                mThumbFadeAnimator.addUpdateListener(animation -> {
+                    mCurThumbAlpha = (Integer) animation.getAnimatedValue();
+                    mScrollThumbBgDrawable.setAlpha(mCurThumbAlpha);
+                    invalidate();
                 });
                 mThumbFadeAnimator.start();
             }
@@ -1291,23 +1273,18 @@ public class SeslIndexScrollView extends FrameLayout {
             mThumbPosAnimator = ValueAnimator.ofFloat(startY, endY);
             mThumbPosAnimator.setDuration(300);
             mThumbPosAnimator.setInterpolator(SeslAnimationUtils.SINE_OUT_70);
-            mThumbPosAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override // android.animation.ValueAnimator.AnimatorUpdateListener
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mTouchY = (Float) animation.getAnimatedValue();
-                    invalidate();
-                }
+            mThumbPosAnimator.addUpdateListener(animation -> {
+                mTouchY = (Float) animation.getAnimatedValue();
+                invalidate();
             });
             mThumbPosAnimator.start();
         }
 
         int findFirstChildPosition() {
             final int position;
-            if (mLayout instanceof LinearLayoutManager) {
-                LinearLayoutManager llm = (LinearLayoutManager) mLayout;
+            if (mLayout instanceof LinearLayoutManager llm) {
                 position = llm.findFirstVisibleItemPosition();
-            } else if (mLayout instanceof StaggeredGridLayoutManager) {
-                StaggeredGridLayoutManager sglm = (StaggeredGridLayoutManager) mLayout;
+            } else if (mLayout instanceof StaggeredGridLayoutManager sglm) {
                 position = sglm.findFirstVisibleItemPositions(null)
                         [mLayout.getLayoutDirection() == LAYOUT_DIRECTION_RTL ? sglm.getSpanCount() - 1 : 0];
             } else {
@@ -1445,7 +1422,7 @@ public class SeslIndexScrollView extends FrameLayout {
         }
 
         @Override
-        protected void onDraw(Canvas canvas) {
+        protected void onDraw(@NonNull Canvas canvas) {
             super.onDraw(canvas);
             if (mIsOpen) {
                 canvas.drawCircle(mPreviewCenterX, mPreviewCenterY, mPreviewRadius, mShapePaint);

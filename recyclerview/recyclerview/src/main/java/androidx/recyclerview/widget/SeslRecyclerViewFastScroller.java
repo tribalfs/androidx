@@ -195,7 +195,7 @@ class SeslRecyclerViewFastScroller {
     private AnimatorSet mPreviewAnimation;
 
     /** Whether the primary text is showing. */
-    private boolean mShowingPrimary;
+    boolean mShowingPrimary;
 
     /** Whether we're waiting for completion of scrollTo(). */
     private boolean mScrollCompleted;
@@ -1336,22 +1336,18 @@ class SeslRecyclerViewFastScroller {
             int paddingTop = mRecyclerView.getPaddingTop();
             int startPosition = firstVisibleItem;
             if (paddingTop > 0) {
-                startPosition = firstVisibleItem;
                 if (mRecyclerView.mLayout instanceof LinearLayoutManager) {
-                    LinearLayoutManager var8 = (LinearLayoutManager)mRecyclerView.mLayout;
+                    LinearLayoutManager layoutManager = (LinearLayoutManager)mRecyclerView.mLayout;
 
                     while(true) {
-                        startPosition = firstVisibleItem;
                         if (firstVisibleItem <= 0) {
                             break;
                         }
-
                         startPosition = firstVisibleItem - 1;
-                        if (var8.findViewByPosition(startPosition) == null) {
+                        if (layoutManager.findViewByPosition(startPosition) == null) {
                             startPosition = firstVisibleItem;
                             break;
                         }
-
                         firstVisibleItem = startPosition;
                     }
                 }
@@ -1359,11 +1355,12 @@ class SeslRecyclerViewFastScroller {
 
             View firstChild = mRecyclerView.getChildAt(0);
             float ratio;
-            if (firstChild != null && firstChild.getHeight() != 0) {
+            int firstChildHeight;
+            if (firstChild != null && (firstChildHeight = firstChild.getHeight()) != 0) {
                 if (startPosition == 0) {
-                    ratio = (float)(paddingTop - firstChild.getTop()) / (float)(firstChild.getHeight() + paddingTop);
+                    ratio = (float)(paddingTop - firstChild.getTop()) / (float)(firstChildHeight + paddingTop);
                 } else {
-                    ratio = (float)(-firstChild.getTop()) / (float)firstChild.getHeight();
+                    ratio = (float)(-firstChild.getTop()) / (float)firstChildHeight;
                 }
             } else {
                 ratio = 0.0F;

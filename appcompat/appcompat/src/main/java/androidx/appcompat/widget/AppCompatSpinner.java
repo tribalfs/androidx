@@ -1181,8 +1181,7 @@ public class AppCompatSpinner extends Spinner implements TintableBackgroundView 
             ViewGroup viewGroup = (ViewGroup) selectedView;
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
                 View child = viewGroup.getChildAt(i);
-                if (child instanceof TextView) {
-                    TextView textView = (TextView) child;
+                if (child instanceof TextView textView) {
                     if (sb.length() == 0) {
                         sb = new StringBuilder(textView.getText());
                     } else {

@@ -907,13 +907,14 @@ public final class MenuItemImpl implements SupportMenuItem, SeslMenuItem {
     }
 
     //Sesl
+    @Nullable
     @Override
     public String getBadgeText() {
         return mBadgeText;
     }
 
     @Override
-    public void setBadgeText(String text) {
+    public void setBadgeText(@Nullable String text) {
         if (mBadgeText == null || !mBadgeText.equals(text)) {
             mBadgeText = text;
             mMenu.onItemsChanged(false);

@@ -29,15 +29,15 @@ import androidx.annotation.RestrictTo;
 class SeslSeekBarDialogPreference extends DialogPreference {
     private final Drawable mMyIcon;
 
-    public SeslSeekBarDialogPreference(Context context, AttributeSet attributeSet, int i10, int i11) {
-        super(context, attributeSet, i10, i11);
+    public SeslSeekBarDialogPreference(Context context, AttributeSet attributeSet, int defStyleAttr, int defStyleRes) {
+        super(context, attributeSet, defStyleAttr, defStyleRes);
         createActionButtons();
         this.mMyIcon = getDialogIcon();
-        setDialogIcon((Drawable) null);
+        setDialogIcon(null);
     }
 
     public static SeekBar getSeekBar(View view) {
-        return (SeekBar) view.findViewById(R.id.seekbar);
+        return view.findViewById(R.id.seekbar);
     }
 
     public void createActionButtons() {
@@ -48,7 +48,7 @@ class SeslSeekBarDialogPreference extends DialogPreference {
     @Override
     public void onBindDialogView(View view) {
         super.onBindDialogView(view);
-        ImageView imageView = (ImageView) view.findViewById(R.id.icon);
+        ImageView imageView = view.findViewById(R.id.icon);
         Drawable drawable = this.mMyIcon;
         if (drawable != null) {
             imageView.setImageDrawable(drawable);

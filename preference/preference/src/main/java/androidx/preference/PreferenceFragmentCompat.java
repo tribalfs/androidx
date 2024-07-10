@@ -213,7 +213,9 @@ public abstract class PreferenceFragmentCompat extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        TypedArray a = requireContext().obtainStyledAttributes(null,
+        Context context = requireContext();
+
+        TypedArray a = context.obtainStyledAttributes(null,
                 R.styleable.PreferenceFragmentCompat, R.attr.preferenceFragmentCompatStyle, 0);
 
         mLayoutResId = a.getResourceId(R.styleable.PreferenceFragmentCompat_android_layout,
@@ -229,17 +231,16 @@ public abstract class PreferenceFragmentCompat extends Fragment implements
         a.recycle();
 
         //Sesl
-        final Context context = getContext();
-        TypedArray a2 = context.obtainStyledAttributes(null,
+        TypedArray ta = context.obtainStyledAttributes(null,
                 androidx.appcompat.R.styleable.View,
                 android.R.attr.listSeparatorTextViewStyle,
                 0);
         Drawable background =
-                a2.getDrawable(androidx.appcompat.R.styleable.View_android_background);
+                ta.getDrawable(androidx.appcompat.R.styleable.View_android_background);
         if (background instanceof ColorDrawable) {
             mSubheaderColor = ((ColorDrawable) background).getColor();
         }
-        a2.recycle();
+        ta.recycle();
         //sesl
 
         final LayoutInflater themedInflater = inflater.cloneInContext(requireContext());
@@ -283,9 +284,8 @@ public abstract class PreferenceFragmentCompat extends Fragment implements
         }
 
         if (mOnPreDrawListener == null) {
-            ViewTreeObserver viewTreeObserver = listView.getViewTreeObserver();
             createOnPreDrawListener();
-            viewTreeObserver.addOnPreDrawListener(mOnPreDrawListener);
+            listView.getViewTreeObserver().addOnPreDrawListener(mOnPreDrawListener);
         }
 
         mList.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
@@ -1061,14 +1061,14 @@ public abstract class PreferenceFragmentCompat extends Fragment implements
     //Sesl
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        if (getListView() != null) {
+        RecyclerView listView = getListView();
+        if (listView != null) {
             if (mOnPreDrawListener == null) {
-                ViewTreeObserver viewTreeObserver = getListView().getViewTreeObserver();
                 createOnPreDrawListener();
-                viewTreeObserver.addOnPreDrawListener(mOnPreDrawListener);
+                listView.getViewTreeObserver().addOnPreDrawListener(mOnPreDrawListener);
             }
-            RecyclerView.Adapter<?> adapter = getListView().getAdapter();
-            RecyclerView.LayoutManager layoutManager = getListView().getLayoutManager();
+            RecyclerView.Adapter<?> adapter = listView.getAdapter();
+            RecyclerView.LayoutManager layoutManager = listView.getLayoutManager();
             boolean isSmallScreenWidth = newConfig.screenWidthDp <= 250;
             if (isSmallScreenWidth != mIsReducedMargin && (adapter instanceof PreferenceGroupAdapter) && layoutManager != null) {
                 mIsReducedMargin = isSmallScreenWidth;
@@ -1078,7 +1078,7 @@ public abstract class PreferenceFragmentCompat extends Fragment implements
                 try {
                     setDivider(obtainStyledAttributes.getDrawable(R.styleable.PreferenceFragment_android_divider));
                     Parcelable onSaveInstanceState = layoutManager.onSaveInstanceState();
-                    getListView().setAdapter(getListView().getAdapter());
+                    listView.setAdapter(listView.getAdapter());
                     layoutManager.onRestoreInstanceState(onSaveInstanceState);
                 } finally {
                     obtainStyledAttributes.recycle();
@@ -1113,7 +1113,7 @@ public abstract class PreferenceFragmentCompat extends Fragment implements
                             }
                         }
                         mScreenWidthDp = swDp;
-                        mList.getViewTreeObserver().removeOnPreDrawListener(this);
+                        recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
                         mOnPreDrawListener = null;
                     }
                     return false;

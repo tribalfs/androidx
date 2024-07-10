@@ -238,6 +238,7 @@ public class SeslTouchTargetDelegate extends TouchDelegate {
             return result;
         }
 
+        @NonNull
         public String toString() {
             return "ExtraInsets{" +
                     "left=" + left +

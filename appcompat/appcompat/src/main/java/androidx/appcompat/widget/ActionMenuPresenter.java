@@ -762,7 +762,7 @@ class ActionMenuPresenter extends BaseMenuPresenter
                 float badge_size =  res.getDimension(R.dimen.sesl_badge_default_width);
                 lp.width = (int) badge_size ;
                 lp.height = (int) (badge_size + res.getDimension(R.dimen.sesl_badge_additional_width));
-                lp.topMargin = (int) getResources().getDimension(R.dimen.sesl_menu_item_number_badge_top_margin);
+                lp.topMargin = (int) res.getDimension(R.dimen.sesl_menu_item_number_badge_top_margin);
                 lp.setMarginEnd((int) res.getDimension(R.dimen.sesl_menu_item_number_badge_end_margin));
             }
 
@@ -818,10 +818,11 @@ class ActionMenuPresenter extends BaseMenuPresenter
             if (badgeText == null) {
                 nBadge = mNumberFormat.format(badgeCount);
                 float badge_size  = (int)res.getDimension(R.dimen.sesl_badge_default_width);
-                length = (int) (badge_size + (nBadge.length() * res.getDimension(R.dimen.sesl_badge_additional_width)));
-                dimension = (int) (badge_size + getResources().getDimension(R.dimen.sesl_badge_additional_width));
-                lp.topMargin = (int) getResources().getDimension(R.dimen.sesl_menu_item_number_badge_top_margin);
-                lp.setMarginEnd((int) getResources().getDimension(R.dimen.sesl_menu_item_number_badge_end_margin));
+                float badge_additional_width = res.getDimension(R.dimen.sesl_badge_additional_width);
+                length = (int) (badge_size + (nBadge.length() * badge_additional_width));
+                dimension = (int) (badge_size + badge_additional_width);
+                lp.topMargin = (int) res.getDimension(R.dimen.sesl_menu_item_number_badge_top_margin);
+                lp.setMarginEnd((int) res.getDimension(R.dimen.sesl_menu_item_number_badge_end_margin));
             } else {
                 float badge_size  = (int)res.getDimension(R.dimen.sesl_menu_item_badge_size);
                 length = dimension = (int) badge_size;

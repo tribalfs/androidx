@@ -17,6 +17,7 @@
 package androidx.picker.widget;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
@@ -45,11 +46,12 @@ class SeslOpacitySeekBar extends SeekBar {
             initColor(color);
         }
 
+        Resources res = getContext().getResources();
         mProgressDrawable
-                = (GradientDrawable) getContext().getDrawable(R.drawable.sesl_color_picker_opacity_seekbar);
+                = (GradientDrawable) res.getDrawable(R.drawable.sesl_color_picker_opacity_seekbar);
         setProgressDrawable(mProgressDrawable);
 
-        setThumb(getContext().getResources().getDrawable(R.drawable.sesl_color_picker_seekbar_cursor));
+        setThumb(res.getDrawable(R.drawable.sesl_color_picker_seekbar_cursor));
         setThumbOffset(0);
         setSplitTrack(false);
     }

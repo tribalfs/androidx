@@ -106,6 +106,7 @@ import androidx.appcompat.animation.SeslAnimationUtils;
 import androidx.appcompat.util.SeslMisc;
 import androidx.appcompat.util.SeslRoundedCorner;
 import androidx.appcompat.util.SeslSubheaderRoundedCorner;
+import androidx.core.content.ContextCompat;
 import androidx.core.os.TraceCompat;
 import androidx.core.util.Preconditions;
 import androidx.core.view.AccessibilityDelegateCompat;
@@ -406,8 +407,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             mLastItemAddRemoveAnim = null;
             mIsSetOnlyAddAnim = false;
             mIsSetOnlyRemoveAnim = false;
-            if (getItemAnimator() instanceof DefaultItemAnimator) {
-                ((DefaultItemAnimator) getItemAnimator()).clearPendingAnimFlag();
+            ItemAnimator itemAnimator = getItemAnimator();
+            if (itemAnimator instanceof DefaultItemAnimator) {
+                ((DefaultItemAnimator) itemAnimator).clearPendingAnimFlag();
             }
             invalidate();
         }
@@ -1185,7 +1187,6 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         //Sesl
         mContext = context;
         seslInitConfigurations(context);
-        setWillNotDraw(getOverScrollMode() == View.OVER_SCROLL_NEVER);
         //sesl
 
         final ViewConfiguration vc = ViewConfiguration.get(context);
@@ -1281,7 +1282,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
         mItemAnimator.setHostView(this);
 
-        mRoundedCorner = new SeslSubheaderRoundedCorner(getContext());
+        mRoundedCorner = new SeslSubheaderRoundedCorner(context);
         mRoundedCorner.setRoundedCorners(SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_LEFT
                 | SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_RIGHT);
         mRoundedCorner.setRoundedCornerColor(SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_LEFT
@@ -4454,14 +4455,14 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         //Sesl
         if (mFastScroller != null && mFastScroller.onTouchEvent(e)) {
             if (mFastScrollerEventListener != null) {
-                if (e.getActionMasked() == MotionEvent.ACTION_DOWN
-                        || e.getActionMasked() == MotionEvent.ACTION_MOVE) {
+                int actionMask = e.getActionMasked();
+                if (actionMask == MotionEvent.ACTION_DOWN || actionMask == MotionEvent.ACTION_MOVE) {
                     final int effectState = mFastScroller.getEffectState();
                     if (effectState == SeslRecyclerViewFastScroller.EFFECT_STATE_OPEN) {
                         mFastScrollerEventListener.onPressed(mFastScroller.getScrollY());
                     }
                 }
-                if (e.getActionMasked() == MotionEvent.ACTION_UP) {
+                if (actionMask == MotionEvent.ACTION_UP) {
                     final int effectState = mFastScroller.getEffectState();
                     if (effectState == SeslRecyclerViewFastScroller.EFFECT_STATE_CLOSE) {
                         mFastScrollerEventListener.onReleased(mFastScroller.getScrollY());
@@ -4560,8 +4561,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     mLastTouchY = y - mScrollOffset[1];
 
                     //Sesl
-                    int mMotionEventUpPendingFlag = 0x2000000;
-                    if ((e.getFlags() & mMotionEventUpPendingFlag) != 0) {
+                    if ((e.getFlags() & 0x200000/*mMotionEventUpPendingFlag*/) != 0) {
                         mVelocityTracker.addMovement(vtev);
                         mIsSkipMoveEvent = true;
                         return false;
@@ -5688,7 +5688,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             if (mLayout != null && !mLayout.canScrollHorizontally()) {
                 mHasNestedScrollRange = false;
                 ViewParent parent = getParent();
-                while (parent != null && parent instanceof ViewGroup) {
+                while (parent instanceof ViewGroup) {
                     if (parent instanceof NestedScrollingParent2
                             && findSuperClass(parent, "CoordinatorLayout")) {
                         ViewGroup viewGroup = (ViewGroup) parent;
@@ -5696,8 +5696,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                         int height = mWindowOffsets[1] + viewGroup.getHeight();
                         getLocationInWindow(mWindowOffsets);
                         mInitialTopOffsetOfScreen = mWindowOffsets[1];
-                        mRemainNestedScrollRange =
-                         getHeight() - (height - mInitialTopOffsetOfScreen);
+                        mRemainNestedScrollRange = getHeight() - (height - mInitialTopOffsetOfScreen);
                         if (mRemainNestedScrollRange < 0) {
                             mRemainNestedScrollRange = 0;
                         }
@@ -15686,7 +15685,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         return firstPosition;
     }
 
-    public void seslInitConfigurations(@NonNull Context context) {
+    void seslInitConfigurations(@NonNull Context context) {
         final ViewConfiguration vc = ViewConfiguration.get(context);
         final Resources resources = context.getResources();
         mTouchSlop = vc.getScaledTouchSlop();
@@ -17431,8 +17430,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             }
             mTextPaint.setTextAlign(Paint.Align.CENTER);
             mTextPaint.setTextSize(res.getDimensionPixelSize(R.dimen.sesl_index_tip_text_size));
-            mTextPaint.setColor(res.getColor(androidx.appcompat.R.color.sesl_white,
-                    mContext.getTheme()));
+            mTextPaint.setColor(ContextCompat.getColor(mContext, androidx.appcompat.R.color.sesl_white));
 
             mTextBounds = new Rect();
 
@@ -17455,7 +17453,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             @SuppressLint({"InternalInsetResource", "DiscouragedApi"})
             final int resId = res.getIdentifier("status_bar_height", "dimen", "android");
             if (resId > 0) {
-                mStatusBarHeight = mContext.getResources().getDimensionPixelSize(resId);
+                mStatusBarHeight = res.getDimensionPixelSize(resId);
             } else {
                 mStatusBarHeight = 0;
             }

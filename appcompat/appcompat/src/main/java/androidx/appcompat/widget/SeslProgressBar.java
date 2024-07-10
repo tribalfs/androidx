@@ -33,7 +33,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
@@ -76,9 +75,10 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.math.MathUtils;
 import androidx.core.util.Pools.SynchronizedPool;
-import androidx.core.view.ViewCompat;
 import androidx.reflect.graphics.drawable.SeslStateListDrawableReflector;
 import androidx.reflect.view.SeslViewReflector;
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -93,6 +93,7 @@ import java.util.Locale;
 
 /**
  * Samsung ProgressBar class.
+ * @noinspection unused
  */
 @RemoteView
 @SuppressLint("RestrictedApi")
@@ -168,11 +169,11 @@ public class SeslProgressBar extends View {
     private Drawable mProgressDrawable;
     private boolean mUseHorizontalProgress = false;
 
-    private Drawable mIndeterminateHorizontalXsmall;
-    private Drawable mIndeterminateHorizontalSmall;
-    private Drawable mIndeterminateHorizontalMedium;
-    private Drawable mIndeterminateHorizontalLarge;
-    private Drawable mIndeterminateHorizontalXlarge;
+    private final Drawable mIndeterminateHorizontalXsmall;
+    private final Drawable mIndeterminateHorizontalSmall;
+    private final Drawable mIndeterminateHorizontalMedium;
+    private final Drawable mIndeterminateHorizontalLarge;
+    private final Drawable mIndeterminateHorizontalXlarge;
     /**
      * Please use {@link #getCurrentDrawable()}, {@link #setProgressDrawable(Drawable)},
      * {@link #setIndeterminateDrawable(Drawable)} and their tiled versions instead of
@@ -189,7 +190,7 @@ public class SeslProgressBar extends View {
     private boolean mNoInvalidate;
     private Interpolator mInterpolator;
     private RefreshProgressRunnable mRefreshProgressRunnable;
-    private long mUiThreadId;
+    private final long mUiThreadId;
     private boolean mShouldStartAnimationDrawable;
 
     private CircleAnimationCallback mCircleAnimationCallback;
@@ -383,21 +384,15 @@ public class SeslProgressBar extends View {
 
         ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(context,
                 R.style.Base_V7_Theme_AppCompat_Light);
-        mIndeterminateHorizontalXsmall =
-                getResources().getDrawable(R.drawable.sesl_progress_bar_indeterminate_xsmall_transition,
-                contextThemeWrapper.getTheme());
-        mIndeterminateHorizontalSmall =
-                getResources().getDrawable(R.drawable.sesl_progress_bar_indeterminate_small_transition,
-                contextThemeWrapper.getTheme());
-        mIndeterminateHorizontalMedium =
-                getResources().getDrawable(R.drawable.sesl_progress_bar_indeterminate_medium_transition,
-                contextThemeWrapper.getTheme());
-        mIndeterminateHorizontalLarge =
-                getResources().getDrawable(R.drawable.sesl_progress_bar_indeterminate_large_transition,
-                contextThemeWrapper.getTheme());
-        mIndeterminateHorizontalXlarge =
-                getResources().getDrawable(R.drawable.sesl_progress_bar_indeterminate_xlarge_transition,
-                contextThemeWrapper.getTheme());
+
+        Resources.Theme theme = contextThemeWrapper.getTheme();
+        Resources res = getResources();
+
+        mIndeterminateHorizontalXsmall = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_xsmall_transition, theme);
+        mIndeterminateHorizontalSmall = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_small_transition, theme);
+        mIndeterminateHorizontalMedium = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_medium_transition, theme);
+        mIndeterminateHorizontalLarge = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_large_transition, theme);
+        mIndeterminateHorizontalXlarge = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_xlarge_transition, theme);
 
         a.recycle();
 
@@ -409,7 +404,7 @@ public class SeslProgressBar extends View {
             setImportantForAccessibility( IMPORTANT_FOR_ACCESSIBILITY_YES);
         }
 
-        mDensity = context.getResources().getDisplayMetrics().density;
+        mDensity = res.getDisplayMetrics().density;
         mCircleAnimationCallback = new CircleAnimationCallback(this);
     }
 
@@ -503,7 +498,7 @@ public class SeslProgressBar extends View {
             final int N = StateListDrawableCompat.getStateCount(in);
             for (int i = 0; i < N; i++) {
                 Drawable d = StateListDrawableCompat.getStateDrawable(in, i);
-                if (d != null && needsTileify(d)) {
+                if (needsTileify(d)) {
                     return true;
                 }
             }
@@ -1412,7 +1407,7 @@ public class SeslProgressBar extends View {
             if (drawable instanceof LayerDrawable) {
                 Drawable layer = ((LayerDrawable) drawable).findDrawableByLayerId(id);
                 if (layer != null && canResolveLayoutDirection()) {
-                    DrawableCompat.setLayoutDirection(layer, ViewCompat.getLayoutDirection(this));
+                    DrawableCompat.setLayoutDirection(layer, getLayoutDirection());
                 }
                 if (layer != null) {
                     drawable = layer;
@@ -1425,7 +1420,7 @@ public class SeslProgressBar extends View {
                     Drawable stateD =
                             StateListDrawableCompat.getStateDrawable((StateListDrawable) drawable
                                     , i);
-                    if (stateD != null && stateD instanceof LayerDrawable) {
+                    if (stateD instanceof LayerDrawable) {
                         Drawable layer = ((LayerDrawable) stateD).findDrawableByLayerId(i);
                         if (layer != null && canResolveLayoutDirection()) {
                             DrawableCompat.setLayoutDirection(layer, getLayoutDirection());
@@ -1772,13 +1767,12 @@ public class SeslProgressBar extends View {
             return;
         }
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M || getWindowVisibility() == VISIBLE) {
+        if (getWindowVisibility() == VISIBLE) {
             if (mIndeterminateDrawable instanceof Animatable) {
                 mShouldStartAnimationDrawable = true;
                 mHasAnimation = false;
-                if (mIndeterminateDrawable instanceof AnimatedVectorDrawable) {
-                    ((AnimatedVectorDrawable) mIndeterminateDrawable)
-                            .registerAnimationCallback(mCircleAnimationCallback);
+                if (mIndeterminateDrawable instanceof AnimatedVectorDrawableCompat) {
+                    AnimatedVectorDrawableCompat.registerAnimationCallback(mIndeterminateDrawable, mCircleAnimationCallback);
                 }
             } else {
                 mHasAnimation = true;
@@ -1816,9 +1810,8 @@ public class SeslProgressBar extends View {
         mHasAnimation = false;
         if (mIndeterminateDrawable instanceof Animatable) {
             ((Animatable) mIndeterminateDrawable).stop();
-            if (mIndeterminateDrawable instanceof AnimatedVectorDrawable) {
-                ((AnimatedVectorDrawable) mIndeterminateDrawable)
-                        .unregisterAnimationCallback(mCircleAnimationCallback);
+            if (mIndeterminateDrawable instanceof AnimatedVectorDrawableCompat) {
+                AnimatedVectorDrawableCompat.unregisterAnimationCallback(mIndeterminateDrawable, mCircleAnimationCallback);
             }
             mShouldStartAnimationDrawable = false;
         }
@@ -1970,7 +1963,7 @@ public class SeslProgressBar extends View {
     }
 
     @Override
-    protected synchronized void onDraw(Canvas canvas) {
+    protected synchronized void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
         drawTrack(canvas);
@@ -2399,9 +2392,9 @@ public class SeslProgressBar extends View {
         }
     }
 
-    private static class CircleAnimationCallback extends Animatable2.AnimationCallback {
+    private static class CircleAnimationCallback extends Animatable2Compat.AnimationCallback {
         final Handler mHandler = new Handler(Looper.getMainLooper());
-        private WeakReference<SeslProgressBar> mProgressBar;
+        private final WeakReference<SeslProgressBar> mProgressBar;
 
         public CircleAnimationCallback(SeslProgressBar progressBar) {
             mProgressBar = new WeakReference<>(progressBar);
@@ -2464,10 +2457,10 @@ public class SeslProgressBar extends View {
     private class CirCleProgressDrawable extends Drawable {
         int mColor;
         ColorStateList mColorStateList;
-        private boolean mIsBackground;
+        private final boolean mIsBackground;
         private final Paint mPaint;
         int mAlpha = 255;
-        private RectF mArcRect = new RectF();
+        private final RectF mArcRect = new RectF();
         private final ProgressState mState = new ProgressState();
         private final IntProperty<CirCleProgressDrawable> VISUAL_CIRCLE_PROGRESS =
                 new IntProperty<>("visual_progress") {

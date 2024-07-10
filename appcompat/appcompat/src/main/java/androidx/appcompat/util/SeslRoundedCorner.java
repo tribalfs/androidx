@@ -85,32 +85,25 @@ public class SeslRoundedCorner {
         final Resources.Theme theme = context.getTheme();
 
         if (isMutate) {
-            mTopLeftRound = ResourcesCompat.getDrawable(resources,
-                    R.drawable.sesl_top_left_round, theme).mutate();
-            mTopRightRound = ResourcesCompat.getDrawable(resources,
-                    R.drawable.sesl_top_right_round, theme).mutate();
-            mBottomLeftRound = ResourcesCompat.getDrawable(resources,
-                    R.drawable.sesl_bottom_left_round, theme).mutate();
-            mBottomRightRound = ResourcesCompat.getDrawable(resources,
-                    R.drawable.sesl_bottom_right_round, theme).mutate();
+            mTopLeftRound = resources.getDrawable(R.drawable.sesl_top_left_round, theme).mutate();
+            mTopRightRound = resources.getDrawable(R.drawable.sesl_top_right_round, theme).mutate();
+            mBottomLeftRound =
+                    resources.getDrawable(R.drawable.sesl_bottom_left_round, theme).mutate();
+            mBottomRightRound =
+                    resources.getDrawable(R.drawable.sesl_bottom_right_round, theme).mutate();
         } else {
-            mTopLeftRound = ResourcesCompat.getDrawable(resources,
-                    R.drawable.sesl_top_left_round
-                    , theme);
-            mTopRightRound = ResourcesCompat.getDrawable(resources,
-                    R.drawable.sesl_top_right_round, theme);
-            mBottomLeftRound = ResourcesCompat.getDrawable(resources,
-                    R.drawable.sesl_bottom_left_round, theme);
-            mBottomRightRound = ResourcesCompat.getDrawable(resources,
-                    R.drawable.sesl_bottom_right_round, theme);
+            mTopLeftRound = resources.getDrawable(R.drawable.sesl_top_left_round, theme);
+            mTopRightRound = resources.getDrawable(R.drawable.sesl_top_right_round, theme);
+            mBottomLeftRound = resources.getDrawable(R.drawable.sesl_bottom_left_round, theme);
+            mBottomRightRound = resources.getDrawable(R.drawable.sesl_bottom_right_round, theme);
         }
 
         TypedValue typedValue = new TypedValue();
-        context.getTheme().resolveAttribute(androidx.appcompat.R.attr.roundedCornerColor,
+        theme.resolveAttribute(androidx.appcompat.R.attr.roundedCornerColor,
                 typedValue, true);
         final int roundColor;
         if (typedValue.resourceId > 0) {
-            roundColor = ResourcesCompat.getColor(context.getResources(), typedValue.resourceId,
+            roundColor = ResourcesCompat.getColor(resources, typedValue.resourceId,
                     theme);
         }else {
             roundColor = resources.getColor(darkTheme? R.color.sesl_round_and_bgcolor_dark :
@@ -198,12 +191,12 @@ public class SeslRoundedCorner {
         return mRoundRadius;
     }
 
-    public void drawRoundedCorner(Canvas canvas) {
+    public void drawRoundedCorner(@NonNull Canvas canvas) {
         canvas.getClipBounds(mRoundedCornerBounds);
         drawRoundedCornerInternal(canvas);
     }
 
-    public void drawRoundedCorner(View view, Canvas canvas) {
+    public void drawRoundedCorner(@NonNull View view, @NonNull Canvas canvas) {
         int left;
         int top;
         if (view.getTranslationY() != 0.0f) {

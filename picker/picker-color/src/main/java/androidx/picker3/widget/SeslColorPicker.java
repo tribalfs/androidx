@@ -85,14 +85,14 @@ public class SeslColorPicker extends LinearLayout {
     ArrayList<EditText> editTexts = new ArrayList<>();
     private String[] mColorDescription = null;
     boolean mFlagVar;
-    private boolean mIsLightTheme;
+    private final boolean mIsLightTheme;
     boolean mShowOpacitySeekbar;
     boolean mFromRecentLayoutTouch = false;
     boolean mIsInputFromUser = false;
     private boolean mIsOpacityBarEnabled = false;
     private boolean mIsSpectrumSelected = false;
     EditText mLastFocussedEditText;
-    private TabLayout.OnTabSelectedListener mOnTabSelectListener;
+    private final TabLayout.OnTabSelectedListener mOnTabSelectListener;
     private LinearLayout mOpacityLayout;
     SeslOpacitySeekBar mOpacitySeekBar;
     private FrameLayout mOpacitySeekBarContainer;
@@ -110,7 +110,7 @@ public class SeslColorPicker extends LinearLayout {
     final int MODE_SPECTRUM = 0;
     final int MODE_SWATCH = 1;
     int mTabIndex = MODE_SPECTRUM;
-    private TabLayout mTabLayoutContainer;
+    private final TabLayout mTabLayoutContainer;
     boolean mTextFromRGB = false;
     boolean mfromEditText = false;
     boolean mfromRGB = false;
@@ -337,7 +337,10 @@ public class SeslColorPicker extends LinearLayout {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                 int intValue;
-                if (mOpacitySeekBar == null || charSequence.toString().trim().length() <= 0 || (intValue = Integer.valueOf(charSequence.toString()).intValue()) > 100 || !mIsInputFromUser) {
+                if (mOpacitySeekBar == null
+                        || charSequence.toString().trim().isEmpty()
+                        || (intValue = Integer.parseInt(charSequence.toString())) > 100
+                        || !mIsInputFromUser) {
                     return;
                 }
                 mColorPickerOpacityEditText.setTag(0);
@@ -417,8 +420,7 @@ public class SeslColorPicker extends LinearLayout {
         mSpectrumViewContainer = findViewById(R.id.sesl_color_picker_color_spectrum_view_container);
 
         mColorPickerSaturationEditText.setText(
-                "" + String.format(Locale.getDefault(), "%d",
-                        Integer.valueOf(mGradientColorSeekBar.getProgress())));
+                "" + String.format(Locale.getDefault(), "%d", mGradientColorSeekBar.getProgress()));
 
         mColorSpectrumView.setOnSpectrumColorChangedListener((hue, saturation) -> {
             mIsInputFromUser = true;
@@ -447,7 +449,7 @@ public class SeslColorPicker extends LinearLayout {
                 if (mTextFromRGB) return;
                 try {
                     if (mGradientColorSeekBar != null && !s.toString().trim().isEmpty()) {
-                        final int progress = Integer.valueOf(s.toString());
+                        final int progress = Integer.parseInt(s.toString());
                         mfromEditText = true;
                         mFlagVar = false;
                         if (progress <= 100) {
@@ -638,12 +640,9 @@ public class SeslColorPicker extends LinearLayout {
             }
 
         });
-        mOpacitySeekBar.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                mColorPickerOpacityEditText.setTag(1);
-                return event.getAction() == MotionEvent.ACTION_DOWN;
-            }
+        mOpacitySeekBar.setOnTouchListener((view, event) -> {
+            mColorPickerOpacityEditText.setTag(1);
+            return event.getAction() == MotionEvent.ACTION_DOWN;
         });
         FrameLayout frameLayout = mOpacitySeekBarContainer;
         frameLayout.setContentDescription(mResources.getString(R.string.sesl_color_picker_opacity)
@@ -673,15 +672,12 @@ public class SeslColorPicker extends LinearLayout {
                 }
             });
         }
-        mColorPickerBlueEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId ==  6) {
-                    mColorPickerBlueEditText.clearFocus();
-                    return false;
-                }
+        mColorPickerBlueEditText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId ==  6) {
+                mColorPickerBlueEditText.clearFocus();
                 return false;
             }
+            return false;
         });
     }
 
@@ -805,7 +801,7 @@ public class SeslColorPicker extends LinearLayout {
 
     void updateHexAndRGBValues(int color) {
         if (color != 0) {
-            final String format = String.format("%08x", color & -1);
+            final String format = String.format("%08x", color);
             final String colorStr = format.substring(2);
             mColorPickerHexEditText.setText(colorStr.toUpperCase());
             mColorPickerHexEditText.setSelection(mColorPickerHexEditText.getText().length());
@@ -1054,7 +1050,7 @@ public class SeslColorPicker extends LinearLayout {
     public static class PickedColor {
         private Integer mColor = null;
         private int mAlpha = 255;
-        private float[] mHsv = new float[3];
+        private final float[] mHsv = new float[3];
 
         public void setColor(@NonNull Integer color) {
             mColor = color;
@@ -1078,7 +1074,7 @@ public class SeslColorPicker extends LinearLayout {
             fArr[0] = f;
             fArr[1] = f2;
             fArr[2] = 1.0f;
-            mColor = Integer.valueOf(Color.HSVToColor(mAlpha, fArr));
+            mColor = Color.HSVToColor(mAlpha, fArr);
             mAlpha = (int) Math.ceil((i * 100) / 255.0f);
         }
 

@@ -61,7 +61,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
     public static final int ADDITIONS_ANIM_PENDING = 8;
     public static final int PREV_ANIM_EXECUTED = 16;
 
-    private int mPendingAnimFlag = 0;
+    protected int mPendingAnimFlag = 0;
     private int mLastItemBottom = 0;
     private boolean mEnableRemoveDelay = false;
     //sesl
@@ -233,8 +233,9 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         resetAnimation(holder);
         mPendingRemovals.add(holder);
         //Sesl
-        if (holder.itemView.getBottom() > mLastItemBottom) {
-            mLastItemBottom = holder.itemView.getBottom();
+        int itemViewBottom = holder.itemView.getBottom();
+        if (itemViewBottom > mLastItemBottom) {
+            mLastItemBottom = itemViewBottom;
         }
         if ((mPendingAnimFlag & REMOVAL_ANIM_PENDING) == 0) {
             mPendingAnimFlag |= REMOVAL_ANIM_PENDING;
@@ -246,10 +247,13 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
     private void animateRemoveImpl(final RecyclerView.ViewHolder holder) {
         final View view = holder.itemView;
         final ViewPropertyAnimator animation = view.animate();
-        long duration = getRemoveDuration();
         //Sesl
-        if (view.getTag() != null && view.getTag().equals("preferencecategory")) {
+        long duration;
+        Object viewTag = view.getTag();
+        if (viewTag != null && viewTag.equals("preferencecategory")) {
             duration = 0;
+        }else{
+            duration = getRemoveDuration();
         }
         //sesl
         mRemoveAnimations.add(holder);
@@ -269,7 +273,7 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
                         dispatchFinishedWhenDone();
                         //Sesl
                         if ((mPendingAnimFlag & REMOVAL_ANIM_PENDING) != 0) {
-                            mPendingAnimFlag = -2 & mPendingAnimFlag;
+                            mPendingAnimFlag &= -MOVE_ANIM_PENDING;
                         }
                         //sesl
                     }
@@ -317,10 +321,10 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
                         dispatchFinishedWhenDone();
                         //Sesl
                         if ((mPendingAnimFlag & ADDITIONS_ANIM_PENDING) != 0) {
-                            mPendingAnimFlag = -9 & mPendingAnimFlag;
+                            mPendingAnimFlag &= -9;
                         }
                         if ((mPendingAnimFlag & PREV_ANIM_EXECUTED) != 0) {
-                            mPendingAnimFlag = -17 & mPendingAnimFlag;
+                            mPendingAnimFlag &= -17;
                         }
                         //sesl
                     }
@@ -374,16 +378,11 @@ public class DefaultItemAnimator extends SimpleItemAnimator {
         animation.setInterpolator(ITEM_MOVE_INTERPOLATOR);//sesl
         mMoveAnimations.add(holder);
         //Sesl
-        if (getHostView() instanceof RecyclerView) {
-            final RecyclerView listView = (RecyclerView) getHostView();
-            if (listView.mBlackTop != -1
-                    && holder.getLayoutPosition() == listView.mChildHelper.getChildCount() - 1) {
-                animation.setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        listView.invalidate();
-                    }
-                });
+        final View hostView = getHostView();
+        if (hostView instanceof RecyclerView ) {
+            if (((RecyclerView) hostView).mBlackTop != -1
+                    && holder.getLayoutPosition() == ((RecyclerView) hostView).mChildHelper.getChildCount() - 1) {
+                animation.setUpdateListener(animator -> hostView.invalidate());
             }
         }
         //sesl

@@ -305,15 +305,30 @@ public class SeslDatePickerSpinnerLayout extends LinearLayout {
         mMonthSpinner.setTextTypeface(datePickerTypeface);
         mYearSpinner.setTextTypeface(datePickerTypeface);
 
-        final Resources res = context.getResources();
+        Resources res = context.getResources();
+
+        mToastText = res.getString(R.string.sesl_number_picker_invalid_value_entered);
+        setSpinnersTextSize();
+
+        mDaySpinner.setPickerContentDescription(res.getString(R.string.sesl_date_picker_day));
+        mMonthSpinner.setPickerContentDescription(res.getString(R.string.sesl_date_picker_month));
+        mYearSpinner.setPickerContentDescription(res.getString(R.string.sesl_date_picker_year));
+
+        mCurrentDate.setTimeInMillis(System.currentTimeMillis());
+        init(mCurrentDate.get(Calendar.YEAR),
+                mCurrentDate.get(Calendar.MONTH), mCurrentDate.get(Calendar.DAY_OF_MONTH));
+
+        reorderSpinners();
+    }
+
+    private void setSpinnersTextSize(){
+        Resources res = this.mContext.getResources();
 
         final int numberTextSize
                 = res.getInteger(R.integer.sesl_date_picker_spinner_number_text_size);
         final int numberTextSizeWithUnit
                 = res.getInteger(R.integer.sesl_date_picker_spinner_number_text_size_with_unit);
         int textSize = numberTextSize;
-
-        mToastText = res.getString(R.string.sesl_number_picker_invalid_value_entered);
 
         mDaySpinner.setTextSize(numberTextSize);
         mYearSpinner.setTextSize(numberTextSize);
@@ -338,19 +353,6 @@ public class SeslDatePickerSpinnerLayout extends LinearLayout {
             mMonthSpinner.setDateUnit(SeslNumberPicker.MODE_UNIT_MONTH);
             mYearSpinner.setDateUnit(SeslNumberPicker.MODE_UNIT_YEAR);
         }
-
-        mDaySpinner.setPickerContentDescription(
-                context.getResources().getString(R.string.sesl_date_picker_day));
-        mMonthSpinner.setPickerContentDescription(
-                context.getResources().getString(R.string.sesl_date_picker_month));
-        mYearSpinner.setPickerContentDescription(
-                context.getResources().getString(R.string.sesl_date_picker_year));
-
-        mCurrentDate.setTimeInMillis(System.currentTimeMillis());
-        init(mCurrentDate.get(Calendar.YEAR),
-                mCurrentDate.get(Calendar.MONTH), mCurrentDate.get(Calendar.DAY_OF_MONTH));
-
-        reorderSpinners();
     }
 
     void init(int year, int monthOfYear, int dayOfMonth) {
@@ -1146,7 +1148,7 @@ public class SeslDatePickerSpinnerLayout extends LinearLayout {
     }
 
     void setOnEditTextModeChangedListener(SeslDatePicker picker,
-                                          SeslDatePicker.OnEditTextModeChangedListener onEditModeChangedListener) {
+            SeslDatePicker.OnEditTextModeChangedListener onEditModeChangedListener) {
         if (mDatePicker == null) {
             mDatePicker = picker;
         }

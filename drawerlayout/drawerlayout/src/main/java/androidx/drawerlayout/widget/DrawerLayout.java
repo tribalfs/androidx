@@ -44,8 +44,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.view.WindowInsets;
 import android.view.accessibility.AccessibilityEvent;
 import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
@@ -1719,25 +1717,22 @@ public class DrawerLayout extends ViewGroup implements Openable {
                 if (!shouldSkipScroll()) {
                     needsInvalidate |= mLeftDragger.smoothSlideViewTo(child,
                             -childWidth, child.getTop());
-                    lp.isPeeking = false;
                 } else {
                     moveDrawerToOffset(child, 0);
                     updateDrawerState(STATE_IDLE, child);
                     child.setVisibility(INVISIBLE);
-                    lp.isPeeking = false;
                 }
             } else {
                 if (!shouldSkipScroll()) {
                     needsInvalidate |= mRightDragger.smoothSlideViewTo(child,
                             getWidth(), child.getTop());
-                    lp.isPeeking = false;
                 } else {
                     moveDrawerToOffset(child, 0);
                     updateDrawerState(STATE_IDLE, child);
                     child.setVisibility(INVISIBLE);
-                    lp.isPeeking = false;
                 }
             }
+            lp.isPeeking = false;
             //sesl
         }
 

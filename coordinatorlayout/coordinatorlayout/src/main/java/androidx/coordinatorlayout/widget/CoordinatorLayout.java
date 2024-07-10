@@ -577,10 +577,10 @@ public class CoordinatorLayout extends ViewGroup implements NestedScrollingParen
         // Make sure we reset in case we had missed a previous important event.
         if (action == MotionEvent.ACTION_DOWN) {
             //Sesl
-            for (int i = getChildCount() - 1; i >= 0; i--) {
+            int childCount = getChildCount();
+            for (int i = childCount - 1; i >= 0; i--) {
                 final View child = getChildAt(i);
-                if (child instanceof AppBarLayoutBehavior) {
-                    AppBarLayoutBehavior behavior = (AppBarLayoutBehavior) child;
+                if (child instanceof AppBarLayoutBehavior behavior) {
                     final boolean isMouseEvent = isMouseEvent(ev);
                     if (mToolIsMouse != isMouseEvent) {
                         mToolIsMouse = isMouseEvent;
@@ -1968,16 +1968,16 @@ public class CoordinatorLayout extends ViewGroup implements NestedScrollingParen
             @SuppressLint("InvalidNullabilityOverride") @NonNull KeyEvent event
     ) {
         if (mEnableAutoCollapsingKeyEvent) {
-            if (event.getKeyCode() == KeyEvent.KEYCODE_TAB
-                    || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP
-                    || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN
-                    || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT
-                    || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            int keyCode = event.getKeyCode();
+            if (keyCode == KeyEvent.KEYCODE_TAB
+                    || keyCode == KeyEvent.KEYCODE_DPAD_UP
+                    || keyCode == KeyEvent.KEYCODE_DPAD_DOWN
+                    || keyCode == KeyEvent.KEYCODE_DPAD_LEFT
+                    || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                 final int childCount = getChildCount();
                 for (int i = 0; i < childCount; i++) {
                     final View child = getChildAt(i);
-                    if (child instanceof AppBarLayoutBehavior) {
-                        AppBarLayoutBehavior behavior = (AppBarLayoutBehavior) child;
+                    if (child instanceof AppBarLayoutBehavior behavior) {
                         if (!behavior.seslIsCollapsed()) {
                             behavior.seslSetExpanded(false);
                             break;

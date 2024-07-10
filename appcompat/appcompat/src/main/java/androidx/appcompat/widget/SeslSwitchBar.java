@@ -34,6 +34,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.R;
 import androidx.appcompat.util.SeslMisc;
@@ -61,43 +63,43 @@ public class SeslSwitchBar extends LinearLayout implements CompoundButton.OnChec
          * @param switchView The Switch view whose state has changed.
          * @param isChecked  The new checked state of switchView.
          */
-        void onSwitchChanged(SwitchCompat switchView, boolean isChecked);
+        void onSwitchChanged(@NonNull SwitchCompat switchView, boolean isChecked);
     }
 
-    private static final int SWITCH_ON_STRING_RESOURCE_ID = R.string.sesl_switchbar_on_text;
-    private static final int SWITCH_OFF_STRING_RESOURCE_ID = R.string.sesl_switchbar_off_text;
+    static final int SWITCH_ON_STRING_RESOURCE_ID = R.string.sesl_switchbar_on_text;
+    static final int SWITCH_OFF_STRING_RESOURCE_ID = R.string.sesl_switchbar_off_text;
 
-    private final List<OnSwitchChangeListener> mSwitchChangeListeners = new ArrayList();
-    private SwitchBarDelegate mDelegate;
+    private final List<OnSwitchChangeListener> mSwitchChangeListeners = new ArrayList<>();
+    private final SwitchBarDelegate mDelegate;
     private String mSessionDesc = null;
 
-    private SeslToggleSwitch mSwitch;
-    private SeslProgressBar mProgressBar;
-    private TextView mTextView;
+    SeslToggleSwitch mSwitch;
+    private final SeslProgressBar mProgressBar;
+    private final TextView mTextView;
     private String mLabel;
     @StringRes
     private int mOnTextId;
     @ColorInt
-    private int mOnTextColor;
+    private final int mOnTextColor;
     @StringRes
     private int mOffTextId;
     @ColorInt
-    private int mOffTextColor;
-    private LinearLayout mBackground;
+    private final int mOffTextColor;
+    private final LinearLayout mBackground;
     @ColorInt
-    private int mBackgroundColor;
+    private final int mBackgroundColor;
     @ColorInt
-    private int mBackgroundActivatedColor;
+    private final int mBackgroundActivatedColor;
 
     public SeslSwitchBar(Context context) {
         this(context, null);
     }
 
-    public SeslSwitchBar(Context context, AttributeSet attrs) {
+    public SeslSwitchBar(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, R.attr.seslSwitchBarStyle);
     }
 
-    public SeslSwitchBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SeslSwitchBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
@@ -119,12 +121,9 @@ public class SeslSwitchBar extends LinearLayout implements CompoundButton.OnChec
         a.recycle();
         mProgressBar = findViewById(R.id.sesl_switchbar_progress);
         mBackground = findViewById(R.id.sesl_switchbar_container);
-        mBackground.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mSwitch != null && mSwitch.isEnabled()) {
-                    mSwitch.setChecked(!mSwitch.isChecked());
-                }
+        mBackground.setOnClickListener(v -> {
+            if (mSwitch != null && mSwitch.isEnabled()) {
+                mSwitch.setChecked(!mSwitch.isChecked());
             }
         });
         mOnTextId = SWITCH_ON_STRING_RESOURCE_ID;
@@ -293,7 +292,7 @@ public class SeslSwitchBar extends LinearLayout implements CompoundButton.OnChec
         /**
          * Constructor called from {@link #CREATOR}
          */
-        private SavedState(Parcel in) {
+        SavedState(Parcel in) {
             super(in);
             checked = (Boolean) in.readValue(null);
             visible = (Boolean) in.readValue(null);
@@ -306,6 +305,7 @@ public class SeslSwitchBar extends LinearLayout implements CompoundButton.OnChec
             out.writeValue(visible);
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "SeslSwitchBar.SavedState{"
@@ -315,7 +315,7 @@ public class SeslSwitchBar extends LinearLayout implements CompoundButton.OnChec
         }
 
         public static final Creator<SavedState> CREATOR
-                = new Creator<SavedState>() {
+                = new Creator<>() {
 
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
@@ -368,8 +368,8 @@ public class SeslSwitchBar extends LinearLayout implements CompoundButton.OnChec
 
     private static class SwitchBarDelegate extends AccessibilityDelegateCompat {
         private String mSessionName = "";
-        private SeslToggleSwitch mSwitch;
-        private TextView mText;
+        private final SeslToggleSwitch mSwitch;
+        private final TextView mText;
 
         public SwitchBarDelegate(View switchBar) {
             mText = switchBar.findViewById(R.id.sesl_switchbar_text);
@@ -381,11 +381,13 @@ public class SeslSwitchBar extends LinearLayout implements CompoundButton.OnChec
         }
 
         @Override
-        public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
+        public void onInitializeAccessibilityNodeInfo(@NonNull View host,
+                @NonNull AccessibilityNodeInfoCompat info) {
             super.onInitializeAccessibilityNodeInfo(host, info);
 
             String string = host.getContext().getResources().getString(mSwitch.isChecked() ?
-                    SeslSwitchBar.SWITCH_ON_STRING_RESOURCE_ID : SeslSwitchBar.SWITCH_OFF_STRING_RESOURCE_ID);
+                    SeslSwitchBar.SWITCH_ON_STRING_RESOURCE_ID :
+                    SeslSwitchBar.SWITCH_OFF_STRING_RESOURCE_ID);
             StringBuilder sb = new StringBuilder();
             CharSequence text = mText.getText();
             if (!TextUtils.isEmpty(mSessionName)) {

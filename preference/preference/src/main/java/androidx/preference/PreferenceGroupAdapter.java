@@ -568,13 +568,14 @@ public class PreferenceGroupAdapter extends RecyclerView.Adapter<PreferenceViewH
                 i++;
             }
         }
-        if (arrayList.size() > 0
-                && ( arrayList.get(arrayList.size() - 1) >= mVisiblePreferences.size())) {
+        int arraySize = arrayList.size();
+        if (arraySize > 0
+                && ( arrayList.get(arraySize - 1) >= mVisiblePreferences.size())) {
             Log.w(TAG,
-                    "accessibilityPosition over visible size | last " + arrayList.get(arrayList.size() - 1) +
+                    "accessibilityPosition over visible size | last " + arrayList.get(arraySize - 1) +
                             " vsize " + mVisiblePreferences.size());
 
-            for (int j = 0; j < arrayList.size(); j++) {
+            for (int j = 0; j < arraySize; j++) {
                 arrayList.set(j, j);
             }
         }

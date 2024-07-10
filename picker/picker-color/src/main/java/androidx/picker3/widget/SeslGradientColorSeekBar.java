@@ -44,10 +44,10 @@ class SeslGradientColorSeekBar extends SeekBar {
 
     public SeslGradientColorSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = getContext();
+        mResources = mContext.getResources();
         mProgressDrawable
-                = (GradientDrawable) getContext().getDrawable(R.drawable.sesl_color_picker_gradient_seekbar_drawable);
-        mContext = context;
-        mResources = context.getResources();
+                = (GradientDrawable) mResources.getDrawable(R.drawable.sesl_color_picker_gradient_seekbar_drawable);
     }
 
     void init(Integer color) {
@@ -104,7 +104,7 @@ class SeslGradientColorSeekBar extends SeekBar {
     }
 
     private void initThumb() {
-        setThumb(getContext().getDrawable(R.drawable.sesl_color_picker_seekbar_cursor));
+        setThumb(mResources.getDrawable(R.drawable.sesl_color_picker_seekbar_cursor));
         setThumbOffset(0);
         setSplitTrack(false);
     }

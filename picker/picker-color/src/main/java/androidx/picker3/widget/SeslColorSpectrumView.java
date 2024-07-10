@@ -69,23 +69,24 @@ class SeslColorSpectrumView extends View {
     private int ROUNDED_CORNER_RADIUS_IN_Px = 0;
     private final int mCursorPaintSize;
     private final int mCursorStrokeSize;
-    public boolean mFromSwatchTouch = false;
     private float mCurrentXPos;
-    public float mCurrentYPos;
+    boolean mFromSwatchTouch;
+    float mCurrentYPos;
 
     private final int[] HUE_COLORS = {
             -65281, -16776961, -16711681, -16711936, -256, -65536
     };
 
-    int mStartMargin;
-    public int mTopMargin;
+    final int mStartMargin;
+    final int mTopMargin;
 
     private final static int INVALID_ID = -1;
+
     int mSelectedVirtualViewId = INVALID_ID;
     SeslColorSpectrumViewTouchHelper mTouchHelper;
-    int mVirtualItemHeight;
-    int mVirtualItemWidth;
-    private Rect mSpectrumRectBackground;
+    final int mVirtualItemHeight;
+    final int mVirtualItemWidth;
+    private final Rect mSpectrumRectBackground;
     public Paint mBackgroundPaint;
     public int mSaturationProgress;
 
@@ -136,7 +137,7 @@ class SeslColorSpectrumView extends View {
         init();
     }
 
-    public final void initAccessibility() {
+    private void initAccessibility() {
         mTouchHelper = new SeslColorSpectrumViewTouchHelper(this);
         ViewCompat.setAccessibilityDelegate(this, mTouchHelper);
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
@@ -178,21 +179,24 @@ class SeslColorSpectrumView extends View {
         float posY = event.getY();
         mCurrentXPos = posX;
 
-        if (posX > mSpectrumRect.width() + mStartMargin) {
-            mCurrentXPos = mSpectrumRect.width() + mStartMargin;
+        int spectrumRectWidth = mSpectrumRect.width();
+        int spectrumRectHeight = mSpectrumRect.width();
+
+        int posXMax = spectrumRectWidth + mStartMargin;
+
+        if (posX > posXMax) {
+            mCurrentXPos = posXMax;
+            posX = posXMax;
         }
+
+        int posYMax = spectrumRectHeight + mTopMargin;
 
         mCurrentYPos = posY;
-        if (posY > mSpectrumRect.height() + mTopMargin) {
-            mCurrentYPos = mSpectrumRect.height() + mTopMargin;
+        if (posY > posYMax) {
+            mCurrentYPos = posYMax;
+            posY = posYMax;
         }
 
-        if (posX > mSpectrumRect.width() + mStartMargin) {
-            posX = mSpectrumRect.width() + mStartMargin;
-        }
-        if (posY > mSpectrumRect.height() + mTopMargin) {
-            posY = mSpectrumRect.height() + mTopMargin;
-        }
         if (posX < 0.0f) {
             posX = 0.0f;
         }
@@ -203,8 +207,8 @@ class SeslColorSpectrumView extends View {
         mCursorPosX = posX;
         mCursorPosY = posY;
 
-        final float hue = ((posX - mSpectrumRect.left) / mSpectrumRect.width()) * 300.0f;
-        final float saturation = (mCursorPosY - mSpectrumRect.top) / mSpectrumRect.height();
+        final float hue = ((posX - mSpectrumRect.left) / spectrumRectWidth) * 300.0f;
+        final float saturation = (mCursorPosY - mSpectrumRect.top) / spectrumRectHeight;
 
         final float[] hsv = new float[3];
         hsv[0] = hue >= 0 ? hue : 0;
@@ -350,13 +354,20 @@ class SeslColorSpectrumView extends View {
                 mCursorPosY = 0.0f;
                 mCursorPosX = mCurrentXPos;
             } else {
-                mCursorPosX = mSpectrumRect.left + ((mSpectrumRect.width() * hsv[0]) / 300.0f);
-                mCursorPosY = mSpectrumRect.top + (mSpectrumRect.height() * hsv[1]);
-                if (mCursorPosX > mSpectrumRect.width() + mStartMargin) {
-                    mCursorPosX = mSpectrumRect.width() + mStartMargin;
+                int spectrumRectHeight = mSpectrumRect.height();
+                int spectrumRectWidth = mSpectrumRect.width();
+
+                mCursorPosX = mSpectrumRect.left + ((spectrumRectWidth * hsv[0]) / 300.0f);
+                mCursorPosY = mSpectrumRect.top + (spectrumRectHeight * hsv[1]);
+
+                int curPosXMax = spectrumRectWidth + mStartMargin;
+                if (mCursorPosX > curPosXMax) {
+                    mCursorPosX = curPosXMax;
                 }
-                if (mCursorPosY > mSpectrumRect.height() + mTopMargin) {
-                    mCursorPosY = mSpectrumRect.height() + mTopMargin;
+
+                int curPosYMax = spectrumRectHeight + mTopMargin;
+                if (mCursorPosY > curPosYMax) {
+                    mCursorPosY = curPosYMax;
                 }
             }
 
@@ -385,7 +396,6 @@ class SeslColorSpectrumView extends View {
     public boolean dispatchHoverEvent(MotionEvent motionEvent) {
         return this.mTouchHelper.dispatchHoverEvent(motionEvent) || super.dispatchHoverEvent(motionEvent);
     }
-
 
 
     private class SeslColorSpectrumViewTouchHelper extends ExploreByTouchHelper {

@@ -26,7 +26,6 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -47,6 +46,7 @@ import androidx.annotation.RestrictTo;
 import androidx.appcompat.R;
 import androidx.appcompat.widget.SeslDropDownItemTextView;
 import androidx.appcompat.widget.TintTypedArray;
+import androidx.core.widget.TextViewCompat;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -134,7 +134,7 @@ public class ListMenuItemView extends LinearLayout
         if (!mIsSubMenu) {
             mTitleView = findViewById(R.id.title);
             if (mTextAppearance != -1) {
-                mTitleView.setTextAppearance( mTextAppearance);
+                TextViewCompat.setTextAppearance(mTitleView, mTextAppearance);
             }
             if (mTitleView != null) {
                 mTitleView.setSingleLine(false);
@@ -437,7 +437,7 @@ public class ListMenuItemView extends LinearLayout
             if (!TextUtils.isEmpty(getContentDescription())) {
                 nodeInfo.setContentDescription(getContentDescription());
             } else {
-                nodeInfo.setContentDescription(((Object) mItemData.getTitle()) + " , "
+                nodeInfo.setContentDescription(mItemData.getTitle() + " , "
                         + getResources().getString(R.string.sesl_action_menu_overflow_badge_description));
             }
         }

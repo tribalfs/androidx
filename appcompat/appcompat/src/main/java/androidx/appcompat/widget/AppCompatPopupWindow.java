@@ -85,10 +85,12 @@ class AppCompatPopupWindow extends PopupWindow {
 
         //Sesl
         mContext = context;
-        final Transition enterTransition = getTransition(a.getResourceId(R.styleable.PopupWindow_popupEnterTransition, 0));
-        final Transition exitTransition = getTransition(a.getResourceId(R.styleable.PopupWindow_popupExitTransition, 0));
-        setEnterTransition(enterTransition);
-        setExitTransition(exitTransition);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            final Transition enterTransition = getTransition(a.getResourceId(R.styleable.PopupWindow_popupEnterTransition, 0));
+            final Transition exitTransition = getTransition(a.getResourceId(R.styleable.PopupWindow_popupExitTransition, 0));
+            setEnterTransition(enterTransition);
+            setExitTransition(exitTransition);
+        }
 
         final int popupBackgroundResId = a.getResourceId(R.styleable.PopupWindow_android_popupBackground, -1);
         boolean isOneUIBlurBackground = false;

@@ -33,6 +33,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -1921,22 +1922,35 @@ public class Fragment implements ComponentCallbacks, OnCreateContextMenuListener
     @MainThread
     @Nullable
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        View view = getView();
+
+        if (view == null) {
+            return null;
+        }
+
+        Resources res = getResources();
+
         if (nextAnim == R.anim.sesl_fragment_open_exit) {
-            getView().setTranslationZ(0.0f);
-            getView().setForeground(new ColorDrawable(getResources().getColor(R.color.sesl_fragment_fgcolor)));
+            view.setTranslationZ(0.0f);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                view.setForeground(new ColorDrawable(res.getColor(R.color.sesl_fragment_fgcolor,
+                        requireContext().getTheme())));
+            }
             return null;
         } else if (nextAnim == R.anim.sesl_fragment_open_enter) {
-            getView().setTranslationZ(1.0f);
-            getView().setBackgroundColor(getResources().getColor(android.R.color.transparent));
-            getView().setBackgroundTintMode(PorterDuff.Mode.SRC);
-            getView().setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.sesl_fragment_bgcolor)));
+            view.setTranslationZ(1.0f);
+            view.setBackgroundColor(res.getColor(android.R.color.transparent));
+            view.setBackgroundTintMode(PorterDuff.Mode.SRC);
+            view.setBackgroundTintList(ColorStateList.valueOf(res.getColor(R.color.sesl_fragment_bgcolor)));
             return null;
         } else if (nextAnim == R.anim.sesl_fragment_close_enter) {
-            getView().setForeground(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
-            getView().setBackgroundColor(getResources().getColor(android.R.color.transparent));
-            getView().setBackgroundTintMode(PorterDuff.Mode.SRC);
-            getView().setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.sesl_fragment_bgcolor)));
-            getActivity().getWindow().getDecorView().setBackgroundColor(getResources().getColor(R.color.sesl_fragment_fgcolor));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                view.setForeground(new ColorDrawable(res.getColor(android.R.color.transparent)));
+            }
+            view.setBackgroundColor(res.getColor(android.R.color.transparent));
+            view.setBackgroundTintMode(PorterDuff.Mode.SRC);
+            view.setBackgroundTintList(ColorStateList.valueOf(res.getColor(R.color.sesl_fragment_bgcolor)));
+            getActivity().getWindow().getDecorView().setBackgroundColor(res.getColor(R.color.sesl_fragment_fgcolor));
             return null;
         }
         return null;

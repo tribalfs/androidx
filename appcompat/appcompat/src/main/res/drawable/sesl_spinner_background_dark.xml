@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:paddingEnd="@dimen/sesl_spinner_arrow_icon_entire_width" android:paddingMode="stack">
-    <item>
-        <ripple android:color="?attr/colorControlHighlight">
-            <item android:id="@android:id/mask" android:drawable="@drawable/sesl_spinner_background_mask"/>
-        </ripple>
-    </item>
-    <item android:gravity="end|center_vertical" android:width="@dimen/sesl_spinner_arrow_icon_width" android:drawable="@drawable/sesl_spinner_background_am_alpha_dark" android:end="@dimen/sesl_spinner_arrow_icon_end_padding"/>
-</layer-list>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingEnd="@dimen/sesl_spinner_arrow_icon_entire_width"
+    android:paddingMode="stack">
+    <layer-list>
+        <item>
+            <ripple android:color="?attr/colorControlHighlight">
+                <item android:id="@android:id/mask"
+                    android:drawable="@drawable/sesl_spinner_background_mask"/>
+            </ripple>
+        </item>
+        <item android:drawable="@drawable/abc_spinner_mtrl_am_alpha" />
+    </layer-list>
+</inset>
+

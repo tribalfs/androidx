@@ -48,6 +48,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.picker.R;
 
@@ -878,21 +879,21 @@ public class SeslColorPicker extends LinearLayout {
             setCurrentColorViewDescription(currentColor, CURRENT_COLOR_VIEW);
             mSelectedColorBackground.setColor(currentColor);
             mapColorOnColorWheel(currentColor);
-            updateHexAndRGBValues(mCurrentColorBackground.getColor().getDefaultColor());
+            updateHexAndRGBValues(currentColor);
         } else if (size != 0) {
             final int firstColor = mRecentColorValues.get(0);
             mCurrentColorBackground.setColor(firstColor);
             setCurrentColorViewDescription(firstColor, CURRENT_COLOR_VIEW);
             mSelectedColorBackground.setColor(firstColor);
             mapColorOnColorWheel(firstColor);
-            updateHexAndRGBValues(mCurrentColorBackground.getColor().getDefaultColor());
+            updateHexAndRGBValues(firstColor);
         }
 
         if (mRecentColorInfo.getNewColor() != null) {
             final int newColor = mRecentColorInfo.getNewColor();
             mSelectedColorBackground.setColor(newColor);
             mapColorOnColorWheel(newColor);
-            updateHexAndRGBValues(mSelectedColorBackground.getColor().getDefaultColor());
+            updateHexAndRGBValues(newColor);
         }
     }
 
@@ -947,9 +948,11 @@ public class SeslColorPicker extends LinearLayout {
 
     private void setImageColor(View button, Integer color) {
         GradientDrawable gradientDrawable
-                = (GradientDrawable) mContext.getDrawable(mIsLightTheme ?
-                R.drawable.sesl_color_picker_used_color_item_slot_light
-                : R.drawable.sesl_color_picker_used_color_item_slot_dark);
+                = (GradientDrawable) AppCompatResources.getDrawable(
+                mContext,
+                mIsLightTheme
+                        ? R.drawable.sesl_color_picker_used_color_item_slot_light
+                        : R.drawable.sesl_color_picker_used_color_item_slot_dark);
         if (color != null) {
             gradientDrawable.setColor(color);
         }

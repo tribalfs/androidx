@@ -24,7 +24,7 @@ dependencies {
     api(project(":core:core"))
     api("androidx.dynamicanimation:dynamicanimation:1.0.0")
     api(project(":viewpager:viewpager"))
-    implementation libs.androidx.constraintlayout
+    implementation libs.constraintLayout
 }
 
 

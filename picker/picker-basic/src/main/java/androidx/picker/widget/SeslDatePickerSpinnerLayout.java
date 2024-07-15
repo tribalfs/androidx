@@ -142,7 +142,6 @@ public class SeslDatePickerSpinnerLayout extends LinearLayout {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    // TODO rework this method
     public SeslDatePickerSpinnerLayout(@NonNull Context context, @Nullable AttributeSet attrs,
             int defStyleAttr,
             int defStyleRes) {
@@ -155,113 +154,119 @@ public class SeslDatePickerSpinnerLayout extends LinearLayout {
         mCurrentLocale = Locale.getDefault();
         setCurrentLocale(mCurrentLocale);
 
-        // kang
-        SeslNumberPicker.OnValueChangeListener onChangeListener =
-                new SeslNumberPicker.OnValueChangeListener() {
+        SeslNumberPicker.OnValueChangeListener onChangeListener = new SeslNumberPicker.OnValueChangeListener() {
             @Override
-            public void onValueChange(@NonNull SeslNumberPicker var1, int var2, int var3) {
+            public void onValueChange(@NonNull SeslNumberPicker picker, int oldValue,
+                    int newValue) {
                 mTempDate.setTimeInMillis(mCurrentDate.getTimeInMillis());
+
                 if (mIsLunar) {
                     mLunarTempYear = mLunarCurrentYear;
                     mLunarTempMonth = mLunarCurrentMonth;
                     mLunarTempDay = mLunarCurrentDay;
                 }
 
-                int var5;
-                boolean var6;
-                boolean var7;
-                label96: {
-                    Calendar var9;
-                    if (var1.equals(mDaySpinner)) {
-                        var5 = mTempDate.getActualMaximum(5);
+                int maxDayOfMonth;
+                boolean shouldUpdateSpinners;
+                boolean requiresUpdate;
+
+                handleValueChange:
+                {
+                    Calendar calendar;
+                    if (picker.equals(mDaySpinner)) {
+                        maxDayOfMonth = mTempDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+
                         if (mIsLunar) {
-                            var5 = getLunarMaxDayOfMonth(mTempDate.get(1), mTempDate.get(2),
+                            maxDayOfMonth = getLunarMaxDayOfMonth(
+                                    mTempDate.get(Calendar.YEAR),
+                                    mTempDate.get(Calendar.MONTH),
                                     mIsLeapMonth);
                         }
 
-                        if (var2 == var5 && var3 == 1 || var2 == 1 && var3 == var5) {
-                            mTempDate.set(5, var3);
+                        if ((oldValue == maxDayOfMonth && newValue == 1)
+                                || (oldValue == 1 && newValue == maxDayOfMonth)) {
+                            mTempDate.set(Calendar.DAY_OF_MONTH, newValue);
                             if (mIsLunar) {
-                                mLunarTempDay = var3;
+                                mLunarTempDay = newValue;
                             }
                         } else {
-                            var9 = mTempDate;
-                            var2 = var3 - var2;
-                            var9.add(5, var2);
+                            calendar = mTempDate;
+                            int dayDifference = newValue - oldValue;
+                            calendar.add(Calendar.DAY_OF_MONTH, dayDifference);
                             if (mIsLunar) {
-                                mLunarTempDay += var2;
+                                mLunarTempDay += dayDifference;
                             }
                         }
 
-                        var6 = false;
-                    } else {
-                        if (var1.equals(mMonthSpinner)) {
-                            if (var2 == 11 && var3 == 0 || var2 == 0 && var3 == 11) {
-                                mTempDate.set(2, var3);
-                                if (mIsLunar) {
-                                    mLunarTempMonth = var3;
-                                }
-                            } else {
-                                var9 = mTempDate;
-                                var2 = var3 - var2;
-                                var9.add(2, var2);
-                                if (mIsLunar) {
-                                    mLunarTempMonth += var2;
-                                }
+                        shouldUpdateSpinners = false;
+                    } else if (picker.equals(mMonthSpinner)) {
+                        if ((oldValue == 11 && newValue == 0) || (oldValue == 0
+                                && newValue == 11)) {
+                            mTempDate.set(Calendar.MONTH, newValue);
+                            if (mIsLunar) {
+                                mLunarTempMonth = newValue;
                             }
-
-                            var6 = false;
-                            var7 = true;
-                            break label96;
+                        } else {
+                            calendar = mTempDate;
+                            int monthDifference = newValue - oldValue;
+                            calendar.add(Calendar.MONTH, monthDifference);
+                            if (mIsLunar) {
+                                mLunarTempMonth += monthDifference;
+                            }
                         }
 
-                        if (!var1.equals(mYearSpinner)) {
-                            throw new IllegalArgumentException();
-                        }
-
-                        var9 = mTempDate;
-                        var2 = var3 - var2;
-                        var9.add(1, var2);
+                        shouldUpdateSpinners = false;
+                        requiresUpdate = true;
+                        break handleValueChange;
+                    } else if (picker.equals(mYearSpinner)) {
+                        calendar = mTempDate;
+                        int yearDifference = newValue - oldValue;
+                        calendar.add(Calendar.YEAR, yearDifference);
                         if (mIsLunar) {
-                            mLunarTempYear += var2;
+                            mLunarTempYear += yearDifference;
                         }
 
-                        var6 = true;
+                        shouldUpdateSpinners = true;
+                    } else {
+                        throw new IllegalArgumentException();
                     }
 
-                    var7 = var6;
+                    requiresUpdate = shouldUpdateSpinners;
                 }
 
                 if (mIsLunar) {
-                    var2 = getLunarMaxDayOfMonth(mLunarTempYear, mLunarTempMonth, mIsLeapMonth);
-                    if (mLunarTempDay > var2) {
-                        mLunarTempDay = var2;
+                    maxDayOfMonth = getLunarMaxDayOfMonth(mLunarTempYear, mLunarTempMonth,
+                            mIsLeapMonth);
+                    if (mLunarTempDay > maxDayOfMonth) {
+                        mLunarTempDay = maxDayOfMonth;
                     }
 
                     if (mIsLeapMonth) {
-                        mIsLeapMonth = SeslSolarLunarTablesReflector.isLeapMonth(mPathClassLoader
-                                , mSolarLunarTables, mLunarTempYear, mLunarTempMonth);
+                        mIsLeapMonth = SeslSolarLunarTablesReflector.isLeapMonth(
+                                mPathClassLoader,
+                                mSolarLunarTables,
+                                mLunarTempYear,
+                                mLunarTempMonth);
                     }
                 }
 
-                var5 = mTempDate.get(1);
-                var2 = mTempDate.get(2);
-                var3 = mTempDate.get(5);
+                int year = mTempDate.get(Calendar.YEAR);
+                int month = mTempDate.get(Calendar.MONTH);
+                int day = mTempDate.get(Calendar.DAY_OF_MONTH);
                 if (mIsLunar) {
-                    var5 = mLunarTempYear;
-                    var2 = mLunarTempMonth;
-                    var3 = mLunarTempDay;
+                    year = mLunarTempYear;
+                    month = mLunarTempMonth;
+                    day = mLunarTempDay;
                 }
 
-                setDate(var5, var2, var3);
-                if (var6 || var7) {
-                    updateSpinners(false, false, var6, var7);
+                setDate(year, month, day);
+                if (shouldUpdateSpinners || requiresUpdate) {
+                    updateSpinners(false, false, shouldUpdateSpinners, requiresUpdate);
                 }
 
                 notifyDateChanged();
             }
         };
-        // kang
 
         mSpinners = findViewById(R.id.sesl_date_picker_pickers);
         mDayPaddingView = findViewById(R.id.sesl_date_picker_spinner_day_padding);

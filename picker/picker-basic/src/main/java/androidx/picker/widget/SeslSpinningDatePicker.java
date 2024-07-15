@@ -525,7 +525,7 @@ public class SeslSpinningDatePicker extends LinearLayout
                     onValidationChanged(!mStartDate.after(mEndDate));
                     updateSimpleMonthView(false);
                     if (mMode == DATE_MODE_WEEK_SELECT && mIsWeekRangeSet) {
-                        updateStartEndDateRange(getDayOffset(), year, month, day);
+                        updateStartEndDateRange(getDayOfWeekOffset(), year, month, day);
                     }
                     SeslSpinningDatePicker.this.onDateChanged();
                 });
@@ -812,7 +812,7 @@ public class SeslSpinningDatePicker extends LinearLayout
                 view.setLunar(mIsLunar, mIsLeapMonth, mPathClassLoader);
             }
             if (mMode == DATE_MODE_WEEK_SELECT && mIsWeekRangeSet) {
-                updateStartEndDateRange(getDayOffset(), year, month, dayOfMonth);
+                updateStartEndDateRange(getDayOfWeekOffset(), year, month, dayOfMonth);
             }
 
             int startYear, startMonth, startDay, endYear, endMonth, endDay;
@@ -1389,145 +1389,141 @@ public class SeslSpinningDatePicker extends LinearLayout
         mIsCalledFromDeactivatedDayClick = false;
     }
 
-    // TODO rework this method
-    // kang
+
     @Override
-    public void onDeactivatedDayClick(SeslSimpleMonthView var1, int var2, int var3, int var4,
-            boolean var5, boolean var6) {
-        /* var1 = view; var2 = year; var3 = month; var4 = selectedDay; var5 = isLeapMonth; var6 =
-         isPrevMonth;  */
-        byte var7 = 1;
-        this.mIsCalledFromDeactivatedDayClick = true;
-        int var9;
-        SeslSimpleMonthView var11;
-        if (this.mIsLunar) {
-            var2 = this.mCurrentPosition;
-            if (var6) {
-                --var2;
+    public void onDeactivatedDayClick(SeslSimpleMonthView view, int year, int month, int selectedDay,
+            boolean isLeapMonth, boolean isPrevMonth) {
+
+        mIsCalledFromDeactivatedDayClick = true;
+        int lunarYear;
+        SeslSimpleMonthView monthView;
+        if (mIsLunar) {
+            int positon = mCurrentPosition;
+            if (isPrevMonth) {
+                --positon;
             } else {
-                ++var2;
+                ++positon;
             }
 
-            LunarDate var8 = this.getLunarDateByPosition(var2);
-            var9 = var8.year;
-            var3 = var8.month;
-            var5 = var8.isLeapMonth;
-            this.mIsLeapMonth = var5;
-            this.mDatePickerSpinner.setLunar(this.mIsLunar, var5);
-            var2 = this.mCurrentPosition;
-            if (var6) {
-                --var2;
+            LunarDate lunarDate = getLunarDateByPosition(positon);
+
+            lunarYear = lunarDate.year;
+            int lunarMonth = lunarDate.month;
+            isLeapMonth = lunarDate.isLeapMonth;
+
+            mIsLeapMonth = isLeapMonth;
+            mDatePickerSpinner.setLunar(this.mIsLunar, isLeapMonth);
+
+            positon = mCurrentPosition;
+            if (isPrevMonth) {
+                --positon;
             } else {
-                ++var2;
+                ++positon;
             }
 
-            this.mCurrentPosition = var2;
-            this.mCalendarViewPager.setCurrentItem(var2);
-            var11 =
-                    (SeslSimpleMonthView)this.mCalendarPagerAdapter.views.get(this.mCurrentPosition);
-            if (var11 == null) {
-                var2 = var7;
+            mCurrentPosition = positon;
+            mCalendarViewPager.setCurrentItem(positon);
+            monthView = mCalendarPagerAdapter.views.get(mCurrentPosition);
+            if (monthView == null) {
+                positon = 1;
             } else {
-                var2 = var11.getDayOfWeekStart();
+                positon = monthView.getDayOfWeekStart();
             }
 
-            this.mDayOfWeekStart = var2;
-            this.onDayClick(var1, var9, var3, var4);
+            mDayOfWeekStart = positon;
+            onDayClick(view, lunarYear, lunarMonth, selectedDay);
         } else {
-            int var10 = this.getMinYear();
-            var9 = this.getMinMonth();
-            var11 =
-                    (SeslSimpleMonthView)this.mCalendarPagerAdapter.views.get((var2 - var10) * 12 + (var3 - var9));
-            if (var11 == null) {
+            int var10 = getMinYear();
+            lunarYear = getMinMonth();
+            monthView = mCalendarPagerAdapter.views.get((year - var10) * 12 + (month - lunarYear));
+            if (monthView == null) {
                 var10 = 1;
             } else {
-                var10 = var11.getDayOfWeekStart();
+                var10 = monthView.getDayOfWeekStart();
             }
 
-            this.mDayOfWeekStart = var10;
-            this.onDayClick(var1, var2, var3, var4);
-            this.updateSimpleMonthView(true);
+            mDayOfWeekStart = var10;
+            onDayClick(view, year, month, selectedDay);
+            updateSimpleMonthView(true);
         }
     }
-    // kang
 
-    // TODO rework this method
-    // kang
-    private int getDayOffset() {
-        SeslSimpleMonthView seslSimpleMonthView =
-                this.mCalendarPagerAdapter.views.get(this.mCurrentPosition);
-        this.mDayOfWeekStart = seslSimpleMonthView == null ? 1 :
-                seslSimpleMonthView.getDayOfWeekStart();
-        int i = (((this.mCurrentDate.get(5) % 7) + this.mDayOfWeekStart) - 1) % 7;
+
+    private int getDayOfWeekOffset() {
+        SeslSimpleMonthView seslSimpleMonthView = mCalendarPagerAdapter.views.get(mCurrentPosition);
+        mDayOfWeekStart = seslSimpleMonthView == null ? 1 : seslSimpleMonthView.getDayOfWeekStart();
+        int i = (((mCurrentDate.get(5) % 7) + mDayOfWeekStart) - 1) % 7;
         if (i == 0) {
             return 7;
         }
         return i;
     }
-    // kang
 
-    // TODO rework this method
-    // kang
-    void updateSimpleMonthView(boolean var1) {
-        /* var1 = animation */
 
-        int var2 = this.mCurrentDate.get(2);
-        int var3 = this.mCurrentDate.get(1);
-        if (this.mIsLunar) {
-            var3 = this.mLunarCurrentYear;
-            var2 = this.mLunarCurrentMonth;
+    void updateSimpleMonthView(boolean animation) {
+        int year, month, tempYear;
+
+        if (mIsLunar) {
+            if (mLunarChanged) {
+                month = mTempDate.get(Calendar.MONTH);
+                tempYear = mTempDate.get(Calendar.YEAR);
+            }else{
+                month = mLunarCurrentMonth;
+                tempYear = mLunarCurrentYear;
+            }
+        }else{
+            tempYear = mCurrentDate.get(Calendar.YEAR);
+            month = mCurrentDate.get(Calendar.MONTH);
         }
 
-        int var4 = var3;
-        if (this.mLunarChanged) {
-            var2 = this.mTempDate.get(2);
-            var4 = this.mTempDate.get(1);
-        }
+        year = (tempYear - getMinYear()) * 12 + (month - getMinMonth());
 
-        var3 = (var4 - this.getMinYear()) * 12 + (var2 - this.getMinMonth());
-        if (this.mIsLunar) {
-            label64: {
-                if (var2 < this.getIndexOfleapMonthOfYear(var4)) {
-                    var3 = var2;
+        if (mIsLunar) {
+            computeYear: {
+                if (month < getIndexOfleapMonthOfYear(tempYear)) {
+                    year = month;
                 } else {
-                    var3 = var2 + 1;
+                    year = month + 1;
                 }
 
-                if (var4 == this.getMinYear()) {
-                    var4 = -this.getMinMonth();
+                if (tempYear == this.getMinYear()) {
+                    tempYear = -this.getMinMonth();
                 } else {
-                    var4 = this.getTotalMonthCountWithLeap(var4 - 1);
+                    tempYear = this.getTotalMonthCountWithLeap(tempYear - 1);
                 }
 
-                var4 += var3;
-                int var5 = this.mMode;
-                if ((var5 != 1 && var5 != 3 || var2 != this.mLunarStartMonth || this.mIsLeapStartMonth != 1) && (var5 != 2 && var5 != 3 || var2 != this.mLunarEndMonth || this.mIsLeapEndMonth != 1)) {
-                    var3 = var4;
-                    if (var5 != 0) {
-                        break label64;
+                tempYear += year;
+                int mode = this.mMode;
+                if ((mode != DATE_MODE_START && mode != DATE_MODE_WEEK_SELECT
+                        || month != mLunarStartMonth
+                        || mIsLeapStartMonth != 1)
+                        && (mode != 2 && mode != 3 || month != mLunarEndMonth || mIsLeapEndMonth != 1)) {
+                    year = tempYear;
+                    if (mode != 0) {
+                        break computeYear;
                     }
 
-                    var3 = var4;
-                    if (!this.mIsLeapMonth) {
-                        break label64;
+                    if (!mIsLeapMonth) {
+                        break computeYear;
                     }
                 }
 
-                var3 = var4 + 1;
+                year = tempYear + 1;
             }
         }
 
-        this.mCurrentPosition = var3;
-        this.mCalendarViewPager.setCurrentItem(var3, var1);
-        Message var6 = this.mHandler.obtainMessage();
-        var6.what = 1000;
-        var6.obj = true;
-        this.mHandler.sendMessage(var6);
-        var6 = this.mHandler.obtainMessage();
-        var6.what = 1001;
-        this.mHandler.sendMessage(var6);
+        mCurrentPosition = year;
+        mCalendarViewPager.setCurrentItem(year, animation);
+
+        Message msg = this.mHandler.obtainMessage();
+        msg.what = 1000;
+        msg.obj = true;
+        mHandler.sendMessage(msg);
+
+        msg = mHandler.obtainMessage();
+        msg.what = 1001;
+        mHandler.sendMessage(msg);
     }
-    // kang
 
     private class CalendarPagerAdapter extends PagerAdapter {
         SparseArray<SeslSimpleMonthView> views = new SparseArray<>();

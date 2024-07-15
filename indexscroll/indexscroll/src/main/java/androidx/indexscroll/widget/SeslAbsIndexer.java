@@ -17,6 +17,7 @@
 package androidx.indexscroll.widget;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY;
+import static androidx.recyclerview.widget.LinearLayoutManager.INVALID_OFFSET;
 
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
@@ -250,159 +251,127 @@ public abstract class SeslAbsIndexer extends DataSetObserver {
         }
     }
 
-    // TODO rework this method
-    // kang
-    private int getPositionForString(String var1) {
-        /* var1 = searchString */
-        SparseIntArray var2 = this.mAlphaMap;
-        int var3 = this.getItemCount();
-        if (var3 != 0 && this.mAlphabet != null) {
-            int var4 = var3;
-            if (var1 != null) {
-                if (var1.length() == 0) {
-                    var4 = var3;
+    private int getPositionForString(String searchString) {
+
+        if (mAlphabet == null) return 0;
+
+        int totalItems = getItemCount();
+        if (totalItems == 0 || searchString == null || searchString.isEmpty()) return totalItems ;
+
+        SparseIntArray cacheAlphaMap = mAlphaMap;
+
+        char indexChar = searchString.charAt(0);
+        int cachedOffset = cacheAlphaMap.get(indexChar, INVALID_OFFSET);
+
+        int calculatedOffset;
+
+        if (cachedOffset != INVALID_OFFSET) {
+            cachedOffset = Math.abs(cachedOffset);
+            calculatedOffset = totalItems ;
+
+        } else {
+            int offsetFromAlphabets;
+            findOffsetInAlphabets: {
+                calculatedOffset = mAlphabet.toString().indexOf(indexChar);
+                if (calculatedOffset > 0) {
+                    offsetFromAlphabets = calculatedOffset - 1;
+                    if (indexChar > mAlphabet.charAt(offsetFromAlphabets)) {
+                        offsetFromAlphabets = cacheAlphaMap.get(mAlphabet.charAt(offsetFromAlphabets), INVALID_OFFSET);
+                        if (offsetFromAlphabets != INVALID_OFFSET) {
+                            offsetFromAlphabets = Math.abs(offsetFromAlphabets);
+                            break findOffsetInAlphabets;
+                        }
+                    }
+                }
+                offsetFromAlphabets = 0;
+            }
+
+            cachedOffset = offsetFromAlphabets;
+
+            adjustOffset: {
+                if (calculatedOffset <  mAlphabet.length() - 1) {
+                    ++calculatedOffset;
+                    if (indexChar < mAlphabet.charAt(calculatedOffset)) {
+                        calculatedOffset = cacheAlphaMap.get(this.mAlphabet.charAt(calculatedOffset), INVALID_OFFSET);
+                        if (calculatedOffset != INVALID_OFFSET) {
+                            calculatedOffset = Math.abs(calculatedOffset);
+                            break adjustOffset;
+                        }
+                    }
+                }
+                calculatedOffset = totalItems ;
+            }
+        }
+
+        String searchKey;
+        if (indexChar == SYMBOL_CHAR) {
+            searchKey = "!";
+        } else {
+            searchKey = searchString;
+        }
+
+        int sectionEnd;
+        if (indexChar == 9733) {
+            sectionEnd = Math.max(cachedOffset, mProfileItemCount);
+        } else {
+            if (indexChar == GROUP_CHECKER) {
+                sectionEnd = Math.max(cachedOffset, mProfileItemCount + mFavoriteItemCount);
+            } else {
+                sectionEnd = Math.max(cachedOffset, mProfileItemCount + mFavoriteItemCount + mGroupItemCount);
+            }
+        }
+
+        calculatedOffset -= mDigitItemCount;
+
+        int searchEnd = (indexChar == DIGIT_CHAR) ? calculatedOffset : sectionEnd;
+
+        int middleIndex = (calculatedOffset + searchEnd) / 2;
+
+        int finalPosition = totalItems;
+        findFinalPosition: {
+            while(middleIndex >= searchEnd && middleIndex < calculatedOffset) {
+                String item = getItemAt(middleIndex);
+                int areEquivalent;
+                if (item != null && !item.isEmpty()) {
+                    if (indexChar == 9733 || indexChar == SYMBOL_CHAR || indexChar == GROUP_CHECKER) {
+                        areEquivalent = 1;
+                    }else{
+                        areEquivalent = compare(item, searchKey);
+                    }
+
+                    adjustBounds: {
+                        if (areEquivalent != 0) {
+                            if (areEquivalent < 0) {
+                                searchEnd = middleIndex + 1;
+                                if (searchEnd >= totalItems ) {
+                                    break findFinalPosition;
+                                }
+                                break adjustBounds;
+                            }
+                        } else if (searchEnd == middleIndex) {
+                            break;
+                        }
+
+                        calculatedOffset = middleIndex;
+                    }
+                    middleIndex = (searchEnd + calculatedOffset) / 2;
                 } else {
-                    char var5 = var1.charAt(0);
-                    var4 = var2.get(var5, -2147483648);
-                    int var6;
-                    int var7;
-                    if (-2147483648 != var4) {
-                        var6 = Math.abs(var4);
-                        var7 = var3;
-                    } else {
-                        CharSequence var8;
-                        label116: {
-                            var6 = this.mAlphabet.toString().indexOf(var5);
-                            if (var6 > 0) {
-                                var8 = this.mAlphabet;
-                                var4 = var6 - 1;
-                                if (var5 > var8.charAt(var4)) {
-                                    var4 = var2.get(this.mAlphabet.charAt(var4), -2147483648);
-                                    if (var4 != -2147483648) {
-                                        var4 = Math.abs(var4);
-                                        break label116;
-                                    }
-                                }
-                            }
-
-                            var4 = 0;
-                        }
-
-                        label110: {
-                            if (var6 < this.mAlphabet.length() - 1) {
-                                var8 = this.mAlphabet;
-                                ++var6;
-                                if (var5 < var8.charAt(var6)) {
-                                    var6 = var2.get(this.mAlphabet.charAt(var6), -2147483648);
-                                    if (var6 != -2147483648) {
-                                        var6 = Math.abs(var6);
-                                        break label110;
-                                    }
-                                }
-                            }
-
-                            var6 = var3;
-                        }
-
-                        var7 = var6;
-                        var6 = var4;
-                    }
-
-                    char var9 = var1.charAt(0);
-                    String var14;
-                    if (var9 == '&') {
-                        var14 = "!";
-                    } else {
-                        var14 = var1;
-                    }
-
-                    int var10;
-                    if (var9 == 9733) {
-                        var10 = this.mProfileItemCount;
-                        var4 = var6;
-                        if (var6 < var10) {
-                            var4 = var10;
-                        }
-                    } else {
-                        int var11;
-                        if (var9 == '\ud83d') {
-                            var11 = this.mProfileItemCount;
-                            var10 = this.mFavoriteItemCount;
-                            var4 = var6;
-                            if (var6 < var11 + var10) {
-                                var4 = var11 + var10;
-                            }
-                        } else {
-                            var11 = this.mProfileItemCount;
-                            var10 = this.mFavoriteItemCount;
-                            int var12 = this.mGroupItemCount;
-                            var4 = var6;
-                            if (var6 < var11 + var10 + var12) {
-                                var4 = var11 + var10 + var12;
-                            }
-                        }
-                    }
-
-                    var7 -= this.mDigitItemCount;
-                    var6 = var4;
-                    if (var9 == '#') {
-                        var6 = var7;
-                    }
-
-                    var4 = (var7 + var6) / 2;
-
-                    label101: {
-                        while(var4 >= var6 && var4 < var7) {
-                            String var13 = this.getItemAt(var4);
-                            if (var13 != null && !var13.equals("")) {
-                                var10 = this.compare(var13, var14);
-                                if (var9 == 9733 || var9 == '&' || var9 == '#' || var9 == '\ud83d') {
-                                    var10 = 1;
-                                }
-
-                                label87: {
-                                    if (var10 != 0) {
-                                        if (var10 < 0) {
-                                            var6 = var4 + 1;
-                                            if (var6 >= var3) {
-                                                break label101;
-                                            }
-                                            break label87;
-                                        }
-                                    } else if (var6 == var4) {
-                                        break;
-                                    }
-
-                                    var7 = var4;
-                                }
-
-                                var4 = (var6 + var7) / 2;
-                            } else {
-                                if (var4 <= var6) {
-                                    break;
-                                }
-
-                                --var4;
-                            }
-                        }
-
-                        var3 = var4;
-                    }
-
-                    var4 = var3;
-                    if (var1.length() == 1) {
-                        var2.put(var5, var3);
-                        var4 = var3;
-                    }
+                    if (middleIndex <= searchEnd) break;
+                    --middleIndex;
                 }
             }
 
-            return var4;
-        } else {
-            return 0;
+            finalPosition = middleIndex;
         }
+
+        if (searchString.length() == 1) {
+            cacheAlphaMap.put(indexChar, finalPosition);
+        }
+
+        return finalPosition;
+
     }
-    // kang
+
 
     private void getBundleInfo() {
         final String[] sections = mBundle.getStringArray(INDEXSCROLL_INDEX_TITLES);

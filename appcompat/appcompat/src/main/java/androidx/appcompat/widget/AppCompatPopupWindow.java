@@ -20,6 +20,7 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -27,8 +28,8 @@ import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.transition.TransitionSet;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.PopupWindow;
 
 import androidx.annotation.AttrRes;
@@ -41,8 +42,6 @@ import androidx.appcompat.view.ActionBarPolicy;
 import androidx.core.widget.PopupWindowCompat;
 import androidx.reflect.view.SeslViewReflector;
 import androidx.reflect.widget.SeslPopupWindowReflector;
-
-import java.lang.reflect.Field;
 
 /**
  * <p><b>SESL variant</b></p>
@@ -231,25 +230,35 @@ class AppCompatPopupWindow extends PopupWindow {
 
 
     /**
-     * Adjust popup selector corners in non-Samsung Basic Interaction devices.
+     * Ensure selector/ripple have rounded corners in non-Samsung Basic Interaction devices.
      */
     private void fixRoundedCorners() {
         if (!mIsReplacedPoupBackground) {
-            try {
-                Log.d("ACPW", "fixRoundedCorners for non-Samsung.");
-                // get PopupWindow mBackgroundView field
-                Field field = getClass().getSuperclass().getDeclaredField("mBackgroundView");
-                field.setAccessible(true);
-                Object bg = field.get(this);
-                // if we got it, fix those corners
-                if (bg instanceof View) {
-                    ((View) bg).setClipToOutline(true);
-                }
+            View contentView = getContentView();
+            ViewOutlineProvider outlineProvider = contentView.getOutlineProvider();
 
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                Log.e("ACPW", "fixRoundedCorners: " + e);
+            final float cornerRadius = mContext.getResources().getDimensionPixelSize(R.dimen.sesl_menu_popup_corner_radius);
+            RoundedOutlineProvider roundedOutlineProvider = new RoundedOutlineProvider(cornerRadius);
+
+            if (outlineProvider != null && outlineProvider.equals(roundedOutlineProvider)){
+                return;
             }
+
+            contentView.setOutlineProvider(roundedOutlineProvider);
+            contentView.setClipToOutline(true);
         }
     }
 
+    private static class RoundedOutlineProvider extends ViewOutlineProvider {
+        private final float mCornerRadius;
+
+        public RoundedOutlineProvider(float cornerRadius) {
+            mCornerRadius = cornerRadius;
+        }
+
+        @Override
+        public void getOutline(View view, Outline outline) {
+            outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), mCornerRadius);
+        }
+    }
 }

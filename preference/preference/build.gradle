@@ -23,7 +23,7 @@ plugins {
 
 
 dependencies {
-    api("androidx.annotation:annotation:1.2.0")
+    api("androidx.annotation:annotation:1.8.1")
     api project(":appcompat:appcompat")
     // Use the latest version of core library for verifying insets visibility
     api project(":core:core")

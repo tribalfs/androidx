@@ -7,7 +7,7 @@ plugins {
 
 
 dependencies {
-    api("androidx.annotation:annotation:1.1.0")
+    api("androidx.annotation:annotation:1.8.1")
     implementation project(":core:core-ktx")
     api project(":customview:customview")
     implementation("androidx.window:window:1.2.0")
@@ -30,7 +30,7 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
     namespace = "androidx.slidingpanelayout"
-    
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

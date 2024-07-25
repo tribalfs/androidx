@@ -73,9 +73,16 @@
         <attr name="csPointerHaloWidth" format="integer" />
         <attr name="csPointerStrokeWidth" format="integer" />
         <attr name="csProgress" format="integer" />
-
         <attr name="csSecondPointerColor" format="color" />
         <attr name="csSecondPointerHaloColor" format="color" />
         <attr name="csStartAngle" format="integer" />
+        <attr name="csCircleProgressColor" format="color" />
+        <attr name="csCircleXRadius" format="dimension" />
+        <attr name="csCircleYRadius" format="dimension" />
+        <attr name="csPointerAlphaOnTouch" format="integer" />
+        <attr name="csPointerHaloBorderWidth" format="dimension" />
+        <attr name="csUseCustomRadii" format="boolean" />
     </declare-styleable>
+
+
 </resources>

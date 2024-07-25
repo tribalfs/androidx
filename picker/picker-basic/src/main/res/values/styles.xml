@@ -39,4 +39,30 @@
 
     <style name="CalendarHeaderText" parent="@style/RobotoRegular"/>
 
+    <style name="WakeUpTimePicker_AMPM">
+        <item name="android:textSize">@dimen/sesl_sleep_time_am_pm_size</item>
+        <item name="android:textColor">@color/sesl_bed_wakeup_time_color</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:importantForAccessibility">no</item>
+        <item name="android:fontFamily">roboto-num3L</item>
+        <item name="android:paddingStart">@dimen/sesl_bedtime_time_picker_ampm_padding</item>
+        <item name="android:paddingEnd">@dimen/sesl_bedtime_time_picker_ampm_padding</item>
+    </style>
+
+    <style name="BedTimePicker_AMPM">
+        <item name="android:textSize">@dimen/sesl_sleep_time_am_pm_size</item>
+        <item name="android:textColor">@color/sesl_bed_wakeup_time_color</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:importantForAccessibility">no</item>
+        <item name="android:fontFamily">roboto-num3L</item>
+        <item name="android:paddingStart">@dimen/sesl_bedtime_time_picker_ampm_padding</item>
+        <item name="android:paddingEnd">@dimen/sesl_bedtime_time_picker_ampm_padding</item>
+    </style>
+
 </resources>

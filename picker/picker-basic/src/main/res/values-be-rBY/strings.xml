@@ -29,4 +29,10 @@
   <string name="sesl_time_picker_set_title">Задайце час</string>
   <string name="sesl_date_picker_year">Год</string>
   <string name="sesl_date_picker_month">Месяц</string>
+
+  <string name="sesl_sleep_duration_in_hours_minutes">Час сну: %1$d гадзін(ы) %2$d хвілін(ы)</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Час сну: %d гадзін(ы) 1 хвіліна</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Час сну: 1 гадзіна %d хвілін</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Час сну: 1 гадзіна 1 хвіліна</string>
+
 </resources>

@@ -16,20 +16,46 @@
 
 package androidx.picker.util;
 
-import android.view.View;
+import android.text.format.DateFormat;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
 
-public abstract class SeslSleepTimePickerUtil {
-    public static float convertToTime(float f) {
-        return (((((((int) (f / 2.5f)) * 2.5f) - 270.0f) + 360.0f) % 360.0f) * 1440.0f) / 360.0f;
+import java.util.Locale;
+
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+public class SeslSleepTimePickerUtil {
+
+    public static float pointToTime(float point) {
+        return (((((((int) (point / 2.5f)) * 2.5f) - 270.0f) + 360.0f) % 360.0f) * 1440.0f) / 360.0f;
     }
 
-    public static boolean needBedTimePickerAdjustment(float f) {
-        return f < 420.0f;
+    public static boolean isSmallDisplay(float screenSize) {
+        return screenSize < 420.0f;
     }
 
-    public static void performHapticFeedback(@NonNull View view, int i) {
-        view.performHapticFeedback(i + 50024);
+    public static boolean isMorning() {
+        return DateFormat.getBestDateTimePattern(Locale.getDefault(), "hm").startsWith("a");
     }
+
+    public static String formatToInteger(int i) {
+        return String.format("%d", i);
+    }
+
+    public static String formatTwoDigitNumber(int i) {
+        return String.format("%02d", i);
+    }
+
+    public static boolean hasDuplicateHourMarkers() {
+        String bestDateTimePattern = DateFormat.getBestDateTimePattern(Locale.getDefault(), "hm");
+        int length = bestDateTimePattern.length();
+        for (int index = 0; index < length; index++) {
+            char charAt = bestDateTimePattern.charAt(index);
+            if (charAt == 'H' || charAt == 'h' || charAt == 'K' || charAt == 'k') {
+                int nextCharIndex = index + 1;
+                return nextCharIndex < length && charAt == bestDateTimePattern.charAt(nextCharIndex);
+            }
+        }
+        return false;
+    }
+
 }

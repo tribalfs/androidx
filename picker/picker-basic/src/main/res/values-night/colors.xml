@@ -27,4 +27,9 @@
 
   <color name="sesl_sleep_goal_wheel_color">#a6393939</color>
   <color name="sesl_sleep_duration_text_color_for_dialog">@color/sesl_text4_dark</color>
+  <color name="sesl_circular_seekbar_color">@color/sesl_gray_D5</color>
+  <color name="sesl_clock_dial_number_color">@color/sesl_text5_dark</color>
+  <color name="sesl_grid_medium_size_color">#b399999e</color>
+  <color name="sesl_grid_small_size_color">#4d99999e</color>
+
 </resources>

@@ -29,4 +29,5 @@
   <dimen name="sesl_date_picker_selected_day_circle_radius">11dp</dimen>
 
   <item type="dimen" name="sesl_time_picker_inner_circle_container_ratio">0.77</item>
+  <dimen name="sesl_circular_seekbar_bottom_margin">10dp</dimen>
 </resources>

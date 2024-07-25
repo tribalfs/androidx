@@ -27,7 +27,7 @@ dependencies {
     api project(":appcompat:appcompat")
     // Use the latest version of core library for verifying insets visibility
     api project(":core:core")
-    implementation("androidx.collection:collection:1.0.0")
+    implementation("androidx.collection:collection:1.4.2")
     api("androidx.activity:activity-ktx:1.5.1")
     api project(":fragment:fragment")
     implementation("androidx.fragment:fragment-ktx:1.6.2"){

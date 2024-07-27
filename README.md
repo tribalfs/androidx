@@ -75,7 +75,7 @@ dependencies {
   implementation "sesl.androidx.appcompat:appcompat:1.7.0+1.0.28-sesl6+rev0"
   implementation "sesl.androidx.fragment:fragment:1.8.0+1.0.0-sesl6+rev0"
   //sesl material
-  implementation "sesl.com.google.android.material.material:1.12.0+1.0.18-sesl6+rev0"
+  implementation "sesl.com.google.android.material:material:1.12.0+1.0.18-sesl6+rev0"
 }
 ```
 
@@ -86,7 +86,7 @@ dependencies {
   implementation("sesl.androidx.appcompat:appcompat:1.7.0+1.0.28-sesl6+rev0")
   implementation("sesl.androidx.fragment:fragment:1.8.0+1.0.0-sesl6+rev0")
   //sesl material
-  implementation ("sesl.com.google.android.material.material:1.12.0+1.0.18-sesl6+rev0")
+  implementation ("sesl.com.google.android.material:material:1.12.0+1.0.18-sesl6+rev0")
 }
 ```
 
@@ -107,7 +107,7 @@ configurations.implementation {
     exclude (group:"androidx.recyclerview", module:"recyclerview")
     exclude (group:"androidx.slidingpanelayout",  module:"slidingpanelayout")
     exclude (group:"androidx.swiperefreshlayout",  module:"swiperefreshlayout")
-    exclude (group:"com.google.android.material.component", module: "material")
+    exclude (group:"com.google.android.material", module: "material")
 }
 ```
 ##### Kotlin DSL
@@ -126,7 +126,7 @@ configurations.implementation {
     exclude ("androidx.recyclerview", "recyclerview")
     exclude ("androidx.slidingpanelayout",  "slidingpanelayout")
     exclude ("androidx.swiperefreshlayout",  "swiperefreshlayout")
-    exclude ("com.google.android.material.component", "material")
+    exclude ("com.google.android.material", "material")
 }
 ```
 

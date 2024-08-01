@@ -99,6 +99,20 @@ public class AppCompatTextView extends TextView implements TintableBackgroundVie
 
     private boolean mIsSetTypefaceProcessing = false;
 
+    /**
+     * Equivalent to Typeface.mOriginalTypeface.
+     * Used to correctly emulate the behavior of getTypeface(), because we need to call setTypeface
+     * directly in order to implement caching of variation instances of typefaces.
+     */
+    private Typeface mOriginalTypeface;
+
+    /**
+     * The currently applied font variation settings.
+     * Used to make getFontVariationSettings somewhat more accurate with Typeface instance caching,
+     * as we don't call super.setFontVariationSettings.
+     */
+    private String mFontVariationSettings;
+
     @Nullable
     private SuperCaller mSuperCaller = null;
 
@@ -163,7 +177,6 @@ public class AppCompatTextView extends TextView implements TintableBackgroundVie
     /**
      * This should be accessed via
      * {@link androidx.core.view.ViewCompat#setBackgroundTintList(android.view.View, ColorStateList)}
-     *
      */
     @RestrictTo(LIBRARY_GROUP_PREFIX)
     @Override
@@ -176,7 +189,6 @@ public class AppCompatTextView extends TextView implements TintableBackgroundVie
     /**
      * This should be accessed via
      * {@link androidx.core.view.ViewCompat#getBackgroundTintList(android.view.View)}
-     *
      */
     @RestrictTo(LIBRARY_GROUP_PREFIX)
     @Override
@@ -189,7 +201,6 @@ public class AppCompatTextView extends TextView implements TintableBackgroundVie
     /**
      * This should be accessed via
      * {@link androidx.core.view.ViewCompat#setBackgroundTintMode(android.view.View, PorterDuff.Mode)}
-     *
      */
     @RestrictTo(LIBRARY_GROUP_PREFIX)
     @Override
@@ -202,7 +213,6 @@ public class AppCompatTextView extends TextView implements TintableBackgroundVie
     /**
      * This should be accessed via
      * {@link androidx.core.view.ViewCompat#getBackgroundTintMode(android.view.View)}
-     *
      */
     @RestrictTo(LIBRARY_GROUP_PREFIX)
     @Override
@@ -218,6 +228,38 @@ public class AppCompatTextView extends TextView implements TintableBackgroundVie
         if (mTextHelper != null) {
             mTextHelper.onSetTextAppearance(context, resId);
         }
+    }
+
+    /**
+     * Set font variation settings.
+     * See {@link TextView#setFontVariationSettings(String)} for details.
+     * <p>
+     * <em>Note:</em> Due to performance optimizations,
+     * {@code getPaint().getFontVariationSettings()} will be less reliable than if not using
+     * AppCompatTextView.  You should prefer {@link #getFontVariationSettings()}, which will be more
+     * accurate. However, neither approach will work correctly if using Typeface objects with
+     * embedded font variation settings.
+     */
+    @RequiresApi(26)
+    @Override
+    public boolean setFontVariationSettings(@Nullable String fontVariationSettings) {
+        Typeface variationTypefaceInstance = AppCompatTextHelper.Api26Impl.createVariationInstance(
+                mOriginalTypeface, fontVariationSettings);
+        if (variationTypefaceInstance != null) {
+            // Call superclass method directly to bypass overwriting mOriginalTypeface
+            super.setTypeface(variationTypefaceInstance);
+            mFontVariationSettings = fontVariationSettings;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Nullable
+    @RequiresApi(26)
+    @Override
+    public String getFontVariationSettings() {
+        return mFontVariationSettings;
     }
 
     @Override
@@ -755,6 +797,20 @@ public class AppCompatTextView extends TextView implements TintableBackgroundVie
     public void setSupportCompoundDrawablesTintMode(@Nullable PorterDuff.Mode tintMode) {
         mTextHelper.setCompoundDrawableTintMode(tintMode);
         mTextHelper.applyCompoundDrawablesTints();
+    }
+
+    @Override
+    public void setTypeface(@Nullable Typeface tf) {
+        mOriginalTypeface = tf;
+        super.setTypeface(tf);
+    }
+
+    @Override
+    @Nullable
+    // Code inspection reveals that the superclass method can return null.
+    @SuppressWarnings("InvalidNullabilityOverride")
+    public Typeface getTypeface() {
+        return mOriginalTypeface;
     }
 
     @Override

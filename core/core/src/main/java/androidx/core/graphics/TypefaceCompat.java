@@ -64,7 +64,8 @@ public class TypefaceCompat {
     }
 
     /**
-     * Cache for Typeface objects dynamically loaded from assets.
+     * Cache for Typeface objects dynamically loaded from assets,
+     * keyed by {@link #createResourceUid(Resources, int, String, int, int)}
      */
     private static final LruCache<String, Typeface> sTypefaceCache = new LruCache<>(16);
 

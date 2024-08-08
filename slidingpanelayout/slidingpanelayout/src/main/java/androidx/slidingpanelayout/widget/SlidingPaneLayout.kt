@@ -2299,20 +2299,24 @@ open class SlidingPaneLayout @JvmOverloads constructor(
             }
         }
 
-        fun dispatchOnPanelOpened(panel: View) {
+        fun dispatchOnPanelOpened(panel: View?) {
             mStartOffset = currentSlideOffset
-            for (listener in panelSlideListeners) {
-                listener.onPanelOpened(panel)
+            if (panel != null) {
+                for (listener in panelSlideListeners) {
+                    listener.onPanelOpened(panel)
+                }
+                sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)
             }
-            sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)
         }
 
-        fun dispatchOnPanelClosed(panel: View) {
+        fun dispatchOnPanelClosed(panel: View?) {
             mStartOffset = currentSlideOffset
-            for (listener in panelSlideListeners) {
-                listener.onPanelClosed(panel)
+            if (panel != null) {
+                for (listener in panelSlideListeners) {
+                    listener.onPanelClosed(panel)
+                }
+                sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)
             }
-            sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)
         }
 
         override fun tryCaptureView(child: View, pointerId: Int): Boolean {
@@ -2326,10 +2330,10 @@ open class SlidingPaneLayout @JvmOverloads constructor(
                 isAnimating = false//sesl
                 preservedOpenState = if (currentSlideOffset == 0f/*inverted in sesl*/) {
                     updateObscuredViewsVisibility(slideableView)
-                    dispatchOnPanelClosed(slideableView!!)
+                    dispatchOnPanelClosed(slideableView)
                     false
                 } else {
-                    dispatchOnPanelOpened(slideableView!!)
+                    dispatchOnPanelOpened(slideableView)
                     true
                 }
             }
@@ -3029,12 +3033,12 @@ open class SlidingPaneLayout @JvmOverloads constructor(
             if (currentSlideOffset == 0.0f) {
                 if (mSlidingState.state != SESL_STATE_CLOSE) {
                     mSlidingState.onStateChanged(SESL_STATE_CLOSE)
-                    overlappingPaneHandler.dispatchOnPanelClosed(slideableView!!)
+                    overlappingPaneHandler.dispatchOnPanelClosed(slideableView)
                 }
             } else if (currentSlideOffset == 1.0f) {
                 if (mSlidingState.state != SESL_STATE_OPEN) {
                     mSlidingState.onStateChanged(SESL_STATE_OPEN)
-                    overlappingPaneHandler.dispatchOnPanelOpened(slideableView!!)
+                    overlappingPaneHandler.dispatchOnPanelOpened(slideableView)
                 }
             } else if (mSlidingState.state != SESL_STATE_IDLE) {
                 mSlidingState.onStateChanged(SESL_STATE_IDLE)

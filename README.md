@@ -6,28 +6,28 @@ Any form of contributions, including suggestions, bug reports, corrections, and 
 
 Info: Samsung’s One UI apps are created using heavily modified versions of some [Android Jetpack](https://github.com/androidx/androidx) and [Material Components for Android](https://github.com/material-components/material-components-android) libraries. These include (but are not limited to) custom themes/styles, custom implementations, and additional APIs. These are internally referenced as SESL. Samsung also added its own androidx modules.
 
-<!--- Todo: add latest versions (badges) --->
 
 ## Available modules (as GithubPackages)
 #### SESL6(OneUI 6) Android Jetpack
-- [sesl.androidx.core:core](https://github.com/tribalfs/sesl-androidx/packages/2110024)
-- [sesl.androidx.core:core-ktx](https://github.com/tribalfs/sesl-androidx/packages/2110025)
-- [sesl.androidx.customview:customview](https://github.com/tribalfs/sesl-androidx/packages/2110026)
-- [sesl.androidx.drawerlayout:drawerlayout](https://github.com/tribalfs/sesl-androidx/packages/2110027)
-- [sesl.androidx.viewpager:viewpager](https://github.com/tribalfs/sesl-androidx/packages/2110037)
-- [sesl.androidx.swiperefreshlayout:swiperefreshlayout](https://github.com/tribalfs/sesl-androidx/packages/2110035)
-- [sesl.androidx.coordinatorlayout:coordinatorlayout](https://github.com/tribalfs/sesl-androidx/packages/2110023)
-- [sesl.androidx.fragment:fragment](https://github.com/tribalfs/sesl-androidx/packages/2110028)
-- [sesl.androidx.recyclerview:recyclerview](https://github.com/tribalfs/sesl-androidx/packages/2110033)
-- [sesl.androidx.appcompat:appcompat](https://github.com/tribalfs/sesl-androidx/packages/2110021)
-- [sesl.androidx.viewpager2:viewpager2](https://github.com/tribalfs/sesl-androidx/packages/2110041)
-- [sesl.androidx.slidingpanelayout:slidingpanelayout](https://github.com/tribalfs/sesl-androidx/packages/2110034)
-- [sesl.androidx.preference:preference](https://github.com/tribalfs/sesl-androidx/packages/2110032)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.core:core-1.13.1%2B1.0.7--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110024)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.core:core--ktx-1.13.1%2B1.0.0--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110025)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.customview:customview-1.2.0--alpha02%2B1.0.1--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110026)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.drawerlayout:drawerlayout-1.2.0%2B1.0.1--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110027)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.viewpager:viewpager-1.1.0--alpha01%2B1.0.0--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110037)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.swiperefreshlayout:swiperefreshlayout-1.2.0--alpha01%2B1.0.0--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110035)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.coordinatorlayout:coordinatorlayout-1.3.0--alpha02%2B1.0.0--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110023)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.fragment:fragment-1.8.2%2B1.0.0--sesl6%2Brev1-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110028)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.recyclerview:recyclerview-1.4.0--alpha01%2B1.0.13--sesl6%2Brev1-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110033)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.appcompat:appcompat-1.7.0%2B1.0.31--sesl6%2Brev1-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110021)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.viewpager2:viewpager2-1.1.0%2B1.0.0--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110041)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.slidingpanelayout:slidingpanelayout-1.2.0%2B1.0.2--sesl6%2Brev2-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110034)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.preference:preference-1.2.1%2B1.0.4--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110032)
 #### SESL6(OneUI 6) Samsung
-- [sesl.androidx.indexscroll:indexscroll](https://github.com/tribalfs/sesl-androidx/packages/2110029)
-- [sesl.androidx.picker:picker-basic](https://github.com/tribalfs/sesl-androidx/packages/2110030)
-- [sesl.androidx.picker:picker-color](https://github.com/tribalfs/sesl-androidx/packages/2110031)
-- [sesl.androidx.apppickerview:apppickerview](https://github.com/tribalfs/sesl-androidx/packages/2110022)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.indexscroll:indexscroll-1.0.3%2B1.0.3--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110029)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.picker:picker--basic-1.0.17%2B1.0.17--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110030)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.picker:picker--color-1.0.6%2B1.0.6--sesl6%2Brev2-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110031)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.apppickerview:apppickerview-1.0.1%2B1.0.1--sesl6%2Brev2-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110022)
+
 
 #### These modules are intended for use together with [sesl-material-components-android](https://github.com/tribalfs/sesl-material-components-android?tab=readme-ov-file#sesloneui-material-components-for-android-unofficial) library.
 

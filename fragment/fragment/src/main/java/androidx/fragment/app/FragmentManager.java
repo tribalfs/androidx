@@ -117,6 +117,7 @@ public abstract class FragmentManager implements FragmentResultOwner {
     public static final String TAG = "FragmentManager";
 
     static boolean USE_PREDICTIVE_BACK = true;
+    ArrayList<BackStackRecord> mBackStackBackup = null;
 
     /**
      * Control whether FragmentManager uses the new state predictive back feature that allows
@@ -1071,6 +1072,13 @@ public abstract class FragmentManager implements FragmentResultOwner {
             executePendingTransactions();
             mHandlingTransitioningOp = false;
             mTransitioningOp = null;
+
+            //Workaround for bug 342419080/358743378 until official fix is released
+            mBackStack = new ArrayList<>(mBackStackBackup.size());
+            for (BackStackRecord record : mBackStackBackup) {
+                mBackStack.add(new BackStackRecord(record));
+            }
+            mBackStackBackup = null;
         }
     }
 
@@ -2047,6 +2055,7 @@ public abstract class FragmentManager implements FragmentResultOwner {
             mExecutingActions = true;
             try {
                 removeRedundantOperationsAndExecute(mTmpRecords, mTmpIsPop);
+            } catch (Exception ignore){
             } finally {
                 cleanupExec();
             }
@@ -2595,6 +2604,11 @@ public abstract class FragmentManager implements FragmentResultOwner {
 
     boolean prepareBackStackState(@NonNull ArrayList<BackStackRecord> records,
             @NonNull ArrayList<Boolean> isRecordPop) {
+        //Workaround for bug 342419080/358743378 until official fix is released
+        mBackStackBackup =  new ArrayList<>(mBackStack.size());
+        for (BackStackRecord record : mBackStack) {
+            mBackStackBackup.add(new BackStackRecord(record));
+        }
         // The transitioning record is the last one on the back stack.
         mTransitioningOp = mBackStack.get(mBackStack.size() - 1);
         // Mark all fragments in the record as transitioning

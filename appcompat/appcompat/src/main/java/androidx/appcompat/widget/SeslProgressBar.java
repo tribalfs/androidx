@@ -414,7 +414,14 @@ public class SeslProgressBar extends View {
         } else {
             int resId = a.getResourceId(index, -1);
             if (resId != -1) {
-                return AnimatedVectorDrawableCompat.create(context, resId);
+                Drawable d = AnimatedVectorDrawableCompat.create(context, resId);
+                if (d == null){
+                    d = ContextCompat.getDrawable(context, resId);
+                    if (!(d instanceof AnimatedVectorDrawableCompat)) {
+                        return null;
+                    }
+                }
+                return d;
             } else {
                 return null;
             }

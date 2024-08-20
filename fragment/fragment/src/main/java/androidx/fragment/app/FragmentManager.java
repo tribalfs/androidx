@@ -2604,11 +2604,23 @@ public abstract class FragmentManager implements FragmentResultOwner {
 
     boolean prepareBackStackState(@NonNull ArrayList<BackStackRecord> records,
             @NonNull ArrayList<Boolean> isRecordPop) {
+        if (FragmentManager.isLoggingEnabled(Log.VERBOSE)) {
+            Log.v(
+                    TAG, "FragmentManager has the following pending actions inside of "
+                            + "prepareBackStackState: " + mPendingActions
+            );
+        }
+        if (mBackStack.isEmpty()) {
+            Log.i(TAG, "Ignoring call to start back stack pop because the back stack is empty.");
+            return false;
+        }
+
         //Workaround for bug 342419080/358743378 until official fix is released
         mBackStackBackup =  new ArrayList<>(mBackStack.size());
         for (BackStackRecord record : mBackStack) {
             mBackStackBackup.add(new BackStackRecord(record));
         }
+
         // The transitioning record is the last one on the back stack.
         mTransitioningOp = mBackStack.get(mBackStack.size() - 1);
         // Mark all fragments in the record as transitioning

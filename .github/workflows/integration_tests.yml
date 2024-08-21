@@ -1,8 +1,8 @@
 name: Run Integration Tests
 on:
-  workflow_run:
-    workflows: ["AndroidX Presubmits"]
-    types: [completed]
+#  workflow_run:
+#    workflows: ["AndroidX Presubmits"]
+#    types: [completed]
 
 jobs:
   run_integration_tests:

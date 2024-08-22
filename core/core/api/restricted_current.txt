@@ -368,6 +368,7 @@ package androidx.core.app {
     field public static final String CATEGORY_STOPWATCH = "stopwatch";
     field public static final String CATEGORY_SYSTEM = "sys";
     field public static final String CATEGORY_TRANSPORT = "transport";
+    field public static final String CATEGORY_VOICEMAIL = "voicemail";
     field public static final String CATEGORY_WORKOUT = "workout";
     field @ColorInt public static final int COLOR_DEFAULT = 0; // 0x0
     field public static final int DEFAULT_ALL = -1; // 0xffffffff
@@ -1592,6 +1593,7 @@ package androidx.core.content.res {
 
   public static final class FontResourcesParserCompat.ProviderResourceEntry implements androidx.core.content.res.FontResourcesParserCompat.FamilyResourceEntry {
     ctor public FontResourcesParserCompat.ProviderResourceEntry(androidx.core.provider.FontRequest, @androidx.core.content.res.FontResourcesParserCompat.FetchStrategy int, int);
+    method public androidx.core.provider.FontRequest? getFallbackRequest();
     method @androidx.core.content.res.FontResourcesParserCompat.FetchStrategy public int getFetchStrategy();
     method public androidx.core.provider.FontRequest getRequest();
     method public int getTimeout();
@@ -1807,6 +1809,7 @@ package androidx.core.graphics {
     method protected android.graphics.Typeface? createFromFamiliesWithDefault(Object!);
     method public android.graphics.Typeface? createFromFontFamilyFilesResourceEntry(android.content.Context!, androidx.core.content.res.FontResourcesParserCompat.FontFamilyFilesResourceEntry!, android.content.res.Resources!, int);
     method public android.graphics.Typeface? createFromFontInfo(android.content.Context!, android.os.CancellationSignal?, androidx.core.provider.FontsContractCompat.FontInfo![], int);
+    method @RequiresApi(29) public android.graphics.Typeface? createFromFontInfoWithFallback(android.content.Context, android.os.CancellationSignal?, java.util.List<androidx.core.provider.FontsContractCompat.FontInfo![]!>, int);
     method public android.graphics.Typeface? createFromResourcesFontFile(android.content.Context!, android.content.res.Resources!, int, String!, int);
     method protected java.lang.reflect.Method! obtainAbortCreationMethod(Class<? extends java.lang.Object!>!) throws java.lang.NoSuchMethodException;
     method protected java.lang.reflect.Method! obtainAddFontFromAssetManagerMethod(Class<? extends java.lang.Object!>!) throws java.lang.NoSuchMethodException;
@@ -1832,6 +1835,7 @@ package androidx.core.graphics {
     ctor public TypefaceCompatApi29Impl();
     method public android.graphics.Typeface? createFromFontFamilyFilesResourceEntry(android.content.Context!, androidx.core.content.res.FontResourcesParserCompat.FontFamilyFilesResourceEntry!, android.content.res.Resources!, int);
     method public android.graphics.Typeface? createFromFontInfo(android.content.Context!, android.os.CancellationSignal?, androidx.core.provider.FontsContractCompat.FontInfo![], int);
+    method public android.graphics.Typeface? createFromFontInfoWithFallback(android.content.Context, android.os.CancellationSignal?, java.util.List<androidx.core.provider.FontsContractCompat.FontInfo![]!>, int);
     method protected android.graphics.Typeface! createFromInputStream(android.content.Context!, java.io.InputStream!);
     method public android.graphics.Typeface? createFromResourcesFontFile(android.content.Context!, android.content.res.Resources!, int, String!, int);
     method protected androidx.core.provider.FontsContractCompat.FontInfo! findBestInfo(androidx.core.provider.FontsContractCompat.FontInfo![]!, int);
@@ -2239,11 +2243,13 @@ package androidx.core.net {
 
 package androidx.core.os {
 
-  @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public enum BufferFillPolicy {
-    method public int getValue();
-    property public final int value;
-    enum_constant public static final androidx.core.os.BufferFillPolicy DISCARD;
-    enum_constant public static final androidx.core.os.BufferFillPolicy RING_BUFFER;
+  @RequiresApi(api=35) public abstract sealed class BufferFillPolicy {
+    field public static final androidx.core.os.BufferFillPolicy.Companion Companion;
+    field public static final androidx.core.os.BufferFillPolicy DISCARD;
+    field public static final androidx.core.os.BufferFillPolicy RING_BUFFER;
+  }
+
+  public static final class BufferFillPolicy.Companion {
   }
 
   public final class BuildCompat {
@@ -2313,7 +2319,8 @@ package androidx.core.os {
     method public static boolean postDelayed(android.os.Handler, Runnable, Object?, long);
   }
 
-  @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public final class HeapProfileRequestBuilder extends androidx.core.os.RequestBuilder<androidx.core.os.HeapProfileRequestBuilder> {
+  @RequiresApi(api=35) public final class HeapProfileRequestBuilder extends androidx.core.os.ProfilingRequestBuilder<androidx.core.os.HeapProfileRequestBuilder> {
+    ctor public HeapProfileRequestBuilder();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected android.os.Bundle getParams();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected int getProfilingType();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected androidx.core.os.HeapProfileRequestBuilder getThis();
@@ -2323,7 +2330,8 @@ package androidx.core.os {
     method public androidx.core.os.HeapProfileRequestBuilder setTrackJavaAllocations(boolean traceJavaAllocations);
   }
 
-  @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public final class JavaHeapDumpRequestBuilder extends androidx.core.os.RequestBuilder<androidx.core.os.JavaHeapDumpRequestBuilder> {
+  @RequiresApi(api=35) public final class JavaHeapDumpRequestBuilder extends androidx.core.os.ProfilingRequestBuilder<androidx.core.os.JavaHeapDumpRequestBuilder> {
+    ctor public JavaHeapDumpRequestBuilder();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected android.os.Bundle getParams();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected int getProfilingType();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected androidx.core.os.JavaHeapDumpRequestBuilder getThis();
@@ -2389,25 +2397,34 @@ package androidx.core.os {
   }
 
   public final class Profiling {
-    method @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public static kotlinx.coroutines.flow.Flow<android.os.ProfilingResult> registerForAllProfilingResults(android.content.Context context);
-    method @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public static void registerForAllProfilingResults(android.content.Context context, java.util.concurrent.Executor executor, java.util.function.Consumer<android.os.ProfilingResult> listener);
-    method @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public static androidx.core.os.HeapProfileRequestBuilder requestHeapProfile();
-    method @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public static androidx.core.os.JavaHeapDumpRequestBuilder requestJavaHeapDump();
-    method @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public static androidx.core.os.StackSamplingRequestBuilder requestStackSampling();
-    method @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public static androidx.core.os.SystemTraceRequestBuilder requestSystemTrace();
-    method @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public static void unregisterForAllProfilingResults(android.content.Context context, java.util.function.Consumer<android.os.ProfilingResult> listener);
+    method @RequiresApi(api=35) public static kotlinx.coroutines.flow.Flow<android.os.ProfilingResult> registerForAllProfilingResults(android.content.Context context);
+    method @RequiresApi(api=35) public static void registerForAllProfilingResults(android.content.Context context, java.util.concurrent.Executor executor, java.util.function.Consumer<android.os.ProfilingResult> listener);
+    method @RequiresApi(api=35) public static void requestProfiling(android.content.Context context, androidx.core.os.ProfilingRequest profilingRequest, java.util.concurrent.Executor? executor, java.util.function.Consumer<android.os.ProfilingResult>? listener);
+    method @RequiresApi(api=35) public static void unregisterForAllProfilingResults(android.content.Context context, java.util.function.Consumer<android.os.ProfilingResult> listener);
   }
 
-  @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public abstract class RequestBuilder<T extends androidx.core.os.RequestBuilder<T>> {
+  @RequiresApi(api=35) public final class ProfilingRequest {
+    method public android.os.CancellationSignal? getCancellationSignal();
+    method public android.os.Bundle getParams();
+    method public int getProfilingType();
+    method public String? getTag();
+    property public final android.os.CancellationSignal? cancellationSignal;
+    property public final android.os.Bundle params;
+    property public final int profilingType;
+    property public final String? tag;
+  }
+
+  @RequiresApi(api=35) public abstract class ProfilingRequestBuilder<T extends androidx.core.os.ProfilingRequestBuilder<T>> {
+    method public final androidx.core.os.ProfilingRequest build();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected abstract android.os.Bundle getParams();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected abstract int getProfilingType();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected abstract T getThis();
-    method public final void request(android.content.Context context, java.util.concurrent.Executor? executor, java.util.function.Consumer<android.os.ProfilingResult>? listener);
     method public final T setCancellationSignal(android.os.CancellationSignal cancellationSignal);
     method public final T setTag(String tag);
   }
 
-  @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public final class StackSamplingRequestBuilder extends androidx.core.os.RequestBuilder<androidx.core.os.StackSamplingRequestBuilder> {
+  @RequiresApi(api=35) public final class StackSamplingRequestBuilder extends androidx.core.os.ProfilingRequestBuilder<androidx.core.os.StackSamplingRequestBuilder> {
+    ctor public StackSamplingRequestBuilder();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected android.os.Bundle getParams();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected int getProfilingType();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected androidx.core.os.StackSamplingRequestBuilder getThis();
@@ -2416,7 +2433,8 @@ package androidx.core.os {
     method public androidx.core.os.StackSamplingRequestBuilder setSamplingFrequencyHz(int samplingFrequencyHz);
   }
 
-  @RequiresApi(api=android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM) public final class SystemTraceRequestBuilder extends androidx.core.os.RequestBuilder<androidx.core.os.SystemTraceRequestBuilder> {
+  @RequiresApi(api=35) public final class SystemTraceRequestBuilder extends androidx.core.os.ProfilingRequestBuilder<androidx.core.os.SystemTraceRequestBuilder> {
+    ctor public SystemTraceRequestBuilder();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected android.os.Bundle getParams();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected int getProfilingType();
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.SUBCLASSES) protected androidx.core.os.SystemTraceRequestBuilder getThis();
@@ -2485,6 +2503,7 @@ package androidx.core.provider {
     method @Deprecated public static void requestFont(android.content.Context, androidx.core.provider.FontRequest, androidx.core.provider.FontsContractCompat.FontRequestCallback, android.os.Handler);
     method @RestrictTo(androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX) public static android.graphics.Typeface? requestFont(android.content.Context, androidx.core.provider.FontRequest, int, boolean, @IntRange(from=0) int, android.os.Handler, androidx.core.provider.FontsContractCompat.FontRequestCallback);
     method public static void requestFont(android.content.Context, androidx.core.provider.FontRequest, int, java.util.concurrent.Executor?, java.util.concurrent.Executor, androidx.core.provider.FontsContractCompat.FontRequestCallback);
+    method public static void requestFontWithFallbackChain(android.content.Context, java.util.List<androidx.core.provider.FontRequest!>, int, java.util.concurrent.Executor?, java.util.concurrent.Executor, androidx.core.provider.FontsContractCompat.FontRequestCallback);
     method @Deprecated @RestrictTo(androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX) public static void resetCache();
     field @Deprecated @RestrictTo(androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX) public static final String PARCEL_FONT_RESULTS = "font_results";
   }
@@ -2506,6 +2525,7 @@ package androidx.core.provider {
   public static class FontsContractCompat.FontFamilyResult {
     ctor @Deprecated @RestrictTo(androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX) public FontsContractCompat.FontFamilyResult(int, androidx.core.provider.FontsContractCompat.FontInfo![]?);
     method public androidx.core.provider.FontsContractCompat.FontInfo![]! getFonts();
+    method public java.util.List<androidx.core.provider.FontsContractCompat.FontInfo![]!> getFontsWithFallbacks();
     method public int getStatusCode();
     field public static final int STATUS_OK = 0; // 0x0
     field public static final int STATUS_UNEXPECTED_DATA_PROVIDED = 2; // 0x2

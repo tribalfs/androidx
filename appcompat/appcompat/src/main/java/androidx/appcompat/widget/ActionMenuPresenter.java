@@ -105,6 +105,7 @@ class ActionMenuPresenter extends BaseMenuPresenter
     int mOpenSubMenuId;
 
     //Sesl
+    private static final int BADGE_LIMIT_NUMBER = 99;
     private CharSequence mTooltipText;
     private final boolean mUseTextItemMode;
     private NumberFormat mNumberFormat = NumberFormat.getInstance(Locale.getDefault());
@@ -281,10 +282,14 @@ class ActionMenuPresenter extends BaseMenuPresenter
             final ArrayList<MenuItemImpl> actionItems = mMenu.getActionItems();
             final int count = actionItems.size();
             for (int i = 0; i < count; i++) {
-                final ActionProvider provider = actionItems.get(i).getSupportActionProvider();
+                final MenuItemImpl menuItem = actionItems.get(i);
+                final ActionProvider provider = menuItem.getSupportActionProvider();
                 if (provider != null) {
                     provider.setSubUiVisibilityListener(this);
                 }
+
+                //Custom
+                updateActionItemBadge(((ActionMenuView) mMenuView), menuItem);
             }
         }
 
@@ -339,6 +344,82 @@ class ActionMenuPresenter extends BaseMenuPresenter
 
         if (mMenuView != null) {//sesl
             ((ActionMenuView) mMenuView).setOverflowReserved(mReserveOverflow);
+        }
+    }
+
+    //Custom
+    //Note: All `ActionMenuItemView` children of ActionMenuView must
+    //be laid out  already before invoking this
+    private void updateActionItemBadge(ActionMenuView actionMenuView, MenuItemImpl item) {
+        final int count = actionMenuView.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View menuItemView =  actionMenuView.getChildAt(i);
+            if (!(menuItemView instanceof ActionMenuItemView)) continue;
+            if (item.getItemId() == ((ActionMenuItemView)menuItemView).getItemData().getItemId()){
+                actionMenuView.removeView(menuItemView);
+                ActionMenuViewBadgedWrapper amvBadgedWrapper = new ActionMenuViewBadgedWrapper(actionMenuView.getContext(), (ActionMenuItemView)menuItemView);
+                actionMenuView.addView(amvBadgedWrapper, i);
+                return;
+            }
+        }
+    }
+
+    //Custom
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    class ActionMenuViewBadgedWrapper extends FrameLayout {
+
+        public ActionMenuViewBadgedWrapper(Context context, ActionMenuItemView menuItemView) {
+            super(context);
+            addView(menuItemView);
+            addView(LayoutInflater.from(context).inflate(
+                            R.layout.sesl_action_menu_item_badge, ActionMenuViewBadgedWrapper.this, false));
+            updateItemViewBadge(menuItemView.getItemData().getBadgeText());
+        }
+
+        private void updateItemViewBadge(String badgeText) {
+
+            ViewGroup badgeView = (ViewGroup) getChildAt(1);
+
+            if (badgeText == null) {
+                badgeView.setVisibility(GONE);
+                return;
+            }
+
+            String formattedTextBadge;
+            int badgeWidth;
+            int badgeHeight;
+            int badgeTopMargin;
+            FrameLayout.LayoutParams badgeLp = (FrameLayout.LayoutParams) badgeView.getLayoutParams();
+
+            Resources res = getResources();
+            try {
+                final int badgeCount = Math.min(Integer.parseInt(badgeText), BADGE_LIMIT_NUMBER);
+                formattedTextBadge = mNumberFormat.format(badgeCount);
+
+                final float default_width = res.getDimension(R.dimen.sesl_badge_default_width);
+                final float additionalWidth = res.getDimension(R.dimen.sesl_badge_additional_width);
+                badgeWidth = (int) (default_width + (formattedTextBadge.length() * additionalWidth));
+                badgeHeight = (int)(default_width + additionalWidth);
+                badgeTopMargin = (int) res.getDimension(R.dimen.sesl_menu_item_number_badge_top_margin);
+            } catch (NumberFormatException e) {
+
+                //This means `badgeText` is not a number
+                //We will show dot badge instead
+                formattedTextBadge = "";
+
+                final int badgeSize = (int) res.getDimension(R.dimen.sesl_menu_item_badge_size);
+                badgeWidth = badgeSize;
+                badgeHeight = badgeSize;
+                badgeTopMargin = (int) res.getDimension(R.dimen.sesl_menu_item_badge_top_margin);
+            }
+
+            ((TextView)badgeView.getChildAt(0)).setText(formattedTextBadge);
+            badgeLp.setMarginEnd((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 7, res.getDisplayMetrics()));
+            badgeLp.topMargin = badgeTopMargin;
+            badgeLp.width = badgeWidth;
+            badgeLp.height = badgeHeight;
+            badgeView.setLayoutParams(badgeLp);
+            badgeView.setVisibility(VISIBLE);
         }
     }
 
@@ -707,7 +788,6 @@ class ActionMenuPresenter extends BaseMenuPresenter
     @RestrictTo(LIBRARY_GROUP_PREFIX)
     class OverflowMenuButton extends FrameLayout implements ActionMenuView.ActionMenuChildView {
 
-        private static final int BADGE_LIMIT_NUMBER = 99;
         private final View mInnerView;
         private CharSequence mContentDescription;
         private final ViewGroup mBadgeBackground;

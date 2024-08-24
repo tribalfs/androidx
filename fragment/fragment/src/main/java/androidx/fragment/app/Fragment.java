@@ -42,6 +42,7 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -65,6 +66,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult;
 import androidx.annotation.AnimRes;
 import androidx.annotation.CallSuper;
+import androidx.annotation.ColorInt;
 import androidx.annotation.ContentView;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.MainThread;
@@ -1933,6 +1935,7 @@ public class Fragment implements ComponentCallbacks, OnCreateContextMenuListener
         }
 
         Resources res = getResources();
+        int colorBackground = getColorBackground(view.getContext());
 
         if (nextAnim == R.anim.sesl_fragment_open_exit) {
             view.setTranslationZ(0.0f);
@@ -1945,7 +1948,7 @@ public class Fragment implements ComponentCallbacks, OnCreateContextMenuListener
             view.setTranslationZ(1.0f);
             view.setBackgroundColor(res.getColor(android.R.color.transparent));
             view.setBackgroundTintMode(PorterDuff.Mode.SRC);
-            view.setBackgroundTintList(ColorStateList.valueOf(res.getColor(R.color.sesl_fragment_bgcolor)));
+            view.setBackgroundTintList(ColorStateList.valueOf(colorBackground));
             return null;
         } else if (nextAnim == R.anim.sesl_fragment_close_enter) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -1954,10 +1957,21 @@ public class Fragment implements ComponentCallbacks, OnCreateContextMenuListener
             view.setBackgroundColor(res.getColor(android.R.color.transparent));
             view.setBackgroundTintMode(PorterDuff.Mode.SRC);
             view.setBackgroundTintList(ColorStateList.valueOf(res.getColor(R.color.sesl_fragment_bgcolor)));
-            getActivity().getWindow().getDecorView().setBackgroundColor(res.getColor(R.color.sesl_fragment_fgcolor));
+            Activity activity = getActivity();
+            if (activity != null) {
+                activity.getWindow().getDecorView().setBackgroundColor(colorBackground);
+            }
             return null;
         }
         return null;
+    }
+
+    @ColorInt
+    private int getColorBackground(@NonNull Context context) {
+        Resources.Theme theme = context.getTheme();
+        TypedValue typedValue = new TypedValue();
+        theme.resolveAttribute(android.R.attr.colorBackground, typedValue, true);
+        return typedValue.data;
     }
 
     /**

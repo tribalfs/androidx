@@ -18,6 +18,7 @@ package androidx.appcompat.util;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +29,15 @@ import java.util.regex.Pattern;
  * Original code by Samsung, all rights reserved to the original author.
  */
 public class SeslKoreanGeneralizer {
-    public static final Pattern HAS_JOSA_PATTERN = Pattern.compile("(?s)(.*)\\((.+)\\)(.*)");
-    @NonNull
-    public Map<String, Pair<String, String>> JOSA_KOREAN_MAP = new HashMap<>() {
+    private static final String NON_PRONOUNCEABLE_CHARACTERS = "()[]<>{};:|`'\"\\.=!?&。 "
+            + "♡♥…«»‘’‚‛“”„‟‹›❛❜❝❞〝〞〟＂＇";
+    private static final int KOREAN_SYLLABLE_BASE = 44032;
+    private static final int KOREAN_SYLLABLE_COUNT = 11172;
+    private static final int RO_EUL_RO_JONG_SUNG_EXCEPTIONS = 2;
+    private static final String HAS_JOSA_REGEX = "(?s)(.*)\\((.+)\\)(.*)";
+    private static final Pattern HAS_JOSA_PATTERN = Pattern.compile(HAS_JOSA_REGEX);
+
+    private static final Map<String, Pair<String, String>> JOSA_KOREAN_MAP = new HashMap<>() {
         {
             put("은(는)", new Pair<>("은", "는"));
             put("(은)는", new Pair<>("은", "는"));
@@ -53,7 +60,7 @@ public class SeslKoreanGeneralizer {
         }
     };
 
-    public final Map<Character, Pair<Boolean, Boolean>> PRONOUNCEABLE_SYMBOLS = new HashMap<>() {
+    private static final Map<Character, Pair<Boolean, Boolean>> PRONOUNCEABLE_SYMBOLS = new HashMap<>() {
         {
             put('0', new Pair<>(true, false));
             put('1', new Pair<>(true, true));
@@ -82,11 +89,12 @@ public class SeslKoreanGeneralizer {
         }
     };
 
-    public String naturalizeText(String str) {
-        return naturalize(str);
+    @NonNull
+    public String naturalizeText(@NonNull String koreanStr) {
+        return naturalize(koreanStr);
     }
 
-    public final String naturalize(String str) {
+    private String naturalize(String str) {
         if (str.isEmpty()) {
             return "";
         }
@@ -117,8 +125,13 @@ public class SeslKoreanGeneralizer {
                 continue;
             }
 
-            String josaFirst = JOSA_KOREAN_MAP.get(josaPattern).first;
-            String josaSecond = JOSA_KOREAN_MAP.get(josaPattern).second;
+            // Check if the previous character is non-pronounceable
+            if (NON_PRONOUNCEABLE_CHARACTERS.indexOf(previousChar) >= 0) {
+                sb.append(str.charAt(i));
+                previousChar = str.charAt(i);
+                i++;
+                continue;
+            }
 
             boolean isEulRo = josaPattern.equals("(으)로");
             Boolean endsWithJongSung = checkIfEndsWithKoreanJongSung(previousChar, isEulRo);
@@ -126,7 +139,14 @@ public class SeslKoreanGeneralizer {
                 endsWithJongSung = checkIfEndsWithPronounceableSymbols(previousChar, isEulRo);
             }
 
-            String josaToAppend = endsWithJongSung != null && !endsWithJongSung ? josaSecond : josaFirst;
+            if (endsWithJongSung == null) {
+                throw new IllegalArgumentException("Invalid character: " + previousChar);
+            }
+
+            String josaFirst = JOSA_KOREAN_MAP.get(josaPattern).first;
+            String josaSecond = JOSA_KOREAN_MAP.get(josaPattern).second;
+
+            String josaToAppend = endsWithJongSung ? josaFirst : josaSecond;
             sb.append(josaToAppend);
 
             previousChar = josaToAppend.charAt(josaToAppend.length() - 1);
@@ -136,22 +156,25 @@ public class SeslKoreanGeneralizer {
         return sb.toString();
     }
 
-    public final Boolean checkIfEndsWithKoreanJongSung(int i, boolean isEulRo) {
-        if (i < 44032 || i > 55203) {
+
+    @Nullable
+    private static Boolean checkIfEndsWithKoreanJongSung(int index, boolean isEulRo) {
+        if (index < KOREAN_SYLLABLE_BASE || index > (KOREAN_SYLLABLE_BASE + KOREAN_SYLLABLE_COUNT - 1)) {
             return null;
         }
-        int jongSungIndex = (i - 44032) % 28;
+        int jongSungIndex = (index - KOREAN_SYLLABLE_BASE) % 28;
         if (isEulRo && (jongSungIndex == 0 || jongSungIndex == 8)) {
             jongSungIndex = 0;
         }
         return jongSungIndex > 0;
     }
 
-    public final boolean hasJosaInString(String str) {
+    private static boolean hasJosaInString(String str) {
         return HAS_JOSA_PATTERN.matcher(str).matches();
     }
 
-    public final Boolean checkIfEndsWithPronounceableSymbols(char key, boolean isEulRo) {
+    @Nullable
+    private static Boolean checkIfEndsWithPronounceableSymbols(char key, boolean isEulRo) {
         Pair<Boolean, Boolean> pair = PRONOUNCEABLE_SYMBOLS.get(key);
         if (pair != null) {
             boolean firstValue = pair.first;

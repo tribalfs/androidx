@@ -104,7 +104,7 @@
     <color name="sesl_dialog_scrollbar_handle_tint_color_mtrl_light">
         @color/sesl_scrollbar_handle_tint_color_light
     </color>
-    <color name="sesl_dialog_show_button_background_color">#47ffffff</color>&gt;
+    <color name="sesl_dialog_show_button_background_color">#47ffffff</color>
     <color name="sesl_dialog_title_text_color_dark">@color/sesl_text1_dark</color>
     <color name="sesl_dialog_title_text_color_light">@color/sesl_text1_light</color>
     <color name="sesl_dropdown_scrollbar_handle_color_dark">#595959</color>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2022 The Android Open Source Project
   ~
@@ -16,6 +16,6 @@
   -->
 <!-- Original code by Samsung, all rights reserved to the original author. -->
 <resources>
-    <dimen name="sesl_list_divider_height">3px</dimen>
+    <dimen name="sesl_list_divider_height">1px</dimen>
     <dimen name="sesl_switch_divider_height">2px</dimen>
 </resources>

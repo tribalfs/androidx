@@ -51,13 +51,13 @@ public class SeslRoundedCorner {
     public static final int ROUNDED_CORNER_BOTTOM_RIGHT = 8;
 
     @NonNull
-    Drawable mTopLeftRound;
+    protected final Drawable mTopLeftRound;
     @NonNull
-    Drawable mTopRightRound;
+    protected final Drawable mTopRightRound;
     @NonNull
-    Drawable mBottomLeftRound;
+    protected final Drawable mBottomLeftRound;
     @NonNull
-    Drawable mBottomRightRound;
+    protected final Drawable mBottomRightRound;
 
     @ColorInt
     private int mTopLeftRoundColor;
@@ -68,9 +68,9 @@ public class SeslRoundedCorner {
     @ColorInt
     private int mBottomRightRoundColor;
 
-    Rect mRoundedCornerBounds = new Rect();
+    final Rect mRoundedCornerBounds = new Rect();
+    final int mRoundRadius;
     int mRoundedCornerMode;
-    int mRoundRadius;
 
     public SeslRoundedCorner(@NonNull Context context) {
         this(context, false);

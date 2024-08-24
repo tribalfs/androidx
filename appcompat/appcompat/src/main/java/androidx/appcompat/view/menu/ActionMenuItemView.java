@@ -44,7 +44,6 @@ import androidx.appcompat.widget.TooltipCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.core.view.ViewCompat;
 
 /**
  * <b>SESL variant</b>
@@ -294,11 +293,10 @@ public class ActionMenuItemView extends AppCompatTextView
         setCompoundDrawables(icon, null, null, null);
 
         //Sesl
-        if (!hasText() ||
-                ViewCompat.getLayoutDirection(this) != ViewCompat.LAYOUT_DIRECTION_RTL) {
-            setCompoundDrawables(icon, null, null, null);
-        } else {
+        if (hasText() && getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
             setCompoundDrawables(null, null, icon, null);
+        } else {
+            setCompoundDrawables(icon, null, null, null);
         }
         //sesl
 

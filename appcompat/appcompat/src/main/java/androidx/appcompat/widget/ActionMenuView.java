@@ -47,6 +47,8 @@ import androidx.appcompat.view.menu.MenuView;
 import androidx.core.view.ViewCompat;
 import androidx.reflect.os.SeslBuildReflector;
 
+import java.util.ArrayList;
+
 /**
  * <p><b>SESL variant</b></p><br>
  *
@@ -960,6 +962,7 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
     }
 
     //Sesl
+    @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
     int getSumOfDigitsInBadges() {
         if (mMenu == null) {
             return 0;
@@ -968,6 +971,25 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
         int sum = 0;
         for (int i = 0; i < mMenu.size(); i++) {
             MenuItemImpl itemImpl = (MenuItemImpl) mMenu.getItem(i);
+            if (itemImpl.isVisible()) {
+                sum += getNumericValue(itemImpl.getBadgeText());
+            }
+        }
+
+        return sum;
+    }
+
+    //Custom
+    @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
+    int getSumOfDigitsInOverflowBadges() {
+        if (mMenu == null) {
+            return 0;
+        }
+
+        int sum = 0;
+        ArrayList<MenuItemImpl> nonActionItems = mMenu.getNonActionItems();
+        for (int i = 0; i < nonActionItems.size(); i++) {
+            MenuItemImpl itemImpl = nonActionItems.get(i);
             if (itemImpl.isVisible()) {
                 sum += getNumericValue(itemImpl.getBadgeText());
             }

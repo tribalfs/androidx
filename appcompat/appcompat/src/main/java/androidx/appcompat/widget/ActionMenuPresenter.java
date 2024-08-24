@@ -329,7 +329,7 @@ class ActionMenuPresenter extends BaseMenuPresenter
         //Sesl
         if (mOverflowButton != null && mMenuView != null) {
             ActionMenuView menuView = (ActionMenuView) mMenuView;
-            mOverflowButton.setBadgeText(menuView.getOverflowBadgeText(), menuView.getSumOfDigitsInBadges());
+            mOverflowButton.setBadgeText(menuView.getOverflowBadgeText(), menuView.getSumOfDigitsInOverflowBadges()/*custom*/);
         }
         if ((mOverflowButton == null || mOverflowButton.getVisibility() != View.VISIBLE)
                 && isOverflowMenuShowing()) {

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Nächster Monat</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Zweimal tippen, um zur Kalenderansicht umzuschalten.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Uhrzeit einstellen</string>
   <string name="sesl_date_picker_year">Jahr</string>
   <string name="sesl_date_picker_month">Monat</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Schlafzeit: %1$d Stunden und %2$d Minuten</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Schlafzeit: %d Stunden und 1 Minute</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Schlafzeit: 1 Stunde und %d Minuten</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Schlafzeit: 1 Stunde und 1 Minute</string>
 </resources>

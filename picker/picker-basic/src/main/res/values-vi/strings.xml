@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Tháng sau</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Chạm hai lần để chuyển sang dạng xem lịch.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Đặt thời gian</string>
   <string name="sesl_date_picker_year">Năm</string>
   <string name="sesl_date_picker_month">Tháng</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Thời gian ngủ: %1$d giờ %2$d phút</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Thời gian ngủ: %d giờ 1 phút</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Thời gian ngủ: 1 giờ %d phút</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Thời gian ngủ: 1 giờ 1 phút</string>
 </resources>

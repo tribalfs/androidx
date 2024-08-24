@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Kitą mėnesį</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Jei norite įjungti kalendoriaus rodinį, bakstelėkite dukart.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Nustatyti laiką</string>
   <string name="sesl_date_picker_year">Metai</string>
   <string name="sesl_date_picker_month">Mėnuo</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Miegojimo laikas: %1$d val. %2$d min.</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Miegojimo laikas: %d val. 1 min.</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Miegojimo laikas: 1 val. %d min.</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Miegojimo laikas: 1 val. 1 min.</string>
 </resources>

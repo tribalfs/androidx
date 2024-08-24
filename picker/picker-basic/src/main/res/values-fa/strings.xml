@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">ماه بعد</string>
   <string name="sesl_date_picker_switch_to_calendar_description">برای رفتن به نمای تقویم، دو بار ضربه بزنید.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">تنظيم زمان</string>
   <string name="sesl_date_picker_year">سال</string>
   <string name="sesl_date_picker_month">ماه</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">زمان خواب: %1$d ساعت و %2$d دقیقه</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">زمان خواب: %d ساعت و ۱ دقیقه</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">زمان خواب: ۱ ساعت و %d دقیقه</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">زمان خواب: ۱ ساعت و ۱ دقیقه</string>
 </resources>

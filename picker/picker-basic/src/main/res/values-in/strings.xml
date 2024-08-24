@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Bulan depan</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Ketuk dua kali untuk beralih ke tampilan kalender.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Atur waktu</string>
   <string name="sesl_date_picker_year">Tahun</string>
   <string name="sesl_date_picker_month">Bulan</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Waktu tidur: %1$d jam %2$d menit</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Waktu tidur: %d jam 1 menit</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Waktu tidur: 1 jam %d menit</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Waktu tidur: 1 jam 1 menit</string>
 </resources>

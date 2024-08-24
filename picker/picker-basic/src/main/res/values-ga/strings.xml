@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">An chéad mhí eile</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Déthapáil le haistriú chuig an amharc féilire.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Socraigh am</string>
   <string name="sesl_date_picker_year">Bliain</string>
   <string name="sesl_date_picker_month">Mí</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Am codlata: %1$d uair an chloig %2$d nóiméad</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Am codlata: %d uair an chloig 1 nóiméad</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Am codlata: 1 uair an chloig %d nóiméad</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Am codlata: 1 uair an chloig 1 nóiméad</string>
 </resources>

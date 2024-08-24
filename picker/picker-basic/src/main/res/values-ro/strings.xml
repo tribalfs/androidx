@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Luna următoare</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Atingeți de două ori pentru a comuta la vizualizarea Calendar.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Setare oră</string>
   <string name="sesl_date_picker_year">An</string>
   <string name="sesl_date_picker_month">Lună</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Durată somn: %1$d ore și %2$d minute</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Durată somn: %d ore și 1 minut</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Durată somn: 1 oră și %d minute</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Durată somn: 1 oră și 1 minut</string>
 </resources>

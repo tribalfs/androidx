@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">ਅਗਲਾ ਮਹੀਨਾ</string>
   <string name="sesl_date_picker_switch_to_calendar_description">ਕੈਲੇਂਡਰ ਦ੍ਰਿਸ਼ ਤੇ ਸਵਿੱਚ ਲਈ ਦੋ ਵਾਰ ਟੈਪ ਕਰੋ।</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">ਸਮਾਂ ਸੈੱਟ ਕਰੋ</string>
   <string name="sesl_date_picker_year">ਸਾਲ</string>
   <string name="sesl_date_picker_month">ਮਹੀਨਾ</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">ਸੌਣ ਦਾ ਸਮਾਂ: %1$d ਘੰਟੇ %2$d ਮਿੰਟ</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">ਸੌਣ ਦਾ ਸਮਾਂ: %d ਘੰਟੇ 1 ਮਿੰਟ</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">ਸੌਣ ਦਾ ਸਮਾਂ: 1 ਘੰਟਾ %d ਮਿੰਟ</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">ਸੌਣ ਦਾ ਸਮਾਂ: 1 ਘੰਟਾ 1 ਮਿੰਟ</string>
 </resources>

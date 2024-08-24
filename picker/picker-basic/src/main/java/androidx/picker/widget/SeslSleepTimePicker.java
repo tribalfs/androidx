@@ -18,7 +18,9 @@ package androidx.picker.widget;
 
 import static android.util.TypedValue.COMPLEX_UNIT_PX;
 
-import static androidx.picker.util.SeslSleepTimePickerUtil.isSmallDisplay;
+import static androidx.picker.util.SeslSleepTimePickerUtil.getFontFromOpenTheme;
+import static androidx.picker.util.SeslSleepTimePickerUtil.getTimeSeparatorText;
+import static androidx.picker.util.SeslSleepTimePickerUtil.needBedTimePickerAdjustment;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -36,7 +38,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
@@ -55,11 +56,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.TextViewCompat;
 import androidx.picker.R;
 import androidx.picker.util.SeslSleepTimePickerUtil;
-import androidx.picker.widget.SeslCircularSeekBarView.SeslCircularSeekBarRevealAnimation;
 
 import java.text.DateFormatSymbols;
 import java.util.Locale;
@@ -67,78 +68,89 @@ import java.util.Locale;
 
 public class SeslSleepTimePicker extends LinearLayout {
 
-    private static final String TAG = "SeslSleepTimePicker";
+    private static final String TAG = "SleepTimePicker";
+
+    private static final int ANIMATION_DURATION = 400;
+    private static final int BED_WAKEUP_FADE_IN_DURATION = 200;
+    private static final int BED_WAKEUP_FADE_OUT_DURATION = 100;
+    private static final int BED_WAKEUP_SRC_FADE_OUT_DURATION = 66;
+    private static final float DEFAULT_BED_TIME_MINUTE = 1320.0f;
+    private static final float DEFAULT_WAKEUP_TIME_MINUTE = 420.0f;
+    private static final int FONT_WEIGHT_LIGHT = 300;
+    private static final int MINIMUM_DIMEN_MULTIWINDOW = 290;
+    private static final float SIZE_RATIO = 0.75f;
+    private static final int SLEEP_PICKER_VIBRATION = 41;
+    private static final float TOTAL_DEGREE = 360.0f;
+    private static final float TOTAL_MINUTES = 1440.0f;
+
 
     static final class SleepDurationFormatterImpl implements SleepDurationFormatter {
         @Override
         public int format(float bedTime, float wakeupTime) {
-            return (int) (((wakeupTime - bedTime) + 1440.0f) % 1440.0f);
+            return (int) (((wakeupTime - bedTime) + TOTAL_MINUTES) % TOTAL_MINUTES);
         }
     }
 
-    final TextView tvWakeupTimeAmPmRight;
-    final TextView tvWakeupTimeAmPmCenterRight;
+    final TextView mWakeUpTimeTextRightAmPm;
+    final TextView mWakeUpTimeCenterTextRightAmPm;
 
     private final RelativeLayout editOuterCircleContainer;
     private final FrameLayout editInnerCircleContainer;
 
     private final FrameLayout sleepTimePickerContainer;
 
-    private final PathInterpolator interpolator = new PathInterpolator(0.22f, 0.25f, 0.0f, 1.0f);
+    private final PathInterpolator CENTER_LAYOUT_PATH_INTERPOLATOR = new PathInterpolator(0.22f, 0.25f, 0.0f, 1.0f);
 
-    private final ImageView bottomCenterDurationWakeupImage;
-    private final ImageView bottomCenterDurationWakeupImageRight;
+    private final ImageView mWakeUpBottomIcon;
+    private final ImageView mWakeUpBottomIconRight;
 
     private SleepDurationFormatter durationFormatter = new SleepDurationFormatterImpl();
 
-    private final ImageView topCenterDurationBedImage;
-    private final ImageView topCenterDurationBedImageRight;
-    private final ImageView centerIconWakeupTime;
-    private final ImageView centerIconBedTime;
-    private final ImageView centerIconWakeupTimeRight;
-    private final ImageView centerIconBedTimeRight;
+    private final ImageView mBedTimeTopIcon;
+    private final ImageView mBedTimeTopIconRight;
+    private final ImageView mWakeUpCenterIcon;
+    private final ImageView mBedTimeCenterIcon;
+    private final ImageView mWakeUpCenterIconRight;
+    private final ImageView mBedTimeCenterIconRight;
 
-    OnSleepTimeChangedListener onChangedListener;
-    final SeslCircularSeekBarView circularSeekBarView;
+    OnSleepTimeChangedListener mOnSleepTimeChangedListener;
+    final SeslCircularSeekBarView mCircularSeekBar;
 
-    private final Context context;
+    private final Context mContext;
 
-    float bedTimeInMinute;
-    float wakeupTimeInMinute;
-    LinearLayout topBedtimeLayout;
-    LinearLayout bottomWakeUpTimeLayout;
-    LinearLayout tvSleepRecordCenterBedTime;
-    final TextView tvSleepCenterDurationBedtime;
+    float mBedTimeInMinute;
+    float mWakeupTimeInMinute;
+    LinearLayout mBedTimeView;
+    LinearLayout mWakeUpTimeView;
+    LinearLayout mBedTimeTargetLayout;
+    final TextView mBedTimeTargetText;
 
-    final LinearLayout tvSleepRecordCenterWakeupTime;
+    final LinearLayout mWakeUpTimeTargetLayout;
 
-    final TextView tvSleepCenterDurationWakeuptime;
-    Animator animator;
-    private final TextView tvSleepDurationText;
-    final TextView tvTopCenterDurationBedtime;
-    final TextView tvBottomCenterDurationWakeuptime;
-    final TextView tvBedtimeAmPmLeft;
-    final TextView tvBedtimeAmPmCenterLeft;
-    final TextView tvBedtimeAmPmRight;
-    final TextView tvBedtimeAmPmCenterRight;
-    final TextView tvWakeupTimeAmPmLeft;
-    final TextView tvWakeupTimeAmPmCenterLeft;
+    final TextView mWakeUpTimeTargetText;
+    Animator mCurrentAnimator;
+    private final TextView mSleepDuration;
+    final TextView mBedTimeText;
+    final TextView mWakeUpTimeText;
+    final TextView mBedTimeTextLeftAmPm;
+    final TextView mBedTimeCenterTextLeftAmPm;
+    final TextView mBedTimeTextRightAmPm;
+    final TextView mBedTimeCenterTextRightAmPm;
+    final TextView mWakeUpTimeTextLeftAmPm;
+    final TextView mWakeUpTimeCenterTextLeftAmPm;
 
     private final int mOuterCircleSize;
     private final int mOuterCircleMinSize;
     private float mInnerCircleRatio;
 
 
-    /* loaded from: classes.dex */
     public interface OnSleepTimeChangedListener {
-        /* renamed from: a */
-        void onDurationChanged(float f, float f2);
+        void onSleepTimeChanged(float bedTimeInMinutes, float wakeupTimeInMinutes);
 
-        /* renamed from: b */
-        void onTrackingStarted();
+        void onStartSleepTimeChanged(float bedTimeInMinutes, float wakeupTimeInMinutes);
 
-        /* renamed from: c */
-        void onProgress();
+        void onStopSleepTimeChanged(float bedTimeInMinutes, float wakeupTimeInMinutes);
+
     }
 
 
@@ -146,260 +158,203 @@ public class SeslSleepTimePicker extends LinearLayout {
         int format(float bedTime, float wakeupTime);
     }
 
-    final class SleepTimePickerListener implements SeslCircularSeekBarView.CircularSeekBarViewListener {
-
-        public final SeslSleepTimePicker picker;
-
-        SleepTimePickerListener(SeslSleepTimePicker timePicker) {
-            this.picker = timePicker;
-        }
-
-        void onSelectedWakeupTimeIcon() {
-            Log.d("SleepTimePicker", "onSelectedWakeUpTimeIcon");
-            int color = ContextCompat.getColor(getContext(), R.color.sesl_bed_wakeup_time_color);
-            int primaryColor = getPrimaryColor();
-            TextView[] textViewArr = new TextView[]{tvBottomCenterDurationWakeuptime,
-                    tvWakeupTimeAmPmLeft, tvWakeupTimeAmPmRight};
-            TextView[] textViewArr2 = new TextView[]{tvSleepCenterDurationWakeuptime,
-                    tvWakeupTimeAmPmCenterLeft, tvWakeupTimeAmPmCenterRight};
-            animateColor( textViewArr, color, primaryColor,  100L);
-            animateToCenter(
-                    SeslSleepTimePicker.this,
-                    bottomWakeUpTimeLayout,
-                    tvSleepRecordCenterWakeupTime,
-                    topBedtimeLayout
-            );
-            animateColor( textViewArr2, color, primaryColor,  50L);
-
-        }
-
-        void onSelectedBedTimeIcon() {
-            Log.d(TAG, "onSelectedBedTimeIcon");
-            int color = ContextCompat.getColor(getContext(), R.color.sesl_bed_wakeup_time_color);
-            int primaryColor = getPrimaryColor();
-            TextView[] textViewArr = new TextView[]{tvTopCenterDurationBedtime, tvBedtimeAmPmLeft
-                    , tvBedtimeAmPmRight};
-            TextView[] textViewArr2 = new TextView[]{tvSleepCenterDurationBedtime,
-                    tvBedtimeAmPmCenterLeft, tvBedtimeAmPmCenterRight};
-            SeslSleepTimePicker.animateColor(  textViewArr, color, primaryColor,  100L);
-            SeslSleepTimePicker.animateToCenter(
-                    SeslSleepTimePicker.this,
-                    topBedtimeLayout,
-                    tvSleepRecordCenterBedTime,
-                    bottomWakeUpTimeLayout
-            );
-            SeslSleepTimePicker.animateColor(  textViewArr2, color, primaryColor,  50L);
-        }
-
-        void onProgressChangedBedTime(SeslCircularSeekBarView seslCircularSeekBarView,
-                float bedTimePosition) {
-            Log.d("SleepTimePicker",
-                    "onProgressChangedBedTime : BedTimePosition " + bedTimePosition);
-            float pointToTime = SeslSleepTimePickerUtil.pointToTime(bedTimePosition);
-            SeslSleepTimePicker picker = this.picker;
-            picker.bedTimeInMinute = pointToTime;
-            if (picker.updateBedTimeDisplay()) {
-                seslCircularSeekBarView.performHapticFeedback(50065);
-            }
-            OnSleepTimeChangedListener listener = picker.onChangedListener;
-            if (listener != null) {
-                listener.onProgress();
-            }
-        }
-
-        void onProgressChangedWakeupTime(SeslCircularSeekBarView seslCircularSeekBarView,
-                float wakeupPosition) {
-            Log.d("SleepTimePicker",
-                    "onProgressChangedWakeupTime : WakeUpTimePosition " + wakeupPosition);
-            float pointToTime = SeslSleepTimePickerUtil.pointToTime(wakeupPosition);
-            SeslSleepTimePicker picker = this.picker;
-            picker.wakeupTimeInMinute = pointToTime;
-            if (picker.updateWakeupTimeDisplay()) {
-                seslCircularSeekBarView.performHapticFeedback(50065);
-            }
-            OnSleepTimeChangedListener listener = picker.onChangedListener;
-            if (listener != null) {
-                listener.onProgress();
-            }
-        }
-
-        void onStartTrackingTouch() {
-            Log.d("SleepTimePicker", "onStartTrackingTouch");
-            SeslSleepTimePicker picker = this.picker;
-            OnSleepTimeChangedListener listener = picker.onChangedListener;
-            if (listener != null) {
-                listener.onTrackingStarted();
-            }
-        }
-
-        void onUnselectedWakeupTimeIcon() {
-            Log.d(TAG, "onUnselectedWakeupTimeIcon");
-            int color = ContextCompat.getColor(getContext(), R.color.sesl_bed_wakeup_time_color);
-            int primaryColor = getPrimaryColor();
-            TextView[] textViewArr2 = new TextView[]{tvSleepCenterDurationWakeuptime,
-                    tvWakeupTimeAmPmCenterLeft, tvWakeupTimeAmPmCenterRight};
-            SeslSleepTimePicker.animateColor( textViewArr2, primaryColor, color,  50L);
-            SeslSleepTimePicker.animateBackToPosition(
-                    SeslSleepTimePicker.this,
-                    tvSleepRecordCenterWakeupTime,
-                    bottomWakeUpTimeLayout,
-                    topBedtimeLayout
-            );
-            TextView[] textViewArr = new TextView[]{tvBottomCenterDurationWakeuptime,
-                    tvWakeupTimeAmPmLeft,
-                    tvWakeupTimeAmPmRight};
-            SeslSleepTimePicker.animateColor(  textViewArr, primaryColor, color,  200L);
-        }
-
-        void onUnselectedBedTimeIcon() {
-            Log.d(TAG, "onUnselectedBedTimeIcon");
-            int color = ContextCompat.getColor(getContext(), R.color.sesl_bed_wakeup_time_color);
-            int primaryColor = getPrimaryColor();
-            TextView[] textViewArr2 = new TextView[]{tvSleepCenterDurationBedtime,
-                    tvBedtimeAmPmCenterLeft, tvBedtimeAmPmCenterRight};
-            SeslSleepTimePicker.animateColor(  textViewArr2, primaryColor, color,  50L);
-            SeslSleepTimePicker.animateBackToPosition(
-                    SeslSleepTimePicker.this,
-                    tvSleepRecordCenterBedTime,
-                    topBedtimeLayout,
-                    bottomWakeUpTimeLayout
-            );
-            TextView[] textViewArr = new TextView[]{tvTopCenterDurationBedtime, tvBedtimeAmPmLeft,
-                    tvBedtimeAmPmRight};
-            SeslSleepTimePicker.animateColor( textViewArr, primaryColor, color,  200L);
-
-        }
-
-        public void onUnselectedMiddleHandler() {
-            Log.d(TAG, "onUnselectedMiddleHandler");
-            int color = ContextCompat.getColor(getContext(), R.color.sesl_bed_wakeup_time_color);
-            int primaryColor = getPrimaryColor();
-            TextView[] textViewArr = new TextView[]{tvBottomCenterDurationWakeuptime,
-                    tvWakeupTimeAmPmLeft,
-                    tvWakeupTimeAmPmRight};
-            TextView[] textViewArr2 = new TextView[]{tvSleepCenterDurationWakeuptime,
-                    tvWakeupTimeAmPmCenterLeft, tvWakeupTimeAmPmCenterRight};
-            TextView[] textViewArr3 = new TextView[]{tvTopCenterDurationBedtime, tvBedtimeAmPmLeft,
-                    tvBedtimeAmPmRight};
-            TextView[] textViewArr4 = new TextView[]{tvSleepCenterDurationBedtime,
-                    tvBedtimeAmPmCenterLeft, tvBedtimeAmPmCenterRight};
-            SeslSleepTimePicker.animateColor( textViewArr, primaryColor,color,200L);
-            SeslSleepTimePicker.animateColor( textViewArr2, primaryColor,color,200L);
-            SeslSleepTimePicker.animateColor(  textViewArr3, primaryColor,color,200L);
-            SeslSleepTimePicker.animateColor(  textViewArr4, primaryColor,color,200L);
-        }
-
-        void onStopTrackingTouch() {
-            Log.d(TAG, "onStopTrackingTouch");
-            updateSleepDurationText();
-            if (onChangedListener != null) {
-                onChangedListener.onDurationChanged(getBedTimeInMinute(), getWakeUpTimeInMinute());
-            }
-        }
-
-        void onSelectedMiddleHandler() {
-            Log.d(TAG, "onSelectedMiddleHandler");
-            int color = ContextCompat.getColor(getContext(), R.color.sesl_bed_wakeup_time_color);
-            int primaryColor = getPrimaryColor();
-            TextView[] textViewArr = new TextView[]{tvBottomCenterDurationWakeuptime,
-                    tvWakeupTimeAmPmLeft, tvWakeupTimeAmPmRight};
-            TextView[] textViewArr2 = new TextView[]{tvSleepCenterDurationWakeuptime,
-                    tvWakeupTimeAmPmCenterLeft, tvWakeupTimeAmPmCenterRight};
-            TextView[] textViewArr3 = new TextView[]{tvTopCenterDurationBedtime,
-                    tvBedtimeAmPmLeft, tvBedtimeAmPmRight};
-            TextView[] textViewArr4 = new TextView[]{tvSleepCenterDurationBedtime,
-                    tvBedtimeAmPmCenterLeft, tvBedtimeAmPmCenterRight};
-            SeslSleepTimePicker.animateColor(  textViewArr, color, primaryColor,  100L);
-            SeslSleepTimePicker.animateColor(  textViewArr2, color, primaryColor,  100L);
-            SeslSleepTimePicker.animateColor(  textViewArr3, color, primaryColor,  100L);
-            SeslSleepTimePicker.animateColor( textViewArr4, color, primaryColor,  100L);
-        }
-    }
-
     public SeslSleepTimePicker(@NonNull Context context, @Nullable AttributeSet attributeSet) {
         super(context, attributeSet);
 
-        this.context = getContext();
+        this.mContext = getContext();
         LayoutInflater.from(context).inflate(R.layout.sesl_sleep_time_picker, this);
 
-        circularSeekBarView = findViewById(R.id.circular_seekbar);
-        tvTopCenterDurationBedtime = findViewById(R.id.sleep_top_center_duration_bedtime);
-        tvBedtimeAmPmLeft = findViewById(R.id.bedtime_am_pm_left);
-        tvBedtimeAmPmRight = findViewById(R.id.bedtime_am_pm_right);
-        tvBedtimeAmPmCenterLeft = findViewById(R.id.bedtime_center_am_pm_left);
-        tvBedtimeAmPmCenterRight = findViewById(R.id.bedtime_center_am_pm_right);
+        mCircularSeekBar = findViewById(R.id.circular_seekbar);
+        mBedTimeText = findViewById(R.id.sleep_top_center_duration_bedtime);
+        mBedTimeTextLeftAmPm = findViewById(R.id.bedtime_am_pm_left);
+        mBedTimeTextRightAmPm = findViewById(R.id.bedtime_am_pm_right);
+        mBedTimeCenterTextLeftAmPm = findViewById(R.id.bedtime_center_am_pm_left);
+        mBedTimeCenterTextRightAmPm = findViewById(R.id.bedtime_center_am_pm_right);
 
-        tvBottomCenterDurationWakeuptime =
+        mWakeUpTimeText =
                 findViewById(R.id.sleep_bottom_center_duration_wakeuptime);
-        tvWakeupTimeAmPmLeft = findViewById(R.id.wakeuptime_am_pm_left);
-        tvWakeupTimeAmPmRight = findViewById(R.id.wakeuptime_am_pm_right);
-        tvWakeupTimeAmPmCenterLeft = findViewById(R.id.wakeuptime_center_am_pm_left);
-        tvWakeupTimeAmPmCenterRight = findViewById(R.id.wakeuptime_center_am_pm_right);
+        mWakeUpTimeTextLeftAmPm = findViewById(R.id.wakeuptime_am_pm_left);
+        mWakeUpTimeTextRightAmPm = findViewById(R.id.wakeuptime_am_pm_right);
+        mWakeUpTimeCenterTextLeftAmPm = findViewById(R.id.wakeuptime_center_am_pm_left);
+        mWakeUpTimeCenterTextRightAmPm = findViewById(R.id.wakeuptime_center_am_pm_right);
 
-        tvSleepRecordCenterBedTime = findViewById(R.id.sleep_record_center_bedtime);
-        tvSleepCenterDurationBedtime = findViewById(R.id.sleep_center_duration_bedtime);
+        mBedTimeTargetLayout = findViewById(R.id.sleep_record_center_bedtime);
+        mBedTimeTargetText = findViewById(R.id.sleep_center_duration_bedtime);
 
-        tvSleepRecordCenterWakeupTime = findViewById(R.id.sleep_record_center_wakeuptime);
-        tvSleepCenterDurationWakeuptime = findViewById(R.id.sleep_center_duration_wakeuptime);
+        mWakeUpTimeTargetLayout = findViewById(R.id.sleep_record_center_wakeuptime);
+        mWakeUpTimeTargetText = findViewById(R.id.sleep_center_duration_wakeuptime);
 
-        tvSleepDurationText = findViewById(R.id.sleep_duration_text_id);
+        mSleepDuration = findViewById(R.id.sleep_duration_text_id);
+        SeslSleepTimePickerUtil.setLargeTextSize(mContext, new TextView[]{mSleepDuration}, 1.3f);
 
-        Resources res = context.getResources();
-        Configuration conf = res.getConfiguration();
-        TextView textView = tvSleepDurationText;
-        if (conf.fontScale > 1.3f && textView!= null) {
-            tvSleepDurationText.setTextSize(1,
-                    (textView.getTextSize() / res.getDisplayMetrics().scaledDensity) * 1.3f);
-        }
-
-        bottomCenterDurationWakeupImage =
+        mWakeUpBottomIcon =
                 findViewById(R.id.sleep_bottom_center_duration_wakeupimage);
-        bottomCenterDurationWakeupImageRight =
+        mWakeUpBottomIconRight =
                 findViewById(R.id.sleep_bottom_center_duration_wakeupimage_right);
-        topCenterDurationBedImage = findViewById(R.id.sleep_top_center_duration_bedimage);
-        topCenterDurationBedImageRight =
+        mBedTimeTopIcon = findViewById(R.id.sleep_top_center_duration_bedimage);
+        mBedTimeTopIconRight =
                 findViewById(R.id.sleep_top_center_duration_bedimage_right);
 
-        centerIconWakeupTime = findViewById(R.id.sleep_center_icon_wakeuptime);
-        centerIconBedTime = findViewById(R.id.sleep_center_icon_bedtime);
-        centerIconWakeupTimeRight = findViewById(R.id.sleep_center_icon_wakeuptime_right);
-        centerIconBedTimeRight = findViewById(R.id.sleep_center_icon_bedtime_right);
+        mWakeUpCenterIcon = findViewById(R.id.sleep_center_icon_wakeuptime);
+        mBedTimeCenterIcon = findViewById(R.id.sleep_center_icon_bedtime);
+        mWakeUpCenterIconRight = findViewById(R.id.sleep_center_icon_wakeuptime_right);
+        mBedTimeCenterIconRight = findViewById(R.id.sleep_center_icon_bedtime_right);
 
-        bottomCenterDurationWakeupImage.setColorFilter(ContextCompat.getColor(context,
+        mWakeUpBottomIcon.setColorFilter(ContextCompat.getColor(context,
                 R.color.sesl_bed_wakeup_time_icon_color), PorterDuff.Mode.SRC_ATOP);
-        bottomCenterDurationWakeupImageRight.setColorFilter(ContextCompat.getColor(context,
+        mWakeUpBottomIconRight.setColorFilter(ContextCompat.getColor(context,
                 R.color.sesl_bed_wakeup_time_icon_color), PorterDuff.Mode.SRC_ATOP);
-        topCenterDurationBedImage.setColorFilter(ContextCompat.getColor(context,
+        mBedTimeTopIcon.setColorFilter(ContextCompat.getColor(context,
                 R.color.sesl_bed_wakeup_time_icon_color), PorterDuff.Mode.SRC_ATOP);
-        topCenterDurationBedImageRight.setColorFilter(ContextCompat.getColor(context,
+        mBedTimeTopIconRight.setColorFilter(ContextCompat.getColor(context,
                 R.color.sesl_bed_wakeup_time_icon_color), PorterDuff.Mode.SRC_ATOP);
-        centerIconWakeupTime.setColorFilter(ContextCompat.getColor(context,
+        mWakeUpCenterIcon.setColorFilter(ContextCompat.getColor(context,
                 R.color.sesl_bed_wakeup_time_icon_color), PorterDuff.Mode.SRC_ATOP);
-        centerIconBedTime.setColorFilter(ContextCompat.getColor(context,
+        mBedTimeCenterIcon.setColorFilter(ContextCompat.getColor(context,
                 R.color.sesl_bed_wakeup_time_icon_color), PorterDuff.Mode.SRC_ATOP);
-        centerIconWakeupTimeRight.setColorFilter(ContextCompat.getColor(context,
+        mWakeUpCenterIconRight.setColorFilter(ContextCompat.getColor(context,
                 R.color.sesl_bed_wakeup_time_icon_color), PorterDuff.Mode.SRC_ATOP);
-        centerIconBedTimeRight.setColorFilter(ContextCompat.getColor(context,
+        mBedTimeCenterIconRight.setColorFilter(ContextCompat.getColor(context,
                 R.color.sesl_bed_wakeup_time_icon_color), PorterDuff.Mode.SRC_ATOP);
-        tvSleepRecordCenterWakeupTime.setAlpha(0.0f);
-        tvSleepRecordCenterBedTime.setAlpha(0.0f);
+        mWakeUpTimeTargetLayout.setAlpha(0.0f);
+        mBedTimeTargetLayout.setAlpha(0.0f);
 
-        topBedtimeLayout = findViewById(R.id.sleep_record_top_bed_time_layout);
-        bottomWakeUpTimeLayout = findViewById(R.id.sleep_record_bottom_wakeup_time_layout);
+        mBedTimeView = findViewById(R.id.sleep_record_top_bed_time_layout);
+        mWakeUpTimeView = findViewById(R.id.sleep_record_bottom_wakeup_time_layout);
 
         editOuterCircleContainer = findViewById(R.id.sleep_visual_edit_outer_circle_container);
         editInnerCircleContainer = findViewById(R.id.sleep_visual_edit_inner_circle_container);
         sleepTimePickerContainer =  findViewById(R.id.sleepTimePicker);
 
+        Resources res = context.getResources();
         mOuterCircleSize = (int) res.getDimension(R.dimen.sesl_sleep_visual_edit_outer_circle_size);
         mOuterCircleMinSize =
                 (int) res.getDimension(R.dimen.sesl_sleep_visual_edit_outer_circle_min_size);
         mInnerCircleRatio = getInnerCircleRatio(res);
 
-        circularSeekBarView.listener = new SleepTimePickerListener(this);
+        initListeners();
 
-        setBedTimeInMinute(1320.0f);
-        setWakeUpTimeInMinute(420.0f);
+        setBedTimeInMinute(DEFAULT_BED_TIME_MINUTE);
+        setWakeUpTimeInMinute(DEFAULT_WAKEUP_TIME_MINUTE);
+    }
+
+    private void initListeners(){
+        final TextView[] textViewArrBedTimeCenter = {mBedTimeTargetText, mBedTimeCenterTextLeftAmPm, this.mBedTimeCenterTextRightAmPm};
+        final TextView[] textViewArrWakeUpTimeCenter = {this.mWakeUpTimeTargetText, this.mWakeUpTimeCenterTextLeftAmPm, this.mWakeUpTimeCenterTextRightAmPm};
+        final TextView[] textViewArrBedTime = {this.mBedTimeText, this.mBedTimeTextLeftAmPm, this.mBedTimeTextRightAmPm};
+        final TextView[] textViewArrWakeUpTime = {this.mWakeUpTimeText, this.mWakeUpTimeTextLeftAmPm, this.mWakeUpTimeTextRightAmPm};
+
+        SeslCircularSeekBarView.OnCircularSeekBarChangeListener listener =  new SeslCircularSeekBarView.OnCircularSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChangedBedTime(SeslCircularSeekBarView seslCircularSeekBarView,
+                    float bedTimePosition) {
+                Log.d(TAG, "onProgressChangedBedTime : BedTimePosition " + bedTimePosition);
+                mBedTimeInMinute = SeslSleepTimePickerUtil.convertToTime(bedTimePosition);
+                if (updateBedTimeText()) {
+                    SeslSleepTimePickerUtil.performHapticFeedback(seslCircularSeekBarView, SLEEP_PICKER_VIBRATION);
+                }
+                if (mOnSleepTimeChangedListener != null) {
+                    mOnSleepTimeChangedListener.onSleepTimeChanged(getBedTimeInMinute(), getWakeUpTimeInMinute());
+                }
+            }
+
+            @Override
+            public void onProgressChangedWakeupTime(SeslCircularSeekBarView seslCircularSeekBarView,
+                    float wakeupPosition) {
+                Log.d(TAG, "onProgressChangedWakeupTime : WakeUpTimePosition " + wakeupPosition);
+                mWakeupTimeInMinute = SeslSleepTimePickerUtil.convertToTime(wakeupPosition);
+                if (updateWakeUpTimeText()) {
+                    SeslSleepTimePickerUtil.performHapticFeedback(seslCircularSeekBarView, SLEEP_PICKER_VIBRATION);
+                }
+                if (mOnSleepTimeChangedListener != null) {
+                    mOnSleepTimeChangedListener.onSleepTimeChanged(getBedTimeInMinute(), getWakeUpTimeInMinute());
+                }
+            }
+
+            @Override
+            public void onSelectBedTimeIcon() {
+                Log.d(TAG, "onSelectedBedTimeIcon");
+                int color = ContextCompat.getColor(getContext(), R.color.sesl_bed_wakeup_time_color);
+                int primaryColor = getPrimaryColor();
+                animateText(textViewArrBedTime, color, primaryColor, BED_WAKEUP_FADE_OUT_DURATION);
+                animateCenter(mBedTimeView, mBedTimeTargetLayout, mWakeUpTimeView, 100.0f);
+                animateText(textViewArrBedTimeCenter, color, primaryColor, 50L);
+            }
+
+            @Override
+            public void onSelectMiddleHandler() {
+                Log.d(TAG, "onSelectedMiddleHandler");
+                int color = ContextCompat.getColor(getContext(), R.color.sesl_bed_wakeup_time_color);
+                int primaryColor = getPrimaryColor();
+                animateText(textViewArrBedTime, color, primaryColor, BED_WAKEUP_FADE_OUT_DURATION);
+                animateText(textViewArrBedTimeCenter, color, primaryColor, BED_WAKEUP_FADE_OUT_DURATION);
+                animateText(textViewArrWakeUpTime, color, primaryColor, BED_WAKEUP_FADE_OUT_DURATION);
+                animateText(textViewArrWakeUpTimeCenter, color, primaryColor, BED_WAKEUP_FADE_OUT_DURATION);
+            }
+
+            @Override
+            public void onSelectWakeUpTimeIcon() {
+                Log.d(TAG, "onSelectWakeupTimeIcon");
+                int color = ContextCompat.getColor(getContext(), R.color.sesl_bed_wakeup_time_color);
+                int primaryColor = SeslSleepTimePicker.this.getPrimaryColor();
+                animateText(textViewArrWakeUpTime, color, primaryColor, 100L);
+                animateCenter(mWakeUpTimeView, mWakeUpTimeTargetLayout, mBedTimeView, -50.0f);
+                animateText(textViewArrWakeUpTimeCenter, color, primaryColor, 50L);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeslCircularSeekBarView seslCircularSeekBarView) {
+                Log.d(TAG, "onStartTrackingTouch");
+                if (mOnSleepTimeChangedListener != null) {
+                    mOnSleepTimeChangedListener.onStartSleepTimeChanged(getBedTimeInMinute(), getWakeUpTimeInMinute());
+                }
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeslCircularSeekBarView seslCircularSeekBarView) {
+                Log.d(TAG, "onStopTrackingTouch");
+                setSleepTimeDurationText();
+                if (mOnSleepTimeChangedListener != null) {
+                    mOnSleepTimeChangedListener.onStopSleepTimeChanged(getBedTimeInMinute(), getWakeUpTimeInMinute());
+                }
+            }
+
+            @Override
+            public void onUnselectBedTimeIcon() {
+                Log.d(TAG, "onUnselectBedTimeIcon");
+                int color = ContextCompat.getColor(getContext(),
+                        R.color.sesl_bed_wakeup_time_color);
+                int primaryColor = getPrimaryColor();
+                animateText(textViewArrBedTimeCenter, primaryColor, color, 50L);
+                reverseAnimateCenter(mBedTimeTargetLayout, mBedTimeView, mWakeUpTimeView, 50.0f);
+                animateText(textViewArrBedTime, primaryColor, color, BED_WAKEUP_FADE_IN_DURATION);
+            }
+
+            @Override
+            public void onUnselectMiddleHandler() {
+                Log.d(TAG, "onUnselectMiddleHandler");
+                int color = ContextCompat.getColor(getContext(),
+                        R.color.sesl_bed_wakeup_time_color);
+                int primaryColor = getPrimaryColor();
+                animateText(textViewArrBedTime, primaryColor, color, BED_WAKEUP_FADE_IN_DURATION);
+                animateText(textViewArrBedTimeCenter, primaryColor, color, BED_WAKEUP_FADE_IN_DURATION);
+                animateText(textViewArrWakeUpTime, primaryColor, color, BED_WAKEUP_FADE_IN_DURATION);
+                animateText(textViewArrWakeUpTimeCenter, primaryColor, color, BED_WAKEUP_FADE_IN_DURATION);
+            }
+
+            @Override
+            public void onUnselectWakeUpTimeIcon() {
+                Log.d(TAG, "onUnselectWakeUpTimeIcon");
+                int primaryColor = getPrimaryColor();
+                int color = ContextCompat.getColor(getContext(), R.color.sesl_bed_wakeup_time_color);
+                animateText(textViewArrWakeUpTimeCenter, primaryColor, color, 50L);
+                reverseAnimateCenter(mWakeUpTimeTargetLayout, mWakeUpTimeView, mBedTimeView, -50.0f);
+                animateText(textViewArrWakeUpTime, primaryColor, color, BED_WAKEUP_FADE_IN_DURATION);
+            }
+        };
+
+        mCircularSeekBar.setOnSeekBarChangeListener(listener);
     }
 
     private static float getInnerCircleRatio(Resources res){
@@ -408,41 +363,38 @@ public class SeslSleepTimePicker extends LinearLayout {
         return typedValue.getFloat();
     }
 
-    static void animateToCenter(
-            @NonNull SeslSleepTimePicker timePicker,
+    void animateCenter(
             @NonNull LinearLayout layoutToCenter,
             @NonNull LinearLayout centerLayout,
-            @NonNull LinearLayout layoutToHide
+            @NonNull LinearLayout layoutToHide,
+            float f
     ) {
-        Animator animator = timePicker.animator;
-        if (animator != null) {
-            animator.cancel();
-        }
+        cancelCurrentAnimator();
         Rect layoutToCenterRec = getRect(layoutToCenter);
         Rect centerLayoutRec = getRect(centerLayout);
         centerLayout.setAlpha(1.0f);
 
         ObjectAnimator hideAnimation = ObjectAnimator.ofFloat(layoutToHide, View.ALPHA, 1.0f,
-                0.0f).setDuration(100L);
+                0.0f).setDuration(BED_WAKEUP_FADE_OUT_DURATION);
         ObjectAnimator fasterHideAnimation = ObjectAnimator.ofFloat(layoutToCenter, View.ALPHA,
-                1.0f, 0.0f).setDuration(66L);
+                1.0f, 0.0f).setDuration(BED_WAKEUP_SRC_FADE_OUT_DURATION);
         ObjectAnimator centerAnimation = ObjectAnimator.ofFloat(
                 centerLayout,
                 View.TRANSLATION_Y,
                 layoutToCenterRec.top - centerLayoutRec.top, 0.0f
-        ).setDuration(400L);
+        ).setDuration(ANIMATION_DURATION);
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.play(centerAnimation).with(fasterHideAnimation);
         animatorSet.play(hideAnimation);
-        animatorSet.setInterpolator(timePicker.interpolator);
+        animatorSet.setInterpolator(CENTER_LAYOUT_PATH_INTERPOLATOR);
 
         animatorSet.addListener(
                 new AnimatorListenerAdapter(){
                     @Override
                     public void onAnimationCancel(@NonNull Animator animator) {
                         super.onAnimationCancel(animator);
-                        timePicker.animator = null;
+                        SeslSleepTimePicker.this.mCurrentAnimator = null;
                     }
 
                     @Override
@@ -456,11 +408,10 @@ public class SeslSleepTimePicker extends LinearLayout {
                     }
                 });
         animatorSet.start();
-
-        timePicker.animator = animatorSet;
+        mCurrentAnimator = animatorSet;
     }
 
-    static void animateColor(
+    void animateText(
             @NonNull TextView[] textViewArr,
             int fromValue,
             int toValue,
@@ -477,18 +428,22 @@ public class SeslSleepTimePicker extends LinearLayout {
         }
     }
 
-    static void animateBackToPosition(
-            @NonNull SeslSleepTimePicker seslSleepTimePicker,
-            @NonNull LinearLayout resumeToCenter,
-            @NonNull LinearLayout layoutFromCenter,
-            @NonNull LinearLayout layoutToShow
-    ) {
-        Animator animator = seslSleepTimePicker.animator;
+    private void cancelCurrentAnimator() {
+        Animator animator = this.mCurrentAnimator;
         if (animator != null) {
             animator.cancel();
         }
+    }
+
+    void reverseAnimateCenter(
+            @NonNull LinearLayout resumeToCenter,
+            @NonNull LinearLayout layoutFromCenter,
+            @NonNull LinearLayout layoutToShow,
+            float f
+    ) {
+        cancelCurrentAnimator();
         ObjectAnimator unhideAnimation = ObjectAnimator.ofFloat(layoutToShow, View.ALPHA, 0.0f,
-                1.0f).setDuration(200L);
+                1.0f).setDuration(BED_WAKEUP_FADE_IN_DURATION);
 
         Rect resumeToCenterLayoutRec = getRect(resumeToCenter);
         Rect layoutFromCenterRec = getRect(layoutFromCenter);
@@ -496,19 +451,19 @@ public class SeslSleepTimePicker extends LinearLayout {
                 resumeToCenter,
                 View.TRANSLATION_Y,
                 0.0f, -(resumeToCenterLayoutRec.top - layoutFromCenterRec.top)
-        ).setDuration(400L);
+        ).setDuration(ANIMATION_DURATION);
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.play(recenterAnimation);
         animatorSet.play(unhideAnimation);
-        animatorSet.setInterpolator(seslSleepTimePicker.interpolator);
+        animatorSet.setInterpolator(CENTER_LAYOUT_PATH_INTERPOLATOR);
 
         animatorSet.addListener(
                 new AnimatorListenerAdapter(){
                     @Override
                     public void onAnimationCancel(@NonNull Animator animator) {
                         super.onAnimationCancel(animator);
-                        seslSleepTimePicker.animator = null;
+                        SeslSleepTimePicker.this.mCurrentAnimator = null;
                     }
 
                     @Override
@@ -524,7 +479,7 @@ public class SeslSleepTimePicker extends LinearLayout {
                     }
                 });
         animatorSet.start();
-        seslSleepTimePicker.animator = animatorSet;
+        mCurrentAnimator = animatorSet;
     }
 
     static Rect getRect(LinearLayout linearLayout) {
@@ -542,7 +497,7 @@ public class SeslSleepTimePicker extends LinearLayout {
         return typedValue.data;
     }
 
-    private static void resizeIcon(Resources resources, ViewGroup.LayoutParams lp, float f) {
+    private static void setTimeIconSize(Resources resources, ViewGroup.LayoutParams lp, float f) {
         lp.height =
                 (int) (resources.getDimensionPixelSize(R.dimen.sesl_sleep_record_bed_image_icon_size) * f);
         lp.width =
@@ -550,109 +505,98 @@ public class SeslSleepTimePicker extends LinearLayout {
     }
 
     private void setSleepOuterCircleContainerSize(float screenSize) {
-        int dimension = isSmallDisplay(screenSize) ? mOuterCircleMinSize :  mOuterCircleSize;
+        int dimension = needBedTimePickerAdjustment(screenSize) ? mOuterCircleMinSize :  mOuterCircleSize;
         LayoutParams lp = (LayoutParams) this.editOuterCircleContainer.getLayoutParams();
         lp.height = dimension;
         lp.width = dimension;
     }
 
     private void setSleepTimePickerFrameSize(float screenSize) {
-        int dimension = isSmallDisplay(screenSize) ? mOuterCircleMinSize :  mOuterCircleSize;
+        int dimension = needBedTimePickerAdjustment(screenSize) ? mOuterCircleMinSize :  mOuterCircleSize;
         ViewGroup.LayoutParams layoutParams = this.sleepTimePickerContainer.getLayoutParams();
         layoutParams.height = dimension;
         layoutParams.width = dimension;
     }
 
-    private void updateSleepTimePicker() {
+    private void initSleepTimePickerData() {
         float f = getResources().getConfiguration().screenHeightDp;
         setSleepOuterCircleContainerSize(f);
-        updateInnerCircleSize();
-        Resources resources = this.context.getResources();
-        if (resources.getConfiguration().screenWidthDp < 290) {
-            resizeLabelsAndIcons(resources, 0.75f);
-        } else {
-            resizeLabelsAndIcons(resources, 1.0f);
-        }
-        updateTypeFace();
+        setInnerCircleContainerSize();
+        setTimeTextSize();
+        setTimeTypeFace();
         setSleepTimePickerFrameSize(f);
-        updateWakeupTimeDisplay();
-
-        SeslCircularSeekBarView seekbar = this.circularSeekBarView;
-
-        seekbar.setProgressBasedOnAngle(
-                (((((((wakeupTimeInMinute - 360.0f) + 1440.0f) % 1440.0f) * 360.0f) / 1440.0f) % 360.0f) + 360.0f) % 360.0f,
-                0
-        );
-        seekbar.recalculateAll();
-        seekbar.invalidate();
-        updateBedTimeDisplay();
-
-        seekbar.setProgressBasedOnAngle(
-                (((((((bedTimeInMinute - 360.0f) + 1440.0f) % 1440.0f) * 360.0f) / 1440.0f) % 360.0f) + 360.0f) % 360.0f,
-                1
-        );
-        seekbar.recalculateAll();
-        seekbar.invalidate();
-        updateSleepDurationText();
-
-        if (SeslSleepTimePickerUtil.isMorning() && TextUtils.getLayoutDirectionFromLocale(
-                Locale.getDefault()) == LAYOUT_DIRECTION_RTL) {
-            centerIconBedTimeRight.setVisibility(View.VISIBLE);
-            topCenterDurationBedImageRight.setVisibility(View.VISIBLE);
-            topCenterDurationBedImage.setVisibility(View.GONE);
-            centerIconBedTime.setVisibility(View.GONE);
-            centerIconWakeupTimeRight.setVisibility(View.VISIBLE);
-            bottomCenterDurationWakeupImageRight.setVisibility(View.VISIBLE);
-            bottomCenterDurationWakeupImage.setVisibility(View.GONE);
-            centerIconWakeupTime.setVisibility(View.GONE);
-        } else {
-            centerIconBedTimeRight.setVisibility(View.GONE);
-            topCenterDurationBedImageRight.setVisibility(View.GONE);
-            topCenterDurationBedImage.setVisibility(View.VISIBLE);
-            centerIconBedTime.setVisibility(View.VISIBLE);
-            centerIconWakeupTimeRight.setVisibility(View.GONE);
-            bottomCenterDurationWakeupImageRight.setVisibility(View.GONE);
-            bottomCenterDurationWakeupImage.setVisibility(View.VISIBLE);
-            centerIconWakeupTime.setVisibility(View.VISIBLE);
-        }
-
-        circularSeekBarView.calculateProgressDegrees();
-
-        SeslCircularSeekBarRevealAnimation revealAnimation = circularSeekBarView.mCircularSeekBarRevealAnimation;
-        revealAnimation.progress = circularSeekBarView.mProgressDegrees;
-
-        ValueAnimator animator = ValueAnimator.ofFloat(0.0f, 1.0f);
-        animator.setDuration(800L);
-        animator.setInterpolator(revealAnimation.interpolator);
-        animator.addListener(revealAnimation.animatorListener);
-        animator.addUpdateListener(animation -> {
-            float animatedValue = (Float) animation.getAnimatedValue();
-            circularSeekBarView.setProgressBasedOnAngle(
-                    (circularSeekBarView.mFirstPointerPosition
-                            + (((revealAnimation.progress + 360.0f) % 360.0f) * animatedValue))
-                            % 360.0f, 0
-            );
-            circularSeekBarView.recalculateAll();
-            circularSeekBarView.invalidate();
-        });
-        animator.start();
-
+        updateWakeUpTimeText();
+        updateWakeUpTimePointer();
+        updateBedTimeText();
+        updateBedTimePointer();
+        setSleepTimeDurationText();
+        setBedTimeIconVisibility();
+        updateWakeUpBedTimeIcon();
+        mCircularSeekBar.startRevealAnimation();
     }
 
-    private void updateBedtimeAmPmViewsVisibility(
+    private void updateWakeUpTimePointer() {
+        mCircularSeekBar.setWakeUpTimePosition(convertToAngle(mWakeupTimeInMinute));
+    }
+
+    private float convertToAngle(float f) {
+        return ((((f - TOTAL_DEGREE) + TOTAL_MINUTES) % TOTAL_MINUTES) * TOTAL_DEGREE) / TOTAL_MINUTES;
+    }
+
+    private void setTimeTextSize() {
+        Resources resources = this.mContext.getResources();
+        if (resources.getConfiguration().screenWidthDp < MINIMUM_DIMEN_MULTIWINDOW) {
+            setTimeTextSizeRatio(resources, SIZE_RATIO);
+        } else {
+            setTimeTextSizeRatio(resources, 1.0f);
+        }
+    }
+
+    private void updateBedTimePointer() {
+        mCircularSeekBar.setBedTimePosition(convertToAngle(mBedTimeInMinute));
+    }
+
+    private void updateWakeUpBedTimeIcon() {
+        setBedTimeIconVisibility();
+    }
+
+    private void setBedTimeIconVisibility(){
+        if (SeslSleepTimePickerUtil.isLeftAmPm() && TextUtils.getLayoutDirectionFromLocale(
+                Locale.getDefault()) == LAYOUT_DIRECTION_RTL) {
+            mBedTimeCenterIconRight.setVisibility(View.VISIBLE);
+            mBedTimeTopIconRight.setVisibility(View.VISIBLE);
+            mBedTimeTopIcon.setVisibility(View.GONE);
+            mBedTimeCenterIcon.setVisibility(View.GONE);
+            mWakeUpCenterIconRight.setVisibility(View.VISIBLE);
+            mWakeUpBottomIconRight.setVisibility(View.VISIBLE);
+            mWakeUpBottomIcon.setVisibility(View.GONE);
+            mWakeUpCenterIcon.setVisibility(View.GONE);
+        } else {
+            mBedTimeCenterIconRight.setVisibility(View.GONE);
+            mBedTimeTopIconRight.setVisibility(View.GONE);
+            mBedTimeTopIcon.setVisibility(View.VISIBLE);
+            mBedTimeCenterIcon.setVisibility(View.VISIBLE);
+            mWakeUpCenterIconRight.setVisibility(View.GONE);
+            mWakeUpBottomIconRight.setVisibility(View.GONE);
+            mWakeUpBottomIcon.setVisibility(View.VISIBLE);
+            mWakeUpCenterIcon.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setBedTimeTextVisibility(
             int centerRightViewVisibility,
             int rightViewVisibility,
             int centerLeftViewVisibility,
             int leftViewVisibility
     ) {
-        tvBedtimeAmPmCenterRight.setVisibility(centerRightViewVisibility);
-        tvBedtimeAmPmRight.setVisibility(rightViewVisibility);
-        tvBedtimeAmPmCenterLeft.setVisibility(centerLeftViewVisibility);
-        tvBedtimeAmPmLeft.setVisibility(leftViewVisibility);
+        mBedTimeCenterTextRightAmPm.setVisibility(centerRightViewVisibility);
+        mBedTimeTextRightAmPm.setVisibility(rightViewVisibility);
+        mBedTimeCenterTextLeftAmPm.setVisibility(centerLeftViewVisibility);
+        mBedTimeTextLeftAmPm.setVisibility(leftViewVisibility);
     }
 
-    private void updateInnerCircleSize() {
-        Resources res = context.getResources();
+    private void setInnerCircleContainerSize() {
+        Resources res = mContext.getResources();
 
         // Calculate the pointer dimension
         float pointerRadius = res.getDimension(R.dimen.sesl_sleep_time_pointer_size) / 2.0f;
@@ -666,7 +610,7 @@ public class SeslSleepTimePicker extends LinearLayout {
 
         // Determine the outer circle size
         float outerCircleSize ;
-        if (isSmallDisplay(screenHeightDp)) {
+        if (needBedTimePickerAdjustment(screenHeightDp)) {
             outerCircleSize =
                     res.getDimension(R.dimen.sesl_sleep_visual_edit_outer_circle_min_size);
         }else{
@@ -686,11 +630,15 @@ public class SeslSleepTimePicker extends LinearLayout {
         innerCircleLayoutParams.width = innerCircleSize;
     }
 
-    private void updateSleepDurationText() {
-        Resources res = context.getResources();
-        int totalMinutes = durationFormatter.format(bedTimeInMinute, wakeupTimeInMinute);
+    void setSleepTimeDurationText() {
+        final int totalMinutes = durationFormatter.format(mBedTimeInMinute, mWakeupTimeInMinute);
+        mSleepDuration.setText(makeSleepDurationText(totalMinutes));
+    }
+
+    private String makeSleepDurationText(int totalMinutes) {
         String sleepDurationSummary;
 
+        Resources res = mContext.getResources();
         if (totalMinutes > 60) {
             int minutes = totalMinutes % 60;
             int hours = totalMinutes / 60;
@@ -717,133 +665,89 @@ public class SeslSleepTimePicker extends LinearLayout {
                     res.getQuantityString(R.plurals.sesl_sleep_duration_in_min_plurals,
                             totalMinutes, totalMinutes) : "";
         }
-
-        tvSleepDurationText.setText(sleepDurationSummary);
+        return sleepDurationSummary;
     }
 
-    public final void resizeLabelsAndIcons(@NonNull Resources resources, float sizePercent) {
-        tvBottomCenterDurationWakeuptime.setTextSize(COMPLEX_UNIT_PX,
-                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_text_size) * sizePercent);
-        tvTopCenterDurationBedtime.setTextSize(COMPLEX_UNIT_PX,
-                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_text_size) * sizePercent);
-        tvSleepCenterDurationWakeuptime.setTextSize(COMPLEX_UNIT_PX,
-                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_text_size) * sizePercent);
-        tvSleepCenterDurationBedtime.setTextSize(COMPLEX_UNIT_PX,
-                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_text_size) * sizePercent);
-        tvWakeupTimeAmPmLeft.setTextSize(COMPLEX_UNIT_PX,
-                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * 0.75f);
-        tvBedtimeAmPmLeft.setTextSize(COMPLEX_UNIT_PX,
-                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * 0.75f);
-        tvWakeupTimeAmPmCenterLeft.setTextSize(COMPLEX_UNIT_PX,
-                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * 0.75f);
-        tvBedtimeAmPmCenterLeft.setTextSize(COMPLEX_UNIT_PX,
-                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * 0.75f);
-        tvWakeupTimeAmPmRight.setTextSize(COMPLEX_UNIT_PX,
-                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * 0.75f);
-        tvBedtimeAmPmRight.setTextSize(COMPLEX_UNIT_PX,
-                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * 0.75f);
-        tvWakeupTimeAmPmCenterRight.setTextSize(COMPLEX_UNIT_PX,
-                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * 0.75f);
-        tvBedtimeAmPmCenterRight.setTextSize(COMPLEX_UNIT_PX,
-                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * 0.75f);
-        resizeIcon(resources, bottomCenterDurationWakeupImage.getLayoutParams(), sizePercent);
-        resizeIcon(resources, bottomCenterDurationWakeupImageRight.getLayoutParams(), sizePercent);
-        resizeIcon(resources, centerIconWakeupTime.getLayoutParams(), sizePercent);
-        resizeIcon(resources, centerIconWakeupTimeRight.getLayoutParams(), sizePercent);
-        resizeIcon(resources, topCenterDurationBedImage.getLayoutParams(), sizePercent);
-        resizeIcon(resources, topCenterDurationBedImageRight.getLayoutParams(), sizePercent);
-        resizeIcon(resources, centerIconBedTime.getLayoutParams(), sizePercent);
-        resizeIcon(resources, centerIconBedTimeRight.getLayoutParams(), sizePercent);
+
+    public final void setTimeTextSizeRatio(@NonNull Resources resources, float textSizeRatio) {
+        mWakeUpTimeText.setTextSize(COMPLEX_UNIT_PX,
+                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_text_size) * textSizeRatio);
+        mBedTimeText.setTextSize(COMPLEX_UNIT_PX,
+                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_text_size) * textSizeRatio);
+        mWakeUpTimeTargetText.setTextSize(COMPLEX_UNIT_PX,
+                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_text_size) * textSizeRatio);
+        mBedTimeTargetText.setTextSize(COMPLEX_UNIT_PX,
+                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_text_size) * textSizeRatio);
+        mWakeUpTimeTextLeftAmPm.setTextSize(COMPLEX_UNIT_PX,
+                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * SIZE_RATIO);
+        mBedTimeTextLeftAmPm.setTextSize(COMPLEX_UNIT_PX,
+                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * SIZE_RATIO);
+        mWakeUpTimeCenterTextLeftAmPm.setTextSize(COMPLEX_UNIT_PX,
+                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * SIZE_RATIO);
+        mBedTimeCenterTextLeftAmPm.setTextSize(COMPLEX_UNIT_PX,
+                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * SIZE_RATIO);
+        mWakeUpTimeTextRightAmPm.setTextSize(COMPLEX_UNIT_PX,
+                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * SIZE_RATIO);
+        mBedTimeTextRightAmPm.setTextSize(COMPLEX_UNIT_PX,
+                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * SIZE_RATIO);
+        mWakeUpTimeCenterTextRightAmPm.setTextSize(COMPLEX_UNIT_PX,
+                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * SIZE_RATIO);
+        mBedTimeCenterTextRightAmPm.setTextSize(COMPLEX_UNIT_PX,
+                resources.getDimensionPixelSize(R.dimen.sesl_sleep_time_am_pm_size) * SIZE_RATIO);
+        setTimeIconSize(resources, mWakeUpBottomIcon.getLayoutParams(), textSizeRatio);
+        setTimeIconSize(resources, mWakeUpBottomIconRight.getLayoutParams(), textSizeRatio);
+        setTimeIconSize(resources, mWakeUpCenterIcon.getLayoutParams(), textSizeRatio);
+        setTimeIconSize(resources, mWakeUpCenterIconRight.getLayoutParams(), textSizeRatio);
+        setTimeIconSize(resources, mBedTimeTopIcon.getLayoutParams(), textSizeRatio);
+        setTimeIconSize(resources, mBedTimeTopIconRight.getLayoutParams(), textSizeRatio);
+        setTimeIconSize(resources, mBedTimeCenterIcon.getLayoutParams(), textSizeRatio);
+        setTimeIconSize(resources, mBedTimeCenterIconRight.getLayoutParams(), textSizeRatio);
     }
 
-    private void updateTypeFace() {
-        Typeface createFromFile = null;
-        String string = Settings.System.getString(context.getContentResolver(), "theme_font_clock");
+    private void setTimeTypeFace() {
+        Typeface fontFromOpenTheme = getFontFromOpenTheme(mContext);
 
-        if (string != null) {
-            if (!TextUtils.isEmpty(string)) {
-                try {
-                    createFromFile = Typeface.createFromFile(string);
-                } catch (Exception ignored) {
-                }
-            }
-        }
-
-        if (createFromFile == null) {
+        if (fontFromOpenTheme == null) {
             try {
-                createFromFile = Build.VERSION.SDK_INT >= 28 ?
-                        Typeface.create(Typeface.create("sec", Typeface.NORMAL), 300, false) :
+                fontFromOpenTheme = Build.VERSION.SDK_INT >= 28 ?
+                        Typeface.create(Typeface.create("sec", Typeface.NORMAL), FONT_WEIGHT_LIGHT, false) :
                         Typeface.create("roboto-num3L", Typeface.NORMAL);
             } catch (Exception e) {
                 Log.e("SeslSleepTimePicker", "setTimeTypeFace exception : " + e);
                 return;
             }
         }
+        mBedTimeText.setTypeface(fontFromOpenTheme);
+        mWakeUpTimeText.setTypeface(fontFromOpenTheme);
+        mBedTimeTargetText.setTypeface(fontFromOpenTheme);
+        mWakeUpTimeTargetText.setTypeface(fontFromOpenTheme);
     }
 
     @SuppressLint("SetTextI18n")
-    private boolean updateTimeDisplay(
+    private boolean setTimeViewInTimePicker(
             float minutes,
             TextView hourTextView,
             TextView minuteTextView,
             TextView amPmTextView,
             TextView contentDescriptionTextView
     ) {
-
         int totalMinutes  = (int) minutes;
         int hours  = totalMinutes  / 60;
         int minutesRemainder  = totalMinutes  % 60;
-        Locale locale = new Locale("es", "ES");
-        Context context = this.context;
 
-        String minuteStr;
-        String amPmStr;
-        String hourStr;
+        String[] timeTextString = getTimeTextString(hours, minutesRemainder);
 
-        if (DateFormat.is24HourFormat(context)) {
-            hourStr = Locale.getDefault().equals(locale) ?
-                    SeslSleepTimePickerUtil.formatToInteger(hours  % 24) :
-                    SeslSleepTimePickerUtil.formatTwoDigitNumber(hours );
-            minuteStr = SeslSleepTimePickerUtil.formatTwoDigitNumber(minutesRemainder );
-            amPmStr = "";
-        } else {
-            int hours12 = hours  % 12;
-            hourStr = hours12 == 0 ? "ja".equals(Locale.getDefault().getLanguage()) ?
-                    SeslSleepTimePickerUtil.formatToInteger(0) :
-                    SeslSleepTimePickerUtil.hasDuplicateHourMarkers() ?
-                            SeslSleepTimePickerUtil.formatTwoDigitNumber(12) :
-                            SeslSleepTimePickerUtil.formatToInteger(12) :
-                    SeslSleepTimePickerUtil.hasDuplicateHourMarkers() ?
-                            SeslSleepTimePickerUtil.formatTwoDigitNumber(hours12) :
-                            SeslSleepTimePickerUtil.formatToInteger(hours12);
-            minuteStr = SeslSleepTimePickerUtil.formatTwoDigitNumber(minutesRemainder );
-            String[] amPmStrings = new DateFormatSymbols().getAmPmStrings();
-            amPmStr = amPmStrings != null ? hours  >= 12 ? amPmStrings[1] : amPmStrings[0] : "";
-        }
+        String minuteStr = timeTextString[0];
+        String amPmStr = timeTextString[1];
+        String hourStr = timeTextString[2];
 
         String finalTimeSeparator;
         if (Locale.getDefault().equals(Locale.CANADA_FRENCH)) {
             finalTimeSeparator = "h";
         } else {
-            String bestDateTimePattern = DateFormat.getBestDateTimePattern(Locale.getDefault(),
-                    DateFormat.is24HourFormat(context) ? "Hm" : "hm");
-            int lastIndexOfH = bestDateTimePattern.lastIndexOf(72);
-            if (lastIndexOfH == -1) {
-                lastIndexOfH = bestDateTimePattern.lastIndexOf(104);
-            }
-            if (lastIndexOfH == -1) {
-                finalTimeSeparator = ":";
-            } else {
-                int lastIndexOfTimeSeparator = lastIndexOfH + 1;
-                int indexOf = bestDateTimePattern.indexOf(109, lastIndexOfTimeSeparator);
-                finalTimeSeparator = indexOf == -1 ?
-                        Character.toString(bestDateTimePattern.charAt(lastIndexOfTimeSeparator)) :
-                        bestDateTimePattern.substring(lastIndexOfTimeSeparator, indexOf);
-            }
-            finalTimeSeparator = Locale.getDefault().equals(Locale.CANADA_FRENCH) ? ":" :
-                    finalTimeSeparator.replace("'", "");
+            finalTimeSeparator = getTimeSeparatorText(mContext);
         }
-        if (!DateFormat.is24HourFormat(context)) {
+        if (!DateFormat.is24HourFormat(mContext)) {
             minuteTextView.setText(amPmStr);
             if (contentDescriptionTextView != null) {
                 contentDescriptionTextView.setText(amPmStr);
@@ -858,30 +762,63 @@ public class SeslSleepTimePicker extends LinearLayout {
         return !amPmTextView.getText().toString().equals(charSequence);
     }
 
+    private String[] getTimeTextString(int hours, int minutesRemainder) {
+        String minuteStr;
+        String amPmStr;
+        String hourStr;
 
-    private void updateWakeupTimeAmPmVisibility(int i, int i2, int i3, int i4) {
-        tvWakeupTimeAmPmCenterRight.setVisibility(i);
-        tvWakeupTimeAmPmRight.setVisibility(i2);
-        tvWakeupTimeAmPmCenterLeft.setVisibility(i3);
-        tvWakeupTimeAmPmLeft.setVisibility(i4);
+        String[] strArr = new String[3];
+        Locale locale = new Locale("es", "ES");
+        if (DateFormat.is24HourFormat(mContext)) {
+            hourStr = Locale.getDefault().equals(locale) ?
+                    SeslSleepTimePickerUtil.toDigitString(hours  % 24) :
+                    SeslSleepTimePickerUtil.toTwoDigitString(hours );
+            minuteStr = SeslSleepTimePickerUtil.toTwoDigitString(minutesRemainder );
+            amPmStr = "";
+        } else {
+            int hours12 = hours  % 12;
+            hourStr = hours12 == 0 ? "ja".equals(Locale.getDefault().getLanguage()) ?
+                    SeslSleepTimePickerUtil.toDigitString(0) :
+                    SeslSleepTimePickerUtil.getHourFormatData(false) ?
+                            SeslSleepTimePickerUtil.toTwoDigitString(12) :
+                            SeslSleepTimePickerUtil.toDigitString(12) :
+                    SeslSleepTimePickerUtil.getHourFormatData(false) ?
+                            SeslSleepTimePickerUtil.toTwoDigitString(hours12) :
+                            SeslSleepTimePickerUtil.toDigitString(hours12);
+            minuteStr = SeslSleepTimePickerUtil.toTwoDigitString(minutesRemainder );
+            String[] amPmStrings = new DateFormatSymbols().getAmPmStrings();
+            amPmStr = amPmStrings != null ? hours  >= 12 ? amPmStrings[1] : amPmStrings[0] : "";
+        }
+        strArr[0] = minuteStr;
+        strArr[1] = amPmStr;
+        strArr[2] = hourStr;
+
+        return strArr;
     }
 
-    boolean updateBedTimeDisplay() {
-        if (DateFormat.is24HourFormat(context)) {
-            updateBedtimeAmPmViewsVisibility(GONE, GONE, GONE, GONE);
-            return updateTimeDisplay(bedTimeInMinute, tvTopCenterDurationBedtime, null,
-                    tvSleepCenterDurationBedtime, null);
+    private void setWakeUpTimeTextVisibility(int i, int i2, int i3, int i4) {
+        mWakeUpTimeCenterTextRightAmPm.setVisibility(i);
+        mWakeUpTimeTextRightAmPm.setVisibility(i2);
+        mWakeUpTimeCenterTextLeftAmPm.setVisibility(i3);
+        mWakeUpTimeTextLeftAmPm.setVisibility(i4);
+    }
 
-        } else if (SeslSleepTimePickerUtil.isMorning()) {
-            updateBedtimeAmPmViewsVisibility(GONE, GONE, VISIBLE, VISIBLE);
-            return updateTimeDisplay(bedTimeInMinute, tvTopCenterDurationBedtime, tvBedtimeAmPmLeft,
-                    tvSleepCenterDurationBedtime, tvBedtimeAmPmCenterLeft);
+    boolean updateBedTimeText() {
+        if (DateFormat.is24HourFormat(mContext)) {
+            setBedTimeTextVisibility(GONE, GONE, GONE, GONE);
+            return setTimeViewInTimePicker(mBedTimeInMinute, mBedTimeText, null,
+                    mBedTimeTargetText, null);
+
+        } else if (SeslSleepTimePickerUtil.isLeftAmPm()) {
+            setBedTimeTextVisibility(GONE, GONE, VISIBLE, VISIBLE);
+            return setTimeViewInTimePicker(mBedTimeInMinute, mBedTimeText, mBedTimeTextLeftAmPm,
+                    mBedTimeTargetText, mBedTimeCenterTextLeftAmPm);
 
         } else {
-            updateBedtimeAmPmViewsVisibility(VISIBLE, VISIBLE, GONE, GONE);
-            return updateTimeDisplay(bedTimeInMinute, tvTopCenterDurationBedtime,
-                    tvBedtimeAmPmRight,
-                    tvSleepCenterDurationBedtime, tvBedtimeAmPmCenterRight);
+            setBedTimeTextVisibility(VISIBLE, VISIBLE, GONE, GONE);
+            return setTimeViewInTimePicker(mBedTimeInMinute, mBedTimeText,
+                    mBedTimeTextRightAmPm,
+                    mBedTimeTargetText, mBedTimeCenterTextRightAmPm);
         }
     }
 
@@ -890,14 +827,9 @@ public class SeslSleepTimePicker extends LinearLayout {
         super.onConfigurationChanged(configuration);
         float f = getResources().getConfiguration().screenHeightDp;
         setSleepOuterCircleContainerSize(f);
-        updateInnerCircleSize();
-        Resources resources = context.getResources();
-        if (resources.getConfiguration().screenWidthDp < 290) {
-            resizeLabelsAndIcons(resources, 0.75f);
-        } else {
-            resizeLabelsAndIcons(resources, 1.0f);
-        }
-        updateTypeFace();
+        setInnerCircleContainerSize();
+        setTimeTextSize();
+        setTimeTypeFace();
         setSleepTimePickerFrameSize(f);
     }
 
@@ -905,9 +837,9 @@ public class SeslSleepTimePicker extends LinearLayout {
     public final void onRestoreInstanceState(Parcelable parcelable) {
         Bundle bundle = (Bundle) parcelable;
         super.onRestoreInstanceState(bundle.getParcelable("PARENT"));
-        bedTimeInMinute = bundle.getFloat("mBedTime");
-        wakeupTimeInMinute = bundle.getFloat("mWakeUpTime");
-        updateSleepTimePicker();
+        mBedTimeInMinute = bundle.getFloat("mBedTime");
+        mWakeupTimeInMinute = bundle.getFloat("mWakeUpTime");
+        initSleepTimePickerData();
     }
 
     @NonNull
@@ -916,65 +848,99 @@ public class SeslSleepTimePicker extends LinearLayout {
         Parcelable onSaveInstanceState = super.onSaveInstanceState();
         Bundle bundle = new Bundle();
         bundle.putParcelable("PARENT", onSaveInstanceState);
-        bundle.putFloat("mBedTime", bedTimeInMinute);
-        bundle.putFloat("mWakeUpTime", wakeupTimeInMinute);
+        bundle.putFloat("mBedTime", mBedTimeInMinute);
+        bundle.putFloat("mWakeUpTime", mWakeupTimeInMinute);
         return bundle;
     }
 
-
-    boolean updateWakeupTimeDisplay() {
-        if (DateFormat.is24HourFormat(this.context)) {
-            updateWakeupTimeAmPmVisibility(GONE, GONE, GONE, GONE);
-            return updateTimeDisplay(wakeupTimeInMinute, tvBottomCenterDurationWakeuptime, null,
-                    tvSleepCenterDurationWakeuptime, null);
-        } else if (SeslSleepTimePickerUtil.isMorning()) {
-            updateWakeupTimeAmPmVisibility(GONE, GONE, VISIBLE, VISIBLE);
-            return updateTimeDisplay(wakeupTimeInMinute, tvBottomCenterDurationWakeuptime,
-                    tvWakeupTimeAmPmLeft, tvSleepCenterDurationWakeuptime,
-                    tvWakeupTimeAmPmCenterLeft);
+    boolean updateWakeUpTimeText() {
+        if (DateFormat.is24HourFormat(this.mContext)) {
+            setWakeUpTimeTextVisibility(GONE, GONE, GONE, GONE);
+            return setTimeViewInTimePicker(mWakeupTimeInMinute, mWakeUpTimeText, null,
+                    mWakeUpTimeTargetText, null);
+        } else if (SeslSleepTimePickerUtil.isLeftAmPm()) {
+            setWakeUpTimeTextVisibility(GONE, GONE, VISIBLE, VISIBLE);
+            return setTimeViewInTimePicker(mWakeupTimeInMinute, mWakeUpTimeText,
+                    mWakeUpTimeTextLeftAmPm, mWakeUpTimeTargetText,
+                    mWakeUpTimeCenterTextLeftAmPm);
         } else {
-            updateWakeupTimeAmPmVisibility(VISIBLE, VISIBLE, GONE, GONE);
-            return updateTimeDisplay(wakeupTimeInMinute, tvBottomCenterDurationWakeuptime,
-                    tvWakeupTimeAmPmRight, tvSleepCenterDurationWakeuptime,
-                    tvWakeupTimeAmPmCenterRight);
+            setWakeUpTimeTextVisibility(VISIBLE, VISIBLE, GONE, GONE);
+            return setTimeViewInTimePicker(mWakeupTimeInMinute, mWakeUpTimeText,
+                    mWakeUpTimeTextRightAmPm, mWakeUpTimeTargetText,
+                    mWakeUpTimeCenterTextRightAmPm);
         }
     }
 
-    public float getBedTimeInMinute() {
-        return this.bedTimeInMinute;
-    }
-
+    @NonNull
     public LinearLayout getBedTimeView() {
-        return this.topBedtimeLayout;
+        return mBedTimeView;
     }
 
-    public float getWakeUpTimeInMinute() {
-        return this.wakeupTimeInMinute;
-    }
-
+    @NonNull
     public LinearLayout getWakeUpTimeView() {
-        return bottomWakeUpTimeLayout;
+        return mWakeUpTimeView;
     }
 
     public void setBedTimeInMinute(float timeInMinute) {
-        bedTimeInMinute = timeInMinute;
-        updateSleepTimePicker();
+        mBedTimeInMinute = timeInMinute;
+        initSleepTimePickerData();
     }
 
-    public void setOnSleepTimeChangeListener(@Nullable OnSleepTimeChangedListener onSleepTimeChangedListener) {
-        this.onChangedListener = onSleepTimeChangedListener;
-    }
-
-    public void setSleepDurationFormatter(@Nullable SleepDurationFormatter sleepDurationFormatter) {
-        durationFormatter = sleepDurationFormatter;
-    }
-
-    public void setSleepDurationTextStyle(int style) {
-        TextViewCompat.setTextAppearance(tvSleepDurationText, style);
+    public float getBedTimeInMinute() {
+        return this.mBedTimeInMinute;
     }
 
     public void setWakeUpTimeInMinute(float wakeUpTimeInMinute) {
-        this.wakeupTimeInMinute = wakeUpTimeInMinute;
-        updateSleepTimePicker();
+        this.mWakeupTimeInMinute = wakeUpTimeInMinute;
+        initSleepTimePickerData();
     }
+
+    public float getWakeUpTimeInMinute() {
+        return mWakeupTimeInMinute;
+    }
+
+    public void setOnSleepTimeChangeListener(@Nullable OnSleepTimeChangedListener onSleepTimeChangedListener) {
+        this.mOnSleepTimeChangedListener = onSleepTimeChangedListener;
+    }
+
+    public void setSleepDurationFormatter(@NonNull SleepDurationFormatter sleepDurationFormatter) {
+        durationFormatter = sleepDurationFormatter;
+    }
+
+    public void setSleepDurationTextStyle(@StyleRes int style) {
+        TextViewCompat.setTextAppearance(mSleepDuration, style);
+    }
+
+    public void setSleepGoal(float sleepTimeMinutes, float wakeupTimeMinutes) {
+        TextView textView = findViewById(R.id.sleep_goal_text_id);
+        textView.setVisibility(View.VISIBLE);
+        float convertToAngle = convertToAngle(sleepTimeMinutes);
+        float convertToAngle2 = convertToAngle(wakeupTimeMinutes);
+        mCircularSeekBar.setSleepGoalWheel(
+                ((convertToAngle % TOTAL_DEGREE) + TOTAL_DEGREE) % TOTAL_DEGREE,
+                ((convertToAngle2 % TOTAL_DEGREE) + TOTAL_DEGREE) % TOTAL_DEGREE);
+        setSleepGoalTimeDurationText(sleepTimeMinutes, wakeupTimeMinutes, textView);
+    }
+
+    private void setSleepGoalTimeDurationText(float sleepTimeMinutes, float wakeupTimeMinutes, TextView textView) {
+        String durationText;
+        Resources resources = mContext.getResources();
+        int i = (int) (((wakeupTimeMinutes - sleepTimeMinutes) + TOTAL_MINUTES) % TOTAL_MINUTES);
+        if (i > 60) {
+            int i2 = i % 60;
+            int i3 = i / 60;
+            durationText = i2 != 0 ? i2 != 1 ? i3 == 1
+                    ? resources.getString(R.string.sesl_sleep_goal_duration_in_one_hour_minutes, i2)
+                    : resources.getString(R.string.sesl_sleep_goal_duration_in_hours_minutes, i3,
+                            i2) : i3 == 1 ? resources.getString(R.string.sesl_sleep_goal_duration_one_hour_one_minute)
+                    : resources.getString(R.string.sesl_sleep_goal_duration_in_hours_one_minute,
+                            i3) : resources.getQuantityString(R.plurals.sesl_sleep_goal_duration_in_hour_plurals, i3,
+                    i3);
+        } else {
+            durationText = i > 1 ? resources.getQuantityString(R.plurals.sesl_sleep_goal_duration_in_min_plurals, i,
+                    i) : "";
+        }
+        textView.setText(durationText);
+    }
+
 }

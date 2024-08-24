@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Кийинки ай</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Календарь көрүнүшүнө которуу үчүн, эки жолу басыңыз.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Убакыт коюу</string>
   <string name="sesl_date_picker_year">Жыл</string>
   <string name="sesl_date_picker_month">Ай</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Уйку убактысы: %1$d саат %2$d мүнөт</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Уйку убактысы: %d саат 1 мүнөт</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Уйку убактысы: 1 саат %d мүнөт</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Уйку убактысы: 1 cаат 1 мүнөт</string>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">తదుపరి నెల</string>
   <string name="sesl_date_picker_switch_to_calendar_description">క్యాలెండర్ వీక్షణకి మారడానికి రెండుసార్లు ట్యాప్ చేయండి.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">సమయాన్ని సెట్ చేయండి</string>
   <string name="sesl_date_picker_year">సంవత్సరం</string>
   <string name="sesl_date_picker_month">నెల</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">నిద్ర సమయం: %1$d గంటల %2$d నిమిషాలు</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">నిద్ర సమయం: %d గంటల 1 నిమిషం</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">నిద్ర సమయం: 1 గంట %d నిమిషాలు</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">నిద్ర సమయం: 1 గంట 1 నిమిషం</string>
 </resources>

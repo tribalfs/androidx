@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">পৰৱৰ্তী মাহ</string>
   <string name="sesl_date_picker_switch_to_calendar_description">কেলেণ্ডাৰ দৰ্শনলৈ সলনি কৰিবলৈ দুবাৰ টিপক।</string>
@@ -34,5 +33,4 @@
   <string name="sesl_sleep_duration_in_hours_one_minute">শুৱাৰ সময়: %d ঘণ্টা 1 মিনিট</string>
   <string name="sesl_sleep_duration_in_one_hour_minutes">শুৱাৰ সময়: 1 ঘণ্টা %d মিনিট</string>
   <string name="sesl_sleep_duration_one_hour_one_minute">শুৱাৰ সময়: 1 ঘণ্টা 1 মিনিট</string>
-
 </resources>

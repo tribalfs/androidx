@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Næste måned</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Dobbelttryk for at skifte til kalendervisning.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Angiv tid</string>
   <string name="sesl_date_picker_year">År</string>
   <string name="sesl_date_picker_month">Måned</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Søvntid: %1$d timer og %2$d minutter</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Søvntid: %d timer og 1 minut</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Søvntid: 1 time og %d minutter</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Søvntid: 1 time og 1 minut</string>
 </resources>

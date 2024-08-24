@@ -29,4 +29,10 @@
   <string name="sesl_time_picker_set_title">Ställa in tid</string>
   <string name="sesl_date_picker_year">År</string>
   <string name="sesl_date_picker_month">Månad</string>
+
+  <string name="sesl_sleep_duration_in_hours_minutes">Sovtid: %1$d timmar %2$d minuter</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Sovtid: %d timmar 1 minut</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Sovtid: 1 timme %d minuter</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Sovtid: 1 timme 1 minut</string>
+
 </resources>

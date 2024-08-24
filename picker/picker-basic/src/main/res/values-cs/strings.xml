@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Další měsíc</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Poklepáním přepnete na kalendář.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Nastavit čas</string>
   <string name="sesl_date_picker_year">Rok</string>
   <string name="sesl_date_picker_month">Měsíc</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Doba spánku: %1$d hodin %2$d minut</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Doba spánku: %d hodin 1 minuta</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Doba spánku: 1 hodina %d minut</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Doba spánku: 1 hodina 1 minuta</string>
 </resources>

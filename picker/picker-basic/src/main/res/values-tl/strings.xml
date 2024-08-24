@@ -29,4 +29,10 @@
   <string name="sesl_time_picker_set_title">I-set ang oras</string>
   <string name="sesl_date_picker_year">Taon</string>
   <string name="sesl_date_picker_month">Buwan</string>
+
+  <string name="sesl_sleep_duration_in_hours_minutes">Oras na itinulog: %1$d oras %2$d minuto</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Oras na itinulog: %d oras 1 minuto</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Oras na itinulog: 1 oras %d minuto</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Oras na itinulog: 1 oras 1 minuto</string>
+
 </resources>

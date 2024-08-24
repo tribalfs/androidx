@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -29,10 +29,8 @@
   <string name="sesl_time_picker_set_title">ضبط الوقت</string>
   <string name="sesl_date_picker_year">العام</string>
   <string name="sesl_date_picker_month">الشهر</string>
-
   <string name="sesl_sleep_duration_in_hours_minutes">وقت النوم: %1$d ساعة و%2$d دقيقة</string>
   <string name="sesl_sleep_duration_in_hours_one_minute">وقت النوم: %d ساعة ودقيقة واحدة</string>
   <string name="sesl_sleep_duration_in_one_hour_minutes">وقت النوم: ساعة واحدة و%d دقيقة</string>
   <string name="sesl_sleep_duration_one_hour_one_minute">وقت النوم: ساعة واحدة ودقيقة واحدة</string>
-
 </resources>

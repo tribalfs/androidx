@@ -29,4 +29,10 @@
   <string name="sesl_time_picker_set_title">Wagty belle</string>
   <string name="sesl_date_picker_year">Ýyl</string>
   <string name="sesl_date_picker_month">Aý</string>
+
+  <string name="sesl_sleep_duration_in_hours_minutes">Uky wagty: %1$d sagat %2$d minut</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Uky wagty: %d sagat 1 minut</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Uky wagty: 1 sagat %d minut</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Uky wagty: 1 sagat 1 minut</string>
+
 </resources>

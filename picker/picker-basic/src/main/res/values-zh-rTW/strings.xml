@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">下個月</string>
   <string name="sesl_date_picker_switch_to_calendar_description">輕觸兩下來切換為日曆檢視。</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">設定時間</string>
   <string name="sesl_date_picker_year">年</string>
   <string name="sesl_date_picker_month">月</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">睡眠時間：%1$d 小時又 %2$d 分鐘</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">睡眠時間：%d 小時又 1 分鐘</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">睡眠時間：1 小時又 %d 分鐘</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">睡眠時間：1 小時又 1 分鐘</string>
 </resources>

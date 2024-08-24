@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Järgmine kuu</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Kalendrivaatesse lülitumiseks toksake kaks korda.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Määra aeg</string>
   <string name="sesl_date_picker_year">Aasta</string>
   <string name="sesl_date_picker_month">Kuu</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Uneaeg: %1$d tundi ja %2$d minutit</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Uneaeg: %d tundi ja 1 minut</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Uneaeg: 1 tund ja %d minutit</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Uneaeg: 1 tund ja 1 minut</string>
 </resources>

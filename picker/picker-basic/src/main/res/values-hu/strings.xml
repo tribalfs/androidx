@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Jövő hónap</string>
   <string name="sesl_date_picker_switch_to_calendar_description">A naptárnézetre váltáshoz érintse meg kétszer.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Idő beállítása</string>
   <string name="sesl_date_picker_year">Év</string>
   <string name="sesl_date_picker_month">Hónap</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Alvásidő: %1$d óra %2$d perc</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Alvásidő: %d óra 1 perc</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Alvásidő: 1 óra %d perc</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Alvásidő: 1 óra 1 perc</string>
 </resources>

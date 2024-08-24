@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Sonraki ay</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Takvim görünümüne geçmek için çift dokunun.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Süre ayarla</string>
   <string name="sesl_date_picker_year">Yıl</string>
   <string name="sesl_date_picker_month">Ay</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Uyku süresi: %1$d saat %2$d dakika</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Uyku süresi: %d saat 1 dakika</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Uyku süresi: 1 saat %d dakika</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Uyku süresi: 1 saat 1 dakika</string>
 </resources>

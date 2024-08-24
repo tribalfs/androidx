@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Næsti mánuður</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Pikkaðu tvisvar til að skipta yfir í dagatalsyfirlit.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Velja tíma</string>
   <string name="sesl_date_picker_year">Ár</string>
   <string name="sesl_date_picker_month">Mánuður</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Svefntími: %1$d klukkustundir og %2$d mínútur</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Svefntími: %d klukkustundir og 1 mínúta</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Svefntími: 1 klukkustund og %d mínútur</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Svefntími: 1 klukkustund og 1 mínúta</string>
 </resources>

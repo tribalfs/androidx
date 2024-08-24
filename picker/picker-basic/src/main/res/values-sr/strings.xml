@@ -29,4 +29,10 @@
   <string name="sesl_time_picker_set_title">Podesi vreme</string>
   <string name="sesl_date_picker_year">Godina</string>
   <string name="sesl_date_picker_month">Mesec</string>
+
+  <string name="sesl_sleep_duration_in_hours_minutes">Vreme spavanja: %1$d sata/i i %2$d minuta</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Vreme spavanja: %d sata/i i 1 minut</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Vreme spavanja: 1 sat i %d minuta</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Vreme spavanja: 1 sat i 1 minut</string>
+
 </resources>

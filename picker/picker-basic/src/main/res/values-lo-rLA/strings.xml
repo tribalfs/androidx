@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">ເດືອນໜ້າ</string>
   <string name="sesl_date_picker_switch_to_calendar_description">ແຕະສອງຄັ້ງເພື່ອສັບປ່ຽນເປັນມຸມມອງປະຕິທິນ.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">ຕັ້ງ​ເວລາ</string>
   <string name="sesl_date_picker_year">ປີ</string>
   <string name="sesl_date_picker_month">ເດືອນ</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">ເວລານອນຫຼັບ: %1$d ຊົ່ວໂມງ %2$d ນາທີ</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">ເວລານອນຫຼັບ: %d ຊົ່ວໂມງ 1 ນາທີ</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">ເວລານອນຫຼັບ: 1 ຊົ່ວໂມງ %d ນາທີ</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">ເວລານອນຫຼັບ: 1 ຊົ່ວໂມງ 1 ນາທີ</string>
 </resources>

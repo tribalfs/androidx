@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">החודש הבא</string>
   <string name="sesl_date_picker_switch_to_calendar_description">הקש הקשה כפולה כדי לעבור לתצוגת לוח שנה.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">הגדר שעה</string>
   <string name="sesl_date_picker_year">שנה</string>
   <string name="sesl_date_picker_month">חודש</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">זמן שינה: %1$d שעות ו-%2$d דקות</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">זמן שינה: %d שעות ודקה אחת</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">זמן שינה: שעה אחת ו-%d דקות</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">זמן שינה: שעה אחת ודקה אחת</string>
 </resources>

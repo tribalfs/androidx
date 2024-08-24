@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">ខែបន្ទាប់</string>
   <string name="sesl_date_picker_switch_to_calendar_description">ប៉ះ​ពីរដង ដើម្បី​ប្ដូរ​ទៅ​ទិដ្ឋភាព​ប្រតិទិន។</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">កំណត់​ម៉ោង</string>
   <string name="sesl_date_picker_year">ឆ្នាំ</string>
   <string name="sesl_date_picker_month">ខែ</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">ពេល​គេង៖ %1$d ម៉ោង %2$d នាទី</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">ពេល​គេង៖ %d ម៉ោង 1 នាទី</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">ពេល​គេង៖ 1 ម៉ោង %d នាទី</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">ពេល​គេង៖ 1 ម៉ោង 1 នាទី</string>
 </resources>

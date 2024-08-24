@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">IDS_CLD_BODY_NEXT_MONTH</string>
   <string name="sesl_date_picker_switch_to_calendar_description">IDS_IDLE_TBBODY_DOUBLE_TAP_TO_SWITCH_TO_CALENDAR_VIEW</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">IDS_HEALTH_OPT_SET_TIME_ABB</string>
   <string name="sesl_date_picker_year">IDS_IDLE_TBOPT_YEAR</string>
   <string name="sesl_date_picker_month">IDS_IDLE_TBOPT_MONTH</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">DREAM_CLOCK_OPT_SLEEP_TIME_C_P1SD_HOURS_P2SD_MINUTES %1$d %2$d</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">DREAM_CLOCK_OPT_SLEEP_TIME_C_PD_HOURS_1_MINUTE %d</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">DREAM_CLOCK_OPT_SLEEP_TIME_C_1_HOUR_PD_MINUTES %d</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">DREAM_CLOCK_OPT_SLEEP_TIME_C_1_HOUR_1_MINUTE</string>
 </resources>

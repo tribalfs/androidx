@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Моҳи оянда</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Барои гузариш ба намуди тақвим, ду бор зарба занед.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Танзими вақт</string>
   <string name="sesl_date_picker_year">Сол</string>
   <string name="sesl_date_picker_month">Моҳ</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Давомнокии хоб: %1$d соат %2$d дақиқа</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Давомнокии хоб: %d соат 1 дақиқа</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Давомнокии хоб: 1 соат %d дақиқа</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Давомнокии хоб: 1 соат 1 дақиқа</string>
 </resources>

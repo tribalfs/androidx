@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Sljedeći mjesec</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Dvaput dodirnite za prebacivanje na prikaz kalendara.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Postavi vrijeme</string>
   <string name="sesl_date_picker_year">Godina</string>
   <string name="sesl_date_picker_month">Mjesec</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Vrijeme spavanja: %1$d sat/a/i %2$d minuta/e</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Vrijeme spavanja: %d sat/a/i 1 minuta</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Vrijeme spavanja: 1 sat %d minuta/e</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Vrijeme spavanja: 1 sat 1 minuta</string>
 </resources>

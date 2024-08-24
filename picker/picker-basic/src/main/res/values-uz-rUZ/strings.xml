@@ -29,4 +29,10 @@
   <string name="sesl_time_picker_set_title">Vaqtni o‘rnatish</string>
   <string name="sesl_date_picker_year">Yil</string>
   <string name="sesl_date_picker_month">Oy</string>
+
+  <string name="sesl_sleep_duration_in_hours_minutes">Uxlash vaqti: %1$d soat %2$d daqiqa</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Uxlash vaqti: %d soat 1 daqiqa</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Uxlash vaqti: 1 soat %d daqiqa</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Uxlash vaqti: 1 soat 1 daqiqa</string>
+
 </resources>

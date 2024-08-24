@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Следващ месец</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Докоснете двукратно, за да превключите на изглед на календар.</string>
@@ -29,4 +28,9 @@
   <string name="sesl_time_picker_set_title">Задаване на час</string>
   <string name="sesl_date_picker_year">Година</string>
   <string name="sesl_date_picker_month">Месец</string>
+
+  <string name="sesl_sleep_duration_in_hours_minutes">Време на сън: %1$d часа и %2$d минути</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Време на сън: %d часа и 1 минута</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Време на сън: 1 час и %d минути</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Време на сън: 1 час и 1 минута</string>
 </resources>

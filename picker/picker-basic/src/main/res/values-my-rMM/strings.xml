@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">နောက်တစ်လ</string>
   <string name="sesl_date_picker_switch_to_calendar_description">ပြက္ခဒိန် ကြည်ရှုမှုသို့ ကူးပြောင်းရန် နှစ်ချက်နှိပ်ပါ။</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">အချိန် သတ်မှတ်ပါ</string>
   <string name="sesl_date_picker_year">နှစ်</string>
   <string name="sesl_date_picker_month">လ</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">အိပ်စက်ချိန် : %1$d နာရီ %2$d မိနစ်</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">အိပ်စက်ချိန် : %d နာရီ ၁ မိနစ်</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">အိပ်စက်ချိန် : ၁ နာရီ %d မိနစ်</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">အိပ်စက်ချိန် : ၁ နာရီ ၁ မိနစ်</string>
 </resources>

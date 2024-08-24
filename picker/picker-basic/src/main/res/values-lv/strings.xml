@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
   Copyright 2024 The Android Open Source Project
 
@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
   <string name="sesl_date_picker_increment_month">Nākamais mēnesis</string>
   <string name="sesl_date_picker_switch_to_calendar_description">Veiciet dubultskārienu, lai pārslēgtos uz kalendāra skatu.</string>
@@ -29,4 +28,8 @@
   <string name="sesl_time_picker_set_title">Iestatīt laiku</string>
   <string name="sesl_date_picker_year">Gads</string>
   <string name="sesl_date_picker_month">Mēnesis</string>
+  <string name="sesl_sleep_duration_in_hours_minutes">Miega ilgums: %1$d stundas, %2$d minūtes</string>
+  <string name="sesl_sleep_duration_in_hours_one_minute">Miega ilgums: %d stundas, 1 minūte</string>
+  <string name="sesl_sleep_duration_in_one_hour_minutes">Miega ilgums: 1 stunda, %d minūtes</string>
+  <string name="sesl_sleep_duration_one_hour_one_minute">Miega ilgums: 1 stunda, 1 minūte</string>
 </resources>

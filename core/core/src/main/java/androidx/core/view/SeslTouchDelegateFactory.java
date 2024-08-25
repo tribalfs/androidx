@@ -23,8 +23,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
 import androidx.core.view.SeslTouchTargetDelegate.ExtraInsets;
-import androidx.core.view.SeslTouchTargetDelegate.InvalidDelegateViewException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,24 +33,24 @@ import java.util.List;
 /*
  * Original code by Samsung, all rights reserved to the original author.
  */
-
+@RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
 public class SeslTouchDelegateFactory {
-    private interface Strategy {
+
+    public interface Strategy {
         ExtraInsets getExtraInsets(Rect prevBounds, Rect bounds, Rect nextBounds);
     }
 
-    public static TouchDelegate make(@NonNull LinearLayout linearLayout)
-            throws InvalidDelegateViewException {
+    @Nullable
+    public static SeslTouchTargetDelegate.Builder make(@NonNull LinearLayout linearLayout) throws SeslTouchTargetDelegate.InvalidDelegateViewException {
         return make(linearLayout, getChildren(linearLayout));
     }
 
-    @NonNull
-    public static TouchDelegate make(@NonNull LinearLayout linearLayout, List<View> targetList)
-            throws InvalidDelegateViewException {
-        SeslTouchTargetDelegate delegate = new SeslTouchTargetDelegate(linearLayout);
+    @Nullable
+    public static SeslTouchTargetDelegate.Builder make(@NonNull LinearLayout linearLayout, @NonNull List<View> targetList)
+            throws SeslTouchTargetDelegate.InvalidDelegateViewException {
 
-        if (targetList.size() == 0) {
-            return delegate;
+        if (targetList.isEmpty()) {
+            return null;
         }
 
         final int h = linearLayout.getHeight();
@@ -58,7 +59,7 @@ public class SeslTouchDelegateFactory {
 
         ArrayList<Rect> targetsBounds = new ArrayList<>();
         for (View view : targetList) {
-            targetsBounds.add(delegate.calculateViewBounds(view));
+            targetsBounds.add(SeslTouchTargetDelegate.calculateViewBounds(linearLayout, view));
         }
 
         Strategy strategy;
@@ -71,7 +72,7 @@ public class SeslTouchDelegateFactory {
 
                 return ExtraInsets.of(l, t, r, b);
             };
-        } else {
+        }else{
             strategy = (prevBounds, bounds, nextBounds) -> {
                 final int l = bounds.left - llBounds.left;
                 final int t = bounds.top - prevBounds.bottom;
@@ -86,17 +87,17 @@ public class SeslTouchDelegateFactory {
         targetsBounds.add(new Rect(Math.max(0, w - lastVBounds.right) + w,
                 Math.max(0, h - lastVBounds.bottom) + h, w, h));
 
-        int i = 0;
+        SeslTouchTargetDelegate.Builder builder = new SeslTouchTargetDelegate.Builder(linearLayout);
+
         Rect rect = new Rect(0, 0, 0, 0);
-        while (i < targetList.size()) {
-            Rect r = targetsBounds.get(i);
-            int i2 = i + 1;
-            delegate.addTouchDelegate(targetList.get(i), strategy.getExtraInsets(rect, r, targetsBounds.get(i2)));
-            rect = r;
-            i = i2;
+        for (int i = 0; i < targetList.size(); i++) {
+            Rect currentRect = targetsBounds.get(i);
+            Rect nextRect = targetsBounds.get(i + 1);
+            builder.addDelegateView(targetList.get(i), strategy.getExtraInsets(rect, currentRect, nextRect));
+            rect = currentRect;
         }
 
-        return delegate;
+        return builder;
     }
 
     private static List<View> getChildren(ViewGroup viewGroup) {

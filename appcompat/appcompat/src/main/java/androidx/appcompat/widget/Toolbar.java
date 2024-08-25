@@ -2961,10 +2961,11 @@ public class Toolbar extends ViewGroup implements MenuHost {
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        TypedArray a = getContext().obtainStyledAttributes(R.styleable.AppCompatTheme);
+        Context context = getContext();
+        TypedArray a = context.obtainStyledAttributes(R.styleable.AppCompatTheme);
         final int actionBarSize = a.getDimensionPixelSize(R.styleable.AppCompatTheme_actionBarSize, 0);
         if (mNavButtonView != null) {
-            a = getContext().obtainStyledAttributes(null, R.styleable.View, R.attr.actionOverflowButtonStyle, 0);
+            a = context.obtainStyledAttributes(null, R.styleable.View, R.attr.actionOverflowButtonStyle, 0);
             mNavButtonView.setMinimumHeight(a.getDimensionPixelSize(R.styleable.View_android_minHeight, 0));
         }
         a.recycle();
@@ -2977,7 +2978,7 @@ public class Toolbar extends ViewGroup implements MenuHost {
         lp.height = actionBarSize + mUserTopPadding;
         setLayoutParams(lp);
 
-        TypedArray a2 = getContext().obtainStyledAttributes(null, R.styleable.Toolbar, android.R.attr.toolbarStyle, 0);
+        TypedArray a2 = context.obtainStyledAttributes(null, R.styleable.Toolbar, android.R.attr.toolbarStyle, 0);
         int maxButtonHeight = a2.getDimensionPixelSize(R.styleable.Toolbar_maxButtonHeight, -1);
         if (maxButtonHeight >= -1) {
             mMaxButtonHeight = maxButtonHeight;
@@ -3005,7 +3006,7 @@ public class Toolbar extends ViewGroup implements MenuHost {
         } else {
             if (mTitleTextView != null) {
                 mTitleTextView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-            };
+            }
             if (mSubtitleTextView != null) {
                 mSubtitleTextView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
             }
@@ -3051,16 +3052,16 @@ public class Toolbar extends ViewGroup implements MenuHost {
 
     private void seslSetTouchDelegateForToolbar() {
         final ViewTreeObserver vto = getViewTreeObserver();
-        if (vto == null || this.mOnGlobalLayoutListenerForTD != null) {
+        if (vto == null || mOnGlobalLayoutListenerForTD != null) {
             return;
         }
-        mOnGlobalLayoutListenerForTD = () -> {
+        mOnGlobalLayoutListenerForTD = () ->
             post(() -> {
                 SeslTouchTargetDelegate seslTouchTargetDelegate = new SeslTouchTargetDelegate(this);
                 boolean shouldLayout;
                 if (shouldLayout(mNavButtonView)) {
                     seslTouchTargetDelegate.addTouchDelegate(mNavButtonView, ExtraInsets
-                            .of(0, SESL_TOP_INSET_TO_EXPAND, 0, 0));
+                            .of(0, mNavButtonView.getTop(), 0, getHeight() - mNavButtonView.getBottom()));
                     shouldLayout = true;
                 } else {
                     shouldLayout = false;
@@ -3089,7 +3090,7 @@ public class Toolbar extends ViewGroup implements MenuHost {
                         if (childAt.getVisibility() == View.VISIBLE) {
                             int measuredWidth = childAt.getMeasuredWidth() / 2;
                             seslTouchTargetDelegate.addTouchDelegate(childAt,
-                                    SeslTouchTargetDelegate.ExtraInsets.of(inIndex == 0 ? measuredWidth : 0, measuredWidth, 0, measuredWidth));
+                                    ExtraInsets.of(inIndex == 0 ? measuredWidth : 0, measuredWidth, 0, measuredWidth));
                             shouldLayout = true;
                         }
                         inIndex++;
@@ -3099,7 +3100,6 @@ public class Toolbar extends ViewGroup implements MenuHost {
                     setTouchDelegate(seslTouchTargetDelegate);
                 }
             });
-        };
         vto.addOnGlobalLayoutListener(mOnGlobalLayoutListenerForTD);
 
     }

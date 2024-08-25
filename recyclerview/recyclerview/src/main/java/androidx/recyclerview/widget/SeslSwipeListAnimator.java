@@ -47,12 +47,9 @@ public class SeslSwipeListAnimator {
     private static final String TAG = "SeslSwipeListAnimator";
     private static final int DEFAULT_ANIMATION_CANCEL_DURATION = 250;
     private static final int DEFAULT_ANIMATION_DURATION = 100;
-
-    private final int DIRECTION_LTR = 0;
-    private final int DIRECTION_RTL = 1;
-
-    private final int DEFAULT_DRAWABLE_PADDING = 10;
-    private final int DEFAULT_TEXT_SIZE = 17;
+    private static final int DIRECTION_LTR = 0;
+    private static final int DEFAULT_DRAWABLE_PADDING = 10;
+    private static final int DEFAULT_TEXT_SIZE = 17;
 
     private final int DEFAULT_LEFT_COLOR = Color.parseColor("#6ebd52");
     private final int DEFAULT_RIGHT_COLOR = Color.parseColor("#56c0e5");

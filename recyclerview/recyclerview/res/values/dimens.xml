@@ -41,4 +41,7 @@
     <dimen name="sesl_index_tip_padding">14dp</dimen>
     <dimen name="sesl_index_tip_radius">15dp</dimen>
     <dimen name="sesl_index_tip_text_size">13sp</dimen>
+
+    <dimen name="sesl_recyclerview_overlay_feature_hidden_height">164dp</dimen>
+
 </resources>

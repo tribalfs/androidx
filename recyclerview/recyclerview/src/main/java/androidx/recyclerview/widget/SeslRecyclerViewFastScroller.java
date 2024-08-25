@@ -36,7 +36,6 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
-import android.util.IntProperty;
 import android.util.Log;
 import android.util.Property;
 import android.util.TypedValue;
@@ -54,7 +53,6 @@ import android.widget.ImageView.ScaleType;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
 import androidx.appcompat.animation.SeslAnimationUtils;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -511,7 +509,7 @@ class SeslRecyclerViewFastScroller {
 
     public void setScrollbarPosition(int position) {
         if (position == View.SCROLLBAR_POSITION_DEFAULT) {
-            position = mRecyclerView.mLayout.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ?
+            position = mRecyclerView.getLayoutManager().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ?
                     View.SCROLLBAR_POSITION_LEFT : View.SCROLLBAR_POSITION_RIGHT;
         }
 
@@ -1046,7 +1044,7 @@ class SeslRecyclerViewFastScroller {
     private void getSectionsFromIndexer() {
         mSectionIndexer = null;
 
-        RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
+        RecyclerView.Adapter<?> adapter = mRecyclerView.getAdapter();
         if (adapter instanceof SectionIndexer) {
             mListAdapter = adapter;
             mSectionIndexer = (SectionIndexer) adapter;
@@ -1072,6 +1070,7 @@ class SeslRecyclerViewFastScroller {
         final Object[] sections = mSections;
         final int sectionCount = sections == null ? 0 : sections.length;
         int sectionIndex;
+        RecyclerView.LayoutManager layoutManager = this.mRecyclerView.getLayoutManager();
         if (sections != null && sectionCount > 0) {
             final int exactSection = MathUtils.clamp(
                     (int) (position * sectionCount), 0, sectionCount - 1);
@@ -1143,24 +1142,20 @@ class SeslRecyclerViewFastScroller {
             // Clamp to valid positions.
             targetIndex = MathUtils.clamp(targetIndex, 0, count - 1);
 
-            if (mRecyclerView.mLayout instanceof LinearLayoutManager) {
-                ((LinearLayoutManager) mRecyclerView.mLayout)
-                        .scrollToPositionWithOffset(targetIndex, 0);
+            if (layoutManager instanceof LinearLayoutManager) {
+                ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(targetIndex, 0);
             } else {
-                ((StaggeredGridLayoutManager) mRecyclerView.mLayout)
-                        .scrollToPositionWithOffset(targetIndex, 0, true);
+                ((StaggeredGridLayoutManager) layoutManager).scrollToPositionWithOffset(targetIndex, 0, true);
             }
         } else {
             final int index = MathUtils.clamp((int) (position * count), 0, count - 1);
 
             sectionIndex = -1;
 
-            if (mRecyclerView.mLayout instanceof LinearLayoutManager) {
-                ((LinearLayoutManager) mRecyclerView.mLayout)
-                        .scrollToPositionWithOffset(index, 0);
+            if (layoutManager instanceof LinearLayoutManager) {
+                ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(index, 0);
             } else {
-                ((StaggeredGridLayoutManager) mRecyclerView.mLayout)
-                        .scrollToPositionWithOffset(index, 0, true);
+                ((StaggeredGridLayoutManager) layoutManager).scrollToPositionWithOffset(index, 0, true);
             }
         }
 
@@ -1330,40 +1325,32 @@ class SeslRecyclerViewFastScroller {
             getSectionsFromIndexer();
         }
 
-        float position = 0.0F;
+        RecyclerView.LayoutManager layoutManager = this.mRecyclerView.getLayoutManager();
+
+        float percentage = 0.0F;
         if (visibleItemCount != 0 && totalItemCount != 0) {
             SectionIndexer sectionIndexer = mSectionIndexer;
-            int paddingTop = mRecyclerView.getPaddingTop();
+            int topPadding = mRecyclerView.getPaddingTop();
             int startPosition = firstVisibleItem;
-            if (paddingTop > 0) {
-                if (mRecyclerView.mLayout instanceof LinearLayoutManager) {
-                    LinearLayoutManager layoutManager = (LinearLayoutManager)mRecyclerView.mLayout;
-
-                    while(true) {
-                        if (firstVisibleItem <= 0) {
-                            break;
-                        }
-                        startPosition = firstVisibleItem - 1;
-                        if (layoutManager.findViewByPosition(startPosition) == null) {
-                            startPosition = firstVisibleItem;
-                            break;
-                        }
-                        firstVisibleItem = startPosition;
+            if (topPadding > 0) {
+                if (layoutManager instanceof LinearLayoutManager) {
+                    while(startPosition > 0 && layoutManager.findViewByPosition(startPosition - 1) != null) {
+                        startPosition--;
                     }
                 }
             }
 
             View firstChild = mRecyclerView.getChildAt(0);
-            float ratio;
+            float position;
             int firstChildHeight;
             if (firstChild != null && (firstChildHeight = firstChild.getHeight()) != 0) {
                 if (startPosition == 0) {
-                    ratio = (float)(paddingTop - firstChild.getTop()) / (float)(firstChildHeight + paddingTop);
+                    position = (float)(topPadding - firstChild.getTop()) / (float)(firstChildHeight + topPadding);
                 } else {
-                    ratio = (float)(-firstChild.getTop()) / (float)firstChildHeight;
+                    position = (float)(-firstChild.getTop()) / (float)firstChildHeight;
                 }
             } else {
-                ratio = 0.0F;
+                position = 0.0F;
             }
 
             boolean hasSections;
@@ -1386,10 +1373,10 @@ class SeslRecyclerViewFastScroller {
 
                 int section = sectionIndexer.getSectionForPosition(startPosition);
                 int sectionStartPosition = sectionIndexer.getPositionForSection(section);
-                paddingTop = mSections.length;
-                if (section < paddingTop - 1) {
+                int sectionCount = mSections.length;
+                if (section < sectionCount - 1) {
                     firstVisibleItem = section + 1;
-                    if (firstVisibleItem < paddingTop) {
+                    if (firstVisibleItem < sectionCount) {
                         firstVisibleItem = sectionIndexer.getPositionForSection(firstVisibleItem);
                     } else {
                         firstVisibleItem = totalItemCount - 1;
@@ -1401,16 +1388,16 @@ class SeslRecyclerViewFastScroller {
                 }
 
                 if (firstVisibleItem == 0) {
-                    ratio = position;
+                    position = percentage;
                 } else {
-                    ratio = ((float)startPosition + ratio - (float)sectionStartPosition) / (float)firstVisibleItem;
+                    position = ((float)startPosition + position - (float)sectionStartPosition) / (float)firstVisibleItem;
                 }
 
-                position = (float)section + ratio;
-                ratio = (float)paddingTop;
+                percentage = (float)section + position;
+                position = (float)sectionCount;
             } else {
                 if (visibleItemCount == totalItemCount) {
-                    if (mRecyclerView.mLayout instanceof StaggeredGridLayoutManager
+                    if (layoutManager instanceof StaggeredGridLayoutManager
                             && startPosition != 0 && firstChild != null
                             && ((StaggeredGridLayoutManager.LayoutParams)firstChild.getLayoutParams()).isFullSpan()
                     ) {
@@ -1420,41 +1407,41 @@ class SeslRecyclerViewFastScroller {
                     return 0.0F;
                 }
 
-                if (mRecyclerView.mLayout instanceof GridLayoutManager) {
-                    firstVisibleItem = ((GridLayoutManager)mRecyclerView.mLayout).getSpanCount()
-                            / ((GridLayoutManager)mRecyclerView.mLayout).getSpanSizeLookup().getSpanSize(startPosition);
-                } else if (mRecyclerView.mLayout instanceof StaggeredGridLayoutManager) {
-                    firstVisibleItem = ((StaggeredGridLayoutManager)mRecyclerView.mLayout).getSpanCount();
+                int spanCount;
+                if (layoutManager instanceof GridLayoutManager) {
+                    spanCount = ((GridLayoutManager)layoutManager).getSpanCount();
+                    int spanSize = ((GridLayoutManager)layoutManager).getSpanSizeLookup().getSpanSize(startPosition);
+                    firstVisibleItem = spanCount / spanSize;
+                } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+                    spanCount = ((StaggeredGridLayoutManager)layoutManager).getSpanCount();
+                    firstVisibleItem = spanCount;
                 } else {
                     firstVisibleItem = 1;
                 }
 
-                position = (float)startPosition + ratio * (float)firstVisibleItem;
-                ratio = (float)totalItemCount;
+                percentage = (float)startPosition + position * (float)firstVisibleItem;
+                position = (float)totalItemCount;
             }
 
-            position /= ratio;
-            ratio = position;
+            float itemSize = percentage / position;
             if (startPosition + visibleItemCount == totalItemCount) {
                 View lastChild = mRecyclerView.getChildAt(visibleItemCount - 1);
                 View firstVisibleChild = mRecyclerView.getChildAt(0);
-                visibleItemCount = lastChild.getBottom() - mRecyclerView.getHeight() + mRecyclerView.getPaddingBottom();
-                firstVisibleItem = visibleItemCount - (firstVisibleChild.getTop() - mRecyclerView.getPaddingTop());
-                if (firstVisibleItem > lastChild.getHeight() || startPosition > 0) {
-                    firstVisibleItem = lastChild.getHeight();
+                int visibleHeight = lastChild.getBottom() - mRecyclerView.getHeight() + mRecyclerView.getPaddingBottom();
+                int firstVisibleItemHeight = visibleHeight - (firstVisibleChild.getTop() - mRecyclerView.getPaddingTop());
+                if (firstVisibleItemHeight > lastChild.getHeight() || startPosition > 0) {
+                    firstVisibleItemHeight = lastChild.getHeight();
                 }
 
-                visibleItemCount = firstVisibleItem - visibleItemCount;
-                ratio = position;
-                if (visibleItemCount > 0) {
-                    ratio = position;
-                    if (firstVisibleItem > 0) {
-                        ratio = position + (1.0F - position) * ((float)visibleItemCount / (float)firstVisibleItem);
-                    }
+                visibleHeight = firstVisibleItemHeight - visibleHeight;
+                if (visibleHeight > 0 && firstVisibleItemHeight > 0) {
+                    position = itemSize + (1.0F - itemSize) * ((float)visibleHeight / (float)firstVisibleItemHeight);
                 }
+            }else{
+                position = itemSize;
             }
 
-            return ratio;
+            return position;
         } else {
             return 0.0F;
         }

@@ -28,6 +28,8 @@ import static android.view.MotionEvent.TOOL_TYPE_STYLUS;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY;
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
+import static androidx.appcompat.util.SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_LEFT;
+import static androidx.appcompat.util.SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_RIGHT;
 import static androidx.core.util.Preconditions.checkArgument;
 import static androidx.core.view.ViewCompat.TYPE_NON_TOUCH;
 import static androidx.core.view.ViewCompat.TYPE_TOUCH;
@@ -105,10 +107,8 @@ import androidx.annotation.RestrictTo;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.animation.SeslAnimationUtils;
 import androidx.appcompat.util.SeslMisc;
-import androidx.appcompat.util.SeslRoundedCorner;
 import androidx.appcompat.util.SeslSubheaderRoundedCorner;
 import androidx.core.content.ContextCompat;
-import androidx.core.os.BuildCompat;
 import androidx.core.os.TraceCompat;
 import androidx.core.util.Preconditions;
 import androidx.core.view.AccessibilityDelegateCompat;
@@ -301,7 +301,6 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     private ValueAnimator mGoToTopFadeInAnimator;
     private ValueAnimator mGoToTopFadeOutAnimator;
     private Drawable mGoToTopImage;
-    private Drawable mGoToTopImageLight;
     private final Rect mGoToTopRect = new Rect();
     ImageView mGoToTopView;
     IndexTip mIndexTip;
@@ -396,6 +395,21 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     private boolean mPreventFirstGlow = false;
     private boolean mSizeChnage = false;
     private boolean mUsePagingTouchSlopForStylus = false;
+    private int mSeslOverlayFeatureHeight = 0;
+    private final int[] mHoverScrollArrows = new int[]{
+            SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_UP(),
+            SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_RIGHT(),
+            SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_DOWN(),
+            SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_LEFT()};
+    private float mPointerIconRotation = 0.0f;
+
+    private enum ScrollArrowDirection {
+        UP,
+        RIGHT,
+        DOWN,
+        LEFT
+    }
+
     static {
         LINEAR_INTERPOLATOR = new LinearInterpolator();
     }
@@ -1270,8 +1284,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 resources.getDrawable(androidx.appcompat.R.drawable.sesl_pen_block_selection);
 
         if (context.getTheme().resolveAttribute(androidx.appcompat.R.attr.goToTopStyle, outValue,
-         true)) {
-            mGoToTopImageLight = resources.getDrawable(outValue.resourceId);
+                true)) {
+            mGoToTopImage = resources.getDrawable(outValue.resourceId);
         }
 
         context.getTheme().resolveAttribute(androidx.appcompat.R.attr.roundedCornerColor,
@@ -1285,10 +1299,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         mItemAnimator.setHostView(this);
 
         mRoundedCorner = new SeslSubheaderRoundedCorner(context);
-        mRoundedCorner.setRoundedCorners(SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_LEFT
-                | SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_RIGHT);
-        mRoundedCorner.setRoundedCornerColor(SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_LEFT
-                | SeslRoundedCorner.ROUNDED_CORNER_BOTTOM_RIGHT, mRectColor);
+        mRoundedCorner.setRoundedCorners(ROUNDED_CORNER_BOTTOM_LEFT
+                | ROUNDED_CORNER_BOTTOM_RIGHT);
+        mRoundedCorner.setRoundedCornerColor(ROUNDED_CORNER_BOTTOM_LEFT
+                | ROUNDED_CORNER_BOTTOM_RIGHT, mRectColor);
         //sesl
 
         // Re-set whether nested scrolling is enabled so that it is set on all API levels
@@ -5685,6 +5699,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
         if (changed) {
             mSizeChnage = true;
+            mSeslOverlayFeatureHeight = getResources().getDimensionPixelSize(R.dimen.sesl_recyclerview_overlay_feature_hidden_height);
             seslSetImmersiveScrollBottomPadding(0);
             setupGoToTop(-1);
             autoHide(GTP_STATE_SHOWN);
@@ -5807,7 +5822,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             drawGoToTop();
         }
 
-        if (isTalkBackIsRunning()) {
+        if (!isGoToTopAvailableEnvironment()) {
             if (mGoToTopView != null && mGoToTopView.getAlpha() != 0.0f) {
                 mGoToTopView.setAlpha(0.0f);
             }
@@ -6544,7 +6559,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         }
 
         if (mIndexTipEnabled && mIndexTip != null) {
-            if (mScrollState != SCROLL_STATE_IDLE) {
+            if (mScrollState != SCROLL_STATE_IDLE && getHeight() > mSeslOverlayFeatureHeight) {
                 mIndexTip.show(mScrollState, vresult);
             }
             mIndexTip.invalidate();
@@ -15535,27 +15550,20 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     }
 
     private boolean isSupportGotoTop() {
-        return !isTalkBackIsRunning() && mEnableGoToTop;
+        return isGoToTopAvailableEnvironment() && mEnableGoToTop;
     }
 
-    private boolean isTalkBackIsRunning() {
-        AccessibilityManager accessibilityManager = (AccessibilityManager) getContext()
-                .getSystemService(Context.ACCESSIBILITY_SERVICE);
-        String services = Settings.Secure.getString(getContext().getContentResolver(),
-                "enabled_accessibility_services");
-
-        if (accessibilityManager != null && accessibilityManager.isEnabled() && services != null) {
-            return services.matches("(?i).*com.samsung.accessibility/" +
-                    "com.samsung.android.app.talkback.TalkBackService.*")
-                    ||services.matches("(?i).*com.samsung.android.accessibility.talkback/" +
-                    "com.samsung.android.marvin.talkback.TalkBackService.*")
-                    || services.matches("(?i).*com.google.android.marvin.talkback.TalkBackService"
-                    + ".*")
-                    || services.matches("(?i).*com.samsung.accessibility/" +
-                    "com.samsung.accessibility.universalswitch.UniversalSwitchService.*");
-        }
-
-        return false;
+    private boolean isGoToTopAvailableEnvironment() {
+        String string;
+        AccessibilityManager accessibilityManager = (AccessibilityManager) getContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
+        return (accessibilityManager == null
+                || !accessibilityManager.isEnabled()
+                || (string = Settings.Secure.getString(getContext().getContentResolver(), "enabled_accessibility_services")) == null
+                || !(string.matches("(?i).*com.samsung.accessibility/com.samsung.android.app.talkback.TalkBackService.*")
+                || string.matches("(?i).*com.samsung.android.accessibility.talkback/com.samsung.android.marvin.talkback.TalkBackService.*")
+                || string.matches("(?i).*com.google.android.marvin.talkback.TalkBackService.*")
+                || string.matches("(?i).*com.samsung.accessibility/com.samsung.accessibility.universalswitch.UniversalSwitchService.*")))
+                && getHeight() > mSeslOverlayFeatureHeight;
     }
 
     private void playGotoToFadeOut() {
@@ -15593,7 +15601,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     }
 
     void setupGoToTop(int where) {
-        if (!isTalkBackIsRunning() && mEnableGoToTop) {
+        if (isGoToTopAvailableEnvironment() && mEnableGoToTop) {
             removeCallbacks(mAutoHide);
             if (where == GTP_STATE_SHOWN && !canScrollUp()) {
                 where = GTP_STATE_NONE;
@@ -15750,6 +15758,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     public void seslSetFillBottomColor(@ColorInt int color) {
         mRectPaint.setColor(color);
+        mRoundedCorner.setRoundedCornerColor(ROUNDED_CORNER_BOTTOM_LEFT
+                | ROUNDED_CORNER_BOTTOM_RIGHT, color);
     }
 
     private void runLastItemAddDeleteAnim(View view) {
@@ -16119,14 +16129,18 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     @RequiresApi(Build.VERSION_CODES.N)
     public void seslSetFastScrollerThreshold(float threshold) {
-        if (mFastScroller != null && threshold >= 0) {
-            mFastScroller.setThreshold(threshold);
+        SeslRecyclerViewFastScroller fastScroller = this.mFastScroller;
+        if (fastScroller != null && threshold >= 0) {
+            fastScroller.setThreshold(threshold);
         }
     }
 
     @Override
     public boolean isVerticalScrollBarEnabled() {
-        return !mFastScrollerEnabled && super.isVerticalScrollBarEnabled();
+        SeslRecyclerViewFastScroller fastScroller = this.mFastScroller;
+        return fastScroller != null
+                ? !fastScroller.isEnabled() && super.isVerticalScrollBarEnabled()
+                : super.isVerticalScrollBarEnabled();
     }
 
     @RestrictTo(LIBRARY_GROUP_PREFIX)
@@ -16147,37 +16161,20 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     }
 
     public void seslSetGoToTopEnabled(boolean enable) {
-        seslSetGoToTopEnabled(enable, true);
+        initGoToTop(enable, SeslMisc.isLightTheme(this.mContext));
     }
 
-    public void seslSetGoToTopEnabled(boolean enable, boolean isWhite) {
-        mGoToTopImage = isWhite
-                ? mGoToTopImageLight :
-                 mContext.getResources().getDrawable(androidx.appcompat.R.drawable.sesl_list_go_to_top_dark, mContext.getTheme());
-
+    private void initGoToTop(boolean enable, boolean isLightTheme) {
         if (mGoToTopImage != null) {
             if (enable) {
                 if (mGoToTopView == null) {
                     mGoToTopView = new ImageView(mContext);
-
-                    final boolean isLightTheme = SeslMisc.isLightTheme(mContext);
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        Drawable background;
-                        if (isLightTheme && isWhite) {
-                            background = mContext.getResources().getDrawable(
-                                    R.drawable.sesl_go_to_top_background_light,
-                                     mContext.getTheme());
-                        } else {
-                            background = mContext.getResources().getDrawable(
-                                    R.drawable.sesl_go_to_top_background_dark, mContext.getTheme());
-                        }
-                        mGoToTopView.setBackground(background);
-                        mGoToTopView.setElevation(mGoToTopElevation);
-                    }
-
-                    mGoToTopView.setImageDrawable(mGoToTopImage);
                 }
-
+                mGoToTopView.setBackground(mContext.getResources().getDrawable(isLightTheme
+                                ? R.drawable.sesl_go_to_top_background_light
+                                 : R.drawable.sesl_go_to_top_background_dark,  mContext.getTheme()));
+                mGoToTopView.setElevation(mGoToTopElevation);
+                mGoToTopView.setImageDrawable(mGoToTopImage);
                 mGoToTopView.setAlpha(0.0f);
                 if (!mEnableGoToTop) {
                     getOverlay().add(mGoToTopView);
@@ -16870,6 +16867,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         mIsPenSelectionEnabled = enabled;
     }
 
+    public void seslSetPointerIconRotation(float rotation) {
+        mPointerIconRotation = rotation;
+    }
+
     public void seslSetOnMultiSelectedListener(@Nullable SeslOnMultiSelectedListener listener) {
         mOnMultiSelectedListener = listener;
     }
@@ -17043,11 +17044,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
         if (!mNeedsHoverScroll) return super.dispatchHoverEvent(event);
 
-        final boolean scrollHorizontally = mLayout.canScrollHorizontally();
+        final boolean canScrollHorizontally = mLayout.canScrollHorizontally();
 
         final int hoverPointLeft;
         final int hoverPointTop;
-        if (scrollHorizontally) {
+        if (canScrollHorizontally) {
             hoverPointLeft = (int) event.getY();
             hoverPointTop = (int) event.getX();
         } else {
@@ -17065,7 +17066,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             maxHoverScrollRange = getHeight() - mListPadding.bottom;
         } else {
             mExtraPaddingInBottomHoverArea = 0;
-            if (scrollHorizontally) {
+            if (canScrollHorizontally) {
                 maxHoverScrollRange = getWidth();
             } else {
                 maxHoverScrollRange = getHeight();
@@ -17076,7 +17077,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
         if (!canScroll && count > 0) {
             getDecoratedBoundsWithMargins(getChildAt(count - 1), mChildBound);
-            if (scrollHorizontally) {
+            if (canScrollHorizontally) {
                 if (mChildBound.right > getRight() - mListPadding.right
                         || mChildBound.right > getWidth() - mListPadding.right) {
                     canScroll = true;
@@ -17093,7 +17094,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             if (!canHoverScrollUp) {
                 if (count > 0) {
                     getDecoratedBoundsWithMargins(getChildAt(0), mChildBound);
-                    if (scrollHorizontally) {
+                    if (canScrollHorizontally) {
                         if (mChildBound.left < mListPadding.left) {
                             canHoverScrollUp = true;
                         }
@@ -17116,7 +17117,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         ) {
 
             int hoverScrollEnd;
-            if (scrollHorizontally) {
+            if (canScrollHorizontally) {
                 hoverScrollEnd = getBottom();
             } else {
                 hoverScrollEnd = getRight();
@@ -17151,19 +17152,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
                                 if (!mHoverHandler.hasMessages(0)) {
                                     mHoverRecognitionStartTime = System.currentTimeMillis();
-
                                     if (!mIsHoverOverscrolled || mHoverScrollDirection == HOVERSCROLL_UP) {
-                                        final int pointerIcon;
-                                        if (scrollHorizontally) {
-                                            pointerIcon =
-                                             SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_LEFT();
-                                        } else {
-                                            pointerIcon =
-                                             SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_UP();
-                                        }
-                                        showPointerIcon(event, pointerIcon);
+                                        showPointerIcon(event,  getRotatedArrowPointerIcon(false, canScrollHorizontally));
                                     }
-
                                     mHoverScrollDirection = HOVERSCROLL_DOWN;
                                     mHoverHandler.sendEmptyMessage(0);
                                 }
@@ -17174,10 +17165,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                                     if (!mHoverHandler.hasMessages(0)) {
                                         mHoverRecognitionStartTime = System.currentTimeMillis();
                                         if (!mIsHoverOverscrolled || mHoverScrollDirection == HOVERSCROLL_DOWN) {
-                                            final int pointerIcon = getPointerIcon(scrollHorizontally);
-                                            showPointerIcon(event, pointerIcon);
+                                            showPointerIcon(event, getRotatedArrowPointerIcon(true, canScrollHorizontally));
                                         }
-
                                         mHoverScrollDirection = HOVERSCROLL_UP;
                                         mHoverHandler.sendEmptyMessage(0);
                                     }
@@ -17207,17 +17196,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                             ) {
                                 if (!mHoverHandler.hasMessages(0)) {
                                     mHoverRecognitionStartTime = System.currentTimeMillis();
-
-                                    final int pointerIcon;
-                                    if (scrollHorizontally) {
-                                        pointerIcon =
-                                         SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_LEFT();
-                                    } else {
-                                        pointerIcon =
-                                         SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_UP();
-                                    }
-                                    showPointerIcon(event, pointerIcon);
-
+                                    showPointerIcon(event, getRotatedArrowPointerIcon(false, canScrollHorizontally));
                                     mHoverScrollDirection =  HOVERSCROLL_DOWN;
                                     mHoverHandler.sendEmptyMessage(0);
                                 }
@@ -17228,10 +17207,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                                         && !mHoverHandler.hasMessages(0)
                                 ) {
                                     mHoverRecognitionStartTime = System.currentTimeMillis();
-
-                                    final int pointerIcon = getPointerIcon(scrollHorizontally);
-                                    showPointerIcon(event, pointerIcon);
-
+                                    showPointerIcon(event, getRotatedArrowPointerIcon(true, canScrollHorizontally));
                                     mHoverScrollDirection = HOVERSCROLL_UP;
                                     mHoverHandler.sendEmptyMessage(0);
                                 }
@@ -17291,7 +17267,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 && hoverPointLeft > 0) {
 
             final int hoverScrollEnd;
-            if (scrollHorizontally) {
+            if (canScrollHorizontally) {
                 hoverScrollEnd = getBottom();
             } else {
                 hoverScrollEnd = getRight();
@@ -17326,16 +17302,31 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     }
 
-    private static int getPointerIcon(boolean scrollHorizontally) {
-        final int pointerIcon;
-        if (scrollHorizontally) {
-            pointerIcon =
-             SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_RIGHT();
+    private int getRotatedArrowPointerIcon(boolean isScrollingUp, boolean isHorizontalLayout) {
+        ScrollArrowDirection scrollArrowDirection;
+        if (isScrollingUp) {
+            scrollArrowDirection = isHorizontalLayout
+                    ? ScrollArrowDirection.RIGHT
+                    : ScrollArrowDirection.DOWN;
         } else {
-            pointerIcon =
-             SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_SCROLL_DOWN();
+            scrollArrowDirection = isHorizontalLayout
+                    ? ScrollArrowDirection.LEFT
+                    : ScrollArrowDirection.UP;
         }
-        return pointerIcon;
+        float rotation = mPointerIconRotation;
+        if (rotation == 0.0f) {
+            return mHoverScrollArrows[scrollArrowDirection.ordinal()];
+        }
+        boolean isNegativeRotation = rotation < 0.0f;
+        int adjustedOrdinal = (scrollArrowDirection.ordinal()
+                + (int) ((rotation + (isNegativeRotation ? -45 : 45)) / 90.0f))
+                % 4;
+
+        if (adjustedOrdinal < 0) {
+            adjustedOrdinal += 4;
+        }
+
+        return mHoverScrollArrows[adjustedOrdinal];
     }
 
     public void seslSetSmoothScrollEnabled(boolean enabled) {
@@ -17524,6 +17515,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     if (section < mSections.length
                             && mSections[section] != null) {
                         mText = mSections[section].toString();
+                    }else{
+                        //custom
+                        //mSections is stale; refresh.
+                        mSections = mSectionIndexer.getSections();
                     }
                 }
             }

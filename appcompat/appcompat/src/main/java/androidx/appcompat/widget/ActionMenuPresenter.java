@@ -143,8 +143,8 @@ class ActionMenuPresenter extends BaseMenuPresenter
                 mOverflowButton = new OverflowMenuButton(mSystemContext);
                 mOverflowButton.setId(R.id.sesl_action_bar_overflow_button);//sesl
                 if (mPendingOverflowIconSet) {
-                    if (mUseTextItemMode) {//sesl
-                        ((AppCompatImageView) mOverflowButton.getInnerView()).setImageDrawable(mPendingOverflowIcon);
+                    if (mUseTextItemMode/*sesl*/) {
+                        ((AppCompatImageView) mOverflowButton.getInnerView()/*sesl*/).setImageDrawable(mPendingOverflowIcon);
                     }
                     mPendingOverflowIcon = null;
                     mPendingOverflowIconSet = false;
@@ -217,7 +217,7 @@ class ActionMenuPresenter extends BaseMenuPresenter
     public Drawable getOverflowIcon() {
         if (!mUseTextItemMode) {//sesl
             if (mOverflowButton != null) {
-                return ((AppCompatImageView) mOverflowButton.getInnerView()).getDrawable();
+                return ((AppCompatImageView) mOverflowButton.getInnerView()/*sesl*/).getDrawable();
             } else if (mPendingOverflowIconSet) {
                 return mPendingOverflowIcon;
             }
@@ -431,7 +431,7 @@ class ActionMenuPresenter extends BaseMenuPresenter
 
     @Override
     public boolean onSubMenuSelected(SubMenuBuilder subMenu) {
-        if (subMenu == null || !subMenu.hasVisibleItems()) return false;//sesl
+        if (subMenu == null/*sesl*/ || !subMenu.hasVisibleItems()) return false;
 
         SubMenuBuilder topSubMenu = subMenu;
         while (topSubMenu.getParentMenu() != mMenu) {
@@ -723,13 +723,11 @@ class ActionMenuPresenter extends BaseMenuPresenter
         }
 
         SavedState saved = (SavedState) state;
-        if (saved.openSubMenuId > 0) {
-            if (mMenu != null) {//sesl
-                MenuItem item = mMenu.findItem(saved.openSubMenuId);
-                if (item != null) {
-                    SubMenuBuilder subMenu = (SubMenuBuilder) item.getSubMenu();
-                    onSubMenuSelected(subMenu);
-                }
+        if (saved.openSubMenuId > 0 && mMenu != null /*sesl*/) {
+            MenuItem item = mMenu.findItem(saved.openSubMenuId);
+            if (item != null) {
+                SubMenuBuilder subMenu = (SubMenuBuilder) item.getSubMenu();
+                onSubMenuSelected(subMenu);
             }
         }
     }
@@ -895,6 +893,7 @@ class ActionMenuPresenter extends BaseMenuPresenter
 
             ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mBadgeBackground.getLayoutParams();
             Resources res = getResources();
+            //TODO(cleanup: badgeText passed here is always non-null)
             if (badgeText == null) {
                 nBadge = mNumberFormat.format(badgeCount);
                 float badge_size  = (int)res.getDimension(R.dimen.sesl_badge_default_width);
@@ -1055,7 +1054,6 @@ class ActionMenuPresenter extends BaseMenuPresenter
 
             setText(res.getString(R.string.sesl_more_item_label));
 
-            //Sesl start
             if (SeslMisc.isLightTheme(context)) {
                 setBackgroundResource(R.drawable.sesl_action_bar_item_text_background_light);
             } else {
@@ -1179,8 +1177,7 @@ class ActionMenuPresenter extends BaseMenuPresenter
                 mMenu.changeMenuMode();
             }
             final View menuView = (View) mMenuView;
-            if (menuView != null && menuView.getWindowToken() != null && mPopup.tryShow(0, 0)) {
-                 //sesl
+            if (menuView != null && menuView.getWindowToken() != null && mPopup.tryShow(0, 0 /*sesl*/)) {
                 mOverflowPopup = mPopup;
             }
             mPostedOpenRunnable = null;

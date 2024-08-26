@@ -2093,8 +2093,9 @@ public class Toolbar extends ViewGroup implements MenuHost {
 
         if (shouldLayout(mNavButtonView)) {
             //Sesl
-            if (mNavButtonView.getLayoutDirection() != mNavButtonIconDrawable.getLayoutDirection()) {
-                mNavButtonIconDrawable.setLayoutDirection(mNavButtonView.getLayoutDirection());
+            int navButtonLD = mNavButtonView.getLayoutDirection();
+            if (navButtonLD != DrawableCompat.getLayoutDirection(mNavButtonIconDrawable)) {
+                DrawableCompat.setLayoutDirection(mNavButtonIconDrawable, navButtonLD);
             }
             //sesl
             if (isRtl) {

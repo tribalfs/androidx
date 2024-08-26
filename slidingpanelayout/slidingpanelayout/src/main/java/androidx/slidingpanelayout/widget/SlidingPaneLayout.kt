@@ -2119,9 +2119,31 @@ open class SlidingPaneLayout @JvmOverloads constructor(
             child: View,
             event: AccessibilityEvent
         ): Boolean {
-            return if (!filter(child)) {
-                super.onRequestSendAccessibilityEvent(host, child, event)
-            } else false
+            //Sesl
+            if (currentSlideOffset != 0.0f || mStartMargin >= mSlidingPaneDragArea) {
+                child.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES)
+            } else if (filterDrawerChild(child)) {
+                child.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS)
+            }
+
+            if (filter(child)) return false;
+            //sesl
+            return super.onRequestSendAccessibilityEvent(host, child, event);
+        }
+
+        //sesl
+        private fun filterDrawerChild(view: View): Boolean {
+            if (view == mDrawerPanel) return true
+
+            (mDrawerPanel as? ViewGroup)?.let {
+                val childCount = it.childCount
+                for (i in 0 until childCount) {
+                    if (view == it.getChildAt(i)) {
+                        return true
+                    }
+                }
+            }
+            return false
         }
 
         fun filter(child: View?): Boolean {

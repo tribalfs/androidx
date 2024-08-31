@@ -48,7 +48,7 @@ public class SeslSemWindowManagerReflector {
     }
 
     public static void registerFoldStateListener(@NonNull Object listener, Object handler) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method = SeslBaseReflector.getMethod(mClassName, "registerFoldStateListener", SeslBaseReflector.getClass(mListenerName), Handler.class);
             if (method != null) {
                 SeslBaseReflector.invoke(getInstance(), method, listener, handler);
@@ -57,7 +57,7 @@ public class SeslSemWindowManagerReflector {
     }
 
     public static void unregisterFoldStateListener(@NonNull Object listener) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method = SeslBaseReflector.getMethod(mClassName, "unregisterFoldStateListener", SeslBaseReflector.getClass(mListenerName));
             if (method != null) {
                 SeslBaseReflector.invoke(getInstance(), method, listener);
@@ -66,7 +66,7 @@ public class SeslSemWindowManagerReflector {
     }
 
     public static boolean isTableMode() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method = SeslBaseReflector.getMethod(mClassName, "isTableMode");
             if (method != null) {
                 Object result = SeslBaseReflector.invoke(getInstance(), method);

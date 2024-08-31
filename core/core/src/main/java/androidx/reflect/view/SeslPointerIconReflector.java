@@ -39,7 +39,7 @@ public class SeslPointerIconReflector {
     }
 
     public static int getField_SEM_TYPE_STYLUS_DEFAULT() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Object TYPE_STYLUS_DEFAULT = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -69,7 +69,7 @@ public class SeslPointerIconReflector {
     }
 
     public static int getField_SEM_TYPE_STYLUS_SCROLL_UP() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Object TYPE_STYLUS_SCROLL_UP = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -99,7 +99,7 @@ public class SeslPointerIconReflector {
     }
 
     public static int getField_SEM_TYPE_STYLUS_SCROLL_DOWN() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Object TYPE_STYLUS_SCROLL_DOWN = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -129,7 +129,7 @@ public class SeslPointerIconReflector {
     }
 
     public static int getField_SEM_TYPE_STYLUS_SCROLL_LEFT() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Object TYPE_STYLUS_SCROLL_LEFT = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -159,7 +159,7 @@ public class SeslPointerIconReflector {
     }
 
     public static int getField_SEM_TYPE_STYLUS_SCROLL_RIGHT() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Object TYPE_STYLUS_SCROLL_RIGHT = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -189,7 +189,7 @@ public class SeslPointerIconReflector {
     }
 
     public static int getField_SEM_TYPE_STYLUS_PEN_SELECT() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Object TYPE_STYLUS_PEN_SELECT = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -219,7 +219,7 @@ public class SeslPointerIconReflector {
     }
 
     public static int getField_SEM_TYPE_STYLUS_MORE() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Object TYPE_STYLUS_MORE = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

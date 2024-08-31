@@ -39,7 +39,7 @@ public class SeslHapticFeedbackConstantsReflector {
     }
 
     public static int semGetVibrationIndex(int index) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semGetVibrationIndex", Integer.TYPE);

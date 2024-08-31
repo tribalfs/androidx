@@ -1727,7 +1727,7 @@ public abstract class SeslAbsSeekBar extends SeslProgressBar {
 
         if (fromUser && mCurrentMode == MODE_LEVEL_BAR) {
             int hapticFeedback;
-            if (DeviceInfo.isSamsung()) {
+            if (DeviceInfo.isOneUI()) {
                 hapticFeedback = SeslHapticFeedbackConstantsReflector.semGetVibrationIndex(41);
             } else {
                 //custom added for non-oneui

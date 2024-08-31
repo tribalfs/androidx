@@ -125,7 +125,7 @@ public class SeslViewReflector {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
             method = SeslBaseReflector.getMethod(mClass, "notifyViewAccessibilityStateChangedIfNeeded", Integer.TYPE);
         } else {
-            if (DeviceInfo.isSamsung()) {
+            if (DeviceInfo.isOneUI()) {
                 method = SeslBaseReflector.getMethod(mClass, "hidden_notifyViewAccessibilityStateChangedIfNeeded", Integer.TYPE);
             }else{
                return;
@@ -154,7 +154,7 @@ public class SeslViewReflector {
     }
 
     public static int semGetHoverPopupType(@NonNull View view) {
-        if (DeviceInfo.isSamsung() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (DeviceInfo.isOneUI() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Method method = SeslBaseReflector.getMethod(mClass, "semGetHoverPopupType");
             if (method != null) {
                 Object result = SeslBaseReflector.invoke(view, method);
@@ -176,7 +176,7 @@ public class SeslViewReflector {
     }
 
     public static void semSetHoverPopupType(@NonNull View view, int type) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetHoverPopupType", Integer.TYPE);
@@ -193,7 +193,7 @@ public class SeslViewReflector {
     }
 
     public static void semSetDirectPenInputEnabled(@NonNull View view, boolean enabled) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetDirectPenInputEnabled", Boolean.TYPE);
@@ -222,7 +222,7 @@ public class SeslViewReflector {
     }
 
     public static void semSetBlurInfo(@NonNull View view, @Nullable Object blurInfo) {
-        if ( DeviceInfo.isSamsung() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if ( DeviceInfo.isOneUI() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             try {
                 Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetBlurInfo", Class.forName("android.view.SemBlurInfo"));
                 if (method != null) {
@@ -235,7 +235,7 @@ public class SeslViewReflector {
     }
 
     public static void semSetPointerIcon(@NonNull View view, int toolType, PointerIcon pointerIcon) {
-        if ( DeviceInfo.isSamsung()) {
+        if ( DeviceInfo.isOneUI()) {
             Method method = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semSetPointerIcon", Integer.TYPE, PointerIcon.class);
@@ -250,7 +250,7 @@ public class SeslViewReflector {
     }
 
     public static boolean isHighContrastTextEnabled(@NonNull View view) {
-        if (DeviceInfo.isSamsung() ) {
+        if (DeviceInfo.isOneUI() ) {
             String methodName;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 methodName = "semIsHighContrastTextEnabled";
@@ -271,7 +271,7 @@ public class SeslViewReflector {
     }
 
     public static Object semGetHoverPopup(@NonNull View view, boolean createIfNotExist) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semGetHoverPopup", Boolean.TYPE);
                 if (method != null) {
@@ -298,7 +298,7 @@ public class SeslViewReflector {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
             method = SeslBaseReflector.getDeclaredMethod(mClass, "resolvePadding");
         } else {
-            if (DeviceInfo.isSamsung()) {
+            if (DeviceInfo.isOneUI()) {
                 method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_resolvePadding");
             }else{
                 return;

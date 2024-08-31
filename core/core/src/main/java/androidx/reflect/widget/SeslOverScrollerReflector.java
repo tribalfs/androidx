@@ -17,7 +17,7 @@
 package androidx.reflect.widget;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
-import static androidx.reflect.DeviceInfo.isSamsung;
+import static androidx.reflect.DeviceInfo.isOneUI;
 
 import android.os.Build;
 import android.widget.OverScroller;
@@ -40,7 +40,7 @@ public class SeslOverScrollerReflector {
     }
 
     public static void fling(@NonNull OverScroller overScroller, int startX, int startY, int velocityX, int velocityY, int minX, int maxX, int minY, int maxY, boolean isSkipMove, float frameLatencyY) {
-        if (isSamsung() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (isOneUI() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_fling", Integer.TYPE, Integer.TYPE, Boolean.TYPE, Float.TYPE);
             if (method != null) {
                 SeslBaseReflector.invoke(overScroller, method, velocityX, velocityY, isSkipMove, frameLatencyY);
@@ -52,7 +52,7 @@ public class SeslOverScrollerReflector {
     }
 
     public static void fling2(@NonNull OverScroller overScroller, int startX, int startY, int velocityX, int velocityY, int minX, int maxX, int minY, int maxY, boolean isSkipMove) {
-        if (isSamsung() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (isOneUI() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_fling", Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE, Boolean.TYPE);
             if (method != null) {
                 SeslBaseReflector.invoke(overScroller, method, startX, startY, velocityX, velocityY, minX, maxX, minY, maxY, isSkipMove);
@@ -64,7 +64,7 @@ public class SeslOverScrollerReflector {
     }
 
     public static void setSmoothScrollEnabled(@NonNull OverScroller overScroller, boolean enabled) {
-        if (isSamsung() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (isOneUI() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Method method = SeslBaseReflector.getDeclaredMethod(mClass, "semSetSmoothScrollEnabled", Boolean.TYPE);
             if (method != null) {
                 SeslBaseReflector.invoke(overScroller, method, enabled);

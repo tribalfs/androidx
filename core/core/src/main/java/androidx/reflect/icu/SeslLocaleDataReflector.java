@@ -47,7 +47,7 @@ public class SeslLocaleDataReflector {
 
     public static Object get(@NonNull Locale locale) {
         Method method;
-        if (DeviceInfo.isSamsung() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (DeviceInfo.isOneUI() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             method = SeslBaseReflector.getDeclaredMethod(mSemClassName, "get", Locale.class);
         } else {
             method = SeslBaseReflector.getMethod(mClassName, "get", Locale.class);

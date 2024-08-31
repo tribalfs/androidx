@@ -41,7 +41,7 @@ public class SeslConfigurationReflector {
     }
 
     public static boolean isDexEnabled(@NonNull Configuration configuration) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             return getField_semDesktopModeEnabled(configuration) == getField_SEM_DESKTOP_MODE_ENABLED();
         }else{
             return false;

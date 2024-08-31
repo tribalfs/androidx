@@ -40,7 +40,7 @@ public class SeslHorizontalScrollViewReflector {
     }
 
     public static void setTouchSlop(@NonNull HorizontalScrollView scrollView, int touchSlop) {
-        if (DeviceInfo.isSamsung() &&  Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (DeviceInfo.isOneUI() &&  Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_setTouchSlop", Integer.TYPE);
             if (method != null) {
                 SeslBaseReflector.invoke(scrollView, method, touchSlop);

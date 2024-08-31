@@ -44,7 +44,7 @@ public class SeslSemBlurInfoReflector {
     }
 
     public static Object semCreateBlurBuilder(int blurMode) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Constructor<?> constructor = SeslBaseReflector.getConstructor(mBuilderClass, Integer.TYPE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (constructor != null) {
@@ -65,7 +65,7 @@ public class SeslSemBlurInfoReflector {
     }
 
     public static Object semSetBuilderBlurRadius(Object builder, int radius) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 method = SeslBaseReflector.getDeclaredMethod(mBuilderClass, "hidden_setRadius", Integer.TYPE);
@@ -82,7 +82,7 @@ public class SeslSemBlurInfoReflector {
     }
 
     public static Object semSetBuilderBlurBackgroundColor(Object builder, int color) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 method = SeslBaseReflector.getDeclaredMethod(mBuilderClass, "hidden_setBackgroundColor", Integer.TYPE);
@@ -99,7 +99,7 @@ public class SeslSemBlurInfoReflector {
     }
 
     public static Object semSetBuilderBlurBackgroundCornerRadius(Object builder, float cornerRadius) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 method = SeslBaseReflector.getDeclaredMethod(mBuilderClass, "hidden_setBackgroundCornerRadius", Float.TYPE);
@@ -116,7 +116,7 @@ public class SeslSemBlurInfoReflector {
     }
 
     public static void semBuildSetBlurInfo(Object builder, @NonNull View view) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 method = SeslBaseReflector.getDeclaredMethod(mBuilderClass, "hidden_build");

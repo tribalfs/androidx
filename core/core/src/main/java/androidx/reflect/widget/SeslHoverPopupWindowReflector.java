@@ -48,7 +48,7 @@ public class SeslHoverPopupWindowReflector {
     }
 
     public static int getField_TYPE_NONE() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Object TYPE_NONE = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -71,7 +71,7 @@ public class SeslHoverPopupWindowReflector {
     }
 
     public static int getField_TYPE_TOOLTIP() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Object TYPE_TOOLTIP = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -94,7 +94,7 @@ public class SeslHoverPopupWindowReflector {
     }
 
     public static int getField_TYPE_USER_CUSTOM() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Object TYPE_USER_CUSTOM = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -117,7 +117,7 @@ public class SeslHoverPopupWindowReflector {
     }
 
     public static void setGravity(@NonNull Object hoverPopupWindow, int gravity) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 method = SeslBaseReflector.getDeclaredMethod(mClassName, "hidden_setGravity", Integer.TYPE);
@@ -134,7 +134,7 @@ public class SeslHoverPopupWindowReflector {
     }
 
     public static void setOffset(@NonNull Object hoverPopupWindow, int x, int y) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 method = SeslBaseReflector.getDeclaredMethod(mClassName, "hidden_setOffset", Integer.TYPE, Integer.TYPE);
@@ -151,7 +151,7 @@ public class SeslHoverPopupWindowReflector {
     }
 
     public static void setHoverDetectTime(@NonNull Object hoverPopupWindow, int ms) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 method = SeslBaseReflector.getDeclaredMethod(mClassName, "hidden_setHoverDetectTime", Integer.TYPE);
@@ -166,7 +166,7 @@ public class SeslHoverPopupWindowReflector {
     }
 
     public static void setHoveringPoint(@NonNull Object hoverPopupWindow, int x, int y) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method = SeslBaseReflector.getMethod(mClassName, "setHoveringPoint", Integer.TYPE, Integer.TYPE);
             if (method != null) {
                 SeslBaseReflector.invoke(hoverPopupWindow, method, x, y);
@@ -175,7 +175,7 @@ public class SeslHoverPopupWindowReflector {
     }
 
     public static void update(@NonNull Object hoverPopupWindow) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 method = SeslBaseReflector.getMethod(mClassName, "hidden_update");

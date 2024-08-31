@@ -17,7 +17,7 @@
 package androidx.reflect.widget;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
-import static androidx.reflect.DeviceInfo.isSamsung;
+import static androidx.reflect.DeviceInfo.isOneUI;
 
 import android.os.Build;
 import android.widget.AbsListView;
@@ -42,7 +42,7 @@ public class SeslAbsListViewReflector {
     }
 
     public static EdgeEffect getField_mEdgeGlowTop(@NonNull AbsListView listView) {
-        if (isSamsung()) {
+        if (isOneUI()) {
             Object edgeGlowTop = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -66,7 +66,7 @@ public class SeslAbsListViewReflector {
     }
 
     public static void setField_mEdgeGlowTop(@NonNull AbsListView listView, EdgeEffect edgeEffect) {
-        if (isSamsung()) {
+        if (isOneUI()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_mEdgeGlowTop", EdgeEffect.class);
                 if (method != null) {
@@ -82,7 +82,7 @@ public class SeslAbsListViewReflector {
     }
 
     public static void setField_mEdgeGlowBottom(@NonNull AbsListView listView, EdgeEffect edgeEffect) {
-        if (isSamsung()) {
+        if (isOneUI()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_mEdgeGlowBottom", EdgeEffect.class);
                 if (method != null) {

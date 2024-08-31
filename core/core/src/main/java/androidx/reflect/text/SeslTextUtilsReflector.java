@@ -46,7 +46,7 @@ public class SeslTextUtilsReflector {
      * Calls <b>TextUtils.semGetPrefixCharForSpan(TextPaint, CharSequence, char[])</b>.
      */
     public static char[] semGetPrefixCharForSpan(TextPaint paint, CharSequence text, char[] prefix) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_semGetPrefixCharForSpan", TextPaint.class, CharSequence.class, char[].class);

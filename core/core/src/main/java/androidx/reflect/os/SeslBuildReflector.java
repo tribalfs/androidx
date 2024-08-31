@@ -43,7 +43,7 @@ public class SeslBuildReflector {
         }
 
         public static int getField_SEM_PLATFORM_INT() {
-            if (DeviceInfo.isSamsung()) {
+            if (DeviceInfo.isOneUI()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     Field field = SeslBaseReflector.getDeclaredField(mClass, "SEM_PLATFORM_INT");
                     if (field != null) {

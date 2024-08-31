@@ -19,6 +19,7 @@ package androidx.reflect.media;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Constructor;
@@ -50,6 +51,7 @@ public class SeslSemSoundAssistantManagerReflector {
     }
 
     public static void setFastAudioOpenMode(Context context, boolean mode) {
+        if (!DeviceInfo.isOneUI()) return;
         Method method = SeslBaseReflector.getDeclaredMethod(mClassName, "setFastAudioOpenMode", Boolean.TYPE);
         Object semSoundAssistantManager = getInstance(context);
         if (method != null && semSoundAssistantManager != null) {

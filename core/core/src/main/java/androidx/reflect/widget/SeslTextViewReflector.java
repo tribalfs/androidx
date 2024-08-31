@@ -16,7 +16,7 @@
 
 package androidx.reflect.widget;
 
-import static androidx.reflect.DeviceInfo.isSamsung;
+import static androidx.reflect.DeviceInfo.isOneUI;
 
 import android.os.Build;
 import android.widget.TextView;
@@ -38,7 +38,7 @@ public class SeslTextViewReflector {
     }
 
     public static void semSetActionModeMenuItemEnabled(@NonNull TextView textView, int menuId, boolean enabled) {
-        if (isSamsung()) {
+        if (isOneUI()) {
             Method method;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -56,7 +56,7 @@ public class SeslTextViewReflector {
     }
 
     public static int getField_SEM_AUTOFILL_ID() {
-        if (isSamsung()) {
+        if (isOneUI()) {
             Object SEM_AUTOFILL_ID = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -92,7 +92,7 @@ public class SeslTextViewReflector {
     }
 
     public static boolean semIsTextSelectionProgressing() {
-        if (isSamsung()) {
+        if (isOneUI()) {
             Method method = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -112,7 +112,7 @@ public class SeslTextViewReflector {
     }
 
     public static boolean semIsTextViewHovered() {
-        if (isSamsung()) {
+        if (isOneUI()) {
             Method method = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -132,7 +132,7 @@ public class SeslTextViewReflector {
     }
 
     public static void semSetButtonShapeEnabled(@NonNull TextView textView, boolean enabled) {
-        if (isSamsung()) {
+        if (isOneUI()) {
             Method method = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -148,7 +148,7 @@ public class SeslTextViewReflector {
     }
 
     public static void semSetButtonShapeEnabled(@NonNull TextView textView, boolean enabled, int textColor) {
-        if (isSamsung()) {
+        if (isOneUI()) {
             Method method = null;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

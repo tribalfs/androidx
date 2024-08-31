@@ -34,7 +34,7 @@ public class SeslAccessibilityManagerReflector {
     }
 
     public static boolean isScreenReaderEnabled(AccessibilityManager accessibilityManager, boolean defaultValue) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method = SeslBaseReflector.getDeclaredMethod(mClassName, "semIsScreenReaderEnabled");
             if (method != null && accessibilityManager != null) {
                 return (Boolean) SeslBaseReflector.invoke(accessibilityManager, method);

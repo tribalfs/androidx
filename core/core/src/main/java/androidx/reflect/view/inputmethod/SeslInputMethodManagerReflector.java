@@ -38,7 +38,7 @@ public class SeslInputMethodManagerReflector {
     }
 
     public static int isAccessoryKeyboardState(InputMethodManager imm) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method = SeslBaseReflector.getMethod(mClass, "isAccessoryKeyboardState");
             if (method != null) {
                 Object result = SeslBaseReflector.invoke(imm, method);
@@ -51,7 +51,7 @@ public class SeslInputMethodManagerReflector {
     }
 
     public static boolean isInputMethodShown(InputMethodManager imm) {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method = SeslBaseReflector.getMethod(mClass, "semIsInputMethodShown");
             if (method != null) {
                 Object result = SeslBaseReflector.invoke(imm, method);

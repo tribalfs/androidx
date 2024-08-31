@@ -16,11 +16,14 @@
 
 package androidx.reflect.media;
 
+import static android.media.AudioManager.FX_KEY_CLICK;
+
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 import android.media.AudioManager;
 
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Field;
@@ -37,38 +40,41 @@ public class SeslAudioManagerReflector {
     }
 
     public static int getField_SOUND_TIME_PICKER_SCROLL() {
-        Field SOUND_TIME_PICKER_SCROLL = SeslBaseReflector.getField(mClass, "SOUND_TIME_PICKER_SCROLL");
-        if (SOUND_TIME_PICKER_SCROLL != null) {
-            Object obj = SeslBaseReflector.get(null, SOUND_TIME_PICKER_SCROLL);
-            if (obj instanceof Integer) {
-                return (Integer) obj;
+        if (DeviceInfo.isOneUI()) {
+            Field SOUND_TIME_PICKER_SCROLL = SeslBaseReflector.getField(mClass, "SOUND_TIME_PICKER_SCROLL");
+            if (SOUND_TIME_PICKER_SCROLL != null) {
+                Object obj = SeslBaseReflector.get(null, SOUND_TIME_PICKER_SCROLL);
+                if (obj instanceof Integer) {
+                    return (Integer) obj;
+                }
             }
         }
-
-        return 0;
+        return FX_KEY_CLICK;
     }
 
     public static int getField_SOUND_TIME_PICKER_SCROLL_FAST() {
-        Field SOUND_TIME_PICKER_FAST = SeslBaseReflector.getField(mClass, "SOUND_TIME_PICKER_FAST");
-        if (SOUND_TIME_PICKER_FAST != null) {
-            Object obj = SeslBaseReflector.get(null, SOUND_TIME_PICKER_FAST);
-            if (obj instanceof Integer) {
-                return (Integer) obj;
+        if (DeviceInfo.isOneUI()) {
+            Field SOUND_TIME_PICKER_FAST = SeslBaseReflector.getField(mClass, "SOUND_TIME_PICKER_FAST");
+            if (SOUND_TIME_PICKER_FAST != null) {
+                Object obj = SeslBaseReflector.get(null, SOUND_TIME_PICKER_FAST);
+                if (obj instanceof Integer) {
+                    return (Integer) obj;
+                }
             }
         }
-
-        return 0;
+        return FX_KEY_CLICK;
     }
 
     public static int getField_SOUND_TIME_PICKER_SCROLL_SLOW() {
-        Field SOUND_TIME_PICKER_SLOW = SeslBaseReflector.getField(mClass, "SOUND_TIME_PICKER_SLOW");
-        if (SOUND_TIME_PICKER_SLOW != null) {
-            Object obj = SeslBaseReflector.get(null, SOUND_TIME_PICKER_SLOW);
-            if (obj instanceof Integer) {
-                return (Integer) obj;
+        if (DeviceInfo.isOneUI()) {
+            Field SOUND_TIME_PICKER_SLOW = SeslBaseReflector.getField(mClass, "SOUND_TIME_PICKER_SLOW");
+            if (SOUND_TIME_PICKER_SLOW != null) {
+                Object obj = SeslBaseReflector.get(null, SOUND_TIME_PICKER_SLOW);
+                if (obj instanceof Integer) {
+                    return (Integer) obj;
+                }
             }
         }
-
-        return 0;
+        return FX_KEY_CLICK;
     }
 }

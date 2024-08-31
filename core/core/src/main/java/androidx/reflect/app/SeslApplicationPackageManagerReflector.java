@@ -17,7 +17,7 @@
 package androidx.reflect.app;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
-import static androidx.reflect.DeviceInfo.isSamsung;
+import static androidx.reflect.DeviceInfo.isOneUI;
 
 import android.content.ComponentName;
 import android.graphics.drawable.Drawable;
@@ -40,7 +40,7 @@ public class SeslApplicationPackageManagerReflector {
     }
 
     public static Drawable semGetApplicationIconForIconTray(@NonNull Object instance, String packageName, int mode) {
-        if (isSamsung()) {
+        if (isOneUI()) {
             Method method = SeslBaseReflector.getMethod(mClassName, "semGetApplicationIconForIconTray", String.class, Integer.TYPE);
 
             if (method != null) {
@@ -54,7 +54,7 @@ public class SeslApplicationPackageManagerReflector {
     }
 
     public static Drawable semGetActivityIconForIconTray(@NonNull Object instance, ComponentName activityName, int mode) {
-        if (isSamsung()) {
+        if (isOneUI()) {
             Method method = SeslBaseReflector.getMethod(mClassName, "semGetActivityIconForIconTray", ComponentName.class, Integer.TYPE);
 
             if (method != null) {

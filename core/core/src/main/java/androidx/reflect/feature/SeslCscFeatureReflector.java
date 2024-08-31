@@ -21,6 +21,7 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 import android.os.Build;
 
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Method;
@@ -59,6 +60,8 @@ public class SeslCscFeatureReflector {
     }
 
     public static String getString(String tag, String defaultValue) {
+        if (!DeviceInfo.isOneUI()) return defaultValue;
+
         Object result = null;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

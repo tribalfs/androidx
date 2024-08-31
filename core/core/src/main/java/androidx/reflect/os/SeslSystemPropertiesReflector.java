@@ -21,6 +21,7 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 import android.os.Build;
 
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 import androidx.reflect.SeslBaseReflector;
 
 import java.lang.reflect.Method;
@@ -37,6 +38,7 @@ public class SeslSystemPropertiesReflector {
     }
 
     public static String getStringProperties(String key) {
+        if (!DeviceInfo.isOneUI()) return null;
         Method method;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             method = SeslBaseReflector.getDeclaredMethod(mClassName, "get", String.class);
@@ -55,6 +57,7 @@ public class SeslSystemPropertiesReflector {
     }
 
     public static String getSalesCode() {
+        if (!DeviceInfo.isOneUI()) return null;
         Method method;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             method = SeslBaseReflector.getDeclaredMethod(mClassName, "getSalesCode");

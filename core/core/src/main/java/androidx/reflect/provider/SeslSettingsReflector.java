@@ -45,8 +45,8 @@ public class SeslSettingsReflector {
         }
 
         public static String getField_SEM_PEN_HOVERING() {
-            Object PEN_HOVERING = null;
-            if (DeviceInfo.isSamsung()) {
+            if (DeviceInfo.isOneUI()) {
+                Object PEN_HOVERING = null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_SEM_PEN_HOVERING");
                     if (method != null) {
@@ -65,31 +65,31 @@ public class SeslSettingsReflector {
                         PEN_HOVERING = SeslBaseReflector.get(null, field);
                     }
                 }
+                if (PEN_HOVERING instanceof String) {
+                    return (String) PEN_HOVERING;
+                }
             }
-            if (PEN_HOVERING instanceof String) {
-                return (String) PEN_HOVERING;
-            } else {
-                return "pen_hovering";
-            }
+            return "pen_hovering";
         }
 
         public static String getField_SEM_ACCESSIBILITY_REDUCE_TRANSPARENCY() {
-            Object result = null;
+            if (DeviceInfo.isOneUI()) {
+                Object result = null;
 
-            if (DeviceInfo.isSamsung()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    Method method = SeslBaseReflector.getDeclaredMethod(mClass, "hidden_SEM_ACCESSIBILITY_REDUCE_TRANSPARENCY");
+                    Method method = SeslBaseReflector.getDeclaredMethod(mClass,
+                            "hidden_SEM_ACCESSIBILITY_REDUCE_TRANSPARENCY");
                     if (method != null) {
                         result = SeslBaseReflector.invoke(null, method);
                     }
                 }
-            }
 
-            if (result instanceof String) {
-                return (String) result;
-            } else {
-                return "not_supported";
+                if (result instanceof String) {
+                    return (String) result;
+                }
             }
+            return "not_supported";
+
         }
     }
 

@@ -32,7 +32,7 @@ public class SeslViewRuneReflector {
     }
 
     public static boolean supportFoldableDualDisplay() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method = SeslBaseReflector.getMethod(mClassName, "hidden_supportFoldableDualDisplay");
 
             Object result = null;
@@ -49,7 +49,7 @@ public class SeslViewRuneReflector {
     }
 
     public static boolean supportFoldableNoSubDisplay() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method = SeslBaseReflector.getMethod(mClassName, "hidden_supportFoldableNoSubDisplay");
 
             Object result = null;
@@ -66,7 +66,7 @@ public class SeslViewRuneReflector {
     }
 
     public static boolean isEdgeEffectStretchType() {
-        if (DeviceInfo.isSamsung()) {
+        if (DeviceInfo.isOneUI()) {
             Method method = SeslBaseReflector.getMethod(mClassName, "hidden_isEdgeEffectStretchType");
 
             Object result = null;

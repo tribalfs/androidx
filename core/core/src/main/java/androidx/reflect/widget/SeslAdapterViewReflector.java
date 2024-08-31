@@ -17,7 +17,7 @@
 package androidx.reflect.widget;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
-import static androidx.reflect.DeviceInfo.isSamsung;
+import static androidx.reflect.DeviceInfo.isOneUI;
 
 import android.os.Build;
 import android.widget.AdapterView;
@@ -42,7 +42,7 @@ public class SeslAdapterViewReflector {
     }
 
     public static void semSetBottomColor(@NonNull AdapterView adapterView, @ColorInt int color) {
-        if (isSamsung()) {
+        if (isOneUI()) {
             String methodName = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 methodName = "hidden_semSetBottomColor";

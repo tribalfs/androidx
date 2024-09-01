@@ -41,4 +41,20 @@ __pycache__
 # Don't ignore src files under build package
 !**/src/**/build
 
+# Exclude non-sesl modules
+camera
+activity
+appsearch
+browser
+cardview
+exifinterface
+input
+lifecycle
+print
+profileinstaller
+sqlite
+tracing
+webkit
+work
+
 github.properties

@@ -12,10 +12,9 @@
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
-     limitations under the License.
--->
-<!-- Original code by Samsung, all rights reserved to the original author. -->
-<resources>
+     limitations under the License. -->
+<!-- Original code by Samsung, all rights reserved to the original author. --><resources>
+
     <style name="Base.V7.Widget.AppCompat.EditText" parent="@android:style/Widget.EditText">
         <item name="android:textSize">@dimen/sesl_edit_text_size</item>
         <item name="android:textColor">@color/sesl_edit_text_dark</item>
@@ -32,12 +31,12 @@
         <item name="android:textSize">@dimen/sesl_dialog_button_text_size</item>
         <item name="android:textColor">@color/sesl_dialog_button_text_color_dark</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:background">@drawable/sesl_dialog_btn_default_borderless</item>
+        <item name="android:background">@drawable/sesl_dialog_btn_default_borderless_recoil_background_dark</item>
         <item name="android:minWidth">@dimen/sesl_dialog_button_min_width</item>
         <item name="android:minHeight">@dimen/sesl_dialog_button_min_height</item>
         <item name="android:singleLine">true</item>
         <item name="android:fontFamily">sec</item>
-        <item name="android:stateListAnimator">@drawable/sesl_dialog_button_disabled_anim</item>
+        <item name="android:stateListAnimator">@animator/sesl_recoil_dialog_button_selector</item>
         <item name="android:textFontWeight">600</item>
         <item name="textAllCaps">false</item>
     </style>
@@ -46,12 +45,12 @@
         <item name="android:textSize">@dimen/sesl_dialog_button_text_size</item>
         <item name="android:textColor">@color/sesl_dialog_button_text_color_light</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:background">@drawable/sesl_dialog_btn_default_borderless</item>
+        <item name="android:background">@drawable/sesl_dialog_btn_default_borderless_recoil_background_light</item>
         <item name="android:minWidth">@dimen/sesl_dialog_button_min_width</item>
         <item name="android:minHeight">@dimen/sesl_dialog_button_min_height</item>
         <item name="android:singleLine">true</item>
         <item name="android:fontFamily">sec</item>
-        <item name="android:stateListAnimator">@drawable/sesl_dialog_button_disabled_anim</item>
+        <item name="android:stateListAnimator">@animator/sesl_recoil_dialog_button_selector</item>
         <item name="android:textFontWeight">600</item>
         <item name="textAllCaps">false</item>
     </style>

@@ -65,4 +65,8 @@
     <string name="sesl_switchbar_on_text">Włączone</string>
     <string name="sesl_switch_off">Wyłączone</string>
     <string name="sesl_switch_on">Włączone</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Odrzuć sugestię</string>
+    <string name="sesl_appbar_suggest_pagination">Strona %1$d z %2$d</string>
+    <!--sesl7-->
 </resources>

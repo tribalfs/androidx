@@ -46,6 +46,7 @@ import androidx.core.internal.view.SupportMenuItem;
 import androidx.core.view.ActionProvider;
 
 /**
+ * <p><b>SESL variant</b></p><br>
  */
 @RestrictTo(LIBRARY_GROUP_PREFIX)
 public final class MenuItemImpl implements SupportMenuItem, SeslMenuItem {
@@ -67,6 +68,8 @@ public final class MenuItemImpl implements SupportMenuItem, SeslMenuItem {
     private int mShortcutNumericModifiers = KeyEvent.META_CTRL_ON;
     private char mShortcutAlphabeticChar;
     private int mShortcutAlphabeticModifiers = KeyEvent.META_CTRL_ON;
+
+    private int mSeslNaviMenuItemType;//sesl7
 
     /** The icon's drawable which is only created as needed */
     private Drawable mIconDrawable;
@@ -914,11 +917,40 @@ public final class MenuItemImpl implements SupportMenuItem, SeslMenuItem {
     }
 
     @Override
-    public void setBadgeText(@Nullable String text) {
-        if (mBadgeText == null || !mBadgeText.equals(text)) {
-            mBadgeText = text;
+    public void setBadgeText(@Nullable String badgeText) {
+        if (mBadgeText == null || !mBadgeText.equals(badgeText)) {
+            mBadgeText = badgeText;
             mMenu.onItemsChanged(false);
         }
     }
     //sesl
+
+    //Sesl7
+    /**
+     * Sets the navigation menu item type of this menu item.
+     *
+     * @param itemType Set either {@link androidx.core.view.MenuItemCompat#SESL_MENU_ITEM_TYPE_NONE SESL_MENU_ITEM_TYPE_NONE}
+     *                or {@link androidx.core.view.MenuItemCompat#SESL_MENU_ITEM_TYPE_CHECKBOX SESL_MENU_ITEM_TYPE_CHECKBOX}
+     * @return This menu item for call chaining
+     * @see #getSeslNaviMenuItemType
+     */
+    @NonNull
+    @Override
+    public MenuItemImpl setSeslNaviMenuItemType(int itemType) {
+        mSeslNaviMenuItemType = itemType;
+        mMenu.onItemsChanged(false);
+        return this;
+    }
+
+    /**
+     * Gets the navigation menu item type of this menu item.
+     * @return Either {@link androidx.core.view.MenuItemCompat#SESL_MENU_ITEM_TYPE_NONE SESL_MENU_ITEM_TYPE_NONE}
+     * or {@link androidx.core.view.MenuItemCompat#SESL_MENU_ITEM_TYPE_CHECKBOX SESL_MENU_ITEM_TYPE_CHECKBOX}
+     * @see #setSeslNaviMenuItemType
+     */
+    @Override
+    public int getSeslNaviMenuItemType() {
+        return this.mSeslNaviMenuItemType;
+    }
+    //sesl7
 }

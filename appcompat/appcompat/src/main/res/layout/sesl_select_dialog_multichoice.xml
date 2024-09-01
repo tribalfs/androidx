@@ -22,10 +22,10 @@
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
     android:gravity="center_vertical"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:minHeight="?android:listPreferredItemHeightSmall"
     android:paddingStart="@dimen/sesl_select_dialog_single_multi_item_padding_start"
     android:paddingTop="@dimen/sesl_select_dialog_item_padding_vertical"
     android:paddingBottom="@dimen/sesl_select_dialog_item_padding_vertical"
     android:textAppearance="?attr/textAppearanceListItem"
-    android:drawableStart="?android:attr/listChoiceIndicatorMultiple"
+    android:drawableStart="?android:listChoiceIndicatorMultiple"
     android:drawablePadding="@dimen/sesl_checked_text_padding"/>

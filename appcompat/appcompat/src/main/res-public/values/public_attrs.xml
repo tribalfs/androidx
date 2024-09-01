@@ -266,11 +266,21 @@
      <public type="attr" name="trackTint"/>
      <public type="attr" name="trackTintMode"/>
      <public type="attr" name="useDisabledAlpha"/>
-     <public type="attr" name="useDisabledAlpha"/>
      <public type="attr" name="voiceIcon"/>
      <public type="attr" name="windowActionBar"/>
      <public type="attr" name="windowActionBarOverlay"/>
      <public type="attr" name="windowActionModeOverlay"/>
      <public type="attr" name="windowNoTitle"/>
      <public type="attr" name="emojiCompatEnabled"/>
+     <!--Sesl7-->
+     <public type="attr" name="seslLayoutRoundedCorner"/>
+     <public type="attr" name="seslPrefDrawerWidthSize"/>
+     <public type="attr" name="seslRecoilColor"/>
+     <public type="attr" name="seslRecoilMask"/>
+     <public type="attr" name="seslRecoilRadius"/>
+     <public type="attr" name="seslNaviMenuItemType"/>
+     <public type="attr" name="seslLargeTouchAnimator"/>
+     <public type="attr" name="seslMediumTouchAnimator"/>
+     <!--sesl7-->
+
 </resources>

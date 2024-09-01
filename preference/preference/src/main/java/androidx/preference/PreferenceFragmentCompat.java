@@ -16,8 +16,9 @@
 
 package androidx.preference;
 
+import static android.view.View.LAYOUT_DIRECTION_RTL;
+
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
-import static androidx.core.view.ViewCompat.LAYOUT_DIRECTION_RTL;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -25,14 +26,15 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
+import android.util.LayoutDirection;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -46,6 +48,7 @@ import androidx.annotation.RestrictTo;
 import androidx.annotation.XmlRes;
 import androidx.appcompat.util.SeslRoundedCorner;
 import androidx.appcompat.util.SeslSubheaderRoundedCorner;
+import androidx.core.graphics.Insets;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -159,6 +162,11 @@ public abstract class PreferenceFragmentCompat extends Fragment implements
     private static final float FONT_SCALE_MEDIUM = 1.1f;
     private boolean mIsReducedMargin;
     private int mSubheaderColor;
+    int mLeft = -1;
+    int mTop = -1;
+    int mRight = -1;
+    int mBottom = -1;
+    final boolean mSupportsInsets = Build.VERSION.SDK_INT > 29;//custom
     //sesl
 
     @Override
@@ -308,6 +316,15 @@ public abstract class PreferenceFragmentCompat extends Fragment implements
             listContainer.addView(mList);
         }
         mHandler.post(mRequestFocus);
+
+        //Sesl7
+        final int defaultHorizontalPadding = getResources().getDimensionPixelSize(R.dimen.sesl_preference_padding_horizontal);
+        if (mLeft < 0) mLeft = defaultHorizontalPadding;
+        if (mRight < 0) mRight = defaultHorizontalPadding;
+        if (mTop < 0) mTop = 0;
+        if (mBottom < 0) mBottom = 0;
+        setPadding(mLeft, mTop, mRight, mBottom);
+        //sesl7
 
         return view;
     }
@@ -968,18 +985,22 @@ public abstract class PreferenceFragmentCompat extends Fragment implements
 
         //Sesl
         @Override
-        public void seslOnDispatchDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+        public void seslOnDispatchDraw(@NonNull Canvas c, @NonNull RecyclerView parent, RecyclerView.State state) {
             super.seslOnDispatchDraw(c, parent, state);
 
             int childCount = parent.getChildCount();
-            int width = parent.getWidth();
+            int start = parent.getPaddingLeft() + parent.getLeft();
+            int end = parent.getRight() - parent.getPaddingRight();
 
+            PreferenceViewHolder preferenceHolder;
+            int dividerLeftOffset;
+
+            boolean isLayoutRtl =
+                    getResources().getConfiguration().getLayoutDirection() == LAYOUT_DIRECTION_RTL;
             for (int i = 0; i < childCount; i++) {
                 View view = parent.getChildAt(i);
                 RecyclerView.ViewHolder holder = parent.getChildViewHolder(view);
 
-                PreferenceViewHolder preferenceHolder;
-                int dividerLeftOffset;
                 if (holder instanceof PreferenceViewHolder) {
                     preferenceHolder = (PreferenceViewHolder) holder;
                     dividerLeftOffset = preferenceHolder.seslGetDividerLeftOffset();
@@ -988,15 +1009,12 @@ public abstract class PreferenceFragmentCompat extends Fragment implements
                     dividerLeftOffset = 0;
                 }
 
-                boolean isLayoutRtl =
-                        getResources().getConfiguration().getLayoutDirection() == LAYOUT_DIRECTION_RTL;
-
                 int top = ((int) view.getY()) + view.getHeight();
                 if (mDivider != null && shouldDrawDividerBelow(view, parent)) {
                     if (isLayoutRtl) {
-                        mDivider.setBounds(0, top, width - dividerLeftOffset, mDividerHeight + top);
+                        mDivider.setBounds(start, top, end - dividerLeftOffset, mDividerHeight + top);
                     } else {
-                        mDivider.setBounds(dividerLeftOffset, top, width, mDividerHeight + top);
+                        mDivider.setBounds(start + dividerLeftOffset, top, end, mDividerHeight + top);
                     }
                     mDivider.draw(c);
                 }
@@ -1015,7 +1033,8 @@ public abstract class PreferenceFragmentCompat extends Fragment implements
             }
 
             if (mIsRoundedCorner) {
-                mListRoundedCorner.drawRoundedCorner(c);
+                mListRoundedCorner.drawRoundedCorner(c,
+                        mSupportsInsets ? Insets.of(mLeft, mTop, mRight, mBottom) : null);
             }
         }
         //sesl
@@ -1132,6 +1151,24 @@ public abstract class PreferenceFragmentCompat extends Fragment implements
 
     public void seslSetRoundedCorner(boolean enabled) {
         mIsRoundedCorner = enabled;
+    }
+
+    public void setPadding(int left, int top, int right, int bottom) {
+        mLeft = left;
+        mTop = top;
+        mRight = right;
+        mBottom = bottom;
+        updatePadding();
+    }
+
+    private void updatePadding() {
+        RecyclerView list = mList;
+        if (list != null) {
+            list.setPadding(mLeft, mTop, mRight, mBottom);
+            boolean fillHorizontal = mLeft != 0 || mRight != 0 || mTop != 0 || mBottom != 0;
+            list.seslSetFillHorizontalPaddingEnabled(fillHorizontal);
+            list.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
+        }
     }
     //sesl
 }

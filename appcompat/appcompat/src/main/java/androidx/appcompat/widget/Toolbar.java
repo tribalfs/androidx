@@ -52,10 +52,12 @@ import android.window.OnBackInvokedDispatcher;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.FloatRange;
 import androidx.annotation.MainThread;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.Px;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
 import androidx.annotation.StringRes;
@@ -179,7 +181,7 @@ public class Toolbar extends ViewGroup implements MenuHost {
     private int mUserTopPadding = -1; //sesl6
     //sesl
 
-    ActionMenuView mMenuView;
+    private ActionMenuView mMenuView;
     private TextView mTitleTextView;
     private TextView mSubtitleTextView;
     private ImageButton mNavButtonView;
@@ -3103,12 +3105,43 @@ public class Toolbar extends ViewGroup implements MenuHost {
 
     }
 
+    /**
+     * Gets the top padding that is applied to this Toolbar.
+     * @return -1 when the {@link R.dimen#sesl_action_bar_top_padding default value} is used.
+     * Otherwise, the custom top padding.
+     */
+    @Px
     public int seslGetUserTopPadding() {//sesl6
         return mUserTopPadding;
     }
 
-    public void seslSetUserTopPadding(int topPadding) {//sesl6
+    /**
+     * Sets a custom top padding to this Toolbar. By default, this is set
+     * to {@link R.dimen#sesl_action_bar_top_padding sesl_action_bar_top_padding} value
+     * @param topPadding
+     */
+    public void seslSetUserTopPadding(@Px int topPadding) {//sesl6
         mUserTopPadding = topPadding;
     }
     //sesl
+
+    //Sesl7
+    @Nullable
+    public ActionMenuView seslGetMenuView() {
+        return mMenuView;
+    }
+
+    public void seslSetSubtitleAlpha(@FloatRange(from = 0.0f, to = 1.0f) float alpha) {
+        if (mSubtitleTextView != null) {
+            mSubtitleTextView.setAlpha(alpha);
+        }
+    }
+
+    public void seslSetTitleAlpha(@FloatRange(from = 0.0f, to = 1.0f) float alpha) {
+        if (mTitleTextView != null) {
+            mTitleTextView.setAlpha(alpha);
+        }
+    }
+    //sesl7
+
 }

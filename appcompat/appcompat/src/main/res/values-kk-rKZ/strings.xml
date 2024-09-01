@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">Өшірулі</string>
     <string name="sesl_searchview_description_voice">Дауыспен іздеу</string>
     <string name="sesl_switch_on">Қосулы</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Ұсыныстарды тоқтату</string>
+    <string name="sesl_appbar_suggest_pagination">%2$d ішінен %1$d бет</string>
+    <!--sesl7-->
 </resources>

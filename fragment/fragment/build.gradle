@@ -19,12 +19,12 @@ android {
     namespace = "androidx.fragment"
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 }
 
@@ -41,7 +41,7 @@ dependencies {
     api("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1")
     implementation("androidx.profileinstaller:profileinstaller:1.4.0")
     api("androidx.savedstate:savedstate:1.2.1")
-    api("androidx.annotation:annotation-experimental:1.0.0")
+    api("androidx.annotation:annotation-experimental:1.4.1")
     api(libs.kotlinStdlib)
 
 //    androidTestImplementation("androidx.appcompat:appcompat:1.1.0", {

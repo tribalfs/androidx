@@ -16,10 +16,10 @@
   -->
 <!-- Original code by Samsung, all rights reserved to the original author. -->
 <resources>
-    <dimen name="sesl_list_divider_inset">20dp</dimen>
-    <dimen name="sesl_list_image_end_padding">20dp</dimen>
-    <dimen name="sesl_list_item_padding_end">14dp</dimen>
-    <dimen name="sesl_list_item_padding_horizontal">24dp</dimen>
-    <dimen name="sesl_switchbar_margin_end">24dp</dimen>
-    <dimen name="sesl_switchbar_margin_start">24dp</dimen>
+    <dimen name="sesl_list_divider_inset">16dp</dimen>
+    <dimen name="sesl_list_image_end_padding">16dp</dimen>
+    <dimen name="sesl_list_item_padding_end">8dp</dimen>
+    <dimen name="sesl_list_item_padding_horizontal">18dp</dimen>
+    <dimen name="sesl_switchbar_margin_end">22dp</dimen>
+    <dimen name="sesl_switchbar_margin_start">18dp</dimen>
 </resources>

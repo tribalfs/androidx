@@ -58,15 +58,15 @@ import androidx.picker.util.SeslSleepTimePickerUtil;
 public class SeslCircularSeekBarView extends View {
 
     public interface OnCircularSeekBarChangeListener {
-        void onProgressChangedBedTime(SeslCircularSeekBarView seslCircularSeekBarView,
+        void onProgressChangedBedTime(@NonNull SeslCircularSeekBarView seslCircularSeekBarView,
                 float bedTimePosition);
-        void onProgressChangedWakeupTime(SeslCircularSeekBarView seslCircularSeekBarView,
+        void onProgressChangedWakeupTime(@NonNull SeslCircularSeekBarView seslCircularSeekBarView,
                 float wakeupPosition);
         void onSelectBedTimeIcon();
         void onSelectMiddleHandler();
         void onSelectWakeUpTimeIcon();
-        void onStartTrackingTouch(SeslCircularSeekBarView seslCircularSeekBarView);
-        void onStopTrackingTouch(SeslCircularSeekBarView seslCircularSeekBarView);
+        void onStartTrackingTouch(@NonNull SeslCircularSeekBarView seslCircularSeekBarView);
+        void onStopTrackingTouch(@NonNull SeslCircularSeekBarView seslCircularSeekBarView);
         void onUnselectBedTimeIcon();
         void onUnselectMiddleHandler();
         void onUnselectWakeUpTimeIcon();
@@ -170,7 +170,7 @@ public class SeslCircularSeekBarView extends View {
 
     private OnCircularSeekBarChangeListener mOnCircularSeekBarChangeListener;
 
-    public SeslCircularSeekBarRevealAnimation mCircularSeekBarRevealAnimation;
+    private final SeslCircularSeekBarRevealAnimation mCircularSeekBarRevealAnimation = new SeslCircularSeekBarRevealAnimation(this);
 
     public void setOnSeekBarChangeListener(@NonNull OnCircularSeekBarChangeListener onCircularSeekBarChangeListener) {
         this.mOnCircularSeekBarChangeListener = onCircularSeekBarChangeListener;
@@ -362,7 +362,6 @@ public class SeslCircularSeekBarView extends View {
         if (mFirstPointerAngle == 0.0f) {
             mFirstPointerAngle = 0.1f;
         }
-        mCircularSeekBarRevealAnimation = new SeslCircularSeekBarRevealAnimation(this);
         ta.recycle();
 
 
@@ -454,43 +453,40 @@ public class SeslCircularSeekBarView extends View {
     }
 
     private void setFirstPointerPaint() {
-        Paint paint = new Paint();
-        mFirstPointerPaint = paint;
-        paint.set(mSecondPointerPaint);
+        mFirstPointerPaint = new Paint();
+        mFirstPointerPaint.set(mSecondPointerPaint);
         mFirstPointerPaint.setColor(mFirstPointerColor);
-        Paint paint2 = new Paint();
-        mFirstPointerHaloPaint = paint2;
-        paint2.set(mSecondPointerHaloPaint);
+
+        mFirstPointerHaloPaint = new Paint();
+        mFirstPointerHaloPaint.set(mSecondPointerHaloPaint);
         mFirstPointerHaloPaint.setColor(mFirstPointerHaloColor);
         mFirstPointerHaloPaint.setStrokeWidth(mPointerStrokeWidth);
     }
 
     private void setSecondPointerPaint() {
-        Paint paint = new Paint();
-        mSecondPointerPaint = paint;
-        paint.setAntiAlias(true);
+        mSecondPointerPaint = new Paint();
+        mSecondPointerPaint.setAntiAlias(true);
         mSecondPointerPaint.setDither(true);
         mSecondPointerPaint.setColor(mSecondPointerColor);
         mSecondPointerPaint.setStrokeWidth(mPointerStrokeWidth);
         mSecondPointerPaint.setStyle(Paint.Style.STROKE);
         mSecondPointerPaint.setStrokeJoin(Paint.Join.ROUND);
         mSecondPointerPaint.setStrokeCap(mCircleStyle);
-        Paint paint2 = new Paint();
-        mSecondPointerHaloPaint = paint2;
-        paint2.set(mSecondPointerPaint);
+
+        mSecondPointerHaloPaint = new Paint();
+        mSecondPointerHaloPaint.set(mSecondPointerPaint);
         mSecondPointerHaloPaint.setColor(mSecondPointerHaloColor);
         mSecondPointerHaloPaint.setStrokeWidth(mPointerStrokeWidth);
     }
 
     private void setClockGridPaint() {
-        Paint paint = new Paint(1);
-        mGridPaintSmall = paint;
-        paint.setStrokeWidth(DPTOPX_SCALE);
+        mGridPaintSmall = new Paint(1);
+        mGridPaintSmall.setStrokeWidth(DPTOPX_SCALE);
         mGridPaintSmall.setColor(mCircleGridSmall);
         mGridPaintSmall.setStyle(Paint.Style.STROKE);
-        Paint paint2 = new Paint(1);
-        mGridPaintMedium = paint2;
-        paint2.setStrokeWidth(DPTOPX_SCALE);
+
+        mGridPaintMedium = new Paint(1);
+        mGridPaintMedium.setStrokeWidth(DPTOPX_SCALE);
         mGridPaintMedium.setColor(mCircleGridMedium);
         mGridPaintMedium.setStyle(Paint.Style.STROKE);
     }
@@ -499,9 +495,9 @@ public class SeslCircularSeekBarView extends View {
         Path path = new Path();
         float f = mDashLineStrokeWidth / 2.0f;
         path.addCircle(f, 0.0f, f, Path.Direction.CW);
-        Paint paint = new Paint();
-        mCircleLineProgressPaint = paint;
-        paint.setStyle(Paint.Style.STROKE);
+
+        mCircleLineProgressPaint = new Paint();
+        mCircleLineProgressPaint.setStyle(Paint.Style.STROKE);
         mCircleLineProgressPaint.setStrokeWidth(mDashLineStrokeWidth);
         mCircleLineProgressPaint.setColor(getResources().getColor(R.color.sesl_dotted_line_color));
         mCircleLineProgressPaint.setPathEffect(new PathDashPathEffect(path,
@@ -693,7 +689,7 @@ public class SeslCircularSeekBarView extends View {
         mCircleProgressPath.addArc(mCircleRectF, startAngle, sweepAngle);
 
         mCircleLineProgressPath.reset();
-        if (mProgress > 6.5d) {
+        if (mProgress > 6.5f) {
             if (mUserIsMovingSecondPointer) {
                 float startAngleLineProgressPath =
                         mSecondPointerPosition - (mFirstPointerAngle / 2.0f);
@@ -783,20 +779,20 @@ public class SeslCircularSeekBarView extends View {
         sweepColors[3] = mSecondPointerColor;
         sweepColors[4] = mSecondPointerColor;
 
-        float[] sweepPos = mSweepGradientVariable.pos;
+        final float[] sweepPos = mSweepGradientVariable.pos;
         sweepPos[0] = 0.0f;
-        float progressPercent = this.mProgress / this.mMax;
+        final float progressPercent = this.mProgress / this.mMax;
         sweepPos[1] = 0.1f * progressPercent;
         sweepPos[2] = 0.5f * progressPercent;
         sweepPos[3] = 0.9f * progressPercent;
         sweepPos[4] = progressPercent;
 
-        float centerX2 = mCircleRectF.centerX();
-        float centerY = mCircleRectF.centerY();
+        final float centerX2 = mCircleRectF.centerX();
+        final float centerY = mCircleRectF.centerY();
 
-        SweepGradientVariable sweepGradientVariable = mSweepGradientVariable;
-        SweepGradient shader = new SweepGradient(centerX2, centerY, sweepGradientVariable.color, sweepGradientVariable.pos);
-        Matrix matrix = new Matrix();
+        final SweepGradientVariable sweepGradientVariable = mSweepGradientVariable;
+        final SweepGradient shader = new SweepGradient(centerX2, centerY, sweepGradientVariable.color, sweepGradientVariable.pos);
+        final Matrix matrix = new Matrix();
         matrix.setRotate(this.mFirstPointerPosition, mCircleRectF.centerX(),
                 mCircleRectF.centerY());
         shader.setLocalMatrix(matrix);
@@ -815,13 +811,13 @@ public class SeslCircularSeekBarView extends View {
     }
 
     private void drawClockGrid(@NonNull Canvas canvas) {
-        double d = 0.0d;
+        double d = 0.0f;
         while (true) {
-            int i = (Double.compare(d, 360.0d));
+            int i = (Double.compare(d, 360.0f));
             if (i > 0) {
                 break;
             }
-            double d2 = ((mStartAngle + d) / 180.0d) * Math.PI;
+            double d2 = ((mStartAngle + d) / 180.0f) * Math.PI;
             double centerX = mCircleRectF.centerX();
             float f = this.mRadiusIn;
             float f2 = this.DPTOPX_SCALE * 2.5f;
@@ -832,15 +828,15 @@ public class SeslCircularSeekBarView extends View {
             float stopX = (float) ((Math.cos(d2) * (this.mRadiusIn + f2)) + mCircleRectF.centerX());
             float stopY =
                     (float) (mCircleRectF.centerY() + ((mRadiusIn + (DPTOPX_SCALE * 2.5f)) * Math.sin(d2)));
-            double qrtExtra = d % 90.0d;
-            if (qrtExtra != 0.0d && qrtExtra != 2.5d && qrtExtra != 3.0d && qrtExtra != 87.0d && qrtExtra != 87.5d && d != 175.0d && d != 185.0d) {
-                if (d % 15.0d == 0.0d) {
+            double qrtExtra = d % 90.0f;
+            if (qrtExtra != 0.0f && qrtExtra != 2.5f && qrtExtra != 3.0f && qrtExtra != 87.0f && qrtExtra != 87.5f && d != 175.0f && d != 185.0f) {
+                if (d % 15.0f == 0.0f) {
                     canvas.drawLine(startX, startY, stopX, stopY, this.mGridPaintMedium);
                 } else {
                     canvas.drawLine(startX, startY, stopX, stopY, this.mGridPaintSmall);
                 }
             }
-            d += 2.5d;
+            d += 2.5f;
         }
     }
 
@@ -864,11 +860,11 @@ public class SeslCircularSeekBarView extends View {
         Resources res = getResources();
         Configuration conf = res.getConfiguration();
 
-        float f = (mPointerStrokeWidth / 2.0f) + mPointerHaloWidth;
+        final float f = (mPointerStrokeWidth / 2.0f) + mPointerHaloWidth;
 
-        float screenWidth = conf.screenWidthDp * res.getDisplayMetrics().density;
+        final float screenWidth = conf.screenWidthDp * res.getDisplayMetrics().density;
 
-        float outerSize = needBedTimePickerAdjustment(conf.screenHeightDp)
+        final float outerSize = needBedTimePickerAdjustment(conf.screenHeightDp)
                 ? mOuterCircleMinSize
                 : mOuterCircleSize;
 
@@ -990,27 +986,27 @@ public class SeslCircularSeekBarView extends View {
     private boolean onActionMove() {
         TouchEventVariable eventVariable = mTouchEventVariable;
 
-        float touchAngle = eventVariable.touchAngle;
-        float totalCircleDegrees = this.mTotalCircleDegrees;
+        final float touchAngle = eventVariable.touchAngle;
+        final float totalCircleDegrees = this.mTotalCircleDegrees;
 
-        float degreeThreshold = totalCircleDegrees / 3.0f;
+        final float degreeThreshold = totalCircleDegrees / 3.0f;
 
-        float secondPointerPosition = mSecondPointerPosition;
-        float firstPointerPosition2 = mFirstPointerPosition;
+        final float secondPointerPosition = mSecondPointerPosition;
+        final float firstPointerPosition2 = mFirstPointerPosition;
         float firstToSecondDistanec = secondPointerPosition - firstPointerPosition2;
         if (firstToSecondDistanec < 0.0f) {
             firstToSecondDistanec += 360.0f;
         }
 
-        boolean isNearStart = firstToSecondDistanec < degreeThreshold;
-        boolean isNearEnd = firstToSecondDistanec > totalCircleDegrees - degreeThreshold;
+        final boolean isNearStart = firstToSecondDistanec < degreeThreshold;
+        final boolean isNearEnd = firstToSecondDistanec > totalCircleDegrees - degreeThreshold;
 
         if (mUserIsMovingSecondPointer) {
             float cwDistance = touchAngle - ((firstPointerPosition2 + 2.5f) % 360.0f);
             if (cwDistance < 0.0f) {
                 cwDistance += 360.0f;
             }
-            float cwDistanceComplement = 360.0f - cwDistance;
+            final float cwDistanceComplement = 360.0f - cwDistance;
             float cwDistanceFromEnd =
                     touchAngle - (((firstPointerPosition2 - 2.5f) + 360.0f) % 360.0f);
             if (cwDistanceFromEnd < 0.0f) {
@@ -1031,7 +1027,7 @@ public class SeslCircularSeekBarView extends View {
             if (cwDistanceFromEnd2 < 0.0f) {
                 cwDistanceFromEnd2 += 360.0f;
             }
-            float cwDistanceFromEndComplement = 360.0f - cwDistanceFromEnd2;
+            final float cwDistanceFromEndComplement = 360.0f - cwDistanceFromEnd2;
             eventVariable.touchOverStart = cwDistanceFromStart < degreeThreshold;
             eventVariable.touchOverEnd =
                     cwDistanceFromEndComplement < degreeThreshold;
@@ -1091,29 +1087,29 @@ public class SeslCircularSeekBarView extends View {
             float innerRadius,
             float outerRadius) {
 
-        float circleMaxDimension = Math.max(mCircleHeight, mCircleWidth);
-        float circumferencePart =
+        final float circleMaxDimension = Math.max(mCircleHeight, mCircleWidth);
+        final float circumferencePart =
                 (float) ((mPointerStrokeWidth * 180.0f) / (circleMaxDimension * Math.PI));
-        float halfSecondPointerAngle = mSecondPointerAngle / 2.0f;
-        float max = Math.max(circumferencePart, halfSecondPointerAngle);
+        final float halfSecondPointerAngle = mSecondPointerAngle / 2.0f;
+        final float max = Math.max(circumferencePart, halfSecondPointerAngle);
 
         float angleDifferenceSecondPointer = touchAngle - this.mSecondPointerPosition;
         if (angleDifferenceSecondPointer < 0.0f) {
             angleDifferenceSecondPointer += 360.0f;
         }
-        float complementAngleSecondPointer = 360.0f - angleDifferenceSecondPointer;
+        final float complementAngleSecondPointer = 360.0f - angleDifferenceSecondPointer;
 
-        float firstPointerPosition = this.mFirstPointerPosition;
+        final float firstPointerPosition = this.mFirstPointerPosition;
         float angleDifferenceFirstPointer = touchAngle - firstPointerPosition;
         if (angleDifferenceFirstPointer < 0.0f) {
             angleDifferenceFirstPointer += 360.0f;
         }
 
-        float complementAngleFirstPointer = 360.0f - angleDifferenceFirstPointer;
-        boolean isWithinRadius = touchEventRadius >= innerRadius && touchEventRadius <= outerRadius;
-        boolean isWithinSecondPointerRange =
+        final float complementAngleFirstPointer = 360.0f - angleDifferenceFirstPointer;
+        final boolean isWithinRadius = touchEventRadius >= innerRadius && touchEventRadius <= outerRadius;
+        final boolean isWithinSecondPointerRange =
                 angleDifferenceSecondPointer <= max || complementAngleSecondPointer <= max;
-        boolean isWithinFirstPointerRange =
+        final boolean isWithinFirstPointerRange =
                 angleDifferenceFirstPointer <= max || complementAngleFirstPointer <= max;
 
         if (isWithinRadius && isWithinSecondPointerRange && isWithinFirstPointerRange) {
@@ -1138,10 +1134,10 @@ public class SeslCircularSeekBarView extends View {
     }
 
     private boolean isTimeInRange(float touchAngle, float firstPointerPosition) {
-        float firstPointerTime = SeslSleepTimePickerUtil.convertToTime(firstPointerPosition);
-        float secondPointerTime =
+        final float firstPointerTime = SeslSleepTimePickerUtil.convertToTime(firstPointerPosition);
+        final float secondPointerTime =
                 SeslSleepTimePickerUtil.convertToTime(this.mSecondPointerPosition);
-        float touchAngleTime = SeslSleepTimePickerUtil.convertToTime(touchAngle);
+        final float touchAngleTime = SeslSleepTimePickerUtil.convertToTime(touchAngle);
         return firstPointerTime >= secondPointerTime
                 ? !(firstPointerTime <= secondPointerTime
                         || ((touchAngleTime <= firstPointerTime || touchAngleTime > 1440.0f)
@@ -1149,44 +1145,69 @@ public class SeslCircularSeekBarView extends View {
                 : !(touchAngleTime <= firstPointerTime || touchAngleTime >= secondPointerTime);
     }
 
-
-    public boolean getSleepGoalWheelEnable() {
-        return  mSleepGoalWheelEnable;
-    }
-
-    public void setWakeUpTimePosition(float f) {
-        setProgressBasedOnAngle(((f % 360.0f) + 360.0f) % 360.0f, 0);
+    /**
+     * Sets the wake-up time position based on the given angle.
+     *
+     * @param angleDegrees The angle in degrees (0-360).
+     */
+    void setWakeUpTimePosition(float angleDegrees) {
+        final float normalizedAngle = Math.floorMod((int) angleDegrees, 360);
+        setProgressBasedOnAngle(normalizedAngle, 0);
         recalculateAll();
         invalidate();
     }
 
-    public void setBedTimePosition(float f) {
-        setProgressBasedOnAngle(((f % 360.0f) + 360.0f) % 360.0f, 1);
+    /**
+     * Sets the bedtime position based on the given angle.
+     *
+     * @param angleDegrees The angle in degrees (0-360).
+     */
+    void setBedTimePosition(float angleDegrees) {
+        final float normalizedAngle = Math.floorMod((int) angleDegrees, 360);
+        setProgressBasedOnAngle(normalizedAngle, 1);
         recalculateAll();
         invalidate();
     }
 
-    public void startRevealAnimation() {
+    void startRevealAnimation() {
         calculateProgressDegrees();
         mCircularSeekBarRevealAnimation.setmSweepProgress(this.mProgressDegrees);
         mCircularSeekBarRevealAnimation.startAnimators();
     }
 
-    public void setRevealAnimationValue(float f) {
-        setProgressBasedOnAngle((this.mFirstPointerPosition + (((mCircularSeekBarRevealAnimation.getmSweepProgress() + 360.0f) % 360.0f) * f)) % 360.0f, 0);
+    void setRevealAnimationValue(float animationProgress) {
+        setProgressBasedOnAngle(calculateRevealAngle(animationProgress), 0);
         recalculateAll();
     }
 
-    public void setSleepGoalWheel(float f, float f2) {
+    private float calculateRevealAngle(float animationProgress) {
+        float sweepProgress = (mCircularSeekBarRevealAnimation.getmSweepProgress() + 360.0f) % 360.0f;
+        return (this.mFirstPointerPosition + (sweepProgress * animationProgress)) % 360.0f;
+    }
+
+
+    public void setSleepGoalWheel(float startAngle, float endAngle) {
         this.mSleepGoalWheelEnable = true;
-        float f3 = this.mSecondPointerAngle;
-        float f4 = f - (f3 / 2.0f);
-        float f5 = f2 - f;
-        if (f5 < 0.0f) {
-            f5 += 360.0f;
+
+        // Calculate half of the second pointer angle for offsetting the start.
+        final float halfSecondPointerAngle = this.mSecondPointerAngle/ 2.0f;
+
+        // Calculate the starting angle of the sleep goal wheel.
+        final float sleepGoalWheelExtendStart = startAngle - halfSecondPointerAngle;
+
+        // Calculate the sweep angle (endAngle - startAngle).
+        float sweepAngle = endAngle - startAngle;
+
+        // If sweepAngle is negative, it means the wheel extends past 360 degrees.
+        // Add 360 to make it positive for correct rendering.
+        if (sweepAngle < 0.0f) {
+            sweepAngle += 360.0f;
         }
-        this.mSleepGoalWheelExtendStart = f4;
-        this.mSleepGoalWheelExtendDegree = f5 + f3;
+        this.mSleepGoalWheelExtendStart = sleepGoalWheelExtendStart;
+
+        // The total extend degree includes the sweep angle and the second pointer angle.
+        this.mSleepGoalWheelExtendDegree = sweepAngle + mSecondPointerAngle;
+
         resetRects();
         resetPaths();
         invalidate();
@@ -1194,6 +1215,10 @@ public class SeslCircularSeekBarView extends View {
 
     public void setSleepGoalWheelEnabled(boolean enable) {
         mSleepGoalWheelEnable = enable;
+    }
+
+    public boolean getSleepGoalWheelEnable() {
+        return  mSleepGoalWheelEnable;
     }
 
 }

@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">ഓഫ്</string>
     <string name="sesl_searchview_description_voice">വോയ്സ് തിരയല്‍</string>
     <string name="sesl_switch_on">ഓൺ</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">നിർദ്ദേശം ഡിസ്മിസ് ചെയ്യുക</string>
+    <string name="sesl_appbar_suggest_pagination">പേജ് %2$d-ൽ %1$d</string>
+    <!--sesl7-->
 </resources>

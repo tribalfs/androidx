@@ -65,4 +65,8 @@
     <string name="sesl_switchbar_on_text">Увімкнено</string>
     <string name="sesl_switch_off">Вимк.</string>
     <string name="sesl_switch_on">Увімк.</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Відхилити пропозицію</string>
+    <string name="sesl_appbar_suggest_pagination">Сторінка %1$d з %2$d</string>
+    <!--sesl7-->
 </resources>

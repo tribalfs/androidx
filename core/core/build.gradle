@@ -12,7 +12,7 @@ dependencies {
     }
 
     api("androidx.annotation:annotation:1.8.1")
-    api("androidx.annotation:annotation-experimental:1.4.0")
+    api("androidx.annotation:annotation-experimental:1.4.1")
     api("androidx.lifecycle:lifecycle-runtime:2.6.2")
     api("androidx.versionedparcelable:versionedparcelable:1.1.1")
     implementation("androidx.collection:collection:1.4.2")
@@ -78,7 +78,7 @@ android {
 //        // Drop the file from external dependencies, preferring the local file inside androidTest
 //        pickFirsts = [
 //                "mockito-extensions/org.mockito.plugins.MockMaker",
-//                "mockito-extensions/org.mockito.plugins.StackTraceCleanerProvider"
+//                "mockito-extensions/org.mockito.plugins.StackTraceCleanerProvider"z
 //        ]
 //    }
     defaultConfig {

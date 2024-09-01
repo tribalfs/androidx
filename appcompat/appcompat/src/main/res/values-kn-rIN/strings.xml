@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">ಆಫ್</string>
     <string name="sesl_searchview_description_voice">ಧ್ವನಿ ಶೋಧ</string>
     <string name="sesl_switch_on">ಆನ್</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">ಸಲಹೆಯನ್ನು ವಜಾಗೊಳಿಸಿ</string>
+    <string name="sesl_appbar_suggest_pagination">%2$dರಲ್ಲಿ %1$dನೇ ಪುಟ</string>
+    <!--sesl7-->
 </resources>

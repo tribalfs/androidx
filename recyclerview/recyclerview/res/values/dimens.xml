@@ -44,4 +44,7 @@
 
     <dimen name="sesl_recyclerview_overlay_feature_hidden_height">164dp</dimen>
 
+    <!--added in sesl7-->
+    <dimen name="sesl_system_scroller_vertical_padding">15dp</dimen>
+
 </resources>

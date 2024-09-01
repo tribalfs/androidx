@@ -41,4 +41,8 @@ public class SeslMisc {
         return typedValue.data != 0;
     }
 
+    public static float computeEasingFactor(float density, float pixelsPerSecond, float distance, float maxDistance) {
+        return (distance - (density * pixelsPerSecond)) / maxDistance;
+    }
+
 }

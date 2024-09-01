@@ -24,6 +24,8 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.reflect.app.SeslApplicationPackageManagerReflector;
 
 /*
@@ -32,18 +34,16 @@ import androidx.reflect.app.SeslApplicationPackageManagerReflector;
 
 public class AppPickerIconLoader {
     private static final String THREAD_NAME = "AppPickerIconLoader";
-    private Context mContext;
     private PackageManager mPackageManager;
     private LoadIconTask mLoadIconTask;
 
-    public AppPickerIconLoader(Context context) {
-        mContext = context;
+    public AppPickerIconLoader(@NonNull Context context) {
         mPackageManager = context.getPackageManager();
     }
 
-    public void loadIcon(String packageName, String activityName,
-                         ImageView imageView) {
-        if (!TextUtils.isEmpty(packageName) && imageView != null) {
+    public void loadIcon(@NonNull String packageName, @Nullable String activityName,
+            @NonNull ImageView imageView) {
+        if (!TextUtils.isEmpty(packageName)) {
             imageView.setTag(packageName);
 
             IconInfo iconInfo = new IconInfo(packageName, activityName, imageView);
@@ -53,13 +53,14 @@ public class AppPickerIconLoader {
     }
 
     Drawable getAppIcon(String packageName, String activityName) {
-        if (activityName != null && !activityName.equals("")) {
+        if (activityName != null && !activityName.isEmpty()) {
             ComponentName componentName
                     = new ComponentName(packageName, activityName);
 
             Drawable appIcon
                     = SeslApplicationPackageManagerReflector
                     .semGetActivityIconForIconTray(mPackageManager, componentName, 1);
+
             if (appIcon != null) {
                 return appIcon;
             }
@@ -67,12 +68,13 @@ public class AppPickerIconLoader {
             try {
                 return mPackageManager.getActivityIcon(componentName);
             } catch (PackageManager.NameNotFoundException e) {
-                return appIcon;
+                return null;
             }
         } else {
             Drawable appIcon
                     = SeslApplicationPackageManagerReflector
                     .semGetApplicationIconForIconTray(mPackageManager, packageName, 1);
+
             if (appIcon != null) {
                 return appIcon;
             }
@@ -80,7 +82,7 @@ public class AppPickerIconLoader {
             try {
                 return mPackageManager.getApplicationIcon(packageName);
             } catch (PackageManager.NameNotFoundException e) {
-                return appIcon;
+                return null;
             }
         }
     }

@@ -38,13 +38,13 @@ class SPLToolbarContainer @JvmOverloads constructor(
     attributeSet: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attributeSet, defStyleAttr) {
-    private var mViewStubCompat: ViewStub? = null
+    private var mViewStub: ViewStub? = null
 
     init {
         getContext().obtainStyledAttributes(androidx.appcompat.R.styleable.AppCompatTheme).use {a ->
             if (!a.getBoolean(androidx.appcompat.R.styleable.AppCompatTheme_windowActionModeOverlay, false)) {
                 LayoutInflater.from(context).inflate(R.layout.sesl_spl_action_mode_view_stub, this as ViewGroup, true)
-                mViewStubCompat = findViewById<View>(androidx.appcompat.R.id.action_mode_bar_stub) as ViewStub
+                mViewStub = findViewById<View>(androidx.appcompat.R.id.action_mode_bar_stub) as ViewStub
             }
         }
         setWillNotDraw(false)
@@ -52,18 +52,18 @@ class SPLToolbarContainer @JvmOverloads constructor(
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-        val viewStubCompat = mViewStubCompat
+        val viewStubCompat = mViewStub
         if (viewStubCompat != null) {
             viewStubCompat.bringToFront()
-            mViewStubCompat!!.invalidate()
+            mViewStub!!.invalidate()
         }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val viewStubCompat = mViewStubCompat
+        val viewStubCompat = mViewStub
         if (viewStubCompat != null) {
             viewStubCompat.bringToFront()
-            mViewStubCompat!!.invalidate()
+            mViewStub!!.invalidate()
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }

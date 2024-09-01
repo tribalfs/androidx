@@ -247,7 +247,7 @@ public class SeslSleepTimePicker extends LinearLayout {
         SeslCircularSeekBarView.OnCircularSeekBarChangeListener listener =  new SeslCircularSeekBarView.OnCircularSeekBarChangeListener() {
 
             @Override
-            public void onProgressChangedBedTime(SeslCircularSeekBarView seslCircularSeekBarView,
+            public void onProgressChangedBedTime(@NonNull SeslCircularSeekBarView seslCircularSeekBarView,
                     float bedTimePosition) {
                 Log.d(TAG, "onProgressChangedBedTime : BedTimePosition " + bedTimePosition);
                 mBedTimeInMinute = SeslSleepTimePickerUtil.convertToTime(bedTimePosition);
@@ -260,7 +260,7 @@ public class SeslSleepTimePicker extends LinearLayout {
             }
 
             @Override
-            public void onProgressChangedWakeupTime(SeslCircularSeekBarView seslCircularSeekBarView,
+            public void onProgressChangedWakeupTime(@NonNull SeslCircularSeekBarView seslCircularSeekBarView,
                     float wakeupPosition) {
                 Log.d(TAG, "onProgressChangedWakeupTime : WakeUpTimePosition " + wakeupPosition);
                 mWakeupTimeInMinute = SeslSleepTimePickerUtil.convertToTime(wakeupPosition);
@@ -304,7 +304,7 @@ public class SeslSleepTimePicker extends LinearLayout {
             }
 
             @Override
-            public void onStartTrackingTouch(SeslCircularSeekBarView seslCircularSeekBarView) {
+            public void onStartTrackingTouch(@NonNull SeslCircularSeekBarView seslCircularSeekBarView) {
                 Log.d(TAG, "onStartTrackingTouch");
                 if (mOnSleepTimeChangedListener != null) {
                     mOnSleepTimeChangedListener.onStartSleepTimeChanged(getBedTimeInMinute(), getWakeUpTimeInMinute());
@@ -312,7 +312,7 @@ public class SeslSleepTimePicker extends LinearLayout {
             }
 
             @Override
-            public void onStopTrackingTouch(SeslCircularSeekBarView seslCircularSeekBarView) {
+            public void onStopTrackingTouch(@NonNull SeslCircularSeekBarView seslCircularSeekBarView) {
                 Log.d(TAG, "onStopTrackingTouch");
                 setSleepTimeDurationText();
                 if (mOnSleepTimeChangedListener != null) {

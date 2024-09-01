@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">બંધ</string>
     <string name="sesl_searchview_description_voice">ધ્વનિ શોધ</string>
     <string name="sesl_switch_on">ચાલુ</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">સૂચન કાઢી નાખો</string>
+    <string name="sesl_appbar_suggest_pagination">પૃષ્ઠ %2$d માંથી %1$d</string>
+    <!--sesl7-->
 </resources>

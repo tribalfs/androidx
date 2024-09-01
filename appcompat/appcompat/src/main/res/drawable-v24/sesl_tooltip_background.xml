@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="@dimen/sesl_hover_tooltip_popup_bottom_margin"
+        android:left="@dimen/sesl_hover_tooltip_popup_left_margin"
+        android:right="@dimen/sesl_hover_tooltip_popup_right_margin"
+        android:top="@dimen/sesl_hover_tooltip_popup_top_margin">
+        <androidx.appcompat.util.SeslShapeDrawable android:shape="rectangle">
+            <padding
+                android:bottom="@dimen/sesl_hover_popup_padding_bottom"
+                android:left="@dimen/sesl_hover_popup_padding_left"
+                android:right="@dimen/sesl_hover_popup_padding_right"
+                android:top="@dimen/sesl_hover_popup_padding_top" />
+            <corners android:radius="@dimen/sesl_hover_popup_corner_radius" />
+            <solid android:color="?tooltipFrameBackground" />
+        </androidx.appcompat.util.SeslShapeDrawable>
+    </item>
+</layer-list>

@@ -21,6 +21,8 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -30,6 +32,8 @@ import androidx.annotation.RestrictTo;
 import androidx.core.view.ActionProvider;
 
 /**
+ *  <p><b>SESL variant</b></p><br>
+ *
  * Interface for direct access to a previously created menu item.
  *
  * This version extends the one available in the framework to ensures that any necessary
@@ -39,6 +43,7 @@ import androidx.core.view.ActionProvider;
  */
 @RestrictTo(LIBRARY_GROUP_PREFIX)
 public interface SupportMenuItem extends android.view.MenuItem {
+
     /*
     * These should be kept in sync with attrs.xml enum constants for showAsAction
     */
@@ -404,4 +409,17 @@ public interface SupportMenuItem extends android.view.MenuItem {
      * Returns true if {@link #setShowAsAction(int)} was set to {@link #SHOW_AS_ACTION_NEVER}.
      */
     boolean requiresOverflow();
+
+    //Sesl7
+    @NonNull
+    default MenuItem setSeslNaviMenuItemType(int itemType) {
+        return this;
+    }
+
+
+    default int getSeslNaviMenuItemType() {
+        return 0;
+    }
+    //sesl7
+
 }

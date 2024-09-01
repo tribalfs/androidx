@@ -32,6 +32,8 @@ import androidx.annotation.RequiresApi;
 import androidx.core.internal.view.SupportMenuItem;
 
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * Helper for accessing features in {@link MenuItem}.
  * <p class="note"><strong>Note:</strong> You cannot get an instance of this class. Instead,
  * it provides <em>static</em> methods that correspond to the methods in {@link
@@ -89,6 +91,11 @@ public final class MenuItemCompat {
      */
     @Deprecated
     public static final int SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW = 8;
+
+    //Sesl7
+    public static final int SESL_MENU_ITEM_TYPE_NONE = 0;
+    public static final  int SESL_MENU_ITEM_TYPE_CHECKBOX = 1;
+    //sesl7
 
     /**
      * Interface definition for a callback to be invoked when a menu item marked with {@link
@@ -605,6 +612,33 @@ public final class MenuItemCompat {
 
     private MenuItemCompat() {}
 
+    //Sesl7
+    /**
+     * Sets the navigation menu item type of the provided menu item.
+     *
+     * @param menuItem The menu item to set the type of.
+     * @param itemType Set either {@link #SESL_MENU_ITEM_TYPE_NONE} or {@link #SESL_MENU_ITEM_TYPE_CHECKBOX}
+     * @see #getNaviMenuItemType
+     */
+    public static void setSeslNaviMenuItemType(@NonNull MenuItem menuItem, int itemType) {
+        if (menuItem instanceof SupportMenuItem) {
+            ((SupportMenuItem) menuItem).setSeslNaviMenuItemType(itemType);
+        }
+    }
+
+    /**
+     * Gets the navigation menu item type of the provided menu item.
+     * @param menuItem The menu item to get the type.
+     * @see #setSeslNaviMenuItemType
+     */
+    public static int getNaviMenuItemType(@NonNull MenuItem menuItem) {
+        if (menuItem instanceof SupportMenuItem) {
+            return ((SupportMenuItem) menuItem).getSeslNaviMenuItemType();
+        }
+        return SESL_MENU_ITEM_TYPE_NONE;
+    }
+    //sesl7
+
     @RequiresApi(26)
     static class Api26Impl {
         private Api26Impl() {
@@ -666,4 +700,6 @@ public final class MenuItemCompat {
             return menuItem.getIconTintMode();
         }
     }
+
+
 }

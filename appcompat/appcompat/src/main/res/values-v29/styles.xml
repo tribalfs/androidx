@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+
+    <style name="Widget.AppCompat.ActionButton" parent="@style/Base.V29.Widget.AppCompat.ActionButton" />
+
+    <style name="Widget.AppCompat.ActionButton.CloseMode" parent="@style/Base.V29.Widget.AppCompat.ActionButton.CloseMode" />
+
+    <style name="Widget.AppCompat.ActionButton.Overflow" parent="@style/Base.V29.Widget.AppCompat.ActionButton.Overflow" />
+
+    <style name="Widget.AppCompat.ActionBar.TabView" parent="@style/Base.V29.Widget.AppCompat.ActionBar.TabView" />
+
+    <style name="Widget.AppCompat.Light.ActionBar.TabView" parent="@style/Base.V29.Widget.AppCompat.Light.ActionBar.TabView" />
+
+    <style name="Widget.AppCompat.Spinner" parent="@style/Base.V29.Widget.AppCompat.Spinner" />
+
+    <style name="Widget.AppCompat.ListView.DropDown" parent="@style/Base.V29.Widget.AppCompat.ListView.DropDown" />
+
+    <style name="Widget.AppCompat.ListMenuView" parent="@style/Base.V29.Widget.AppCompat.ListMenuView" />
+
+    <style name="Widget.AppCompat.CompoundButton.Switch" parent="@style/Base.V29.Widget.AppCompat.CompoundButton.Switch" />
+
+    <style name="Widget.AppCompat.CompoundButton.CheckBox" parent="@style/Base.V29.Widget.AppCompat.CompoundButton.CheckBox" />
+
+    <style name="Widget.AppCompat.CompoundButton.RadioButton" parent="@style/Base.V29.Widget.AppCompat.CompoundButton.RadioButton" />
+
+    <style name="Widget.AppCompat.Button" parent="@style/Base.V29.Widget.AppCompat.Button" />
+
+    <style name="Widget.AppCompat.Button.Small" parent="@style/Base.V29.Widget.AppCompat.Button.Small" />
+
+    <style name="Widget.AppCompat.Toolbar.Button.Navigation" parent="@style/Base.V29.Widget.AppCompat.Toolbar.Button.Navigation" />
+
+    <style name="Widget.AppCompat.Light.ActionButton.Overflow" parent="@style/Base.V29.Widget.AppCompat.Light.ActionButton.Overflow" />
+
+    <style name="Widget.AppCompat.Light.ListView.DropDown" parent="@style/Base.V29.Widget.AppCompat.Light.ListView.DropDown" />
+
+    <style name="Widget.AppCompat.Light.Spinner" parent="@style/Base.V29.Widget.AppCompat.Light.Spinner" />
+
+    <style name="Widget.AppCompat.Light.CompoundButton.Switch" parent="@style/Base.V29.Widget.AppCompat.Light.CompoundButton.Switch" />
+
+    <style name="Widget.AppCompat.Light.CompoundButton.CheckBox" parent="@style/Base.V29.Widget.AppCompat.Light.CompoundButton.CheckBox" />
+
+    <style name="Widget.AppCompat.Light.CompoundButton.RadioButton" parent="@style/Base.V29.Widget.AppCompat.Light.CompoundButton.RadioButton" />
+
+    <style name="Widget.AppCompat.Light.Button" parent="@style/Base.V29.Widget.AppCompat.Light.Button" />
+
+    <style name="Widget.AppCompat.Light.Button.Small" parent="@style/Base.V29.Widget.AppCompat.Light.Button.Small" />
+
+    <style name="Widget.AppCompat.Button.Dialog" parent="@style/Base.V29.Widget.AppCompat.Button.Dialog" />
+
+    <style name="Widget.AppCompat.Light.Button.Dialog" parent="@style/Base.V29.Widget.AppCompat.Light.Button.Dialog" />
+
+    <style name="Widget.AppCompat.AbsListView" parent="@style/Base.Widget.AppCompat.AbsListView">
+        <item name="android:listSelector">@drawable/sesl_list_item_recoil_background_dark</item>
+    </style>
+
+    <style name="Widget.AppCompat.Light.AbsListView" parent="@style/Base.Widget.AppCompat.AbsListView">
+        <item name="android:listSelector">@drawable/sesl_list_item_recoil_background_light</item>
+    </style>
+
+</resources>

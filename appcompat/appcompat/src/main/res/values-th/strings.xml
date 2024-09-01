@@ -65,4 +65,8 @@
     <string name="sesl_switchbar_on_text">เปิด</string>
     <string name="sesl_switch_off">ปิดใช้งานอยู่</string>
     <string name="sesl_switch_on">เปิดใช้งานอยู่</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">ปิดคำแนะนำ</string>
+    <string name="sesl_appbar_suggest_pagination">หน้าที่ %1$d จาก %2$d</string>
+    <!--sesl7-->
 </resources>

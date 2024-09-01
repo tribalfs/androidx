@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">As</string>
     <string name="sesl_searchview_description_voice">Cuardach gutha</string>
     <string name="sesl_switch_on">Air</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Ruaig moladh</string>
+    <string name="sesl_appbar_suggest_pagination">Leathanach %1$d as %2$d</string>
+    <!--sesl7-->
 </resources>

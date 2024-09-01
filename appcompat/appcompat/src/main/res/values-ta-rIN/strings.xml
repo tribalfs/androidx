@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">ஆஃப்</string>
     <string name="sesl_searchview_description_voice">குரல் தேடல்</string>
     <string name="sesl_switch_on">ஆன்</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">பரிந்துரையை நிராகரிக்கவும்</string>
+    <string name="sesl_appbar_suggest_pagination">பக்கம் %1$d / %2$d</string>
+    <!--sesl7-->
 </resources>

@@ -32,4 +32,6 @@
         <item name="useDisabledAlpha">true</item>
     </style>
 
+    <style name="Base.Widget.AppCompat.SeekBar.Discrete" parent="Base.Widget.AppCompat.SeekBar"/>
+
 </resources>

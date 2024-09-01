@@ -16,11 +16,15 @@
 
 package androidx.viewpager2.widget;
 
+import static android.view.MotionEvent.ACTION_CANCEL;
+import static android.view.MotionEvent.ACTION_UP;
+
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -37,6 +41,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.animation.PathInterpolator;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.IntRange;
@@ -50,6 +55,7 @@ import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat;
 import androidx.core.view.accessibility.AccessibilityViewCommand;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
@@ -159,6 +165,21 @@ public final class ViewPager2 extends ViewGroup {
     private @OffscreenPageLimit int mOffscreenPageLimit = OFFSCREEN_PAGE_LIMIT_DEFAULT;
     AccessibilityProvider mAccessibilityProvider; // to avoid creation of a synthetic accessor
 
+    //Ses7
+    private static final int CONTAINER_SCALE_DURATION = 400;
+    private static final PathInterpolator CONTAINER_SCALE_INTERPOLATOR = new PathInterpolator(0.22f, 0.25f, 0.0f, 1.0f);
+    private static final float CONTAINER_SCALE_MAX_VALUE = 1.0f;
+    private static final float CONTAINER_SCALE_MIN_VALUE = 0.95f;
+
+    float mContainerScaleValue = CONTAINER_SCALE_MAX_VALUE;
+    boolean mIsSuggestionPagingEnabled = false;
+    ValueAnimator mSuggestionReleaseAnimator;
+    ValueAnimator mSuggestionStartDragAnimator;
+    private boolean mPrevIsClipChildren = false;
+    private OrientationHelper mHorizontalHelper;
+    int mScrollState = SCROLL_STATE_IDLE;
+    //sesl7
+
     public ViewPager2(@NonNull Context context) {
         super(context);
         initialize(context, null);
@@ -230,6 +251,25 @@ public final class ViewPager2 extends ViewGroup {
                 if (newState == SCROLL_STATE_IDLE) {
                     updateCurrentItem();
                 }
+
+                //Sesl7
+                if (mScrollState != newState) {
+                    mScrollState = newState;
+                }
+
+                if (mIsSuggestionPagingEnabled && newState == SCROLL_STATE_DRAGGING) {
+                    if (mSuggestionStartDragAnimator.isRunning()) {
+                        mSuggestionStartDragAnimator.cancel();
+                    }
+
+                    mSuggestionStartDragAnimator.setFloatValues(1.0f, CONTAINER_SCALE_MIN_VALUE);
+                    if (mSuggestionReleaseAnimator.isRunning()) {
+                        mSuggestionStartDragAnimator.setFloatValues(mContainerScaleValue, CONTAINER_SCALE_MIN_VALUE);
+                        mSuggestionReleaseAnimator.cancel();
+                    }
+                    mSuggestionStartDragAnimator.start();
+                }
+                //sesl7
             }
         };
 
@@ -993,6 +1033,25 @@ public final class ViewPager2 extends ViewGroup {
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouchEvent(MotionEvent event) {
+            //Sesl7
+            int actionMasked;
+            if (mIsSuggestionPagingEnabled
+                    && (((actionMasked = event.getActionMasked()) == ACTION_UP || actionMasked == ACTION_CANCEL)
+                    && mScrollState == SCROLL_STATE_DRAGGING)) {
+                mSuggestionReleaseAnimator.setFloatValues(CONTAINER_SCALE_MIN_VALUE, CONTAINER_SCALE_MAX_VALUE);
+
+                if (mSuggestionStartDragAnimator.isRunning()) {
+                    mSuggestionReleaseAnimator.setFloatValues(mContainerScaleValue, CONTAINER_SCALE_MAX_VALUE);
+                    mSuggestionStartDragAnimator.cancel();
+                }
+
+                if (mSuggestionReleaseAnimator.isRunning()) {
+                    mSuggestionReleaseAnimator.cancel();
+                }
+
+                mSuggestionReleaseAnimator.start();
+            }
+            //sesl7
             return isUserInputEnabled() && super.onTouchEvent(event);
         }
 
@@ -1051,6 +1110,17 @@ public final class ViewPager2 extends ViewGroup {
                 boolean focusedChildVisible) {
             return false; // users should use setCurrentItem instead
         }
+
+        //Sesl7
+        @Override
+        public int scrollHorizontallyBy(int i, @NonNull RecyclerView.Recycler recycler, @NonNull RecyclerView.State state) {
+            if (mIsSuggestionPagingEnabled) {
+                setSuggestionPagingVI();
+            }
+            return super.scrollHorizontallyBy(i, recycler, state);
+        }
+        //sesl7
+
     }
 
     private class PagerSnapHelperImpl extends PagerSnapHelper {
@@ -1638,4 +1708,74 @@ public final class ViewPager2 extends ViewGroup {
             onChanged();
         }
     }
+
+    //Sesl7
+    public void seslSetSuggestionPaging(boolean suggestionPagingEnabled) {
+        mIsSuggestionPagingEnabled = suggestionPagingEnabled;
+        if (!suggestionPagingEnabled) {
+            mSuggestionStartDragAnimator.removeAllUpdateListeners();
+            mSuggestionStartDragAnimator.removeAllListeners();
+            mSuggestionReleaseAnimator.removeAllUpdateListeners();
+            mSuggestionReleaseAnimator.removeAllListeners();
+            if (mPrevIsClipChildren) {
+                mRecyclerView.setClipChildren(true);
+            }
+            return;
+        }
+
+        mSuggestionStartDragAnimator = ValueAnimator.ofFloat(CONTAINER_SCALE_MAX_VALUE, CONTAINER_SCALE_MIN_VALUE)
+                .setDuration(CONTAINER_SCALE_DURATION);
+        mSuggestionStartDragAnimator.setInterpolator(CONTAINER_SCALE_INTERPOLATOR);
+        mSuggestionStartDragAnimator.addUpdateListener(valueAnimator -> {
+            mContainerScaleValue = (Float) valueAnimator.getAnimatedValue();
+            setSuggestionPagingVI();
+        });
+        mSuggestionReleaseAnimator = ValueAnimator.ofFloat(CONTAINER_SCALE_MIN_VALUE, CONTAINER_SCALE_MAX_VALUE)
+                .setDuration(CONTAINER_SCALE_DURATION);
+        mSuggestionReleaseAnimator.setInterpolator(CONTAINER_SCALE_INTERPOLATOR);
+        mSuggestionReleaseAnimator.addUpdateListener(valueAnimator -> {
+            mContainerScaleValue = (Float) valueAnimator.getAnimatedValue();
+            setSuggestionPagingVI();
+        });
+        mPrevIsClipChildren = mRecyclerView.getClipChildren();;
+        if (mPrevIsClipChildren) {
+            mRecyclerView.setClipChildren(false);
+        }
+    }
+
+     void setSuggestionPagingVI() {
+        View snapView;
+        PagerSnapHelper pagerSnapHelper = mPagerSnapHelper;
+        if (pagerSnapHelper == null || (snapView = pagerSnapHelper.findSnapView(mLayoutManager)) == null) {
+            return;
+        }
+        int snapViewIndex = mRecyclerView.indexOfChild(snapView);
+        OrientationHelper horizontalHelper = getHorizontalHelper(mLayoutManager);
+        mHorizontalHelper = horizontalHelper;
+        int viewStart = horizontalHelper.getDecoratedStart(snapView);
+        View nextView = mRecyclerView.getChildAt(viewStart < 0 ? snapViewIndex + 1 : snapViewIndex - 1);
+        int i = viewStart < 0 ? viewStart * (-1) : viewStart;
+        float snapViewScale = ((((float) (snapView.getWidth() - i) / snapView.getWidth()) * 0.1f) + 0.9f) * mContainerScaleValue;
+        float nextViewScale = ((((float) i / snapView.getWidth()) * 0.1f) + 0.9f) * mContainerScaleValue;
+        float rotationFactor = viewStart > 0 ? -4 : 4;
+        float nextViewRotationFactor = ((float) (snapView.getWidth() - i) / snapView.getWidth()) * rotationFactor;
+        snapView.setScaleX(snapViewScale);
+        snapView.setScaleY(snapViewScale);
+        snapView.setRotationY(((float) i / snapView.getWidth()) * rotationFactor);
+        if (nextView != null) {
+            nextView.setScaleX(nextViewScale);
+            nextView.setScaleY(nextViewScale);
+            nextView.setRotationY(-nextViewRotationFactor);
+        }
+    }
+
+    @NonNull
+    private OrientationHelper getHorizontalHelper(@NonNull RecyclerView.LayoutManager layoutManager) {
+        OrientationHelper orientationHelper = mHorizontalHelper;
+        if (orientationHelper == null || orientationHelper.getLayoutManager() != layoutManager) {
+            mHorizontalHelper = OrientationHelper.createHorizontalHelper(layoutManager);
+        }
+        return mHorizontalHelper;
+    }
+    //sesl7
 }

@@ -70,11 +70,11 @@ public class SeslSleepTimePickerUtil {
     }
 
 
-    public static void setDefaultTextSize(@NonNull Context context, TextView textView, float f) {
-        setTextSize(context, textView, f, 1.0f);
+    public static void setDefaultTextSize(@NonNull Context context, @NonNull TextView textView, float defaultTextSize) {
+        setTextSize(context, textView, defaultTextSize, 1.0f);
     }
 
-    public static void setLargeTextSize(@NonNull Context context, TextView[] textViewArr,
+    public static void setLargeTextSize(@NonNull Context context, @NonNull TextView[] textViewArr,
             float fontScale) {
         if (context.getResources().getConfiguration().fontScale > fontScale) {
             for (TextView textView : textViewArr) {
@@ -86,22 +86,22 @@ public class SeslSleepTimePickerUtil {
         }
     }
 
-    private static void setTextSize(Context context, TextView textView, float f, float f2) {
+    private static void setTextSize(Context context, TextView textView, float defaultTextSize, float scale) {
         if (textView != null) {
-            float fontScale = context.getResources().getConfiguration().fontScale;
-            float f4 = f / fontScale;
-            Log.d(TAG, "setLargeTextSize fontScale : " + fontScale + ", " + f + ", " + f4);
-            if (fontScale <= f2) {
-                f2 = fontScale;
+            float scalingFactor = context.getResources().getConfiguration().fontScale;
+            float scaleMultiplier = defaultTextSize / scalingFactor;
+            Log.d(TAG, "setTextSize fontScale : " + scalingFactor + ", " + defaultTextSize + ", " + scaleMultiplier);
+            if (scalingFactor < scale) {
+                scale = scalingFactor;
             }
-            setTextSize(textView, f4 * f2);
+            setTextSize(textView, scaleMultiplier * scale);
         }
     }
 
-    public static void setTextSize(@Nullable TextView textView, float f) {
+    public static void setTextSize(@Nullable TextView textView, float textSize) {
         if (textView != null) {
             try {
-                textView.setTextSize(0, (float) Math.ceil(f));
+                textView.setTextSize(0, (float) Math.ceil(textSize));
             } catch (Exception unused) {
                 Log.e(TAG, "Exception");
             }
@@ -113,10 +113,12 @@ public class SeslSleepTimePickerUtil {
         return DateFormat.getBestDateTimePattern(Locale.getDefault(), "hm").startsWith("a");
     }
 
+    @NonNull
     public static String toDigitString(int i) {
         return String.format("%d", i);
     }
 
+    @NonNull
     public static String toTwoDigitString(int i) {
         return String.format("%02d", i);
     }

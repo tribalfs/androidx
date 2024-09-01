@@ -65,4 +65,8 @@
     <string name="sesl_switchbar_on_text">قيد التشغيل</string>
     <string name="sesl_switch_off">إيقاف التشغيل</string>
     <string name="sesl_switch_on">قيد التشغيل</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">استبعاد الاقتراح</string>
+    <string name="sesl_appbar_suggest_pagination">الصفحة %1$d من %2$d</string>
+    <!--Sesl7-->
 </resources>

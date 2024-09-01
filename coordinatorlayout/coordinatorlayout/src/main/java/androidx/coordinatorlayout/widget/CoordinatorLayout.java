@@ -81,11 +81,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/*
- * Original code by Samsung, all rights reserved to the original author.
- */
-
 /**
+ * <p><b>SESL variant</b></p><br>
+ *
  * CoordinatorLayout is a super-powered {@link android.widget.FrameLayout FrameLayout}.
  *
  * <p>CoordinatorLayout is intended for two primary use cases:</p>

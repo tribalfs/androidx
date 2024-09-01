@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">Desaktibatuta</string>
     <string name="sesl_searchview_description_voice">Ahots bilaketa</string>
     <string name="sesl_switch_on">Aktibatuta</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Baztertu iradokizuna</string>
+    <string name="sesl_appbar_suggest_pagination">%2$d orritik %1$dgarrena</string>
+    <!--sesl7-->
 </resources>

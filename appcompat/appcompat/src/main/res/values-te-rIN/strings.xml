@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">ఆఫ్</string>
     <string name="sesl_searchview_description_voice">వాయిస్ శోధన</string>
     <string name="sesl_switch_on">ఆన్</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">సూచనను విస్మరించు</string>
+    <string name="sesl_appbar_suggest_pagination">పేజీ %2$dలో %1$d</string>
+    <!--sesl7-->
 </resources>

@@ -65,4 +65,8 @@
     <string name="sesl_switchbar_on_text">Naka-on</string>
     <string name="sesl_switch_off">Naka-off</string>
     <string name="sesl_switch_on">Naka-on</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">I-dismiss ang mungkahi</string>
+    <string name="sesl_appbar_suggest_pagination">Pahina %1$d ng %2$d</string>
+    <!--sesl7-->
 </resources>

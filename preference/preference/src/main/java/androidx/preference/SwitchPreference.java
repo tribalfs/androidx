@@ -227,7 +227,7 @@ public class SwitchPreference extends TwoStatePreference {
         }
 
         View switchView = view.findViewById(AndroidResources.ANDROID_R_SWITCH_WIDGET);
-        if (mIsLargeLayout != 1) syncSwitchView(switchView);//sesl
+        if (mIsLargeLayout != SWITCH_PREFERENCE_LAYOUT_LARGE) syncSwitchView(switchView);//sesl
         if (isTalkBackIsRunning()) return;//sesl
 
         View summaryView = view.findViewById(android.R.id.summary);

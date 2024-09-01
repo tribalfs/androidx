@@ -16,13 +16,13 @@
   -->
 
 <resources>
-<!--
 
     <style name="Base.Theme.AppCompat" parent="Base.V23.Theme.AppCompat" />
     <style name="Base.Theme.AppCompat.Light" parent="Base.V23.Theme.AppCompat.Light" />
 
     <style name="Base.V23.Theme.AppCompat" parent="Base.V22.Theme.AppCompat">
-        &lt;!&ndash; We can use the platform styles on API 23+ &ndash;&gt;
+        <!--sesl: ff are already supplied in parent theme-->
+<!--        &lt;!&ndash; We can use the platform styles on API 23+ &ndash;&gt;
         <item name="ratingBarStyleIndicator">?android:attr/ratingBarStyleIndicator</item>
         <item name="ratingBarStyleSmall">?android:attr/ratingBarStyleSmall</item>
 
@@ -33,23 +33,27 @@
         <item name="actionMenuTextAppearance">?android:attr/actionMenuTextAppearance</item>
         <item name="actionOverflowButtonStyle">?android:attr/actionOverflowButtonStyle</item>
 
-        <item name="controlBackground">@drawable/abc_control_background_material</item>
+        <item name="controlBackground">@drawable/abc_control_background_material</item>-->
     </style>
 
     <style name="Base.V23.Theme.AppCompat.Light" parent="Base.V22.Theme.AppCompat.Light">
-        &lt;!&ndash; We can use the platform styles on API 23+ &ndash;&gt;
+        <!--sesl: ff are already supplied in parent theme-->
+        <!-- We can use the platform styles on API 23+ -->
+<!--
         <item name="ratingBarStyleIndicator">?android:attr/ratingBarStyleIndicator</item>
         <item name="ratingBarStyleSmall">?android:attr/ratingBarStyleSmall</item>
+-->
 
-        &lt;!&ndash; We can use the platform drawable on v23+ &ndash;&gt;
-        <item name="actionBarItemBackground">?android:attr/actionBarItemBackground</item>
-        &lt;!&ndash; We can use the platform styles on v23+ &ndash;&gt;
+        <!-- We can use the platform drawable on v23+ -->
+<!--        <item name="actionBarItemBackground">?android:attr/actionBarItemBackground</item>-->
+        <!-- We can use the platform styles on v23+ -->
+<!--
         <item name="actionMenuTextColor">?android:attr/actionMenuTextColor</item>
         <item name="actionMenuTextAppearance">?android:attr/actionMenuTextAppearance</item>
         <item name="actionOverflowButtonStyle">?android:attr/actionOverflowButtonStyle</item>
 
         <item name="controlBackground">@drawable/abc_control_background_material</item>
-    </style>
 -->
+    </style>
 
 </resources>

@@ -23,9 +23,9 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -45,6 +45,7 @@ import androidx.annotation.XmlRes;
 import androidx.appcompat.util.SeslRoundedCorner;
 import androidx.appcompat.util.SeslSubheaderRoundedCorner;
 import androidx.core.content.res.TypedArrayUtils;
+import androidx.core.graphics.Insets;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -115,7 +116,7 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
     private static final float FONT_SCALE_LARGE = 1.3f;
     private static final int SWITCH_PREFERENCE_LAYOUT = 2;
     private static final int SWITCH_PREFERENCE_LAYOUT_LARGE = 1;
-    private SeslRoundedCorner mListRoundedCorner;
+    SeslRoundedCorner mListRoundedCorner;
     ViewTreeObserver.OnPreDrawListener mOnPreDrawListener;
     SeslRoundedCorner mRoundedCorner;
     int mScreenWidthDp;
@@ -124,6 +125,11 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
     boolean mIsRoundedCorner = true;
     int mIsLargeLayout;
     private int mSubheaderColor;
+    int mLeft = -1;
+    int mTop = -1;
+    int mRight = -1;
+    int mBottom = -1;
+    final boolean mSupportsInsets = VERSION.SDK_INT > 29;//custom
     //sesl
 
     /**
@@ -299,6 +305,15 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
             listContainer.addView(mList);
         }
         mHandler.post(mRequestFocus);
+
+        //Sesl7
+        final int defaultHorizontalPadding = getResources().getDimensionPixelSize(R.dimen.sesl_preference_padding_horizontal);
+        if (mLeft < 0) mLeft = defaultHorizontalPadding;
+        if (mRight < 0) mRight = defaultHorizontalPadding;
+        if (mTop < 0) mTop = 0;
+        if (mBottom < 0) mBottom = 0;
+        setPadding(mLeft, mTop, mRight, mBottom);
+        //sesl7
 
         return view;
     }
@@ -921,16 +936,25 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
 
             final int childCount = parent.getChildCount();
             final int width = parent.getWidth();
+
+            PreferenceViewHolder preferenceHolder;
+            int dividerLeftOffset;
+
             for (int i = 0; i < childCount; i++) {
-                final View view = parent.getChildAt(i);
-                final RecyclerView.ViewHolder holder = parent.getChildViewHolder(view);
-                final PreferenceViewHolder preferenceHolder =
-                        holder instanceof PreferenceViewHolder ?
-                        (PreferenceViewHolder) holder : null;
+                View view = parent.getChildAt(i);
+                RecyclerView.ViewHolder holder = parent.getChildViewHolder(view);
+
+                if (holder instanceof PreferenceViewHolder) {
+                    preferenceHolder = (PreferenceViewHolder) holder;
+                    dividerLeftOffset = preferenceHolder.seslGetDividerLeftOffset();
+                } else {
+                    preferenceHolder = null;
+                    dividerLeftOffset = 0;
+                }
 
                 int top = (int) view.getY() + view.getHeight();
                 if (mDivider != null && shouldDrawDividerBelow(view, parent)) {
-                    mDivider.setBounds(0, top, width, mDividerHeight + top);
+                    mDivider.setBounds(dividerLeftOffset, top, width, mDividerHeight + top);
                     mDivider.draw(c);
                 }
 
@@ -951,7 +975,8 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
 
             //sesl
             if (mIsRoundedCorner) {
-                mListRoundedCorner.drawRoundedCorner(c);
+                mListRoundedCorner.drawRoundedCorner(c,
+                        mSupportsInsets ? Insets.of(mLeft, mTop, mRight, mBottom) : null);
             }
             //sesl
         }
@@ -1068,6 +1093,24 @@ public abstract class PreferenceFragment extends android.app.Fragment implements
 
     public void seslSetRoundedCorner(boolean enabled) {
         mIsRoundedCorner = enabled;
+    }
+
+    public void setPadding(int left, int top, int right, int bottom) {
+        mLeft = left;
+        mTop = top;
+        mRight = right;
+        mBottom = bottom;
+        updatePadding();
+    }
+
+    private void updatePadding() {
+        RecyclerView list = mList;
+        if (list != null) {
+            list.setPadding(mLeft, mTop, mRight, mBottom);
+            boolean fillHorizontal = mLeft != 0 || mRight != 0 || mTop != 0 || mBottom != 0;
+            list.seslSetFillHorizontalPaddingEnabled(fillHorizontal);
+            list.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
+        }
     }
     //sesl
 }

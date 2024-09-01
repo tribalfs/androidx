@@ -15,9 +15,9 @@
  */
 
 plugins {
-    id("com.android.application") version '8.5.2' apply false
-    id("com.android.library") version '8.5.2' apply false
-    id("org.jetbrains.kotlin.android") version "2.0.20" apply false
+    id("com.android.application") version '8.7.1' apply false
+    id("com.android.library") version '8.7.1' apply false
+    id("org.jetbrains.kotlin.android") version "2.0.21" apply false
 }
 
 apply from: new File("manifest.gradle")
@@ -26,8 +26,46 @@ apply from: new File("manifest.gradle")
 def githubProperties = new Properties()
 githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
 
+def githubUsername = project.findProperty('githubUsername') ?:
+        githubProperties.getProperty('gpr.usr') ?:
+                System.getenv('GITHUB_USERNAME') ?:
+                        { throw new GradleException('GitHub username not found') }()
+
+def githubAccessToken = project.findProperty('githubAccessToken') ?:
+        githubProperties.getProperty('gpr.key') ?:
+                System.getenv('GITHUB_ACCESS_TOKEN') ?:
+                        { throw new GradleException('GitHub Access Token not found') }()
 
 allprojects {
+    repositories {
+        google()
+        mavenCentral()
+
+        maven {
+            url = uri("https://maven.pkg.github.com/tribalfs/sesl-androidx")
+            credentials {
+                username = githubUsername
+                password = githubAccessToken
+            }
+        }
+        maven {
+            url = uri("https://maven.pkg.github.com/tribalfs/sesl-material-components-android")
+            credentials {
+                username = githubUsername
+                password = githubAccessToken
+            }
+        }
+        maven {
+            url = uri("https://maven.pkg.github.com/tribalfs/SeslStub")
+            credentials {
+                username = githubUsername
+                password = githubAccessToken
+            }
+        }
+        maven { url = uri("https://jitpack.io") }
+        maven { url = uri("https://plugins.gradle.org/m2/") }
+        mavenLocal()
+    }
     tasks.withType(Javadoc).tap {
         configureEach {
             options.addStringOption('Xdoclint:none', '-quiet')
@@ -139,9 +177,8 @@ subprojects {
                             url = uri("https://maven.pkg.github.com/tribalfs/sesl-androidx")
 
                             credentials {
-                                /**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
-                                username = githubProperties['gpr.usr'] ?: System.getenv("gpr.usr")
-                                password = githubProperties['gpr.key'] ?: System.getenv("gpr.key")
+                                username = githubUsername
+                                password = githubAccessToken
                             }
                         }
                     }

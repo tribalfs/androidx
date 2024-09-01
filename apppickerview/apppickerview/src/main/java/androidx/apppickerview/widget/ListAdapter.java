@@ -18,6 +18,7 @@ package androidx.apppickerview.widget;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,13 +70,8 @@ class ListAdapter extends AbsAdapter {
                     holder.getLeftContainer().setVisibility(View.VISIBLE);
                     holder.getWidgetContainer().setVisibility(View.GONE);
 
-                    holder.getItem().setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            holder.getCheckBox()
-                                    .setChecked(!holder.getCheckBox().isChecked());
-                        }
-                    });
+                    holder.getItem().setOnClickListener(view -> holder.getCheckBox()
+                            .setChecked(!holder.getCheckBox().isChecked()));
 
                     AccessibilityManager am = (AccessibilityManager) mContext
                             .getSystemService(Context.ACCESSIBILITY_SERVICE);
@@ -91,13 +87,8 @@ class ListAdapter extends AbsAdapter {
                     holder.getLeftContainer().setVisibility(View.VISIBLE);
                     holder.getWidgetContainer().setVisibility(View.GONE);
 
-                    holder.getItem().setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            holder.getRadioButton()
-                                    .setChecked(!holder.getRadioButton().isChecked());
-                        }
-                    });
+                    holder.getItem().setOnClickListener(view -> holder.getRadioButton()
+                            .setChecked(!holder.getRadioButton().isChecked()));
 
                     AccessibilityManager am = (AccessibilityManager) mContext
                             .getSystemService(Context.ACCESSIBILITY_SERVICE);
@@ -121,13 +112,8 @@ class ListAdapter extends AbsAdapter {
                         }
                     }
 
-                    holder.getItem().setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            holder.getSwitch()
-                                    .setChecked(!holder.getSwitch().isChecked());
-                        }
-                    });
+                    holder.getItem().setOnClickListener(view -> holder.getSwitch()
+                            .setChecked(!holder.getSwitch().isChecked()));
 
                     AccessibilityManager am = (AccessibilityManager) mContext
                             .getSystemService(Context.ACCESSIBILITY_SERVICE);
@@ -142,6 +128,7 @@ class ListAdapter extends AbsAdapter {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -253,11 +253,8 @@ public class SeslDatePicker extends LinearLayout
     private boolean mIsCalendarViewDisabled = false;
     //sesl6
 
-    private final View.OnFocusChangeListener mBtnFocusChangeListener = (v, hasFocus) -> {
-        if (!hasFocus) {
-            removeAllCallbacks();
-        }
-    };
+    private final LinearLayout.LayoutParams mLpPreAllocated = new LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
     private final View.OnClickListener mCalendarHeaderClickListener = v -> {
         setCurrentViewType((mCurrentViewType + VIEW_TYPE_SPINNER) % 2);
@@ -649,8 +646,13 @@ public class SeslDatePicker extends LinearLayout
         mPrevButton.setOnKeyListener(mMonthBtnKeyListener);
         mNextButton.setOnKeyListener(mMonthBtnKeyListener);
 
-        mPrevButton.setOnFocusChangeListener(mBtnFocusChangeListener);
-        mNextButton.setOnFocusChangeListener(mBtnFocusChangeListener);
+        OnFocusChangeListener btnFocusChangeListener = (v, hasFocus) -> {
+            if (!hasFocus) {
+                removeAllCallbacks();
+            }
+        };
+        mPrevButton.setOnFocusChangeListener(btnFocusChangeListener);
+        mNextButton.setOnFocusChangeListener(btnFocusChangeListener);
         mPrevButton.setColorFilter(btnTintColor);
         mNextButton.setColorFilter(btnTintColor);
 
@@ -1767,8 +1769,8 @@ public class SeslDatePicker extends LinearLayout
             mOldCalendarViewPagerWidth = mCalendarViewPagerWidth;
 
             if (mCustomButtonLayout != null) {
-                mCustomButtonLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, mCalendarHeaderLayoutHeight));
+                mLpPreAllocated.height = mCalendarHeaderLayoutHeight;
+                mCustomButtonLayout.setLayoutParams(mLpPreAllocated);
             }
             mCalendarHeaderLayout.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, mCalendarHeaderLayoutHeight));
@@ -2117,8 +2119,6 @@ public class SeslDatePicker extends LinearLayout
                     mHandler.sendMessage(msg);
 
                     mCalendarPagerAdapter.notifyDataSetChanged();
-
-                    typeChanged = true;
                 }
 
                 if (mOnViewTypeChangedListener != null) {
@@ -2359,7 +2359,7 @@ public class SeslDatePicker extends LinearLayout
                         new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                 mCalendarHeaderLayoutHeight));
             } else {
-                ((LinearLayout.LayoutParams) mCustomButtonLayout.getLayoutParams()).height =
+                mCustomButtonLayout.getLayoutParams().height =
                         mCalendarHeaderLayoutHeight;
             }
             removeCustomViewFromParent();

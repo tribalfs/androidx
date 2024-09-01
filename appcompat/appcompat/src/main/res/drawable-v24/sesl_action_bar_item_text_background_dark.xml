@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetBottom="@dimen/sesl_action_item_show_button_background_inset_vertical"
+    android:insetTop="@dimen/sesl_action_item_show_button_background_inset_vertical">
+    <ripple android:color="?colorControlHighlight">
+        <item android:id="@android:id/mask">
+            <androidx.appcompat.util.SeslShapeDrawable android:shape="rectangle">
+                <corners android:radius="@dimen/sesl_action_menu_item_text_ripple_radius" />
+                <solid android:color="@color/sesl_action_bar_background_color_dark" />
+            </androidx.appcompat.util.SeslShapeDrawable>
+        </item>
+    </ripple>
+</inset>

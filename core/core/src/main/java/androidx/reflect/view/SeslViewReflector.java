@@ -45,6 +45,26 @@ public class SeslViewReflector {
     private SeslViewReflector() {
     }
 
+    public static void semSetScrollBarBottomPadding(@NonNull View view, int i) {
+        if (DeviceInfo.isOneUI()) {
+            Method declaredMethod = SeslBaseReflector.getDeclaredMethod(mClass,
+                    "semSetScrollBarBottomPadding", Integer.TYPE);
+            if (declaredMethod != null) {
+                SeslBaseReflector.invoke(view, declaredMethod, i);
+            }
+        }
+    }
+
+    public static void semSetScrollBarTopPadding(@NonNull View view, int i) {
+        if (DeviceInfo.isOneUI()) {
+            Method declaredMethod = SeslBaseReflector.getDeclaredMethod(mClass,
+                    "semSetScrollBarTopPadding", Integer.TYPE);
+            if (declaredMethod != null) {
+                SeslBaseReflector.invoke(view, declaredMethod, i);
+            }
+        }
+    }
+
     public static void setField_mPaddingLeft(@NonNull View view, int value) {
         Field field = SeslBaseReflector.getDeclaredField(mClass, "mPaddingLeft");
         if (field != null) {

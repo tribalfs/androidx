@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">বন্ধ আছে</string>
     <string name="sesl_searchview_description_voice">ভয়েস অনুসন্ধান</string>
     <string name="sesl_switch_on">চালু আছে</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">সুপারিশ ডিসমিস করুন</string>
+    <string name="sesl_appbar_suggest_pagination">পেইজ %2$d-এর %1$d</string>
+    <!--sesl7-->
 </resources>

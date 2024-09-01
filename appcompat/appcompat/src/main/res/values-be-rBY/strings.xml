@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">Не выкарыстоўваецца</string>
     <string name="sesl_searchview_description_voice">Галасавы пошук</string>
     <string name="sesl_switch_on">Выкарыстоўваецца</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Адхіліць прапанову</string>
+    <string name="sesl_appbar_suggest_pagination">Старонка %1$d з %2$d</string>
+    <!--sesl7-->
 </resources>

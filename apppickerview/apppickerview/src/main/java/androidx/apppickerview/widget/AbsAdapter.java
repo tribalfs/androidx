@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -110,7 +111,8 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mDataSet;
     }
 
-    void resetPackages(List<String> packageNamesList, boolean dataSetchanged,
+    void resetPackages(List<String> packageNamesList,
+            boolean dataSetchanged,
             List<AppPickerView.AppLabelInfo> labelInfoList,
             List<ComponentName> activityNamesList) {
         Log.i(TAG, "Start resetpackage dataSetchanged : " + dataSetchanged);
@@ -177,17 +179,13 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private Comparator<AppPickerView.AppLabelInfo> getAppLabelComparator(int order) {
-        switch (order) {
-            case AppPickerView.ORDER_ASCENDING:
-                return APP_LABEL_ASCENDING;
-            case AppPickerView.ORDER_ASCENDING_IGNORE_CASE:
-                return APP_LABEL_ASCENDING_IGNORE_CASE;
-            case AppPickerView.ORDER_DESCENDING:
-                return APP_LABEL_DESCENDING;
-            case AppPickerView.ORDER_DESCENDING_IGNORE_CASE:
-                return APP_LABEL_DESCENDING_IGNORE_CASE;
-        }
-        return null;
+        return switch (order) {
+            case AppPickerView.ORDER_ASCENDING -> APP_LABEL_ASCENDING;
+            case AppPickerView.ORDER_ASCENDING_IGNORE_CASE -> APP_LABEL_ASCENDING_IGNORE_CASE;
+            case AppPickerView.ORDER_DESCENDING -> APP_LABEL_DESCENDING;
+            case AppPickerView.ORDER_DESCENDING_IGNORE_CASE -> APP_LABEL_DESCENDING_IGNORE_CASE;
+            default -> null;
+        };
     }
 
     @Override
@@ -266,15 +264,16 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mDataSetFiltered.size();
     }
 
+    @NonNull
     public AppPickerView.AppLabelInfo getAppInfo(int position) {
         return mDataSetFiltered.get(position);
     }
 
-    public void setOnBindListener(@NonNull AppPickerView.OnBindListener listener) {
+    public void setOnBindListener(@Nullable AppPickerView.OnBindListener listener) {
         mOnBindListener = listener;
     }
 
-    public void setOnSearchFilterListener(AppPickerView.OnSearchFilterListener listener) {
+    public void setOnSearchFilterListener(@Nullable AppPickerView.OnSearchFilterListener listener) {
         mOnSearchFilterListener = listener;
     }
 
@@ -333,12 +332,9 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                if ("".equals(mSearchText)) {
-                    mHideAllApps = false;
-                } else {
-                    mHideAllApps = true;
-                }
+                mHideAllApps = !"".equals(mSearchText);
                 mDataSetFiltered.clear();
+                //noinspection unchecked
                 mDataSetFiltered.addAll((ArrayList<AppPickerView.AppLabelInfo>) results.values);
 
                 refreshSectionMap();
@@ -376,19 +372,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mSectionMap.clear();
         ArrayList<String> sections = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= 24) {
-            LocaleList locales = mContext.getResources().getConfiguration().getLocales();
-            if (locales.isEmpty()) {
-                locales = new LocaleList(Locale.ENGLISH);
-            }
-
-            AlphabeticIndex<Integer> alphabeticIndex = new AlphabeticIndex<>(locales.get(0));
-            for (int i = 1; i < locales.size(); i++) {
-                alphabeticIndex.addLabels(locales.get(i));
-            }
-            alphabeticIndex.addLabels(Locale.ENGLISH);
-
-            AlphabeticIndex.ImmutableIndex<Integer> immutableIndex =
-                    alphabeticIndex.buildImmutableIndex();
+            AlphabeticIndex.ImmutableIndex<Integer> immutableIndex = getBuckets();
 
             mPositionToSectionIndex = new int[mDataSetFiltered.size()];
 
@@ -410,6 +394,24 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    @RequiresApi(api = 24)
+    private AlphabeticIndex.ImmutableIndex<Integer> getBuckets() {
+        LocaleList locales = mContext.getResources().getConfiguration().getLocales();
+        if (locales.isEmpty()) {
+            locales = new LocaleList(Locale.ENGLISH);
+        }
+
+        AlphabeticIndex<Integer> alphabeticIndex = new AlphabeticIndex<>(locales.get(0));
+        for (int i = 1; i < locales.size(); i++) {
+            alphabeticIndex.addLabels(locales.get(i));
+        }
+        alphabeticIndex.addLabels(Locale.ENGLISH);
+
+        AlphabeticIndex.ImmutableIndex<Integer> immutableIndex =
+                alphabeticIndex.buildImmutableIndex();
+        return immutableIndex;
+    }
+
     protected float limitFontScale(@NonNull TextView textView) {
         final float currentFontScale
                 = textView.getResources().getConfiguration().fontScale;
@@ -418,53 +420,41 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return i > 0 ? (textSize / currentFontScale) * 1.3f : textSize;
     }
 
-    protected void limitFontLarge(TextView textView) {
-        if (textView != null) {
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, limitFontScale(textView));
-        }
+    protected void limitFontLarge(@NonNull TextView textView) {
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, limitFontScale(textView));
     }
 
-    protected void limitFontLarge2LinesHeight(TextView textView) {
-        if (textView != null) {
-            float limitFontScale = limitFontScale(textView);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, limitFontScale);
-            textView.setMinHeight(Math.round((limitFontScale * 2.0f) + 0.5f));
-        }
+    protected void limitFontLarge2LinesHeight(@NonNull TextView textView) {
+        float limitFontScale = limitFontScale(textView);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, limitFontScale);
+        textView.setMinHeight(Math.round((limitFontScale * 2.0f) + 0.5f));
     }
 
     private static final Comparator<AppPickerView.AppLabelInfo> APP_LABEL_ASCENDING
-            = new Comparator<>() {
-        public int compare(AppPickerView.AppLabelInfo a, AppPickerView.AppLabelInfo b) {
-            Collator collator = Collator.getInstance(Locale.getDefault());
-            collator.setStrength(Collator.TERTIARY);
-            return collator.compare(a.getLabel(), b.getLabel());
-        }
-    };
+            = (a, b) -> {
+                Collator collator = Collator.getInstance(Locale.getDefault());
+                collator.setStrength(Collator.TERTIARY);
+                return collator.compare(a.getLabel(), b.getLabel());
+            };
 
     private static final Comparator<AppPickerView.AppLabelInfo> APP_LABEL_ASCENDING_IGNORE_CASE
-            = new Comparator<>() {
-        public int compare(AppPickerView.AppLabelInfo a, AppPickerView.AppLabelInfo b) {
-            Collator collator = Collator.getInstance(Locale.getDefault());
-            collator.setStrength(Collator.PRIMARY);
-            return collator.compare(a.getLabel(), b.getLabel());
-        }
-    };
+            = (a, b) -> {
+                Collator collator = Collator.getInstance(Locale.getDefault());
+                collator.setStrength(Collator.PRIMARY);
+                return collator.compare(a.getLabel(), b.getLabel());
+            };
 
     private static final Comparator<AppPickerView.AppLabelInfo> APP_LABEL_DESCENDING
-            = new Comparator<AppPickerView.AppLabelInfo>() {
-        public int compare(AppPickerView.AppLabelInfo a, AppPickerView.AppLabelInfo b) {
-            Collator collator = Collator.getInstance(Locale.getDefault());
-            collator.setStrength(Collator.TERTIARY);
-            return collator.compare(b.getLabel(), a.getLabel());
-        }
-    };
+            = (a, b) -> {
+                Collator collator = Collator.getInstance(Locale.getDefault());
+                collator.setStrength(Collator.TERTIARY);
+                return collator.compare(b.getLabel(), a.getLabel());
+            };
 
     private static final Comparator<AppPickerView.AppLabelInfo> APP_LABEL_DESCENDING_IGNORE_CASE
-            = new Comparator<>() {
-        public int compare(AppPickerView.AppLabelInfo a, AppPickerView.AppLabelInfo b) {
-            Collator collator = Collator.getInstance(Locale.getDefault());
-            collator.setStrength(Collator.PRIMARY);
-            return collator.compare(b.getLabel(), a.getLabel());
-        }
-    };
+            = (a, b) -> {
+                Collator collator = Collator.getInstance(Locale.getDefault());
+                collator.setStrength(Collator.PRIMARY);
+                return collator.compare(b.getLabel(), a.getLabel());
+            };
 }

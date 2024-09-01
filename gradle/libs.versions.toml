@@ -32,6 +32,7 @@ dagger = "2.49"
 dependencyAnalysisGradlePlugin = "1.32.0"
 dexmaker = "2.28.3"
 dokka = "1.8.20-dev-214"
+dynamicanimation = "1.0.0"
 espresso = "3.6.1"
 espressoDevice = "1.0.1"
 grpc = "1.52.0"
@@ -92,6 +93,7 @@ androidToolsSdkCommon = { module = "com.android.tools:sdk-common", version.ref =
 androidToolsAnalyticsProtos = { module = "com.android.tools.analytics-library:protos", version.ref = "androidLint" }
 androidKotlinMultiplatform = { module = "com.android.kotlin.multiplatform.library:com.android.kotlin.multiplatform.library.gradle.plugin", version.ref = "androidGradlePlugin" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotationVersion" }
+androidx-dynamicanimation = { module = "androidx.dynamicanimation:dynamicanimation", version.ref = "dynamicanimation" }
 autoCommon = { module = "com.google.auto:auto-common", version = "1.2.1" }
 atomicFu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicFu" }
 atomicFuPluginz = { module = "org.jetbrains.kotlinx:atomicfu-gradle-plugin", version.ref = "atomicFu" }

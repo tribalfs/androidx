@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2022 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2022 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -11,16 +10,25 @@
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
-     limitations under the License.
--->
+     limitations under the License. -->
 
 <!-- Original code by Samsung, all rights reserved to the original author. -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:shareInterpolator="false">
-    <translate
-        android:duration="400"
+    <alpha
+        android:duration="150"
+        android:fillAfter="true"
+        android:fillBefore="true"
         android:fillEnabled="true"
-        android:fillBefore="true" android:fillAfter="true"
-        android:fromYDelta="0.0%" android:toYDelta="-3.125%"
-        android:interpolator="@interpolator/i25_5_0_1"/>
+        android:fromAlpha="1"
+        android:interpolator="@interpolator/interpolator_0_0_1_1"
+        android:toAlpha="0" />
+    <translate
+        android:duration="450"
+        android:fillAfter="true"
+        android:fillBefore="true"
+        android:fillEnabled="true"
+        android:fromXDelta="0%"
+        android:interpolator="@interpolator/interpolator_022_05_0_1"
+        android:toXDelta="-33.299995%" />
 </set>

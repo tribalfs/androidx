@@ -65,4 +65,8 @@
     <string name="sesl_switchbar_on_text">Til</string>
     <string name="sesl_switch_off">Fra</string>
     <string name="sesl_switch_on">Til</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Afvis forslag</string>
+    <string name="sesl_appbar_suggest_pagination">Side %1$d af %2$d</string>
+    <!--sesl7-->
 </resources>

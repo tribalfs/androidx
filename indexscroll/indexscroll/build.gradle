@@ -8,14 +8,14 @@ android {
     sourceSets.main.resources.srcDir "$buildDir/javaResources"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
 }
 
 dependencies {
-    api("androidx.annotation:annotation:1.7.0")
+    api("androidx.annotation:annotation:1.8.1")
     api project(path: ':appcompat:appcompat')
     api project(path: ':core:core')
     api project(path: ':customview:customview')

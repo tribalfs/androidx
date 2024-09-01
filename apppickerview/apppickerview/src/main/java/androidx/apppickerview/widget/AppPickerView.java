@@ -116,17 +116,17 @@ public class AppPickerView extends RecyclerView
     public @interface AppPickerType {
     }
 
-    private AbsAdapter mAdapter;
+    AbsAdapter mAdapter;
     private final AppPickerIconLoader mAppPickerIconLoader;
     private final Context mContext;
     private RecyclerView.ItemDecoration mGridSpacingDecoration;
     SeslSubheaderRoundedCorner mRoundedCorner;
-    private ArrayList<Integer> mSeparators;
+    ArrayList<Integer> mSeparators;
     private boolean mIsAppPickerInitialized;
     boolean mIsCustomViewItemEnabled;
 
     private int mOrder;
-    private int mSpanCount = 4;
+    int mSpanCount = 4;
     private int mType;
 
     public interface OnBindListener {
@@ -146,13 +146,12 @@ public class AppPickerView extends RecyclerView
     }
 
     public AppPickerView(@NonNull Context context, @Nullable AttributeSet attrs,
-                         int defStyleAttr) {
+            int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
         mSpanCount = 4;
         mIsCustomViewItemEnabled = false;
         mIsAppPickerInitialized = false;
-        setRecyclerListener(this);
         mAppPickerIconLoader = new AppPickerIconLoader(mContext);
     }
 
@@ -169,22 +168,22 @@ public class AppPickerView extends RecyclerView
         setAppPickerView(type, null, order, null);
     }
 
-    public void setAppPickerView(@AppPickerType int type, List<String> packageNamesList) {
+    public void setAppPickerView(@AppPickerType int type, @Nullable List<String> packageNamesList) {
         setAppPickerView(type, packageNamesList, ORDER_ASCENDING_IGNORE_CASE, null);
     }
 
     public void setAppPickerView(@AppPickerType int type, @Nullable List<String> packageNamesList,
-                                 @Nullable List<AppLabelInfo> labelInfoList) {
+            @Nullable List<AppLabelInfo> labelInfoList) {
         setAppPickerView(type, packageNamesList, ORDER_ASCENDING_IGNORE_CASE, labelInfoList);
     }
 
     public void setAppPickerView(@AppPickerType int type, @Nullable List<String> packageNamesList,
-                                 @AppPickerOrder int order) {
+            @AppPickerOrder int order) {
         setAppPickerView(type, packageNamesList, order, null);
     }
 
     public void setAppPickerView(@AppPickerType int type, @Nullable List<String> packageNamesList,
-                                 @AppPickerOrder int order, @Nullable List<AppLabelInfo> labelInfoList) {
+            @AppPickerOrder int order, @Nullable List<AppLabelInfo> labelInfoList) {
         setAppPickerView(type, packageNamesList, order, labelInfoList, null);
     }
 
@@ -193,19 +192,19 @@ public class AppPickerView extends RecyclerView
     }
 
     public void setAppPickerView(@AppPickerType int type, @AppPickerOrder int order,
-                                 @Nullable List<ComponentName> activityNamesList) {
+            @Nullable List<ComponentName> activityNamesList) {
         setAppPickerView(type, null, order, null, activityNamesList);
     }
 
     public void setAppPickerView(@AppPickerType int type, @AppPickerOrder int order,
-                                 @Nullable List<AppLabelInfo> labelInfoList,
-                                 @Nullable List<ComponentName> activityNamesList) {
+            @Nullable List<AppLabelInfo> labelInfoList,
+            @Nullable List<ComponentName> activityNamesList) {
         setAppPickerView(type, null, order, labelInfoList, activityNamesList);
     }
 
     private void setAppPickerView(@AppPickerType int type, @Nullable List<String> packageNamesList,
-                                 @AppPickerOrder int order, @Nullable List<AppLabelInfo> labelInfoList,
-                                 @Nullable  List<ComponentName> activityNamesList) {
+            @AppPickerOrder int order, @Nullable List<AppLabelInfo> labelInfoList,
+            @Nullable  List<ComponentName> activityNamesList) {
         TypedValue outValue = new TypedValue();
         mContext.getTheme().resolveAttribute(androidx.appcompat.R.attr.roundedCornerColor,
                 outValue, true);
@@ -261,6 +260,10 @@ public class AppPickerView extends RecyclerView
         mIsAppPickerInitialized = true;
     }
 
+    public boolean isAppPickerInitialized() {
+        return mIsAppPickerInitialized;
+    }
+
     public int getType() {
         return mType;
     }
@@ -286,13 +289,13 @@ public class AppPickerView extends RecyclerView
 
     @NonNull
     public static List<AppLabelInfo> getAppLabelinfoList(@NonNull Context context,
-                                                         @NonNull List<String> packageNamesList) {
+            @NonNull List<String> packageNamesList) {
         return DataManager.resetPackages(context, packageNamesList);
     }
 
     @NonNull
     public static List<AppLabelInfo> getAppLabelinfoList(@NonNull List<ComponentName> activityNamesList,
-                                                         @NonNull Context context) {
+            @NonNull Context context) {
         return DataManager.resetPackages(activityNamesList, context);
     }
 
@@ -326,7 +329,7 @@ public class AppPickerView extends RecyclerView
         mAdapter.addSeparator(position);
 
         RecyclerView.LayoutManager layoutManager = getLayoutManager();
-        if (layoutManager != null && layoutManager instanceof GridLayoutManager) {
+        if (layoutManager instanceof GridLayoutManager) {
             ((GridLayoutManager) layoutManager)
                     .setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                         @Override
@@ -354,7 +357,7 @@ public class AppPickerView extends RecyclerView
     }
 
     public void resetComponentName(@Nullable List<ComponentName> activityNamesList,
-                                   @Nullable List<AppLabelInfo> labelInfoList) {
+            @Nullable List<AppLabelInfo> labelInfoList) {
         mAdapter.resetPackages(null, true, labelInfoList, activityNamesList);
     }
 
@@ -402,23 +405,22 @@ public class AppPickerView extends RecyclerView
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        addRecyclerListener(this);
         mAppPickerIconLoader.startIconLoaderThread();
     }
 
     @Override
     protected void onDetachedFromWindow() {
+        removeRecyclerListener(this);
         mAppPickerIconLoader.stopIconLoaderThread();
         super.onDetachedFromWindow();
     }
 
     private RecyclerView.LayoutManager getLayoutManager(int type) {
-        switch (type) {
-            case TYPE_GRID:
-            case TYPE_GRID_CHECKBOX:
-                return new GridLayoutManager(mContext, mSpanCount);
-            default:
-                return new LinearLayoutManager(mContext);
-        }
+        return switch (type) {
+            case TYPE_GRID, TYPE_GRID_CHECKBOX -> new GridLayoutManager(mContext, mSpanCount);
+            default -> new LinearLayoutManager(mContext);
+        };
     }
 
     private class ListDividerItemDecoration extends RecyclerView.ItemDecoration {
@@ -547,32 +549,23 @@ public class AppPickerView extends RecyclerView
     }
 
     public void refreshUI() {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(TAG, "run refreshUI");
-                mAdapter.notifyItemRangeChanged(0, mAdapter.getItemCount());
-            }
+        post(() -> {
+            Log.i(TAG, "run refreshUI");
+            mAdapter.notifyItemRangeChanged(0, mAdapter.getItemCount());
         });
     }
 
     public void refreshUI(final int position) {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(TAG, "run refreshUI by position");
-                mAdapter.notifyItemChanged(position);
-            }
+        post(() -> {
+            Log.i(TAG, "run refreshUI by position");
+            mAdapter.notifyItemChanged(position);
         });
     }
 
     public void refresh() {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(TAG, "run refresh");
-                mAdapter.notifyDataSetChanged();
-            }
+        post(() -> {
+            Log.i(TAG, "run refresh");
+            mAdapter.notifyDataSetChanged();
         });
     }
 
@@ -723,7 +716,7 @@ public class AppPickerView extends RecyclerView
         private String mPackageName;
 
         public AppLabelInfo(@NonNull String packageName, @NonNull String label,
-                            @NonNull String activityName) {
+                @NonNull String activityName) {
             mPackageName = packageName;
             mLabel = label;
             mActivityName = activityName;

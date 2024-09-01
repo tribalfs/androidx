@@ -76,6 +76,7 @@
     <!-- Displayed in place of the regular shortcut letter when a menu item has Menu+delete for the shortcut. -->
     <string name="abc_menu_delete_shortcut_label">delete</string>
 
+    <!--Sesl-->
     <string name="sesl_action_bar_home_description">Navigate home</string>
     <string name="sesl_action_bar_home_description_format">%1$s, %2$s</string>
     <string name="sesl_action_bar_home_subtitle_description_format">%1$s, %2$s, %3$s</string>
@@ -124,5 +125,10 @@
 
     <string name="sesl_toolbar_collapse_description">Collapse</string>
     <string name="sesl_text_style_medium" translatable="false">1</string>
-
+    <!--sesl-->
+    <!--Sesl7-->
+    <string name="sec_font" translatable="false">sec</string>
+    <string name="sesl_appbar_suggest_dismiss">Dismiss suggestion</string>
+    <string name="sesl_appbar_suggest_pagination">Page %1$d of %2$d</string>
+    <!--sesl-->
 </resources>

@@ -45,36 +45,36 @@
             android:layout_marginBottom="@dimen/sesl_search_plate_margin"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="10dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="@dimen/sesl_action_bar_last_padding"
             android:weightSum="1">
+            <!--Note: paddingEnd custom changed from 10dp-->
 
             <ImageView
                 android:id="@+id/search_back_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:layout_marginEnd="12dp"
-                android:background="@drawable/sesl_search_icon_background_borderless"
                 android:contentDescription="@string/sesl_action_bar_up_description"
                 android:focusable="true"
                 android:scaleType="centerInside"
                 android:src="@drawable/sesl_ic_search_back"
-                android:visibility="gone" />
+                android:visibility="gone"
+                style="?actionButtonStyle" />
 
             <ImageView
                 android:id="@+id/search_mag_icon"
-                style="@style/RtlOverlay.Widget.AppCompat.SearchView.MagIcon"
-                android:layout_width="@dimen/sesl_search_view_icon_width"
-                android:layout_height="@dimen/sesl_search_view_icon_height"
+                android:background="?selectableItemBackgroundBorderless"
                 android:layout_gravity="center_vertical"
+                android:layout_height="@dimen/sesl_search_view_icon_height"
+                android:layout_width="@dimen/sesl_search_view_icon_width"
                 android:scaleType="centerInside"
                 android:tint="@color/sesl_search_view_icon_color"
-                android:visibility="gone" />
+                android:visibility="gone"
+                style="@style/RtlOverlay.Widget.AppCompat.SearchView.MagIcon" />
 
             <view
                 android:id="@+id/search_src_text"
-                class="androidx.appcompat.widget.SearchView$SearchAutoComplete"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -94,55 +94,56 @@
                 android:nextFocusForward="@+id/search_back_btn"
                 android:paddingStart="4dp"
                 android:textSize="@dimen/sesl_search_view_search_text_size"
-                app:emojiCompatEnabled="false" />
+                app:emojiCompatEnabled="false"
+                class="androidx.appcompat.widget.SearchView$SearchAutoComplete" />
 
             <ImageView
                 android:id="@+id/search_close_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/sesl_search_icon_background_borderless"
                 android:contentDescription="@string/sesl_searchview_description_clear"
                 android:focusable="true"
+                android:paddingEnd="6dp"
                 android:paddingStart="6dp"
-                android:paddingEnd="6dp" />
+                style="?actionButtonStyle" />
 
             <ImageView
                 android:id="@+id/search_go_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/sesl_search_icon_background_borderless"
                 android:contentDescription="@string/sesl_searchview_description_submit"
                 android:focusable="true"
-                android:paddingStart="6dp"
                 android:paddingEnd="6dp"
-                android:visibility="gone" />
+                android:paddingStart="6dp"
+                android:visibility="gone"
+                style="?actionButtonStyle" />
 
             <ImageView
                 android:id="@+id/search_voice_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/sesl_search_icon_background_borderless"
                 android:contentDescription="@string/sesl_searchview_description_voice"
                 android:focusable="true"
-                android:paddingStart="6dp"
                 android:paddingEnd="6dp"
-                android:visibility="gone" />
+                android:paddingStart="6dp"
+                android:visibility="gone"
+                style="?actionButtonStyle" />
 
             <ImageView
                 android:id="@+id/search_more_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/sesl_search_icon_background_borderless"
                 android:contentDescription="@string/sesl_action_menu_overflow_description"
                 android:focusable="true"
-                android:paddingStart="6dp"
                 android:paddingEnd="6dp"
+                android:paddingStart="6dp"
                 android:src="@drawable/sesl_ic_search_more"
-                android:visibility="gone" />
+                android:visibility="gone"
+                style="?actionButtonStyle" />
 
             <Space
                 android:layout_width="4dp"

@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">ປິດ</string>
     <string name="sesl_searchview_description_voice">ຄົ້ນຫາດ້ວຍສຽງ</string>
     <string name="sesl_switch_on">ເປີດ</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">ປ່ອຍຄຳແນະນຳໄປ</string>
+    <string name="sesl_appbar_suggest_pagination">ໜ້າ %1$d ໃນ %2$d</string>
+    <!--sesl7-->
 </resources>

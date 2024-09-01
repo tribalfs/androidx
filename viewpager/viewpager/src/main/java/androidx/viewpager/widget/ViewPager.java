@@ -27,7 +27,6 @@ import android.database.DataSetObserver;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -3418,7 +3417,7 @@ public class ViewPager extends ViewGroup {
 
     private boolean seslIsDatePickerLayoutRtl() {
         return mSupportLayoutDirectionForDatePicker
-                && ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL;
+                && getLayoutDirection() == LAYOUT_DIRECTION_RTL;
     }
 
     private int getScrollStart() {

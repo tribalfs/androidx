@@ -30,8 +30,8 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="windowActionBar">?android:attr/windowActionBar</item>
-        <item name="windowNoTitle">?android:attr/windowNoTitle</item>
+        <item name="windowActionBar">?android:windowActionBar</item>
+        <item name="windowNoTitle">?android:windowNoTitle</item>
 
         <!-- Window colors -->
         <item name="android:statusBarColor">@color/sesl_status_bar_color_dark</item>
@@ -50,7 +50,7 @@
         <item name="android:textColorSecondary">@color/sesl_secondary_text_dark</item>
         <item name="android:textColorSecondaryInverse">@color/sesl_secondary_text_light</item>
         <item name="android:textColorHighlight">@color/sesl_highlighted_text_color_dark</item>
-        <item name="android:textColorLink">?attr/colorAccent</item>
+        <item name="android:textColorLink">?colorAccent</item>
 
         <!-- Text styles -->
         <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
@@ -64,10 +64,11 @@
         <item name="android:listChoiceIndicatorSingle">@drawable/sesl_list_choice_btn_radio</item>
         <item name="android:listChoiceIndicatorMultiple">@drawable/sesl_list_choice_btn_check</item>
 
-        <item name="android:textSelectHandle">@drawable/sesl_text_select_handle_middle</item>
+        <!--TODO: confirm if really removed-->
+        <!--<item name="android:textSelectHandle">@drawable/sesl_text_select_handle_middle</item>
         <item name="android:textSelectHandleLeft">@drawable/sesl_text_select_handle_left</item>
         <item name="android:textSelectHandleRight">@drawable/sesl_text_select_handle_right</item>
-
+        -->
         <item name="seslDialogDivderColor">@color/sesl_dialog_divider_color_material_dark</item>
     </style>
 
@@ -75,8 +76,8 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="windowActionBar">?android:attr/windowActionBar</item>
-        <item name="windowNoTitle">?android:attr/windowNoTitle</item>
+        <item name="windowActionBar">?android:windowActionBar</item>
+        <item name="windowNoTitle">?android:windowNoTitle</item>
 
         <!-- Window colors -->
         <item name="android:statusBarColor">@color/sesl_status_bar_color_light</item>
@@ -95,7 +96,7 @@
         <item name="android:textColorSecondary">@color/sesl_secondary_text_light</item>
         <item name="android:textColorSecondaryInverse">@color/sesl_secondary_text_dark</item>
         <item name="android:textColorHighlight">@color/sesl_highlighted_text_color_light</item>
-        <item name="android:textColorLink">?attr/colorAccent</item>
+        <item name="android:textColorLink">?colorAccent</item>
 
         <!-- Text styles -->
         <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
@@ -109,9 +110,10 @@
         <item name="android:listChoiceIndicatorSingle">@drawable/sesl_list_choice_btn_radio</item>
         <item name="android:listChoiceIndicatorMultiple">@drawable/sesl_list_choice_btn_check</item>
 
-        <item name="android:textSelectHandle">@drawable/sesl_text_select_handle_middle</item>
-        <item name="android:textSelectHandleLeft">@drawable/sesl_text_select_handle_left</item>
-        <item name="android:textSelectHandleRight">@drawable/sesl_text_select_handle_right</item>
+        <!--TODO: confirm if really removed-->
+        <!-- <item name="android:textSelectHandle">@drawable/sesl_text_select_handle_middle</item>
+         <item name="android:textSelectHandleLeft">@drawable/sesl_text_select_handle_left</item>
+         <item name="android:textSelectHandleRight">@drawable/sesl_text_select_handle_right</item>-->
 
         <item name="seslDialogDivderColor">@color/sesl_dialog_divider_color_material_light</item>
     </style>
@@ -144,7 +146,7 @@
         <item name="isLightTheme">false</item>
 
         <item name="selectableItemBackground">@drawable/sesl_action_bar_item_background</item>
-        <item name="selectableItemBackgroundBorderless">?attr/selectableItemBackground</item>
+        <item name="selectableItemBackgroundBorderless">?selectableItemBackground</item>
         <item name="borderlessButtonStyle">@style/Widget.AppCompat.Button.Borderless</item>
         <item name="homeAsUpIndicator">@drawable/sesl_ic_ab_back_dark</item>
 
@@ -155,11 +157,11 @@
         <item name="android:textColorSecondaryInverse">@color/sesl_secondary_text_light</item>
         <item name="android:textAppearanceSmall">@style/TextAppearance.AppCompat.Small</item>
 
-        <item name="android:textAppearanceListItem">?attr/textAppearanceListItem</item>
-        <item name="android:textAppearanceListItemSmall">?attr/textAppearanceListItemSmall</item>
+        <item name="android:textAppearanceListItem">?textAppearanceListItem</item>
+        <item name="android:textAppearanceListItemSmall">?textAppearanceListItemSmall</item>
 
-        <item name="dividerVertical">?android:attr/dividerVertical</item>
-        <item name="dividerHorizontal">?android:attr/dividerHorizontal</item>
+        <item name="dividerVertical">?android:dividerVertical</item>
+        <item name="dividerHorizontal">?android:dividerHorizontal</item>
 
         <item name="android:scrollbarThumbHorizontal">@drawable/sesl_scrollbar_handle_dark</item>
         <item name="android:scrollbarThumbVertical">@drawable/sesl_scrollbar_handle_dark</item>
@@ -173,19 +175,19 @@
         <item name="actionOverflowMenuStyle">@style/Widget.AppCompat.PopupMenu.Overflow</item>
         <item name="actionOverflowBottomMenuStyle">@style/Widget.AppCompat.BottomPopupMenu.Overflow</item>
         <item name="actionBarStyle">@style/Widget.AppCompat.ActionBar</item>
-        <item name="actionBarSplitStyle">?attr/actionBarStyle</item>
+        <item name="actionBarSplitStyle">?actionBarStyle</item>
         <item name="actionBarWidgetTheme">@null</item>
         <item name="actionBarTheme">@null</item>
         <item name="actionBarSize">@dimen/sesl_action_bar_default_height</item>
         <item name="actionBarDivider">@null</item>
-        <item name="actionBarItemBackground">?attr/selectableItemBackgroundBorderless</item>
+        <item name="actionBarItemBackground">?selectableItemBackgroundBorderless</item>
         <item name="actionMenuTextAppearance">@style/TextAppearance.AppCompat.Widget.ActionBar.Menu</item>
         <item name="actionMenuTextColor">@color/sesl_action_menu_text_dark</item>
 
         <!-- Action Mode -->
         <item name="actionModeStyle">@style/Widget.AppCompat.ActionMode</item>
         <item name="actionModeBackground">@drawable/sesl_action_bar_background_dark</item>
-        <item name="actionModeSplitBackground">?attr/colorPrimaryDark</item>
+        <item name="actionModeSplitBackground">?colorPrimaryDark</item>
         <item name="actionModeCloseContentDescription">@string/abc_action_mode_done</item>
         <item name="actionModeCloseDrawable">@drawable/sesl_ic_cab_done</item>
         <item name="actionModeCloseButtonStyle">@style/Widget.AppCompat.ActionButton.CloseMode</item>
@@ -202,28 +204,29 @@
         <!-- Panel attributes -->
         <item name="panelMenuListWidth">@dimen/sesl_panel_menu_list_width</item>
         <item name="panelMenuListTheme">@style/Theme.AppCompat.CompactMenu</item>
-        <item name="panelBackground">?android:attr/panelBackground</item>
-        <item name="android:panelBackground">?android:attr/colorBackground</item>
+        <item name="panelBackground">?android:panelBackground</item>
+        <item name="android:panelBackground">?android:colorBackground</item>
         <item name="listChoiceBackgroundIndicator">@drawable/sesl_list_selector_dark</item>
 
         <!-- List attributes -->
         <item name="textAppearanceListItem">@style/TextAppearance.AppCompat.Subhead</item>
         <item name="textAppearanceListItemSmall">@style/TextAppearance.AppCompat.Subhead</item>
         <item name="textAppearanceListItemSecondary">@style/TextAppearance.AppCompat.Body1</item>
-        <item name="android:listPreferredItemHeight">?attr/listPreferredItemHeight</item>
-        <item name="android:listPreferredItemHeightSmall">?attr/listPreferredItemHeightSmall</item>
-        <item name="android:listPreferredItemHeightLarge">?attr/listPreferredItemHeightLarge</item>
+        <item name="android:listPreferredItemHeight">?listPreferredItemHeight</item>
+        <item name="android:listPreferredItemHeightSmall">?listPreferredItemHeightSmall</item>
+        <item name="android:listPreferredItemHeightLarge">?listPreferredItemHeightLarge</item>
         <item name="listPreferredItemHeight">@dimen/sesl_list_preferred_item_height</item>
         <item name="listPreferredItemHeightSmall">@dimen/sesl_list_preferred_item_height_small</item>
         <item name="listPreferredItemHeightLarge">80dp</item>
-        <item name="listPreferredItemPaddingLeft">?attr/listPreferredItemPaddingStart</item>
-        <item name="listPreferredItemPaddingRight">?attr/listPreferredItemPaddingEnd</item>
+        <item name="listPreferredItemPaddingLeft">?listPreferredItemPaddingStart</item>
+        <item name="listPreferredItemPaddingRight">?listPreferredItemPaddingEnd</item>
         <item name="android:listPreferredItemPaddingStart">@dimen/sesl_list_item_padding_horizontal</item>
         <item name="android:listPreferredItemPaddingEnd">@dimen/sesl_list_item_padding_horizontal</item>
         <item name="listPreferredItemPaddingStart">@dimen/sesl_list_item_padding_horizontal</item>
         <item name="listPreferredItemPaddingEnd">@dimen/sesl_list_item_padding_horizontal</item>
 
-        <item name="android:absListViewStyle">@android:style/Widget.AbsListView</item>
+        <!--TODO: confirm if really removed-->
+        <!--<item name="android:absListViewStyle">@android:style/Widget.AbsListView</item>-->
 
         <!-- ProgressBar styles -->
         <item name="android:progressBarStyle">@style/Widget.AppCompat.ProgressBar</item>
@@ -279,7 +282,7 @@
 
         <item name="editTextStyle">@style/Widget.AppCompat.EditText</item>
         <item name="editTextBackground">@drawable/sesl_edit_text_background_dark</item>
-        <item name="editTextColor">?android:attr/textColorPrimary</item>
+        <item name="editTextColor">?android:textColorPrimary</item>
         <item name="autoCompleteTextViewStyle">@style/Widget.AppCompat.AutoCompleteTextView</item>
 
         <!-- Color palette -->
@@ -292,7 +295,7 @@
         <item name="colorControlHighlight">@color/sesl_ripple_color_dark</item>
         <item name="colorButtonNormal">@color/sesl_btn_default_color_dark</item>
         <item name="colorSwitchThumbNormal">@color/sesl_black</item>
-        <item name="controlBackground">?attr/selectableItemBackgroundBorderless</item>
+        <item name="controlBackground">?selectableItemBackgroundBorderless</item>
 
         <item name="drawerArrowStyle">@style/Widget.AppCompat.DrawerArrowToggle</item>
 
@@ -316,6 +319,7 @@
         <item name="android:textAppearanceButton">@style/TextAppearance.AppCompat.Widget.Button</item>
 
         <item name="imageButtonStyle">@style/Widget.AppCompat.ImageButton</item>
+        <item name="android:imageButtonStyle">@style/Widget.AppCompat.ImageButton</item>
 
         <item name="buttonBarStyle">@style/Widget.AppCompat.ButtonBar</item>
         <item name="buttonBarButtonStyle">@style/Widget.AppCompat.Button.ButtonBar.AlertDialog</item>
@@ -361,6 +365,10 @@
 
         <item name="goToTopStyle">@drawable/sesl_list_go_to_top_dark</item>
         <item name="dragBlockImage">@drawable/sesl_pen_block_selection</item>
+        <!--Sesl7-->
+        <item name="checkedTextViewStyle">?android:checkedTextViewStyle</item>
+        <item name="themeSwitchStyle">@style/Widget.Theme.AppCompat.CompoundButton.Switch</item><!--sesl7-->
+        <!--sesl7-->
     </style>
 
     <style name="Base.V21.Theme.AppCompat" parent="Base.V7.Theme.AppCompat">
@@ -373,13 +381,13 @@
         <item name="android:colorButtonNormal">?attr/colorButtonNormal</item>
         <item name="android:ambientShadowAlpha">@dimen/sesl_ambient_shadow_alpha_dark</item>
         <item name="android:spotShadowAlpha">@dimen/sesl_spot_shadow_alpha_dark</item>
+        <!--Sesl7-->
+        <item name="seslLargeTouchAnimator">@animator/sesl_recoil_list_selector</item>
+        <item name="seslLayoutRoundedCorner">corner_all</item>
+        <item name="seslMediumTouchAnimator">@animator/sesl_recoil_card_selector</item>
+        <item name="seslSmallTouchAnimator">@animator/sesl_recoil_button_selector</item>
+        <!--sesl7-->
     </style>
-
-    <style name="Base.V22.Theme.AppCompat" parent="Base.V21.Theme.AppCompat">
-        <item name="android:actionModeShareDrawable">?attr/actionModeShareDrawable</item>
-    </style>
-
-    <style name="Base.V23.Theme.AppCompat" parent="Base.V22.Theme.AppCompat" />
 
     <!-- Base platform-dependent theme providing an action bar in a light-themed activity. -->
     <style name="Base.V7.Theme.AppCompat.Light" parent="Platform.AppCompat.Light">
@@ -476,7 +484,8 @@
         <item name="listPreferredItemPaddingStart">@dimen/sesl_list_item_padding_horizontal</item>
         <item name="listPreferredItemPaddingEnd">@dimen/sesl_list_item_padding_horizontal</item>
 
-        <item name="android:absListViewStyle">@android:style/Widget.AbsListView</item>
+        <!--TODO: confirm if really removed-->
+<!--        <item name="android:absListViewStyle">@android:style/Widget.AbsListView</item>-->
 
         <!-- ProgressBar styles -->
         <item name="android:progressBarStyle">@style/Widget.AppCompat.Light.ProgressBar</item>
@@ -614,6 +623,9 @@
 
         <item name="goToTopStyle">@drawable/sesl_list_go_to_top_light</item>
         <item name="dragBlockImage">@drawable/sesl_pen_block_selection</item>
+        <!--Sesl7-->
+        <item name="themeSwitchStyle">@style/Widget.Theme.AppCompat.Light.CompoundButton.Switch</item><!--sesl7-->
+        <!--sesl7-->
     </style>
 
     <style name="Base.V21.Theme.AppCompat.Light" parent="Base.V7.Theme.AppCompat.Light">
@@ -626,18 +638,18 @@
         <item name="android:colorButtonNormal">?attr/colorButtonNormal</item>
         <item name="android:ambientShadowAlpha">@dimen/sesl_ambient_shadow_alpha_light</item>
         <item name="android:spotShadowAlpha">@dimen/sesl_spot_shadow_alpha_light</item>
+
+        <!--Sesl7-->
+        <item name="seslLargeTouchAnimator">@animator/sesl_recoil_list_selector</item>
+        <item name="seslLayoutRoundedCorner">corner_all</item>
+        <item name="seslMediumTouchAnimator">@animator/sesl_recoil_card_selector</item>
+        <item name="seslSmallTouchAnimator">@animator/sesl_recoil_button_selector</item>
+        <!--sesl7-->
     </style>
 
-    <style name="Base.V22.Theme.AppCompat.Light" parent="Base.V21.Theme.AppCompat.Light">
-        <item name="android:actionModeShareDrawable">?attr/actionModeShareDrawable</item>
-    </style>
+    <style name="Base.Theme.AppCompat" parent="Base.V21.Theme.AppCompat" />
 
-    <style name="Base.V23.Theme.AppCompat.Light" parent="Base.V22.Theme.AppCompat.Light" />
-
-
-    <style name="Base.Theme.AppCompat" parent="Base.V23.Theme.AppCompat" />
-
-    <style name="Base.Theme.AppCompat.Light" parent="Base.V23.Theme.AppCompat.Light" />
+    <style name="Base.Theme.AppCompat.Light" parent="Base.V21.Theme.AppCompat.Light" />
 
     <style name="Base.Theme.AppCompat.Light.DarkActionBar" parent="Base.Theme.AppCompat.Light">
         <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
@@ -706,7 +718,13 @@
         <item name="seslDialogDivderColor">@color/sesl_dialog_divider_color_material_dark</item>
     </style>
 
-    <style name="Base.V21.Theme.AppCompat.Dialog" parent="Base.V7.Theme.AppCompat.Dialog" />
+    <style name="Base.V21.Theme.AppCompat.Dialog" parent="Base.V7.Theme.AppCompat.Dialog">
+        <!--Sesl7-->
+        <item name="android:buttonBarPositiveButtonStyle">@style/Widget.AppCompat.Button.Dialog</item>
+        <item name="android:buttonBarNeutralButtonStyle">@style/Widget.AppCompat.Button.Dialog</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/Widget.AppCompat.Button.Dialog</item>
+        <!--sesl7-->
+    </style>
 
     <style name="Base.V7.Theme.AppCompat.Light.Dialog" parent="Base.Theme.AppCompat.Light">
         <item name="android:colorBackground">@color/sesl_dialog_window_background_color_material_light</item>
@@ -759,7 +777,13 @@
         <item name="seslDialogDivderColor">@color/sesl_dialog_divider_color_material_light</item>
     </style>
 
-    <style name="Base.V21.Theme.AppCompat.Light.Dialog" parent="Base.V7.Theme.AppCompat.Light.Dialog" />
+    <style name="Base.V21.Theme.AppCompat.Light.Dialog" parent="@style/Base.V7.Theme.AppCompat.Light.Dialog">
+        <!--Sesl7-->
+        <item name="android:buttonBarPositiveButtonStyle">@style/Widget.AppCompat.Light.Button.Dialog</item>
+        <item name="android:buttonBarNeutralButtonStyle">@style/Widget.AppCompat.Light.Button.Dialog</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/Widget.AppCompat.Light.Button.Dialog</item>
+        <!--sesl7-->
+    </style>
 
     <style name="Base.Theme.AppCompat.Dialog" parent="Base.V21.Theme.AppCompat.Dialog" />
     <style name="Base.Theme.AppCompat.Light.Dialog" parent="Base.V21.Theme.AppCompat.Light.Dialog" />

@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">ပိတ်</string>
     <string name="sesl_searchview_description_voice">အသံဖြင့် ရှာဖွေခြင်း</string>
     <string name="sesl_switch_on">ဖွင့်</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">အကြံပြုချက်ကို ဖြုတ်ပယ်မည်</string>
+    <string name="sesl_appbar_suggest_pagination">စာမျက်နှာ %2$d ၏ %1$d</string>
+    <!--sesl7-->
 </resources>

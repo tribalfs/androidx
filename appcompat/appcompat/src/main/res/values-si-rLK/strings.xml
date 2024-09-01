@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">ක්‍රියා විරහිතයි</string>
     <string name="sesl_searchview_description_voice">කටහඬින් සෙවුම</string>
     <string name="sesl_switch_on">ක්‍රියාත්මකයි</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">යෝජනාව ඉවත ලන්න</string>
+    <string name="sesl_appbar_suggest_pagination">%2$d න් %1$d වැනි පිටුව</string>
+    <!--Sesl7-->
 </resources>

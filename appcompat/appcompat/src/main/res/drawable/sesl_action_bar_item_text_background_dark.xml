@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetTop="@dimen/sesl_action_item_show_button_background_inset_vertical" android:insetBottom="@dimen/sesl_action_item_show_button_background_inset_vertical">
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetTop="@dimen/sesl_action_item_show_button_background_inset_vertical"
+    android:insetBottom="@dimen/sesl_action_item_show_button_background_inset_vertical">
     <ripple android:color="?attr/colorControlHighlight">
         <item android:id="@android:id/mask">
             <shape android:shape="rectangle">

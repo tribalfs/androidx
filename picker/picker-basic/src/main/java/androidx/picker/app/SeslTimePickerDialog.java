@@ -48,11 +48,7 @@ public class SeslTimePickerDialog extends AlertDialog
     final SeslTimePicker mTimePicker;
     private final OnTimeSetListener mTimeSetListener;
 
-    private final boolean mIs24HourView;
     boolean mIsStartAnimation;
-
-    private final int mInitialHourOfDay;
-    private final int mInitialMinute;
 
     private final View.OnFocusChangeListener mBtnFocusChangeListener =
             new View.OnFocusChangeListener() {
@@ -83,9 +79,6 @@ public class SeslTimePickerDialog extends AlertDialog
                                 int hourOfDay, int minute, boolean is24HourView) {
         super(context, resolveDialogTheme(context, theme));
         mTimeSetListener = callBack;
-        mInitialHourOfDay = hourOfDay;
-        mInitialMinute = minute;
-        mIs24HourView = is24HourView;
 
         Context themeContext = getContext();
 
@@ -96,9 +89,9 @@ public class SeslTimePickerDialog extends AlertDialog
         setButton(BUTTON_NEGATIVE, themeContext.getString(R.string.sesl_picker_cancel), this);
         mTimePicker = view.findViewById(R.id.timePicker);
 
-        mTimePicker.setIs24HourView(mIs24HourView);
-        mTimePicker.setHour(mInitialHourOfDay);
-        mTimePicker.setMinute(mInitialMinute);
+        mTimePicker.setIs24HourView(is24HourView);
+        mTimePicker.setHour(hourOfDay);
+        mTimePicker.setMinute(minute);
         mTimePicker.setOnTimeChangedListener(this);
 
         setTitle(R.string.sesl_time_picker_set_title);
@@ -148,9 +141,9 @@ public class SeslTimePickerDialog extends AlertDialog
         }
     }
 
-    public void updateTime(int hourOfDay, int minutOfHour) {
+    public void updateTime(int hourOfDay, int minuteOfHour) {
         mTimePicker.setHour(hourOfDay);
-        mTimePicker.setMinute(minutOfHour);
+        mTimePicker.setMinute(minuteOfHour);
     }
 
 

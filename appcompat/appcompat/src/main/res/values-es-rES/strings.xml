@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">Desactivado</string>
     <string name="sesl_searchview_description_voice">Búsqueda de voz</string>
     <string name="sesl_switch_on">Activado</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Descartar sugerencia</string>
+    <string name="sesl_appbar_suggest_pagination">Página %1$d de %2$d</string>
+    <!--sesl7-->
 </resources>

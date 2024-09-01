@@ -27,5 +27,6 @@
     <dimen name="sesl_preference_seekbar_value_width">36dp</dimen>
     <dimen name="sesl_preference_switch_padding_vertical">12dp</dimen>
     <dimen name="sesl_list_switch_sreen_start_padding">2dp</dimen>
+    <dimen name="sesl_preference_padding_horizontal">10dp</dimen><!--added in sesl7-->
     <!--sesl-->
 </resources>

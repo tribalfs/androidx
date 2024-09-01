@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.graphics.drawable.SeslRecoilDrawable xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:seslRecoilColor="@color/sesl_ripple_color_light"
+    app:seslRecoilRadius="@dimen/sesl_action_menu_item_text_ripple_radius" />

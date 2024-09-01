@@ -16,19 +16,25 @@
 
 package androidx.slidingpanelayout.widget
 
+import androidx.appcompat.R as appCompatR
+import androidx.core.content.res.ResourcesCompat as ResComp
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
+import android.util.TypedValue.TYPE_FIRST_COLOR_INT
+import android.util.TypedValue.TYPE_LAST_COLOR_INT
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
+import androidx.annotation.RestrictTo
 import androidx.appcompat.util.SeslMisc
-import androidx.core.content.res.ResourcesCompat as ResComp
+import androidx.appcompat.util.SeslRoundedCorner
 import kotlin.math.roundToInt
 
 /**
@@ -50,7 +56,7 @@ internal class SlidingPaneRoundedCorner (private val mContext: Context) {
     private var mStartTopDrawableColor = 0xffffff
 
     @Px
-    var roundedCornerRadius = -1
+    private var mRoundRadius = -1
 
     private val mRoundedCornerBounds = Rect()
     private var mMarginTop = 0
@@ -62,20 +68,46 @@ internal class SlidingPaneRoundedCorner (private val mContext: Context) {
     }
 
     private fun initRoundedCorner() {
-        roundedCornerRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, RADIUS, mRes.displayMetrics)
-                .toInt()
-        val theme = mContext.theme
-        mStartTopDrawable = ResComp.getDrawable(mRes, androidx.appcompat.R.drawable.sesl_top_right_round, theme)
-        mStartBottomDrawable = ResComp.getDrawable(mRes, androidx.appcompat.R.drawable.sesl_bottom_right_round, theme)
-        mEndTopDrawable = ResComp.getDrawable(mRes, androidx.appcompat.R.drawable.sesl_top_left_round, theme)
-        mEndBottomDrawable = ResComp.getDrawable(mRes, androidx.appcompat.R.drawable.sesl_bottom_left_round, theme)
-        val color = if (SeslMisc.isLightTheme(mContext)) {
-            ResComp.getColor(mRes, androidx.appcompat.R.color.sesl_round_and_bgcolor_light, null)
-        }else {
-            ResComp.getColor(mRes, androidx.appcompat.R.color.sesl_round_and_bgcolor_dark, null)
+        val roundRadius = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            RADIUS,
+            mRes.displayMetrics
+        ).toInt()
+
+        val typedValue = TypedValue()
+        mContext.theme.resolveAttribute(
+            appCompatR.attr.roundedCornerColor,
+            typedValue, true
+        )
+
+        val roundColor = if (typedValue.resourceId > 0 && isColorType(typedValue.type)) {
+            ResComp.getColor(mRes, typedValue.resourceId, mContext.theme)
+        } else if (typedValue.data > 0 && isColorType(typedValue.type)) {
+            typedValue.data
+        } else {
+            if (SeslMisc.isLightTheme(mContext)) {
+                ResComp.getColor(mRes, appCompatR.color.sesl_round_and_bgcolor_light , null)
+            } else {
+                ResComp.getColor(mRes, appCompatR.color.sesl_round_and_bgcolor_dark, null)
+            }
         }
-        mStartBottomDrawableColor = color
-        mStartTopDrawableColor = color
+
+        val paint = Paint().apply {
+            style = Paint.Style.FILL
+            this.color = roundColor
+        }
+
+        mStartTopDrawable = SeslRoundedCorner.SeslRoundedChunkingDrawable(roundRadius, paint, 90.0f)
+        mStartBottomDrawable = SeslRoundedCorner.SeslRoundedChunkingDrawable(roundRadius, paint, 180.0f)
+        mEndTopDrawable = SeslRoundedCorner.SeslRoundedChunkingDrawable(roundRadius, paint, 0.0f)//Note: incorrectly set to 180f in vanilla sesl
+        mEndBottomDrawable = SeslRoundedCorner.SeslRoundedChunkingDrawable(roundRadius, paint, 270.0f)
+
+        mStartBottomDrawableColor = roundColor
+        mStartTopDrawableColor = roundColor
+    }
+
+    private fun isColorType(i: Int): Boolean {
+        return i in TYPE_FIRST_COLOR_INT..TYPE_LAST_COLOR_INT
     }
 
     private fun isLayoutRtlSupport(view: View): Boolean {
@@ -86,10 +118,10 @@ internal class SlidingPaneRoundedCorner (private val mContext: Context) {
         if (layoutDirection == View.LAYOUT_DIRECTION_RTL) {
             mStartTopDrawable = null
             mStartBottomDrawable = null
-            return
+        }else {
+            mEndTopDrawable = null
+            mEndBottomDrawable = null
         }
-        mEndTopDrawable = null
-        mEndBottomDrawable = null
     }
 
     internal fun drawRoundedCorner(canvas: Canvas) {
@@ -113,11 +145,11 @@ internal class SlidingPaneRoundedCorner (private val mContext: Context) {
             top = view.top
         }
         val finalTop = mMarginTop + top
-        val width = view.width + left + roundedCornerRadius
+        val width = view.width + left + mRoundRadius
         val height = top + view.height - mMarginBottom
         canvas.getClipBounds(mTmpRect)
         val rect = mTmpRect
-        rect.right = rect.left.coerceAtLeast(view.right + roundedCornerRadius)
+        rect.right = rect.left.coerceAtLeast(view.right + mRoundRadius)
         canvas.clipRect(mTmpRect)
         mRoundedCornerBounds[left, finalTop, width] = height
         drawRoundedCornerInternal(canvas)
@@ -131,27 +163,50 @@ internal class SlidingPaneRoundedCorner (private val mContext: Context) {
         val b = rect.bottom
 
         if (mRoundedCornerMode == MODE_START) {
-            mStartTopDrawable!!.setBounds(l - roundedCornerRadius, t, l, roundedCornerRadius + t)
-            mStartTopDrawable!!.draw(canvas)
-            mStartBottomDrawable!!.setBounds(l - roundedCornerRadius, b - roundedCornerRadius, l, b)
-            mStartBottomDrawable!!.draw(canvas)
-            return
+            mStartTopDrawable!!.apply {
+                setBounds(l - mRoundRadius, t, l, mRoundRadius + t)
+                draw(canvas)
+            }
+            mStartBottomDrawable!!.apply {
+                setBounds(l - mRoundRadius, b - mRoundRadius, l, b)
+                draw(canvas)
+            }
+        }else{
+            mEndTopDrawable!!.apply {
+                setBounds(r - mRoundRadius, t, r, mRoundRadius + t)
+                draw(canvas)
+            }
+            mEndBottomDrawable!!.apply {
+                setBounds(r - mRoundRadius, b - mRoundRadius, r, b)
+                draw(canvas)
+            }
         }
-
-        mEndTopDrawable!!.setBounds(r - roundedCornerRadius, t, r, roundedCornerRadius + t)
-        mEndTopDrawable!!.draw(canvas)
-        mEndBottomDrawable!!.setBounds(r - roundedCornerRadius, b - roundedCornerRadius, r, b)
-        mEndBottomDrawable!!.draw(canvas)
     }
 
     var roundedCorners: Int
         get() = mRoundedCornerMode
         set(roundedCornerMode) {
             mRoundedCornerMode = roundedCornerMode
-            if (mStartTopDrawable == null || mStartBottomDrawable == null || mEndTopDrawable == null || mEndBottomDrawable == null) {
-                initRoundedCorner()
-            }
+            ensureInited()
         }
+
+    fun setRoundedCornerColor(@ColorInt color: Int) {
+        ensureInited()
+        mStartTopDrawableColor = color
+        mStartBottomDrawableColor = color
+        PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN).let {
+            mStartTopDrawable!!.colorFilter = it
+            mEndTopDrawable!!.colorFilter = it
+            mEndBottomDrawable!!.colorFilter = it
+            mStartBottomDrawable!!.colorFilter = it
+        }
+    }
+
+    private inline fun ensureInited(){
+        if (mStartTopDrawable == null || mStartBottomDrawable == null || mEndTopDrawable == null || mEndBottomDrawable == null) {
+            initRoundedCorner()
+        }
+    }
 
     fun setMarginBottom(bottomMargin: Int) {
         mMarginBottom = bottomMargin
@@ -161,18 +216,13 @@ internal class SlidingPaneRoundedCorner (private val mContext: Context) {
         mMarginTop = topMargin
     }
 
-    fun setRoundedCornerColor(@ColorInt color: Int) {
-        if (mStartTopDrawable == null || mStartBottomDrawable == null || mEndTopDrawable == null || mEndBottomDrawable == null) {
-            initRoundedCorner()
+    @get:RestrictTo(RestrictTo.Scope.LIBRARY_GROUP_PREFIX)
+    @set:RestrictTo(RestrictTo.Scope.LIBRARY_GROUP_PREFIX)
+    var roundedCornerRadius: Int
+        get() = mRoundRadius
+        set(@Px radius) {
+            mRoundRadius = radius
         }
-        val porterDuffColorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
-        mStartTopDrawableColor = color
-        mStartTopDrawable!!.colorFilter = porterDuffColorFilter
-        mEndTopDrawable!!.colorFilter = porterDuffColorFilter
-        mEndBottomDrawable!!.colorFilter = porterDuffColorFilter
-        mStartBottomDrawableColor = color
-        mStartBottomDrawable!!.colorFilter = porterDuffColorFilter
-    }
 
     companion object {
         private const val RADIUS = 16f

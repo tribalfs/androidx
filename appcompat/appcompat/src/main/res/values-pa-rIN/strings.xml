@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">ਬੰਦ ਹੈ</string>
     <string name="sesl_searchview_description_voice">ਵੌਇਸ ਖੋਜ</string>
     <string name="sesl_switch_on">ਚਾਲੂ ਹੈ</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">ਸੁਝਾਅ ਨੂੰ ਖਾਰਿਜ ਕਰੋ</string>
+    <string name="sesl_appbar_suggest_pagination">ਪੰਨਾ %2$d ਵਿੱਚੋਂ %1$d</string>
+    <!--sesl7-->
 </resources>

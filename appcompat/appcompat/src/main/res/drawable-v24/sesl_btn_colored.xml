@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetBottom="@dimen/sesl_button_inset_vertical"
+    android:insetLeft="@dimen/sesl_button_inset_horizontal"
+    android:insetRight="@dimen/sesl_button_inset_horizontal"
+    android:insetTop="@dimen/sesl_button_inset_vertical">
+    <ripple android:color="?colorControlHighlight">
+        <item>
+            <selector>
+                <item android:state_enabled="false">
+                    <androidx.appcompat.util.SeslShapeDrawable android:shape="rectangle">
+                        <corners android:radius="@dimen/sesl_control_corner" />
+                        <solid android:color="?colorButtonNormal" />
+                        <padding
+                            android:bottom="@dimen/sesl_button_padding_vertical"
+                            android:left="@dimen/sesl_button_padding_horizontal"
+                            android:right="@dimen/sesl_button_padding_horizontal"
+                            android:top="@dimen/sesl_button_padding_vertical" />
+                    </androidx.appcompat.util.SeslShapeDrawable>
+                </item>
+                <item>
+                    <androidx.appcompat.util.SeslShapeDrawable android:shape="rectangle">
+                        <corners android:radius="@dimen/sesl_control_corner" />
+                        <solid android:color="?colorAccent" />
+                        <padding
+                            android:bottom="@dimen/sesl_button_padding_vertical"
+                            android:left="@dimen/sesl_button_padding_horizontal"
+                            android:right="@dimen/sesl_button_padding_horizontal"
+                            android:top="@dimen/sesl_button_padding_vertical" />
+                    </androidx.appcompat.util.SeslShapeDrawable>
+                </item>
+            </selector>
+        </item>
+    </ripple>
+</inset>

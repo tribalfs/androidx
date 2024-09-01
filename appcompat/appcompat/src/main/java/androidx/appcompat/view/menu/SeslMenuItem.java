@@ -23,8 +23,21 @@ package androidx.appcompat.view.menu;
 import androidx.annotation.Nullable;
 
 public interface SeslMenuItem {
+
+    /**
+     *
+     * @return The badge text of this menu item.
+     * @see #setBadgeText(String)
+     */
     @Nullable
     String getBadgeText();
 
-    void setBadgeText(@Nullable String text);
+    /**
+     * Sets a badge to this menu item.
+     * @param badgeText  Set a numeric string to show a numeric badge.
+     *                   Set an empty string to show a dot badge.
+     *                   Set null to remove the badge.
+     * @see #getBadgeText()
+     */
+    void setBadgeText(@Nullable String badgeText);
 }

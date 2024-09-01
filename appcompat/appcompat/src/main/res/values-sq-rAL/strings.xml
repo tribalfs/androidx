@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">Fikur</string>
     <string name="sesl_searchview_description_voice">Kërkimi me zë</string>
     <string name="sesl_switch_on">Ndezur</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Shpërfille sugjerimin</string>
+    <string name="sesl_appbar_suggest_pagination">Faqja %1$d nga %2$d</string>
+    <!--sesl7-->
 </resources>

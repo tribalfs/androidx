@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:gravity="center"
+        android:id="@+id/sesl_switch_track_on">
+        <androidx.appcompat.util.SeslShapeDrawable android:shape="rectangle">
+            <corners android:radius="10dp" />
+            <size
+                android:height="20dp"
+                android:width="35dp" />
+            <solid android:color="@color/sesl_switch_track_on_color_light" />
+        </androidx.appcompat.util.SeslShapeDrawable>
+    </item>
+</layer-list>

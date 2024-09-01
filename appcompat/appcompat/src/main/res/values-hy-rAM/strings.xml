@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">Անջատված</string>
     <string name="sesl_searchview_description_voice">Ձայնով որոնում</string>
     <string name="sesl_switch_on">Միացված</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Բաց թողնել առաջարկը</string>
+    <string name="sesl_appbar_suggest_pagination">Էջ %1$d՝ %2$d-ից</string>
+    <!--sesl7-->
 </resources>

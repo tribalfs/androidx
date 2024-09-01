@@ -65,4 +65,8 @@
     <string name="sesl_switchbar_on_text">På</string>
     <string name="sesl_switch_off">Av</string>
     <string name="sesl_switch_on">På</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Avvisa förslag</string>
+    <string name="sesl_appbar_suggest_pagination">Sidan %1$d av %2$d</string>
+    <!--sesl7-->
 </resources>

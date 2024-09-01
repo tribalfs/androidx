@@ -28,17 +28,19 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.appcompat.widget.SeslArrayAdapter;
 
 /**
  * <p><b>SESL variant</b></p><br>
  * A {@link ListPreference} that presents the options in a drop down menu rather than a dialog.
  */
+//@RequiresApi(23)
 public class DropDownPreference extends ListPreference {
 
     private final Context mContext;
     private final ArrayAdapter mAdapter;
 
-    private AppCompatSpinner mSpinner;//sesl
+    private AppCompatSpinner/*sesl*/ mSpinner;
 
     private final OnItemSelectedListener mItemSelectedListener = new OnItemSelectedListener() {
         @Override
@@ -101,7 +103,7 @@ public class DropDownPreference extends ListPreference {
      */
     @NonNull
     protected ArrayAdapter createAdapter() {
-        return new ArrayAdapter<>(mContext, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);//sesl
+        return new SeslArrayAdapter(mContext, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
     }
 
     @SuppressWarnings("unchecked")
@@ -133,10 +135,8 @@ public class DropDownPreference extends ListPreference {
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         mSpinner = holder.itemView.findViewById(R.id.spinner);
         //Sesl
+        //note: Horizontal offset logic moved to SeslArrayAdapter in sesl7
         mSpinner.setSoundEffectsEnabled(false);
-        mSpinner.setDropDownHorizontalOffset(getContext().getResources()
-                .getDimensionPixelOffset(androidx.appcompat.R.dimen.sesl_list_dropdown_item_start_padding));
-
         if (!mAdapter.equals(mSpinner.getAdapter())) {
             mSpinner.setAdapter(mAdapter);
         }

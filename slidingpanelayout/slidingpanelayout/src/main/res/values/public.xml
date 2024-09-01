@@ -20,4 +20,15 @@
     <public type="attr" name="userResizingDividerDrawable"/>
     <public type="attr" name="isChildClippingToResizeDividerEnabled"/>
     <public type="attr" name="userResizeBehavior"/>
+    <!--Sesl-->
+    <public type="attr" name="seslResizeOff"/>
+    <public type="attr" name="seslPrefContentWidthSize"/>
+    <public type="attr" name="seslPrefDrawerWidthSize"/>
+    <public type="attr" name="seslIsSinglePanel"/>
+    <public type="attr" name="seslDrawRoundedCorner"/>
+    <public type="attr" name="seslDrawRoundedCornerColor"/>
+    <public type="attr" name="seslDrawerMarginBottom"/>
+    <public type="attr" name="seslDrawerMarginTop"/>
+    <public type="attr" name="seslLabelTextAppearance"/>
+    <!--sesl-->
 </resources>

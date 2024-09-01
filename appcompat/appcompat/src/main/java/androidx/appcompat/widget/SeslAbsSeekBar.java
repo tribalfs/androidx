@@ -139,7 +139,6 @@ public abstract class SeslAbsSeekBar extends SeslProgressBar {
     private float mDisabledAlpha;
 
     private int mScaledTouchSlop;
-    private float touchSlopSensitivity = 0.5f;
     private float mTouchDownX;
     private float mTouchDownY;
     private boolean mIsDragging;
@@ -272,7 +271,7 @@ public abstract class SeslAbsSeekBar extends SeslProgressBar {
             applyTickMarkTint();
 
             mScaledTouchSlop =
-                    (int)(ViewConfiguration.get(context).getScaledTouchSlop() * (1f-touchSlopSensitivity));
+                    (int) (ViewConfiguration.get(context).getScaledTouchSlop() * 0.35F);
 
             mIsLightTheme = SeslMisc.isLightTheme(context);
 
@@ -1201,7 +1200,6 @@ public abstract class SeslAbsSeekBar extends SeslProgressBar {
     }
 
 
-    //custom
     private void trackTouchEvent(MotionEvent event) {
         if (mCurrentMode == MODE_VERTICAL || mCurrentMode == MODE_EXPAND_VERTICAL) {
             trackTouchEventInVertical(event);
@@ -1234,7 +1232,7 @@ public abstract class SeslAbsSeekBar extends SeslProgressBar {
         this.setProgressInternal(Math.round(progress), true, false);
     }
 
-    //custom
+
     private void trackTouchEventInVertical(MotionEvent event) {
         int height = getHeight();
         int paddingTop = getPaddingTop();

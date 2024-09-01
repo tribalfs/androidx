@@ -388,7 +388,7 @@ public class SeslCheckedTextView extends TextView implements Checkable {
     }
 
     private boolean isCheckMarkAtStart() {
-        final int gravity = Gravity.getAbsoluteGravity(mCheckMarkGravity, ViewCompat.getLayoutDirection(this));
+        final int gravity = Gravity.getAbsoluteGravity(mCheckMarkGravity, getLayoutDirection());
         final int hgrav = gravity & Gravity.HORIZONTAL_GRAVITY_MASK;
         return hgrav == Gravity.LEFT;
     }

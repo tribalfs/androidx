@@ -16,22 +16,22 @@
   -->
 
 <resources>
-
-<!--
     <style name="Base.Theme.AppCompat" parent="Base.V22.Theme.AppCompat" />
     <style name="Base.Theme.AppCompat.Light" parent="Base.V22.Theme.AppCompat.Light" />
 
     <style name="Base.V22.Theme.AppCompat" parent="Base.V21.Theme.AppCompat">
-        <item name="actionModeShareDrawable">?android:attr/actionModeShareDrawable</item>
-        &lt;!&ndash; We use the framework provided edit text background on 22+ &ndash;&gt;
-        <item name="editTextBackground">?android:attr/editTextBackground</item>
+        <item name="android:actionModeShareDrawable">?attr/actionModeShareDrawable</item>
+        <!--sesl: ff are already supplied in parent theme-->
+        <!-- We use the framework provided edit text background on 22+ -->
+        <!--<item name="editTextBackground">?android:attr/editTextBackground</item>-->
     </style>
 
     <style name="Base.V22.Theme.AppCompat.Light" parent="Base.V21.Theme.AppCompat.Light">
-        <item name="actionModeShareDrawable">?android:attr/actionModeShareDrawable</item>
-        &lt;!&ndash; We use the framework provided edit text background on 22+ &ndash;&gt;
-        <item name="editTextBackground">?android:attr/editTextBackground</item>
+        <item name="android:actionModeShareDrawable">?attr/actionModeShareDrawable</item>
+        <!--sesl: ff are already supplied in parent theme-->
+        <!-- We use the framework provided edit text background on 22+ -->
+        <!--<item name="editTextBackground">?android:attr/editTextBackground</item>-->
     </style>
--->
+
 
 </resources>

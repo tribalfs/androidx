@@ -466,6 +466,12 @@
         <attr name="progressCircleDotColor1" format="reference|color" />
         <attr name="progressCircleDotColor2" format="reference|color" />
 
+        <!--Sesl7-->
+        <attr name="themeSwitchStyle" format="reference" /><!--sesl7-->
+        <attr name="seslMediumTouchAnimator" format="reference" /><!--sesl7-->
+        <attr name="seslSmallTouchAnimator" format="reference" /><!--sesl7-->
+        <!--sesl7-->
+
     </declare-styleable>
 
 
@@ -827,6 +833,13 @@
                  result to valid color values. Saturate(S + D) -->
             <enum name="add" value="16" />
         </attr>
+
+        <!--Sesl7-->
+        <attr name="seslNaviMenuItemType">
+            <enum name="none" value="0" />
+            <enum name="checkbox" value="1" />
+        </attr>
+        <!--sesl7-->
 
     </declare-styleable>
 
@@ -1486,5 +1499,25 @@
         <attr name="seslSwitchBarTextColor" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="SeslRecoil">
+        <attr name="seslRecoilColor" format="color"/>
+        <attr name="seslRecoilMask" format="reference"/>
+        <attr name="seslRecoilRadius" format="dimension"/>
+    </declare-styleable>
+
+    <attr name="seslLayoutRoundedCorner">
+        <flag name="corner_none" value="0x00000000" />
+        <flag name="corner_top_left" value="0x00000001" />
+        <flag name="corner_top_right" value="0x00000002" />
+        <flag name="corner_bottom_left" value="0x00000004" />
+        <flag name="corner_bottom_right" value="0x00000008" />
+        <flag name="corner_all" value="0x0000000f" />
+    </attr>
+
+    <declare-styleable name="SeslLayout">
+        <attr name="seslLayoutRoundedCorner"/>
+    </declare-styleable>
+
+    <attr name="seslLargeTouchAnimator" format="reference"/>
 
 </resources>

@@ -1,71 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.view.menu.ListMenuItemView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent" android:layout_height="wrap_content" android:minWidth="@dimen/sesl_popup_menu_item_min_width" android:minHeight="@dimen/sesl_popup_menu_item_min_height">
+<androidx.appcompat.view.menu.ListMenuItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/sesl_popup_menu_item_min_height"
+    android:minWidth="@dimen/sesl_popup_menu_item_min_width"
+    android:orientation="vertical">
+
     <androidx.appcompat.widget.SeslMenuDivider
         android:id="@+id/group_divider"
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
-        android:layout_marginTop="@dimen/sesl_popup_menu_divider_top_margin" android:layout_marginBottom="@dimen/sesl_popup_menu_divider_bottom_margin" android:layout_marginStart="@dimen/sesl_popup_menu_divider_start_margin" android:layout_marginEnd="@dimen/sesl_popup_menu_divider_end_margin"/>
+        android:layout_marginBottom="@dimen/sesl_popup_menu_divider_bottom_margin"
+        android:layout_marginEnd="@dimen/sesl_popup_menu_divider_end_margin"
+        android:layout_marginStart="@dimen/sesl_popup_menu_divider_start_margin"
+        android:layout_marginTop="@dimen/sesl_popup_menu_divider_top_margin" />
+
     <LinearLayout
-        android:orientation="horizontal"
         android:id="@+id/content"
-        android:paddingTop="@dimen/sesl_popup_menu_item_top_padding"
-        android:paddingBottom="@dimen/sesl_popup_menu_item_bottom_padding"
-        android:duplicateParentState="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingEnd="@dimen/sesl_popup_menu_item_end_padding">
+        android:duplicateParentState="true"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/sesl_popup_menu_item_bottom_padding"
+        android:paddingEnd="@dimen/sesl_popup_menu_item_end_padding"
+        android:paddingTop="@dimen/sesl_popup_menu_item_top_padding"
+        android:stateListAnimator="@animator/sesl_recoil_button_selector">
+
         <RelativeLayout
-            android:layout_gravity="center_vertical"
-            android:duplicateParentState="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/sesl_popup_menu_item_start_padding">
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/sesl_popup_menu_item_start_padding"
+            android:duplicateParentState="true">
+
             <LinearLayout
-                android:layout_gravity="center_vertical"
                 android:id="@+id/title_parent"
-                android:duplicateParentState="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:duplicateParentState="true">
+
                 <TextView
-                    android:textAppearance="?attr/textAppearanceLargePopupMenu"
-                    android:ellipsize="end"
                     android:id="@+id/title"
-                    android:fadingEdge="horizontal"
-                    android:duplicateParentState="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
+                    android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:textAlignment="viewStart"
-                    android:layout_alignParentStart="true"/>
-                <TextView android:textAppearance="?attr/textAppearanceSmallPopupMenu"
-                    android:id="@+id/shortcut"
                     android:duplicateParentState="true"
+                    android:ellipsize="end"
+                    android:fadingEdge="horizontal"
+                    android:singleLine="true"
+                    android:textAlignment="viewStart"
+                    android:textAppearance="?attr/textAppearanceLargePopupMenu" />
+
+                <TextView
+                    android:id="@+id/shortcut"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:singleLine="true"
+                    android:layout_height="wrap_content"
                     android:layout_below="@+id/title"
-                    android:textAlignment="viewStart"/>
+                    android:duplicateParentState="true"
+                    android:singleLine="true"
+                    android:textAlignment="viewStart"
+                    android:textAppearance="?attr/textAppearanceSmallPopupMenu" />
             </LinearLayout>
-            <TextView android:textSize="@dimen/sesl_menu_item_badge_text_size"
-                android:textColor="@color/sesl_menu_badge_text_color"
-                android:gravity="center" android:id="@+id/menu_badge"
+
+            <TextView
+                android:id="@+id/menu_badge"
+                android:layout_width="@dimen/sesl_menu_item_badge_size"
+                android:layout_height="@dimen/sesl_menu_item_badge_size"
+                android:layout_alignEnd="@+id/title_parent"
                 android:background="@drawable/sesl_noti_badge"
+                android:clickable="false"
+                android:duplicateParentState="true"
                 android:focusable="false"
-                android:visibility="gone" android:clickable="false"
-                android:duplicateParentState="true" android:layout_width="@dimen/sesl_menu_item_badge_size"
-                android:layout_height="@dimen/sesl_menu_item_badge_size" android:minWidth="@dimen/sesl_menu_item_badge_size"
+                android:gravity="center"
                 android:importantForAccessibility="no"
-                android:layout_alignEnd="@+id/title_parent"/>
+                android:minWidth="@dimen/sesl_menu_item_badge_size"
+                android:textColor="@color/sesl_menu_badge_text_color"
+                android:textSize="@dimen/sesl_menu_item_badge_text_size"
+                android:visibility="gone" />
         </RelativeLayout>
-        <ImageView android:layout_gravity="center"
+
+        <ImageView
             android:id="@+id/submenuarrow"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
             android:scaleType="center"
-            android:layout_marginStart="8dp"/>
+            android:visibility="gone" />
     </LinearLayout>
+
 </androidx.appcompat.view.menu.ListMenuItemView>

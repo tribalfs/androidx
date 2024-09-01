@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:gravity="center_vertical"
+        android:height="@dimen/sesl_seekbar_mode_expand_track_height"
+        android:state_enabled="true">
+        <androidx.appcompat.util.SeslShapeDrawable android:shape="rectangle">
+            <solid android:color="@color/sesl_seekbar_level_control_color_default" />
+            <corners android:radius="@dimen/sesl_seekbar_level_progress_radius" />
+            <size android:height="@dimen/sesl_seekbar_mode_expand_track_height" />
+        </androidx.appcompat.util.SeslShapeDrawable>
+    </item>
+</layer-list>

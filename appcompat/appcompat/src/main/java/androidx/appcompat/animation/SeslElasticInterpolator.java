@@ -34,29 +34,32 @@ class SeslElasticInterpolator implements Interpolator {
     private float mAmplitude;
     private float mPeriod;
 
-    public SeslElasticInterpolator(float amplitude, float point) {
+    public SeslElasticInterpolator(float amplitude, float period) {
         this.mAmplitude = amplitude;
-        this.mPeriod = point;
+        this.mPeriod = period;
     }
 
-    private float out(float f10, float f11, float f12) {
-        float f13;
-        if (f10 == 0.0f) {
+    private float out(float value, float amplitude, float period) {
+        float intermediateValue;
+        if (value == 0.0f) {
             return 0.0f;
         }
-        if (f10 >= 1.0f) {
+        if (value >= 1.0f) {
             return 1.0f;
         }
-        if (f12 == 0.0f) {
-            f12 = 0.3f;
+        if (period == 0.0f) {
+            period = 0.3f;
         }
-        if (f11 >= 1.0f) {
-            f13 = (float) ((f12 / 6.283185307179586d) * Math.asin(1.0f / f11));
+        if (amplitude >= 1.0f) {
+            intermediateValue = (float) ((period / 6.283185307179586) * Math.asin(1.0f / amplitude));
         } else {
-            f13 = f12 / 4.0f;
-            f11 = 1.0f;
+            intermediateValue = period / 4.0f;
+            amplitude = 1.0f;
         }
-        return (float) ((f11 * Math.pow(2.0d, (-10.0f) * f10) * Math.sin(((f10 - f13) * 6.283185307179586d) / f12)) + 1.0d);
+        return (float) (amplitude
+                * Math.pow(2.0d, (-10.0f) * value)
+                * Math.sin(((value - intermediateValue) * 6.283185307179586) / period)
+                + 1.0d);
     }
 
     public float getAmplitude() {
@@ -64,8 +67,8 @@ class SeslElasticInterpolator implements Interpolator {
     }
 
     @Override
-    public float getInterpolation(float f10) {
-        return out(f10, this.mAmplitude, this.mPeriod);
+    public float getInterpolation(float value) {
+        return out(value, this.mAmplitude, this.mPeriod);
     }
 
     public float getPeriod() {

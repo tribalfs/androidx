@@ -36,7 +36,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.res.TypedArrayUtils;
-import androidx.core.view.ViewCompat;
 import androidx.reflect.view.SeslHapticFeedbackConstantsReflector;
 import androidx.reflect.view.SeslViewReflector;
 
@@ -225,7 +224,7 @@ public class SwitchPreferenceCompat extends TwoStatePreference {
         }
 
         View switchView = view.findViewById(AndroidResources.ANDROID_R_SWITCH_WIDGET/*sesl*/);
-        if (mIsLargeLayout != 1) syncSwitchView(switchView);//sesl
+        if (mIsLargeLayout != SWITCH_PREFERENCE_LAYOUT_LARGE) syncSwitchView(switchView);//sesl
 
         if (isTalkBackIsRunning()) return;//sesl
 
@@ -364,7 +363,6 @@ public class SwitchPreferenceCompat extends TwoStatePreference {
         switchCompatWidget.setCheckedWithoutAnimation(mChecked);
     }
 
-    @SuppressLint("NewApi")
     private boolean canHapticFeedback(boolean isChecked, View view, SwitchCompat switchCompat) {
         return SUPPORT_TOUCH_FEEDBACK
                 && isChecked != switchCompat.isChecked()

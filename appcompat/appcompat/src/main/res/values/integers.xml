@@ -35,4 +35,7 @@
     <integer name="sesl_menu_popup_max_item_count_mobile_keyboard">7</integer>
 
     <integer name="status_bar_notification_info_maxnum">999</integer>
+
+    <integer name="sesl_recoil_effect_press_duration">100</integer>
+    <integer name="sesl_recoil_effect_release_duration">350</integer>
 </resources>

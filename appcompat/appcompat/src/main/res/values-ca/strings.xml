@@ -65,4 +65,8 @@
     <string name="sesl_switchbar_on_text">Activat</string>
     <string name="sesl_switch_off">Desactivat</string>
     <string name="sesl_switch_on">Activat</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Descartar suggeriment</string>
+    <string name="sesl_appbar_suggest_pagination">Pàgina %1$d de %2$d</string>
+    <!--sesl7-->
 </resources>

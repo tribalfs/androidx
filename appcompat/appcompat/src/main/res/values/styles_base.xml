@@ -61,7 +61,7 @@
         <item name="backgroundSplit">?attr/colorPrimary</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.ActionButton" parent="@android:style/Widget.Material.ActionButton">
+    <style name="Base.Widget.AppCompat.ActionButton" parent="android:Widget.Material.ActionButton">
         <item name="android:background">?attr/actionBarItemBackground</item>
         <item name="android:minWidth">@dimen/sesl_action_button_min_width</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
@@ -91,7 +91,7 @@
     </style>
 
     <style name="Base.Widget.AppCompat.Light.ActionButton.Overflow" parent="@style/Base.Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:background">?attr/actionBarItemBackground</item>
+        <item name="android:background">?actionBarItemBackground</item>
         <item name="android:src">@drawable/sesl_ic_menu_overflow_light</item>
     </style>
 
@@ -100,19 +100,19 @@
         <item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionMode.Title.Inverse</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.Light.AutoCompleteTextView" parent="@style/Base.V7.Widget.AppCompat.Light.AutoCompleteTextView"/>
+    <style name="Base.Widget.AppCompat.Light.AutoCompleteTextView" parent="@style/Base.V7.Widget.AppCompat.Light.AutoCompleteTextView" />
 
     <style name="Base.Widget.AppCompat.Light.Button" parent="@style/Widget.AppCompat.Button">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.Light.Button</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.Light.Button.Borderless" parent="@style/Base.Widget.AppCompat.Light.Button"/>
+    <style name="Base.Widget.AppCompat.Light.Button.Borderless" parent="@style/Base.Widget.AppCompat.Light.Button" />
 
     <style name="Base.Widget.AppCompat.Light.Button.Borderless.Colored" parent="@style/Base.Widget.AppCompat.Light.Button.Borderless">
         <item name="android:textColor">@color/sesl_btn_colored_borderless_text</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.Light.Button.Borderless.Small" parent="@android:style/Widget.Material.Light.Button.Borderless.Small"/>
+    <style name="Base.Widget.AppCompat.Light.Button.Borderless.Small" parent="@android:style/Widget.Material.Light.Button.Borderless.Small" />
 
     <style name="Base.Widget.AppCompat.Light.Button.Colored" parent="@style/Base.Widget.AppCompat.Light.Button">
         <item name="android:textColor">@color/sesl_btn_colored_borderless_text</item>
@@ -132,7 +132,9 @@
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.Light.Button.Small" parent="@style/Base.Widget.AppCompat.Light.Button"/>
+    <style name="Base.Widget.AppCompat.Light.Button.Small" parent="@style/Widget.AppCompat.Button.Small">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.Light.Button</item>
+    </style>
 
     <style name="Base.Widget.AppCompat.Light.ButtonBar" parent="@android:style/Widget.Material.ButtonBar">
         <item name="android:background">@null</item>
@@ -144,23 +146,23 @@
         <item name="android:textOff">@string/sesl_capital_off</item>
         <item name="android:thumb">@drawable/sesl_switch_thumb_selector_light</item>
         <item name="showText">false</item>
-        <item name="switchPadding">0dp</item>
+        <item name="switchPadding">0.0dip</item>
         <item name="switchTextAppearance">@style/TextAppearance.AppCompat.Widget.Switch</item>
         <item name="track">@drawable/sesl_switch_track_selector</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.Light.EditText" parent="@style/Base.V7.Widget.AppCompat.Light.EditText">
-        <item name="android:breakStrategy">simple</item>
-        <item name="android:hyphenationFrequency">none</item>
-    </style>
+    <style name="Base.Widget.AppCompat.Light.EditText" parent="@style/Base.V7.Widget.AppCompat.Light.EditText"/>
 
     <style name="Base.Widget.AppCompat.Light.ListPopupWindow" parent="@style/Widget.AppCompat.ListPopupWindow">
         <item name="android:popupBackground">@drawable/sesl_menu_popup_background</item>
     </style>
 
     <style name="Base.Widget.AppCompat.Light.ListView.DropDown" parent="@style/Widget.AppCompat.ListView.DropDown">
-        <item name="android:scrollbarThumbHorizontal">@drawable/sesl_dropdown_scrollbar_handle_light</item>
-        <item name="android:scrollbarThumbVertical">@drawable/sesl_dropdown_scrollbar_handle_light</item>
+        <item name="android:scrollbarThumbHorizontal">
+            @drawable/sesl_dropdown_scrollbar_handle_light
+        </item>
+        <item name="android:scrollbarThumbVertical">@drawable/sesl_dropdown_scrollbar_handle_light
+        </item>
     </style>
 
     <style name="Base.Widget.AppCompat.Light.PopupMenu" parent="@style/Widget.AppCompat.PopupMenu">
@@ -172,59 +174,58 @@
     </style>
 
     <style name="Base.Widget.AppCompat.ActionBar.TabBar" parent="">
-        <item name="divider">?attr/actionBarDivider</item>
+        <item name="divider">?actionBarDivider</item>
+        <item name="dividerPadding">8.0dip</item>
         <item name="showDividers">middle</item>
-        <item name="dividerPadding">8dip</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.Light.ActionBar.TabBar"
-        parent="Base.Widget.AppCompat.ActionBar.TabBar">
-    </style>
+    <style name="Base.Widget.AppCompat.Light.ActionBar.TabBar" parent="@style/Base.Widget.AppCompat.ActionBar.TabBar" />
 
     <style name="Base.Widget.AppCompat.ActionBar.TabView" parent="">
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:paddingLeft">16dip</item>
-        <item name="android:paddingRight">16dip</item>
-        <item name="android:layout_width">0dip</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:minWidth">80dip</item>
+        <item name="android:paddingLeft">16.0dip</item>
+        <item name="android:paddingRight">16.0dip</item>
+        <item name="android:layout_width">0.0dip</item>
+        <item name="android:minWidth">80.0dip</item>
+        <item name="android:layout_weight">1.0</item>
     </style>
 
     <style name="Base.Widget.AppCompat.Light.ActionBar.TabView" parent="Base.Widget.AppCompat.ActionBar.TabView" />
 
     <style name="Base.Widget.AppCompat.ActionBar.TabText" parent="">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">12.0sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:ellipsize">marquee</item>
+        <item name="android:maxWidth">180.0dip</item>
         <item name="android:maxLines">2</item>
-        <item name="android:maxWidth">180dp</item>
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.Light.ActionBar.TabText" parent="Base.Widget.AppCompat.ActionBar.TabText" />
+    <style name="Base.Widget.AppCompat.Light.ActionBar.TabText" parent="@style/Base.Widget.AppCompat.ActionBar.TabText" />
 
-    <style name="Base.Widget.AppCompat.Light.ActionBar.TabText.Inverse" parent="Base.Widget.AppCompat.Light.ActionBar.TabText">
+    <style name="Base.Widget.AppCompat.Light.ActionBar.TabText.Inverse" parent="@style/Base.Widget.AppCompat.Light.ActionBar.TabText">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium.Inverse</item>
     </style>
 
     <style name="Base.Widget.AppCompat.ActionMode" parent="">
-        <item name="background">?attr/actionModeBackground</item>
-        <item name="backgroundSplit">?attr/actionModeSplitBackground</item>
-        <item name="height">?attr/actionBarSize</item>
-        <item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionMode.Title</item>
-        <item name="subtitleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle</item>
-        <item name="closeItemLayout">@layout/sesl_action_mode_close_item</item>
-
-        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:minHeight">?actionBarSize</item>
+        <item name="background">?actionModeBackground</item>
+        <item name="backgroundSplit">?actionModeSplitBackground</item>
         <item name="buttonGravity">top</item>
+        <item name="closeItemLayout">@layout/sesl_action_mode_close_item</item>
+        <item name="height">?actionBarSize</item>
+        <item name="subtitleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle
+        </item>
+        <item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionMode.Title</item>
     </style>
 
-    <style name="Platform.Widget.AppCompat.Spinner" parent="android:Widget.Spinner.DropDown" />
+    <style name="Platform.Widget.AppCompat.Spinner" parent="@android:style/Widget.Spinner.DropDown" />
 
-    <style name="Base.Widget.AppCompat.DropDownItem.Spinner" parent="android:Widget.Material.DropDownItem.Spinner">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.DropDownItem</item>
+    <style name="Base.Widget.AppCompat.DropDownItem.Spinner" parent="@android:style/Widget.Material.DropDownItem.Spinner">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.DropDownItem
+        </item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingTop">@dimen/sesl_popup_menu_item_top_padding</item>
         <item name="android:paddingBottom">@dimen/sesl_popup_menu_item_bottom_padding</item>
@@ -236,119 +237,117 @@
         <item name="checkMarkGravity">end</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.AutoCompleteTextView" parent="Base.V7.Widget.AppCompat.AutoCompleteTextView" />
+    <style name="Base.Widget.AppCompat.AutoCompleteTextView" parent="@style/Base.V7.Widget.AppCompat.AutoCompleteTextView" />
 
-    <style name="Base.V7.Widget.AppCompat.AutoCompleteTextView" parent="android:Widget.AutoCompleteTextView">
-        <item name="android:dropDownSelector">?android:attr/listChoiceBackgroundIndicator</item>
+    <style name="Base.V7.Widget.AppCompat.AutoCompleteTextView" parent="@android:style/Widget.AutoCompleteTextView">
+        <item name="android:textAppearance">?android:textAppearanceMediumInverse</item>
+        <item name="android:textColor">?android:editTextColor</item>
+        <item name="android:background">?android:editTextBackground</item>
+        <item name="android:dropDownSelector">?android:listChoiceBackgroundIndicator</item>
         <item name="android:popupBackground">@drawable/sesl_menu_popup_background_dark</item>
-        <item name="android:popupElevation">@dimen/sesl_menu_popup_elevation</item>
-        <item name="android:background">?android:attr/editTextBackground</item>
-        <item name="android:textColor">?android:attr/editTextColor</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceMediumInverse</item>
         <item name="android:textCursorDrawable">@drawable/sesl_text_cursor</item>
+        <item name="android:popupElevation">@dimen/sesl_menu_popup_elevation</item>
     </style>
 
-    <style name="Base.V7.Widget.AppCompat.Light.AutoCompleteTextView" parent="android:Widget.AutoCompleteTextView">
-        <item name="android:dropDownSelector">?android:attr/listChoiceBackgroundIndicator</item>
+    <style name="Base.V7.Widget.AppCompat.Light.AutoCompleteTextView" parent="@android:style/Widget.AutoCompleteTextView">
+        <item name="android:textAppearance">?android:textAppearanceMediumInverse</item>
+        <item name="android:textColor">?android:editTextColor</item>
+        <item name="android:background">?android:editTextBackground</item>
+        <item name="android:dropDownSelector">?android:listChoiceBackgroundIndicator</item>
         <item name="android:popupBackground">@drawable/sesl_menu_popup_background</item>
-        <item name="android:popupElevation">@dimen/sesl_menu_popup_elevation</item>
-        <item name="android:background">?android:attr/editTextBackground</item>
-        <item name="android:textColor">?android:attr/editTextColor</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceMediumInverse</item>
         <item name="android:textCursorDrawable">@drawable/sesl_text_cursor</item>
+        <item name="android:popupElevation">@dimen/sesl_menu_popup_elevation</item>
     </style>
 
     <style name="Base.Widget.AppCompat.ActivityChooserView" parent="">
         <item name="android:gravity">center</item>
-        <item name="android:divider">?android:attr/dividerVertical</item>
+        <item name="android:divider">?android:dividerVertical</item>
         <item name="android:showDividers">middle</item>
-        <item name="android:dividerPadding">6dip</item>
+        <item name="android:dividerPadding">6.0dip</item>
     </style>
 
-    <style name="Base.V7.Widget.AppCompat.Toolbar" parent="android:Widget">
+    <style name="Base.V7.Widget.AppCompat.Toolbar" parent="@android:style/Widget">
+        <item name="android:paddingLeft">0.0dip</item>
+        <item name="android:paddingRight">0.0dip</item>
+        <item name="android:minHeight">?actionBarSize</item>
+        <item name="android:paddingStart">0.0dip</item>
+        <item name="android:paddingEnd">0.0dip</item>
         <item name="background">@color/sesl_action_bar_background_color_dark</item>
-        <item name="titleTextAppearance">@style/TextAppearance.Widget.AppCompat.Toolbar.Title</item>
-        <item name="subtitleTextAppearance">@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle</item>
-        <item name="android:minHeight">?attr/actionBarSize</item>
-        <item name="titleMargin">0dp</item>
-        <item name="maxButtonHeight">?attr/actionBarSize</item>
         <item name="buttonGravity">top</item>
-        <item name="collapseIcon">?attr/homeAsUpIndicator</item>
         <item name="collapseContentDescription">@string/sesl_toolbar_collapse_description</item>
+        <item name="collapseIcon">?homeAsUpIndicator</item>
+        <item name="contentInsetEnd">0.0dip</item>
         <item name="contentInsetStart">@dimen/sesl_action_bar_content_inset</item>
-        <item name="contentInsetStartWithNavigation">@dimen/sesl_action_bar_content_inset_with_nav</item>
-        <item name="contentInsetEnd">0dp</item>
-        <item name="android:paddingLeft">0dp</item>
-        <item name="android:paddingRight">0dp</item>
-        <item name="android:paddingStart">0dp</item>
-        <item name="android:paddingEnd">0dp</item>
+        <item name="contentInsetStartWithNavigation">@dimen/sesl_action_bar_content_inset_with_nav
+        </item>
+        <item name="maxButtonHeight">?actionBarSize</item>
+        <item name="subtitleTextAppearance">
+            @style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle
+        </item>
+        <item name="titleMargin">0.0dip</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Widget.AppCompat.Toolbar.Title</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.EditText" parent="Base.V7.Widget.AppCompat.EditText">
-        <item name="android:hyphenationFrequency">none</item>
-        <item name="android:breakStrategy">simple</item>
-    </style>
+    <style name="Base.Widget.AppCompat.EditText" parent="@style/Base.V7.Widget.AppCompat.EditText"/>
 
-    <style name="Base.V7.Widget.AppCompat.EditText" parent="android:Widget.EditText">
-        <item name="android:background">?attr/editTextBackground</item>
+    <style name="Base.V7.Widget.AppCompat.EditText" parent="@android:style/Widget.EditText">
         <item name="android:textSize">@dimen/sesl_edit_text_size</item>
         <item name="android:textColor">@color/sesl_edit_text_dark</item>
         <item name="android:textColorHint">@color/sesl_edit_text_hint_color_dark</item>
-        <item name="android:textCursorDrawable">@drawable/sesl_text_cursor</item>
-        <item name="fontFamily">sans-serif</item>
+        <item name="android:background">?editTextBackground</item>
         <item name="android:focusableInTouchMode">true</item>
         <item name="android:clickable">true</item>
+        <item name="android:textCursorDrawable">@drawable/sesl_text_cursor</item>
+        <item name="fontFamily">sans-serif</item>
     </style>
 
-    <style name="Base.V7.Widget.AppCompat.Light.EditText" parent="Base.V7.Widget.AppCompat.EditText">
+    <style name="Base.V7.Widget.AppCompat.Light.EditText" parent="@style/Base.V7.Widget.AppCompat.EditText">
         <item name="android:textColor">@color/sesl_edit_text_light</item>
         <item name="android:textColorHint">@color/sesl_edit_text_hint_color_light</item>
     </style>
 
     <!-- contains values used in all dpis -->
     <style name="Base.Widget.AppCompat.DrawerArrowToggle.Common" parent="">
-        <item name="color">?android:attr/textColorSecondary</item>
+        <item name="arrowHeadLength">8.0dip</item>
+        <item name="arrowShaftLength">16.0dip</item>
+        <item name="color">?android:textColorSecondary</item>
         <item name="spinBars">true</item>
-        <item name="thickness">2dp</item>
-        <item name="arrowShaftLength">16dp</item>
-        <item name="arrowHeadLength">8dp</item>
+        <item name="thickness">2.0dip</item>
     </style>
 
-    <!-- contains values used in all dpis except hdpi and xxhdpi -->
     <style name="Base.Widget.AppCompat.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle.Common">
-        <item name="barLength">18dp</item>
-        <item name="gapBetweenBars">3dp</item>
-        <item name="drawableSize">24dp</item>
+        <item name="barLength">18.0dip</item>
+        <item name="drawableSize">24.0dip</item>
+        <item name="gapBetweenBars">3.0dip</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.CompoundButton.CheckBox" parent="android:Widget.CompoundButton.CheckBox">
+    <style name="Base.Widget.AppCompat.CompoundButton.CheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:background">@drawable/sesl_control_background</item>
         <item name="android:button">@drawable/sesl_btn_check</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.CompoundButton.RadioButton" parent="android:Widget.CompoundButton.RadioButton">
+    <style name="Base.Widget.AppCompat.CompoundButton.RadioButton" parent="@android:style/Widget.CompoundButton.RadioButton">
         <item name="android:background">@drawable/sesl_control_background</item>
         <item name="android:button">@drawable/sesl_btn_radio</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.CompoundButton.Switch" parent="android:Widget.CompoundButton">
-        <item name="track">@drawable/sesl_switch_track_selector_dark</item>
-        <item name="android:thumb">@drawable/sesl_switch_thumb_selector_dark</item>
-        <item name="switchTextAppearance">@style/TextAppearance.AppCompat.Widget.Switch</item>
+    <style name="Base.Widget.AppCompat.CompoundButton.Switch" parent="@android:style/Widget.CompoundButton">
         <item name="android:background">@drawable/sesl_switch_background</item>
-        <item name="showText">false</item>
-        <item name="switchPadding">0dp</item>
         <item name="android:textOn">@string/sesl_capital_on</item>
         <item name="android:textOff">@string/sesl_capital_off</item>
+        <item name="android:thumb">@drawable/sesl_switch_thumb_selector_dark</item>
+        <item name="showText">false</item>
+        <item name="switchPadding">0.0dip</item>
+        <item name="switchTextAppearance">@style/TextAppearance.AppCompat.Widget.Switch</item>
+        <item name="track">@drawable/sesl_switch_track_selector_dark</item>
     </style>
 
-    <!-- Bordered ink button -->
-    <style name="Base.Widget.AppCompat.Button" parent="android:Widget">
-        <item name="android:background">@drawable/sesl_btn_default</item>
+    <style name="Base.Widget.AppCompat.Button" parent="@android:style/Widget">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.Button</item>
-        <item name="android:minHeight">36dp</item>
-        <item name="android:gravity">center</item>
         <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/sesl_btn_default</item>
+        <item name="android:minHeight">36.0dip</item>
         <item name="android:maxLines">2</item>
         <item name="android:stateListAnimator">@null</item>
     </style>
@@ -358,73 +357,60 @@
         <item name="android:textSize">17sp</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.Button.Dialog" parent="Base.Widget.AppCompat.Light.Button.Borderless.Small">
-        <item name="android:background">@drawable/sesl_dialog_btn_default_borderless</item>
-        <item name="android:minWidth">@dimen/sesl_dialog_button_min_width</item>
-        <item name="android:minHeight">@dimen/sesl_dialog_button_min_height</item>
-        <item name="android:stateListAnimator">@drawable/sesl_dialog_button_disabled_anim</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:singleLine">true</item>
+    <style name="Base.Widget.AppCompat.Button.Dialog" parent="@style/Base.Widget.AppCompat.Light.Button.Borderless.Small">
         <item name="android:textSize">@dimen/sesl_dialog_button_text_size</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/sesl_dialog_button_text_color_dark</item>
         <item name="android:ellipsize">end</item>
+        <item name="android:background">@drawable/sesl_dialog_btn_default_borderless</item>
+        <item name="android:minWidth">@dimen/sesl_dialog_button_min_width</item>
+        <item name="android:minHeight">@dimen/sesl_dialog_button_min_height</item>
+        <item name="android:singleLine">true</item>
         <item name="android:fontFamily">sec-roboto-light</item>
+        <item name="android:stateListAnimator">@drawable/sesl_dialog_button_disabled_anim</item>
+        <item name="textAllCaps">false</item>
     </style>
 
-    <!-- Small bordered ink button -->
-    <style name="Base.Widget.AppCompat.Button.Small" parent="Base.Widget.AppCompat.Button" />
-
-    <!-- Colored bordered ink button -->
-    <style name="Base.Widget.AppCompat.Button.Colored" parent="android:Widget.Material.Button.Colored">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.Button.Colored</item>
+    <style name="Base.Widget.AppCompat.Button.Small" parent="@style/Base.Widget.AppCompat.Button">
+        <item name="android:background">@drawable/sesl_btn_small_default</item>
     </style>
 
-    <!-- Borderless ink button -->
-    <style name="Base.Widget.AppCompat.Button.Borderless" parent="Base.Widget.AppCompat.Button" />
+    <style name="Base.Widget.AppCompat.Button.Borderless" parent="@style/Base.Widget.AppCompat.Button" />
 
-    <!-- Colored borderless ink button -->
-    <style name="Base.Widget.AppCompat.Button.Borderless.Colored" parent="android:Widget.Material.Button.Borderless.Colored" />
-
-    <style name="Base.Widget.AppCompat.Button.ButtonBar.AlertDialog" parent="Widget.AppCompat.Button.Borderless.Colored">
-        <item name="android:minWidth">64dp</item>
+    <style name="Base.Widget.AppCompat.Button.ButtonBar.AlertDialog" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:minWidth">64.0dip</item>
         <item name="android:minHeight">@dimen/sesl_alert_dialog_button_bar_height</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.ImageButton" parent="android:Widget.Material.ImageButton" />
+    <style name="Base.Widget.AppCompat.ImageButton" parent="@style/Base.V29.Widget.AppCompat.ImageButton" />
 
-
-    <style name="Base.DialogWindowTitleBackground.AppCompat" parent="android:Widget">
-        <item name="android:background">@null</item>
-        <item name="android:paddingLeft">?attr/dialogPreferredPadding</item>
-        <item name="android:paddingRight">?attr/dialogPreferredPadding</item>
-        <item name="android:paddingTop">@dimen/sesl_dialog_padding_top</item>
-    </style>
-
-    <style name="Base.DialogWindowTitle.AppCompat" parent="android:Widget">
+    <style name="Base.DialogWindowTitle.AppCompat" parent="@android:style/Widget">
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.DialogWindowTitle
+        </item>
         <item name="android:maxLines">1</item>
         <item name="android:scrollHorizontally">true</item>
-        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.DialogWindowTitle</item>
     </style>
 
-    <style name="Base.DialogWindowTitle.AppCompat.Light" parent="android:Widget">
+    <style name="Base.DialogWindowTitle.AppCompat.Light" parent="@android:style/Widget">
+        <item name="android:textAppearance">
+            @style/Base.TextAppearance.AppCompat.Light.DialogWindowTitle
+        </item>
         <item name="android:maxLines">1</item>
         <item name="android:scrollHorizontally">true</item>
-        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Light.DialogWindowTitle</item>
     </style>
 
-    <style name="Base.Animation.AppCompat.Dialog" parent="android:Animation">
+    <style name="Base.Animation.AppCompat.Dialog" parent="@android:style/Animation">
         <item name="android:windowEnterAnimation">@anim/sesl_dialog_enter</item>
         <item name="android:windowExitAnimation">@anim/sesl_dialog_exit</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.ButtonBar" parent="android:Widget">
+    <style name="Base.Widget.AppCompat.ButtonBar" parent="@android:style/Widget">
         <item name="android:background">@null</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.ButtonBar.AlertDialog" parent="android:Widget.Material.Light.ButtonBar.AlertDialog" />
+    <style name="Base.Widget.AppCompat.ButtonBar.AlertDialog" parent="@android:style/Widget.Material.Light.ButtonBar.AlertDialog" />
 
-    <style name="Base.Animation.AppCompat.DropDownUp" parent="android:Animation">
+    <style name="Base.Animation.AppCompat.DropDownUp" parent="@android:style/Animation">
         <item name="android:windowEnterAnimation">@anim/sesl_grow_fade_in_from_bottom</item>
         <item name="android:windowExitAnimation">@anim/sesl_shrink_fade_out_from_bottom</item>
     </style>
@@ -439,34 +425,34 @@
         <item name="horizontalProgressLayout">@layout/sesl_alert_dialog_progress</item>
     </style>
 
-    <style name="Base.AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat" />
+    <style name="Base.AlertDialog.AppCompat.Light" parent="@style/Base.AlertDialog.AppCompat" />
 
-    <style name="Base.Animation.AppCompat.Tooltip" parent="android:Animation">
+    <style name="Base.Animation.AppCompat.Tooltip" parent="@android:style/Animation">
         <item name="android:windowEnterAnimation">@anim/sesl_tooltip_enter</item>
         <item name="android:windowExitAnimation">@anim/sesl_tooltip_exit</item>
     </style>
 
-    <style name="Base.Animation.AppCompat.ListPopup" parent="android:Animation">
+    <style name="Base.Animation.AppCompat.ListPopup" parent="@android:style/Animation">
         <item name="android:windowEnterAnimation">@anim/sesl_list_popup_enter</item>
         <item name="android:windowExitAnimation">@anim/sesl_list_popup_exit</item>
     </style>
 
-    <style name="Base.Animation.AppCompat.MenuPopup" parent="android:Animation">
+    <style name="Base.Animation.AppCompat.MenuPopup" parent="@android:style/Animation">
         <item name="android:windowEnterAnimation">@anim/sesl_menu_popup_enter</item>
         <item name="android:windowExitAnimation">@anim/sesl_menu_popup_exit</item>
     </style>
 
-    <style name="Base.Animation.AppCompat.BottomMenuPopup" parent="android:Animation">
+    <style name="Base.Animation.AppCompat.BottomMenuPopup" parent="@android:style/Animation">
         <item name="android:windowEnterAnimation">@anim/sesl_bottom_menu_popup_enter</item>
         <item name="android:windowExitAnimation">@anim/sesl_bottom_menu_popup_exit</item>
     </style>
 
 
-    <style name="Base.Widget.AppCompat.Light.ProgressBar.Inverse" parent="@style/Widget.AppCompat.ProgressBar.Inverse"/>
+    <style name="Base.Widget.AppCompat.Light.ProgressBar.Inverse" parent="Widget.AppCompat.ProgressBar.Inverse"/>
 
-    <style name="Base.Widget.AppCompat.Light.ProgressBar.Large.Inverse" parent="@style/Widget.AppCompat.ProgressBar.Large.Inverse"/>
+    <style name="Base.Widget.AppCompat.Light.ProgressBar.Large.Inverse" parent="Widget.AppCompat.ProgressBar.Large.Inverse"/>
 
-    <style name="Base.Widget.AppCompat.Light.ProgressBar.Small.Inverse" parent="@style/Widget.AppCompat.ProgressBar.Small.Inverse"/>
+    <style name="Base.Widget.AppCompat.Light.ProgressBar.Small.Inverse" parent="Widget.AppCompat.ProgressBar.Small.Inverse"/>
 
     <style name="Base.Widget.AppCompat.Light.SearchView" parent="@style/Widget.AppCompat.SearchView">
         <item name="queryBackground">@null</item>
@@ -478,8 +464,11 @@
     </style>
 
     <style name="Base.Widget.AppCompat.Light.SeslSwitchBar" parent="@style/Base.Widget.AppCompat.SeslSwitchBar">
-        <item name="seslSwitchBarBackgroundActivatedColor">@color/sesl_switchbar_on_background_color_light</item>
-        <item name="seslSwitchBarBackgroundColor">@color/sesl_switchbar_off_background_color_light</item>
+        <item name="seslSwitchBarBackgroundActivatedColor">
+            @color/sesl_switchbar_on_background_color_light
+        </item>
+        <item name="seslSwitchBarBackgroundColor">@color/sesl_switchbar_off_background_color_light
+        </item>
         <item name="seslSwitchBarTextColor">@color/sesl_switchbar_off_text_color_light</item>
     </style>
 
@@ -494,51 +483,61 @@
     </style>
 
     <style name="Base.Widget.AppCompat.Light.TextView.SpinnerItem" parent="@style/Widget.AppCompat.TextView.SpinnerItem">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Light.Widget.TextView.SpinnerItem</item>
+        <item name="android:textAppearance">
+            @style/TextAppearance.AppCompat.Light.Widget.TextView.SpinnerItem
+        </item>
     </style>
 
     <style name="Base.Widget.AppCompat.Light.Toolbar" parent="@style/Base.V7.Widget.AppCompat.Toolbar">
         <item name="background">@color/sesl_action_bar_background_color_light</item>
-        <item name="subtitleTextAppearance">@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle.Inverse</item>
-        <item name="titleTextAppearance">@style/TextAppearance.Widget.AppCompat.Toolbar.Title.Inverse</item>
+        <item name="subtitleTextAppearance">
+            @style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle.Inverse
+        </item>
+        <item name="titleTextAppearance">
+            @style/TextAppearance.Widget.AppCompat.Toolbar.Title.Inverse
+        </item>
     </style>
 
-    <style name="Base.Widget.AppCompat.Light.Toolbar.Button.Navigation" parent="@android:style/Widget.Material.Toolbar.Button.Navigation">
+    <style name="Base.Widget.AppCompat.Light.Toolbar.Button.Navigation" parent="android:Widget.Material.Toolbar.Button.Navigation">
         <item name="android:background">?attr/actionBarItemBackground</item>
         <item name="android:scaleType">center</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
         <item name="android:paddingStart">8dp</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.ListMenuView" parent="@android:style/Widget"/>
+    <style name="Base.Widget.AppCompat.ListMenuView" parent="@android:style/Widget" />
 
     <style name="Base.Widget.AppCompat.ListPopupWindow" parent="@android:style/Widget.Material.ListPopupWindow">
-        <item name="android:dropDownSelector">?attr/listChoiceBackgroundIndicator</item>
+        <item name="android:dropDownSelector">?listChoiceBackgroundIndicator</item>
         <item name="android:popupBackground">@drawable/sesl_menu_popup_background_dark</item>
         <item name="android:dropDownWidth">wrap_content</item>
-        <item name="android:dropDownHorizontalOffset">0dp</item>
-        <item name="android:dropDownVerticalOffset">0dp</item>
+        <item name="android:dropDownHorizontalOffset">0.0dip</item>
+        <item name="android:dropDownVerticalOffset">0.0dip</item>
         <item name="android:popupAnimationStyle">@style/Base.Animation.AppCompat.ListPopup</item>
         <item name="android:popupElevation">@dimen/sesl_menu_popup_elevation</item>
         <item name="popupEnterTransition">@null</item>
         <item name="popupExitTransition">@null</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.ListView" parent="@android:style/Widget.ListView"/>
+    <style name="Base.Widget.AppCompat.ListView" parent="@android:style/Widget.ListView" />
 
     <style name="Base.Widget.AppCompat.ListView.DropDown" parent="@android:style/Widget.Material.ListView.DropDown">
-        <item name="android:scrollbarThumbHorizontal">@drawable/sesl_dropdown_scrollbar_handle_dark</item>
-        <item name="android:scrollbarThumbVertical">@drawable/sesl_dropdown_scrollbar_handle_dark</item>
+        <item name="android:scrollbarThumbHorizontal">
+            @drawable/sesl_dropdown_scrollbar_handle_dark
+        </item>
+        <item name="android:scrollbarThumbVertical">@drawable/sesl_dropdown_scrollbar_handle_dark
+        </item>
     </style>
 
     <style name="Base.Widget.AppCompat.ListView.Menu" parent="@style/Widget.AppCompat.Light.ListView">
-        <item name="android:listSelector">?attr/listChoiceBackgroundIndicator</item>
-        <item name="android:divider">?attr/dividerHorizontal</item>
+        <item name="android:listSelector">?listChoiceBackgroundIndicator</item>
+        <item name="android:divider">?dividerHorizontal</item>
     </style>
 
     <style name="Base.Widget.AppCompat.PopupMenu" parent="@style/Widget.AppCompat.ListPopupWindow">
         <item name="android:popupBackground">@drawable/sesl_menu_popup_background_dark</item>
-        <item name="android:dropDownHorizontalOffset">@dimen/sesl_menu_popup_offset_horizontal</item>
+        <item name="android:dropDownHorizontalOffset">@dimen/sesl_menu_popup_offset_horizontal
+        </item>
         <item name="android:dropDownVerticalOffset">@dimen/sesl_menu_popup_offset_vertical</item>
         <item name="android:popupAnimationStyle">@style/Base.Animation.AppCompat.MenuPopup</item>
         <item name="android:popupElevation">@dimen/sesl_menu_popup_elevation</item>
@@ -549,7 +548,8 @@
 
     <style name="Base.Widget.AppCompat.PopupMenu.Overflow" parent="@style/Base.Widget.AppCompat.PopupMenu">
         <item name="android:popupBackground">@drawable/sesl_menu_popup_background_dark</item>
-        <item name="android:dropDownHorizontalOffset">@dimen/sesl_menu_popup_offset_horizontal</item>
+        <item name="android:dropDownHorizontalOffset">@dimen/sesl_menu_popup_offset_horizontal
+        </item>
         <item name="android:dropDownVerticalOffset">@dimen/sesl_menu_popup_offset_vertical</item>
         <item name="android:popupAnimationStyle">@style/Base.Animation.AppCompat.MenuPopup</item>
         <item name="android:popupElevation">@dimen/sesl_menu_popup_elevation</item>
@@ -558,7 +558,7 @@
         <item name="popupExitTransition">@null</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.PopupWindow" parent="@android:style/Widget.Material.PopupWindow"/>
+    <style name="Base.Widget.AppCompat.PopupWindow" parent="@android:style/Widget.Material.PopupWindow" />
 
     <style name="Base.Widget.AppCompat.ProgressBar" parent="@android:style/Widget.ProgressBar">
         <item name="android:indeterminateDrawable">@drawable/sesl_progress</item>
@@ -571,12 +571,14 @@
         <item name="android:indeterminateOnly">false</item>
         <item name="android:indeterminateDrawable">@drawable/sesl_progress</item>
         <item name="android:progressDrawable">@drawable/sesl_progress_circle</item>
-        <item name="android:minWidth">55dp</item>
-        <item name="android:minHeight">55dp</item>
+        <item name="android:minWidth">55.0dip</item>
+        <item name="android:minHeight">55.0dip</item>
     </style>
 
     <style name="Base.Widget.AppCompat.ProgressBar.Horizontal" parent="@android:style/Widget.ProgressBar.Horizontal">
-        <item name="android:indeterminateDrawable">@drawable/sesl_progress_bar_indeterminate_xlarge_transition</item>
+        <item name="android:indeterminateDrawable">
+            @drawable/sesl_progress_bar_indeterminate_xlarge_transition
+        </item>
         <item name="android:progressDrawable">@drawable/sesl_progress_horizontal</item>
         <item name="useHorizontalProgress">true</item>
     </style>
@@ -609,9 +611,9 @@
         <item name="android:minHeight">@dimen/sesl_progress_bar_size_xlarge</item>
     </style>
 
-    <style name="Base.Widget.AppCompat.RatingBar.Indicator" parent="@android:style/Widget.Material.RatingBar.Indicator"/>
+    <style name="Base.Widget.AppCompat.RatingBar.Indicator" parent="android:Widget.Material.RatingBar.Indicator"/>
 
-    <style name="Base.Widget.AppCompat.RatingBar.Small" parent="@android:style/Widget.Material.RatingBar.Small"/>
+    <style name="Base.Widget.AppCompat.RatingBar.Small" parent="@android:style/Widget.Material.RatingBar.Small" />
 
     <style name="Base.Widget.AppCompat.SearchView" parent="@android:style/Widget.Material.SearchView">
         <item name="closeIcon">@drawable/sesl_ic_clear</item>
@@ -625,13 +627,15 @@
         <item name="suggestionRowLayout">@layout/sesl_search_dropdown_item_icons_2line</item>
         <item name="voiceIcon">@drawable/sesl_ic_voice_search_api</item>
     </style>
+
     <style name="Base.Widget.AppCompat.SearchView.ActionBar" parent="@style/Base.Widget.AppCompat.SearchView">
         <item name="defaultQueryHint">@string/sesl_search_hint</item>
         <item name="queryBackground">@null</item>
         <item name="searchHintIcon">@null</item>
         <item name="submitBackground">@null</item>
     </style>
-    <style name="Base.Widget.AppCompat.SeekBar" parent="@android:style/Widget">
+
+    <style name="Base.Widget.AppCompat.SeekBar" parent="android:Widget">
         <item name="android:background">@drawable/sesl_seek_bar_background_borderless</item>
         <item name="android:focusable">true</item>
         <item name="android:maxHeight">@dimen/sesl_progress_bar_min_height</item>
@@ -645,65 +649,90 @@
         <item name="android:splitTrack">false</item>
         <item name="useDisabledAlpha">true</item>
     </style>
-    <style name="Base.Widget.AppCompat.SeekBar.Discrete" parent="@style/Base.Widget.AppCompat.SeekBar">
-    </style>
+
+    <style name="Base.Widget.AppCompat.SeekBar.Discrete" parent="@style/Base.Widget.AppCompat.SeekBar" />
+
     <style name="Base.Widget.AppCompat.SeslSwitchBar" parent="@android:style/Widget">
-        <item name="seslSwitchBarBackgroundActivatedColor">@color/sesl_switchbar_on_background_color_dark</item>
-        <item name="seslSwitchBarBackgroundColor">@color/sesl_switchbar_off_background_color_dark</item>
-        <item name="seslSwitchBarTextActivatedColor">@color/sesl_switchbar_on_text_color_light</item>
+        <item name="seslSwitchBarBackgroundActivatedColor">
+            @color/sesl_switchbar_on_background_color_dark
+        </item>
+        <item name="seslSwitchBarBackgroundColor">@color/sesl_switchbar_off_background_color_dark
+        </item>
+        <item name="seslSwitchBarTextActivatedColor">@color/sesl_switchbar_on_text_color_light
+        </item>
         <item name="seslSwitchBarTextColor">@color/sesl_switchbar_off_text_color_dark</item>
     </style>
+
     <style name="Base.Widget.AppCompat.Spinner" parent="@style/Platform.Widget.AppCompat.Spinner">
         <item name="android:gravity">start|center</item>
         <item name="android:background">@drawable/sesl_spinner_background_dark</item>
         <item name="android:clickable">true</item>
-        <item name="android:dropDownSelector">?android:attr/listChoiceBackgroundIndicator</item>
+        <item name="android:dropDownSelector">?android:listChoiceBackgroundIndicator</item>
         <item name="android:popupBackground">@drawable/sesl_menu_popup_background_dark</item>
-        <item name="android:dropDownHorizontalOffset">0dp</item>
-        <item name="android:dropDownVerticalOffset">0dp</item>
+        <item name="android:dropDownHorizontalOffset">0.0dip</item>
+        <item name="android:dropDownVerticalOffset">0.0dip</item>
         <item name="android:popupAnimationStyle">@style/Base.Animation.AppCompat.ListPopup</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="android:popupElevation">@dimen/sesl_menu_popup_elevation</item>
         <item name="overlapAnchor">true</item>
     </style>
-    <style name="Base.Widget.AppCompat.Spinner.Underlined" parent="@android:style/Widget.Material.Spinner.Underlined">
-    </style>
-    <style name="Base.Widget.AppCompat.TextView" parent="@android:style/Widget.Material.TextView">
-        <item name="android:breakStrategy">high_quality</item>
-        <item name="android:hyphenationFrequency">none</item>
-    </style>
+
+    <style name="Base.Widget.AppCompat.Spinner.Underlined" parent="@android:style/Widget.Material.Spinner.Underlined" />
+
+    <style name="Base.Widget.AppCompat.TextView" parent="@android:style/Widget.Material.TextView"/>
+
     <style name="Base.Widget.AppCompat.TextView.ListSeparator" parent="@android:style/Widget.TextView">
         <item name="android:textSize">@dimen/sesl_list_subheader_text_size</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/sesl_list_subheader_text_color_dark</item>
         <item name="android:ellipsize">end</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:background">?attr/roundedCornerColor</item>
+        <item name="android:background">?roundedCornerColor</item>
         <item name="android:paddingTop">@dimen/sesl_list_subheader_padding_top</item>
         <item name="android:paddingBottom">@dimen/sesl_list_subheader_padding_bottom</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:maxLines">1</item>
         <item name="android:textDirection">locale</item>
-        <item name="android:paddingStart">?attr/listPreferredItemPaddingStart</item>
-        <item name="android:paddingEnd">?android:attr/listPreferredItemPaddingEnd</item>
+        <item name="android:paddingStart">?listPreferredItemPaddingStart</item>
+        <item name="android:paddingEnd">?android:listPreferredItemPaddingEnd</item>
         <item name="fontFamily">sec-roboto-light</item>
     </style>
+
     <style name="Base.Widget.AppCompat.TextView.SpinnerItem" parent="@android:style/Widget.TextView.SpinnerItem">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem</item>
+        <item name="android:textAppearance">
+            @style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem
+        </item>
         <item name="android:paddingTop">@dimen/sesl_spinner_item_top_padding</item>
         <item name="android:paddingBottom">@dimen/sesl_spinner_item_bottom_padding</item>
         <item name="android:paddingStart">@dimen/sesl_spinner_item_start_padding</item>
         <item name="android:paddingEnd">@dimen/sesl_spinner_item_end_padding</item>
     </style>
-    <style name="Base.Widget.AppCompat.Toolbar" parent="@style/Base.V7.Widget.AppCompat.Toolbar">
-    </style>
+
+    <style name="Base.Widget.AppCompat.Toolbar" parent="Base.V26.Widget.AppCompat.Toolbar" />
+
     <style name="Base.Widget.AppCompat.Toolbar.Button.Navigation" parent="@android:style/Widget.Material.Toolbar.Button.Navigation">
-        <item name="android:background">?attr/actionBarItemBackground</item>
+        <item name="android:background">?actionBarItemBackground</item>
         <item name="android:scaleType">center</item>
-        <item name="android:minHeight">?attr/actionBarSize</item>
-        <item name="android:paddingStart">8dp</item>
+        <item name="android:minWidth">60.0dip</item>
+        <item name="android:minHeight">?actionBarSize</item>
+        <item name="android:paddingStart">12.0dip</item>
     </style>
 
+    <style name="Base.Widget.AppCompat.AbsListView" parent="@android:style/Widget.AbsListView" />
+
+    <style name="Base.Widget.AppCompat.Light.CompoundButton.CheckBox" parent="Base.Widget.AppCompat.CompoundButton.CheckBox"/>
+
+    <style name="Base.Widget.AppCompat.Light.CompoundButton.RadioButton" parent="Base.Widget.AppCompat.CompoundButton.RadioButton"/>
+
+    <!--Sesl7-->
+    <style name="Base.Widget.Theme.AppCompat.Light.CompoundButton.Switch" parent="@style/Base.Widget.AppCompat.Light.CompoundButton.Switch">
+        <item name="android:thumb">@drawable/sesl_switch_thumb_selector_light_for_theme</item>
+    </style>
+
+    <style name="Base.Widget.Theme.AppCompat.CompoundButton.Switch" parent="@style/Base.Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:thumb">@drawable/sesl_switch_thumb_selector_dark_for_theme</item>
+    </style>
+    <!--sesl7-->
 
 </resources>

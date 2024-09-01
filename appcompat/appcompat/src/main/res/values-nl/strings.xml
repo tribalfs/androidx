@@ -65,4 +65,8 @@
     <string name="sesl_switchbar_on_text">Aan</string>
     <string name="sesl_switch_off">Uit</string>
     <string name="sesl_switch_on">Aan</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">Suggestie negeren</string>
+    <string name="sesl_appbar_suggest_pagination">Pagina %1$d van %2$d</string>
+    <!--sesl7-->
 </resources>

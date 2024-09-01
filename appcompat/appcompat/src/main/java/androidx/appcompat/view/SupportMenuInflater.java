@@ -17,6 +17,7 @@
 package androidx.appcompat.view;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
+import static androidx.core.view.MenuItemCompat.SESL_MENU_ITEM_TYPE_NONE;
 
 import android.app.Activity;
 import android.content.Context;
@@ -56,6 +57,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 /**
+ * <p><b>SESL variant</b></p><br>
  * This class is used to instantiate menu XML files into Menu objects.
  * <p>
  * For performance reasons, menu inflation relies heavily on pre-processing of
@@ -91,6 +93,8 @@ public class SupportMenuInflater extends MenuInflater {
 
     Context mContext;
     private Object mRealOwner;
+
+    private int navigationMenuItemType = SESL_MENU_ITEM_TYPE_NONE;//sesl7
 
     /**
      * Constructs a menu inflater.
@@ -465,6 +469,7 @@ public class SupportMenuInflater extends MenuInflater {
                 // Reset to null so that it's not carried over to the next item
                 itemIconTintList = null;
             }
+            navigationMenuItemType = a.getInt(R.styleable.MenuItem_seslNaviMenuItemType, SESL_MENU_ITEM_TYPE_NONE);//sesl7
 
             a.recycle();
 
@@ -518,7 +523,6 @@ public class SupportMenuInflater extends MenuInflater {
             if (itemActionViewLayout > 0) {
                 if (!actionViewSpecified) {
                     item.setActionView(itemActionViewLayout);
-                    actionViewSpecified = true;
                 } else {
                     Log.w(LOG_TAG, "Ignoring attribute 'itemActionViewLayout'."
                             + " Action view already specified.");
@@ -540,6 +544,7 @@ public class SupportMenuInflater extends MenuInflater {
             if (itemIconTintList != null) {
                 MenuItemCompat.setIconTintList(item, itemIconTintList);
             }
+            MenuItemCompat.setSeslNaviMenuItemType(item, navigationMenuItemType);//sesl7
         }
 
         public void addItem() {

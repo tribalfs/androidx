@@ -65,4 +65,8 @@
     <string name="sesl_switchbar_on_text">روشن</string>
     <string name="sesl_switch_off">خاموش</string>
     <string name="sesl_switch_on">روشن</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">نادیده گرفتن پیشنهاد</string>
+    <string name="sesl_appbar_suggest_pagination">صفحه %1$d از %2$d</string>
+    <!--sesl7-->
 </resources>

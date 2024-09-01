@@ -20,4 +20,8 @@
     <string name="sesl_switch_off">បិទ</string>
     <string name="sesl_searchview_description_voice">ការស្វែងរក​ដោយ​សំឡេង</string>
     <string name="sesl_switch_on">បើក</string>
+    <!--Sesl7-->
+    <string name="sesl_appbar_suggest_dismiss">ចោល​សំណើ</string>
+    <string name="sesl_appbar_suggest_pagination">ទំព័រ %1$d នៃ %2$d</string>
+    <!--sesl7-->
 </resources>

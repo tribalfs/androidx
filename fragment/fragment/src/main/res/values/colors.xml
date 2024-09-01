@@ -16,5 +16,5 @@
 <!-- Original code by Samsung, all rights reserved to the original author. -->
 <resources>
     <color name="sesl_fragment_bgcolor">#fcfcff</color>
-    <color name="sesl_fragment_fgcolor">#f6f6f8</color>
+    <color name="sesl_fragment_fgcolor">#f1f1f3</color>
 </resources>

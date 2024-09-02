@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import androidx.annotation.RestrictTo;
+import androidx.appcompat.R;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,9 @@ public class MenuAdapter extends BaseAdapter {
     private final boolean mOverflowOnly;
     private final LayoutInflater mInflater;
     private final int mItemLayoutRes;
+
+    public int mInitPaddingTop;
+    public int mInitPaddingBottom;
 
     public MenuAdapter(MenuBuilder menu, LayoutInflater inflater, boolean overflowOnly,
             int itemLayoutRes) {
@@ -91,6 +95,8 @@ public class MenuAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = mInflater.inflate(mItemLayoutRes, parent, false);
+            mInitPaddingTop = convertView.getPaddingTop();
+            mInitPaddingBottom = convertView.getPaddingBottom();
         }
 
         final int currGroupId = getItem(position).getGroupId();
@@ -106,6 +112,22 @@ public class MenuAdapter extends BaseAdapter {
             ((ListMenuItemView) convertView).setForceShowIcon(true);
         }
         itemView.initialize(getItem(position), 0);
+
+        final int firstLastItemPadding = convertView.getResources()
+                .getDimensionPixelSize(R.dimen.sesl_popup_menu_first_last_item_vertical_edge_padding);
+
+        int paddingTop = mInitPaddingTop + firstLastItemPadding;
+        int paddingBottom = mInitPaddingBottom + firstLastItemPadding;
+        int paddingLeft = convertView.getPaddingLeft();
+        if (position != 0) {
+            paddingTop = mInitPaddingTop;
+        }
+        int paddingRight = convertView.getPaddingRight();
+        if (position != getCount() - 1) {
+            paddingBottom = mInitPaddingBottom;
+        }
+        convertView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+
         return convertView;
     }
 

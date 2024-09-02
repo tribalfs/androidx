@@ -151,5 +151,5 @@ configurations.implementation {
 ## Credits
 - [Google](https://developer.android.com/jetpack) for their Jetpack and Material Components libraries.
 - [Samsung](https://www.samsung.com/) for their awesome OneUI Design.
-- [Yanndroid](https://github.com/Yanndroid) and BlackMesa123 for their [OneUI4 sesl library](https://github.com/OneUIProject/oneui-core) that highly inspired this project. Some commits are straightly cherry-picked from this project.
+- [Yanndroid](https://github.com/Yanndroid) and [Salvo Giangreco](https://github.com/salvogiangri) for their [OneUI4 sesl library](https://github.com/OneUIProject/oneui-core) that highly inspired this project. Some commits are straightly cherry-picked from this project.
 

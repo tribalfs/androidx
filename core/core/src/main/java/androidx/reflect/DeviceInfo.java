@@ -18,8 +18,9 @@ public class DeviceInfo {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 Field field = SeslBaseReflector.getDeclaredField(Build.VERSION.class, "SEM_PLATFORM_INT");
                 if (field != null) {
-                    if (SeslBaseReflector.get(null, field) instanceof Integer) {
-                        isOneUI = (Integer) SeslBaseReflector.get(null, field) > 90_000;
+                    Object value = SeslBaseReflector.get(null, field);
+                    if (value instanceof Integer) {
+                        isOneUI = (Integer) value > 90_000;
                         return isOneUI;
                     }
                 }

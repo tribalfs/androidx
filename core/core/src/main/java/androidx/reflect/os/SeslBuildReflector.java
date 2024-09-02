@@ -47,8 +47,9 @@ public class SeslBuildReflector {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     Field field = SeslBaseReflector.getDeclaredField(mClass, "SEM_PLATFORM_INT");
                     if (field != null) {
-                        if (SeslBaseReflector.get(null, field) instanceof Integer) {
-                            return (Integer) SeslBaseReflector.get(null, field);
+                        Object value = SeslBaseReflector.get(null, field);
+                        if (value instanceof Integer) {
+                            return (Integer) value;
                         }
                     }
                 }

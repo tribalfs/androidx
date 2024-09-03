@@ -12205,6 +12205,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     || mRecyclerView.canScrollHorizontally(1));
 
             if (mRecyclerView.mAdapter != null) {
+                //Sesl
+                if (mRecyclerView.mAdapter.seslUseCustomAccessibilityPosition()) {
+                    event.setItemCount(mRecyclerView.mAdapter.seslGetAccessibilityItemCount());
+                    return;
+                }
+                //sesl
                 event.setItemCount(mRecyclerView.mAdapter.getItemCount());
             }
         }
@@ -12238,6 +12244,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 @NonNull AccessibilityNodeInfoCompat info) {
             int rowIndexGuess = canScrollVertically() ? getPosition(host) : 0;
             int columnIndexGuess = canScrollHorizontally() ? getPosition(host) : 0;
+            //Sesl
+            if (mRecyclerView.mAdapter.seslUseCustomAccessibilityPosition()) {
+                rowIndexGuess = mRecyclerView.mAdapter.seslGetAccessibilityItemPosition(rowIndexGuess);
+                columnIndexGuess = mRecyclerView.mAdapter.seslGetAccessibilityItemPosition(columnIndexGuess);
+            }
+            //sesl
             final AccessibilityNodeInfoCompat.CollectionItemInfoCompat itemInfo =
                     AccessibilityNodeInfoCompat.CollectionItemInfoCompat.obtain(rowIndexGuess, 1,
                             columnIndexGuess, 1, false, false);
@@ -12293,6 +12305,14 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             if (mRecyclerView == null || mRecyclerView.mAdapter == null) {
                 return 1;
             }
+            //Sesl
+            if (mRecyclerView.mAdapter.seslUseCustomAccessibilityPosition()) {
+                if (canScrollVertically()) {
+                    return mRecyclerView.mAdapter.seslGetAccessibilityItemCount();
+                }
+                return 1;
+            }
+            //sesl
             return canScrollVertically() ? mRecyclerView.mAdapter.getItemCount() : 1;
         }
 

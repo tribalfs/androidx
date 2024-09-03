@@ -32,6 +32,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.animation.PathInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -158,6 +159,9 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
     // This should only be used used transiently and should not be used to retain any state over
     // time.
     private int[] mReusableIntPair = new int[2];
+
+    final PathInterpolator mPathInterpolator =
+            new PathInterpolator(0.22f, 0.5f, 0.0f, 1.0f);//sesl
 
     /**
      * Creates a vertical LinearLayoutManager
@@ -2327,6 +2331,38 @@ public class LinearLayoutManager extends RecyclerView.LayoutManager implements
             }
         }
     }
+
+    //Sesl
+    @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
+    public void smoothScrollToPositionJumpIfNeeded(RecyclerView recyclerView, RecyclerView.State state, int position) {
+        SmoothScrollerJumpIfNeeded smoothScroller2 = new SmoothScrollerJumpIfNeeded(recyclerView.getContext());
+        recyclerView.showGoToTop();
+        smoothScroller2.setTargetPosition(position);
+        startSmoothScroll(smoothScroller2);
+        Log.d(TAG, "smoothScroller2");
+    }
+
+    public class SmoothScrollerJumpIfNeeded extends LinearSmoothScroller {
+        public SmoothScrollerJumpIfNeeded(@NonNull Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onTargetFound(@NonNull View view, @NonNull RecyclerView.State state,
+                @NonNull RecyclerView.SmoothScroller.Action action) {
+            int dx = calculateDxToMakeVisible(view, getHorizontalSnapPreference());
+            int dy = calculateDyToMakeVisible(view, getVerticalSnapPreference());
+            int offset = (int) Math.sqrt((dx * dx) + (dy * dy));
+            if (calculateTimeForDeceleration(offset) > 0) {
+                int i = (int) (((offset * 2.0E-4d) + 0.44999998807907104d) * 1000.0d);
+                if (i > 800) {
+                    i = 800;
+                }
+                action.update(-dx, -dy, i, mPathInterpolator);
+            }
+        }
+    }
+    //sesl
 
     /**
      * Helper class that keeps temporary state while {LayoutManager} is filling out the empty

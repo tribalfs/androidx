@@ -15581,6 +15581,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             if (mGoToTopFadeOutAnimator.isRunning()) {
                 mGoToTopFadeOutAnimator.cancel();
             }
+            if (mGoToTopImage.getAlpha() < 255) {
+                mGoToTopImage.setAlpha(255);
+            }
             mGoToTopFadeInAnimator.setFloatValues(mGoToTopView.getAlpha(), 1.0f);
             mGoToTopFadeInAnimator.start();
         }
@@ -15939,7 +15942,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     return true;
                 }
 
-                if (isSupportGotoTop() && mGoToTopState == GTP_STATE_PRESSED) {
+                if (mGoToTopState == GTP_STATE_PRESSED) {
                     if (!mGoToTopRect.contains(touchX, touchY)) {
                         mGoToTopState = GTP_STATE_SHOWN;
                         mGoToTopView.setPressed(false);
@@ -15987,7 +15990,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             }
         }
 
-        if (isSupportGotoTop() && mGoToTopState == GTP_STATE_PRESSED) {
+        if (mGoToTopState == GTP_STATE_PRESSED) {
             if (canScrollUp()) {
                 if (mOnGoToTopClickListener != null
                         && mOnGoToTopClickListener.onGoToTopClick(this)) {
@@ -15995,43 +15998,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 }
 
                 Log.d("SeslRecyclerView", " can scroll top ");
-
-                int childCount = getChildCount();
-
-                if (computeVerticalScrollOffset() != 0) {
-                    stopScroll();
-
-                    if (mLayout instanceof StaggeredGridLayoutManager) {
-                        StaggeredGridLayoutManager sglm = (StaggeredGridLayoutManager) mLayout;
-                        sglm.scrollToPositionWithOffset(0, 0);
-                    } else {
-                        mGoToToping = true;
-
-                        if (childCount > 0 && childCount < findFirstVisibleItemPosition()) {
-                            if (mLayout instanceof LinearLayoutManager) {
-                                if (mLayout instanceof GridLayoutManager) {
-                                    GridLayoutManager glm = (GridLayoutManager) mLayout;
-                                    final int spanCount = glm.getSpanCount();
-                                    if (childCount < spanCount) {
-                                        childCount = spanCount;
-                                    }
-                                }
-
-                                LinearLayoutManager llm = (LinearLayoutManager) mLayout;
-                                llm.scrollToPositionWithOffset(childCount, 0);
-                            } else {
-                                scrollToPosition(childCount);
-                            }
-                        }
-
-                        post(new Runnable() {
-                            @Override
-                            public void run() {
-                                smoothScrollToPosition(0);
-                            }
-                        });
-                    }
-                }
+                smoothScrollToPositionJumpIfNeeded(0);
             }
 
             autoHide(GTP_STATE_NONE);
@@ -17688,6 +17655,72 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             set.play(animator);
             set.start();
         }
+    }
+
+    @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
+    public void smoothScrollToPositionJumpIfNeeded(final int position) {
+        final int firstVisiblePosition = findFirstVisibleItemPosition();
+        boolean isScrollingUp = firstVisiblePosition > position;
+        final int lastVisiblePosition = isScrollingUp ? firstVisiblePosition : findLastVisibleItemPosition();
+        int jumpPosition = Math.abs((getChildCount() * 2) + ((isScrollingUp ? 1 : -1) * position));
+
+        if (computeVerticalScrollOffset() != 0) {
+            stopScroll();
+        }
+
+        if (shouldSkipScroll()) {
+            scrollToPosition(0);
+            return;
+        }
+
+        if (mLayout instanceof StaggeredGridLayoutManager) {
+            ((StaggeredGridLayoutManager) mLayout).scrollToPositionWithOffset(position, 0);
+            return;
+        }
+
+        if (firstVisiblePosition > 0
+                && ((isScrollingUp && jumpPosition > 0 && jumpPosition < lastVisiblePosition)
+                || (!isScrollingUp && jumpPosition > 0 && jumpPosition > lastVisiblePosition))
+        ) {
+            jumpToPosition(jumpPosition);
+        }
+
+        post(() -> {
+            RecyclerView recyclerView = RecyclerView.this;
+            if (recyclerView.mLayoutSuppressed) {
+                return;
+            }
+            LayoutManager layoutManager = recyclerView.mLayout;
+            if (layoutManager == null) {
+                Log.e(TAG, "Cannot smooth scroll without a LayoutManager set."
+                        + " Call setLayoutManager with a non-null argument.");
+            } else if (layoutManager instanceof LinearLayoutManager) {
+                ((LinearLayoutManager) layoutManager).smoothScrollToPositionJumpIfNeeded(recyclerView, recyclerView.mState, position);
+            } else {
+                layoutManager.smoothScrollToPosition(recyclerView, recyclerView.mState, position);
+            }
+        });
+    }
+
+    private void jumpToPosition(int position) {
+        if (mLayout instanceof LinearLayoutManager) {
+            if (mLayout instanceof GridLayoutManager) {
+                GridLayoutManager glm = (GridLayoutManager) mLayout;
+                final int spanCount = glm.getSpanCount();
+                if (position < spanCount) {
+                    position = spanCount;
+                }
+            }
+            LinearLayoutManager llm = (LinearLayoutManager) mLayout;
+            llm.scrollToPositionWithOffset(position, 0);
+        } else {
+            scrollToPosition(position);
+        }
+    }
+
+
+    private boolean shouldSkipScroll() {
+        return Settings.System.getInt(getContext().getContentResolver(), "remove_animations", 0) == 1;
     }
     //sesl
 }

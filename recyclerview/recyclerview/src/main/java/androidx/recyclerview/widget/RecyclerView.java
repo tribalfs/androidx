@@ -16330,6 +16330,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         }
     }
 
+    public void seslSetIndexTipEnabled(boolean enabled, int topMargin) {
+        seslSetIndexTipEnabled(enabled);
+        mIndexTip.setTopMargin(topMargin);
+    }
+
     public void seslSetIndexTipEnabled(boolean enabled) {
         if (mAdapter instanceof SectionIndexer) {
             if (enabled) {
@@ -17575,11 +17580,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 }
             }
 
+            final int topMargin = mTopMargin;
             canvas.drawRoundRect(
                     (float)mCenterX - mAnimatingWidth,
-                    (float)(mTopMargin + topOffset),
+                    (float)(topMargin + topOffset),
                     (float)mCenterX + mAnimatingWidth,
-                    (float)(mTopMargin + mHeight + topOffset),
+                    (float)(topMargin + mHeight + topOffset),
                     mRadius,
                     mRadius,
                     mShapePaint
@@ -17674,6 +17680,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             AnimatorSet set = new AnimatorSet();
             set.play(animator);
             set.start();
+        }
+
+        void setTopMargin(int i) {
+            mTopMargin = i;
         }
     }
 

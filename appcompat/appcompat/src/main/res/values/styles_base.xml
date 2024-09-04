@@ -447,7 +447,7 @@
 
 
     <style name="Base.TextAppearance.AppCompat.Widget.SeslSwitchBar" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">20.0sp</item>
+        <item name="android:textSize">@dimen/sesl_text_size_medium</item>
         <item name="android:textColor">?attr/colorPrimaryDark</item>
     </style>
 

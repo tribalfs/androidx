@@ -14,13 +14,13 @@ public class DeviceInfo {
      * @return true if the device has OneUI system, false otherwise.
      */
     public static boolean isOneUI() {
-        if (isOneUI == null){
+        if (isOneUI == null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 Field field = SeslBaseReflector.getDeclaredField(Build.VERSION.class, "SEM_PLATFORM_INT");
                 if (field != null) {
                     Object value = SeslBaseReflector.get(null, field);
                     if (value instanceof Integer) {
-                        isOneUI = (Integer) value > 90_000;
+                        isOneUI = (Integer) value >= 100000;
                         return isOneUI;
                     }
                 }

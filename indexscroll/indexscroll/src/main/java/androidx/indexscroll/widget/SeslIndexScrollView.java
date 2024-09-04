@@ -31,6 +31,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -827,9 +828,14 @@ public class SeslIndexScrollView extends FrameLayout {
             mTextPaint.setAntiAlias(true);
 
             if (mSECRobotoLightRegularFont == null) {
-                mSECRobotoLightRegularFont = Typeface.create(mContext
-                        .getString(androidx.appcompat.R.string.sesl_font_family_regular),
-                        Typeface.NORMAL);
+                if (Build.VERSION.SDK_INT >= 28) {
+                    mSECRobotoLightRegularFont = Typeface.create(
+                            Typeface.create("sec", Typeface.NORMAL), 400, false);
+                } else {
+                    mSECRobotoLightRegularFont = Typeface.create(mContext
+                            .getString(androidx.appcompat.R.string.sesl_font_family_regular),
+                            Typeface.NORMAL);
+                }
             }
             if (mGroupIconFont == null) {
                 mGroupIconFont = Typeface.createFromAsset(mContext.getAssets(),

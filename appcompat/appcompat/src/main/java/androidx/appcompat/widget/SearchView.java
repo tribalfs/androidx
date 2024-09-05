@@ -427,7 +427,7 @@ public class SearchView extends LinearLayoutCompat implements CollapsibleActionV
 
         final Resources resources = mContext.getResources();
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+        if (android.os.Build.VERSION.SDK_INT >= 34) {
             mBoldTypeface = Typeface.create(Typeface.create("sec", Typeface.NORMAL), 600, false);
         } else {
             mBoldTypeface = Typeface.create(resources.getString(R.string.sesl_font_family_regular), Typeface.BOLD);

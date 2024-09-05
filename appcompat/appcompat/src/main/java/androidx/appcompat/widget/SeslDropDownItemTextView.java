@@ -54,7 +54,7 @@ public class SeslDropDownItemTextView extends SeslCheckedTextView {
     public void setChecked(boolean checked) {
         super.setChecked(checked);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= 34) {
             Typeface sec = Typeface.create("sec", Typeface.NORMAL);
             setTypeface(Typeface.create(sec, checked ? 600 : 400, false));
         }else{

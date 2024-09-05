@@ -828,7 +828,7 @@ public class SeslIndexScrollView extends FrameLayout {
             mTextPaint.setAntiAlias(true);
 
             if (mSECRobotoLightRegularFont == null) {
-                if (Build.VERSION.SDK_INT >= 28) {
+                if (Build.VERSION.SDK_INT >= 34) {
                     mSECRobotoLightRegularFont = Typeface.create(
                             Typeface.create("sec", Typeface.NORMAL), 400, false);
                 } else {

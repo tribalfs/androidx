@@ -44,6 +44,7 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.appcompat.view.menu.MenuPresenter;
 import androidx.appcompat.view.menu.MenuView;
+import androidx.appcompat.widget.ActionMenuPresenter.ActionMenuItemViewBadgedWrapper;
 import androidx.core.view.ViewCompat;
 import androidx.reflect.os.SeslBuildReflector;
 
@@ -133,7 +134,7 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
             mOverflowButtonPaddingEnd = resources.getDimensionPixelSize(R.dimen.sesl_action_bar_overflow_padding_end);
         }
         mLastItemEndPadding = resources.getDimensionPixelSize(R.dimen.sesl_action_bar_last_padding);
-       //sesl
+        //sesl
     }
 
     /**
@@ -242,13 +243,15 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
                 final View child = getChildAt(i);
                 final LayoutParams lp = (LayoutParams) child.getLayoutParams();
                 lp.leftMargin = lp.rightMargin = 0;
+                final boolean isWrapped = child instanceof ActionMenuItemViewBadgedWrapper;//custom
 
                 //Sesl
-                if (child instanceof ActionMenuItemView) {
-                    ViewCompat.setPaddingRelative(child, mActionButtonPaddingStart, 0,
-                            mActionButtonPaddingEnd, 0);
+                if (isWrapped || child instanceof ActionMenuItemView) {
+                    ActionMenuItemView itemView = isWrapped
+                            ? ((ActionMenuItemViewBadgedWrapper) child).getInnerItemView()//custom
+                            : (ActionMenuItemView) child;
+                    itemView.setPaddingRelative(mActionButtonPaddingStart, 0, mActionButtonPaddingEnd, 0);
                     if (i == childCount - 1) {
-                        ActionMenuItemView itemView = (ActionMenuItemView) child;
                         if (itemView.hasText()) {
                             if (ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_LTR) {
                                 lp.rightMargin = mLastItemEndPadding;
@@ -257,20 +260,25 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
                                 lp.leftMargin = mLastItemEndPadding;
                                 child.setLayoutParams(lp);
                             }
-                        } else if (mIsOneUI41) {
-                            itemView.setIsLastItem(true);
-                            child.setLayoutParams(lp);
-                            ViewCompat.setPaddingRelative(child, mActionButtonPaddingStart, 0,
-                                    mOverflowButtonPaddingEnd, 0);
                         } else {
-                            itemView.setIsLastItem(true);
-                            itemView.setMinWidth(mOverflowButtonMinWidth);
-                            child.setLayoutParams(lp);
-                            ViewCompat.setPaddingRelative(child, mOverflowButtonPaddingStart, 0,
-                                    mOverflowButtonPaddingEnd, 0);
+                            if (mIsOneUI41) {
+                                itemView.setIsLastItem(true);
+                                child.setLayoutParams(lp);
+                                ViewCompat.setPaddingRelative(itemView, mActionButtonPaddingStart, 0,
+                                        mOverflowButtonPaddingEnd, 0);
+                            } else {
+                                itemView.setIsLastItem(true);
+                                child.setMinimumWidth(mOverflowButtonMinWidth);
+                                child.setLayoutParams(lp);
+                                ViewCompat.setPaddingRelative(itemView, mOverflowButtonPaddingStart, 0,
+                                        Math.max(mOverflowButtonPaddingEnd, 0), 0);
+                            }
+                            if (isWrapped) {
+                                ((ActionMenuItemViewBadgedWrapper) child).adjustBadgeEndMargin(
+                                        mOverflowButtonPaddingEnd - mActionButtonPaddingEnd);
+                            }
                         }
                     } else if (i < childCount - 1) {
-                        ActionMenuItemView itemView = (ActionMenuItemView) child;
                         if (!itemView.hasText()) {
                             itemView.setIsLastItem(false);
                         }
@@ -334,7 +342,8 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
             final View child = getChildAt(i);
             if (child.getVisibility() == GONE) continue;
 
-            final boolean isGeneratedItem = child instanceof ActionMenuItemView;
+            final boolean isWrapped = child instanceof ActionMenuItemViewBadgedWrapper;//custom
+            final boolean isGeneratedItem = isWrapped || child instanceof ActionMenuItemView;
             visibleItemCount++;
 
             if (isGeneratedItem) {
@@ -350,7 +359,9 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
             lp.expandable = false;
             lp.leftMargin = 0;
             lp.rightMargin = 0;
-            lp.preventEdgeOffset = isGeneratedItem && ((ActionMenuItemView) child).hasText();
+            lp.preventEdgeOffset = isGeneratedItem && (isWrapped
+                    ? ((ActionMenuItemViewBadgedWrapper) child).getInnerItemView().hasText() //custom
+                    : ((ActionMenuItemView) child).hasText());
 
             // Overflow always gets 1 cell. No more, no less.
             final int cellsAvailable = lp.isOverflowButton ? 1 : cellsRemaining;
@@ -454,7 +465,7 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
 
                 final View child = getChildAt(i);
                 final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                if (child instanceof ActionMenuItemView) {
+                if (child instanceof ActionMenuItemView || child instanceof ActionMenuItemViewBadgedWrapper/*custom*/) {
                     // If this is one of our views, expand and measure at the larger size.
                     lp.extraPixels = extraPixels;
                     lp.expanded = true;

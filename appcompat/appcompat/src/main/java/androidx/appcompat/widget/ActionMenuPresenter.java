@@ -356,8 +356,10 @@ class ActionMenuPresenter extends BaseMenuPresenter
             View menuItemView =  actionMenuView.getChildAt(i);
             if (!(menuItemView instanceof ActionMenuItemView)) continue;
             if (item.getItemId() == ((ActionMenuItemView)menuItemView).getItemData().getItemId()){
+                if (item.getBadgeText() == null) continue;
                 actionMenuView.removeView(menuItemView);
-                ActionMenuViewBadgedWrapper amvBadgedWrapper = new ActionMenuViewBadgedWrapper(actionMenuView.getContext(), (ActionMenuItemView)menuItemView);
+                ActionMenuItemViewBadgedWrapper
+                        amvBadgedWrapper = new ActionMenuItemViewBadgedWrapper(actionMenuView.getContext(), (ActionMenuItemView)menuItemView);
                 actionMenuView.addView(amvBadgedWrapper, i);
                 return;
             }
@@ -366,13 +368,15 @@ class ActionMenuPresenter extends BaseMenuPresenter
 
     //Custom
     @RestrictTo(LIBRARY_GROUP_PREFIX)
-    class ActionMenuViewBadgedWrapper extends FrameLayout {
+    class ActionMenuItemViewBadgedWrapper extends FrameLayout {
 
-        public ActionMenuViewBadgedWrapper(Context context, ActionMenuItemView menuItemView) {
+        private int defaultEndMargin;
+
+        public ActionMenuItemViewBadgedWrapper(Context context, ActionMenuItemView menuItemView) {
             super(context);
             addView(menuItemView);
             addView(LayoutInflater.from(context).inflate(
-                            R.layout.sesl_action_menu_item_badge, ActionMenuViewBadgedWrapper.this, false));
+                            R.layout.sesl_action_menu_item_badge, ActionMenuItemViewBadgedWrapper.this, false));
             updateItemViewBadge(menuItemView.getItemData().getBadgeText());
         }
 
@@ -401,6 +405,7 @@ class ActionMenuPresenter extends BaseMenuPresenter
                 badgeWidth = (int) (default_width + (formattedTextBadge.length() * additionalWidth));
                 badgeHeight = (int)(default_width + additionalWidth);
                 badgeTopMargin = (int) res.getDimension(R.dimen.sesl_menu_item_number_badge_top_margin);
+                defaultEndMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
             } catch (NumberFormatException e) {
 
                 //This means `badgeText` is not a number
@@ -411,15 +416,28 @@ class ActionMenuPresenter extends BaseMenuPresenter
                 badgeWidth = badgeSize;
                 badgeHeight = badgeSize;
                 badgeTopMargin = (int) res.getDimension(R.dimen.sesl_menu_item_badge_top_margin);
+                defaultEndMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
             }
 
             ((TextView)badgeView.getChildAt(0)).setText(formattedTextBadge);
-            badgeLp.setMarginEnd((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 7, res.getDisplayMetrics()));
+            badgeLp.setMarginEnd(defaultEndMargin);
             badgeLp.topMargin = badgeTopMargin;
             badgeLp.width = badgeWidth;
             badgeLp.height = badgeHeight;
             badgeView.setLayoutParams(badgeLp);
             badgeView.setVisibility(VISIBLE);
+        }
+
+        public ActionMenuItemView getInnerItemView() {
+            return (ActionMenuItemView) getChildAt(0);
+        }
+
+        public void adjustBadgeEndMargin(int additionalMargin) {
+            View badgeView = getChildAt(1);
+            FrameLayout.LayoutParams badgeLp = (FrameLayout.LayoutParams) badgeView.getLayoutParams();
+            int adjustedEndMargin = defaultEndMargin + additionalMargin;
+            if (badgeLp.getMarginEnd() == adjustedEndMargin) return;
+            badgeLp.setMarginEnd(adjustedEndMargin);
         }
     }
 
@@ -832,6 +850,7 @@ class ActionMenuPresenter extends BaseMenuPresenter
 
             ViewGroup.MarginLayoutParams lp = (MarginLayoutParams) mBadgeBackground.getLayoutParams();
             CharSequence text = this.mBadgeText.getText();
+            //TODO(cleanup: text here is always non-null)
             if (text != null) {
                 int badge_size = (int)res.getDimension(R.dimen.sesl_menu_item_badge_size);
                 lp.width = badge_size;

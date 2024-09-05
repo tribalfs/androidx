@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">নিদ্রার সময়: %d ঘন্টা 1 মিনিট</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">নিদ্রার সময়: 1 ঘন্টা %d মিনিট</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">নিদ্রার সময়: 1 ঘন্টা 1 মিনিট</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">মাস-দিন-বছরের ভিউতে স্যুইচ করতে দুবার ট্যাপ করুন।</string>
 </resources>

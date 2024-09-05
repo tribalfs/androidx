@@ -33,4 +33,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">وقت النوم: %d ساعة ودقيقة واحدة</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">وقت النوم: ساعة واحدة و%d دقيقة</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">وقت النوم: ساعة واحدة ودقيقة واحدة</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">انقر نقراً مزدوجاً للانتقال إلى عرض اليوم-الشهر-السنة.</string>
 </resources>

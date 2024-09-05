@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Thời gian ngủ: %d giờ 1 phút</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Thời gian ngủ: 1 giờ %d phút</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Thời gian ngủ: 1 giờ 1 phút</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Chạm hai lần để chuyển sang dạng xem Tháng-Ngày-Năm.</string>
 </resources>

@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Temps de repòs: %d hores i 1 minut</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Temps de repòs: 1 hora i %d minuts</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Temps de repòs: 1 hora i 1 minut</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Toca dos cops per canviar a la vista de dia, mes i any.</string>
 </resources>

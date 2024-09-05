@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">سونے کا وقت: %d گھنٹہ 1 منٹ</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">سونے کا وقت: 1 گھنٹہ %d منٹ</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">سونے کا وقت: 1 گھنٹہ 1 منٹ</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">دن۔ماہ۔سال منظر پر سوئچ کرنے کیلئے دو بار تھپتھپائیں۔</string>
 </resources>

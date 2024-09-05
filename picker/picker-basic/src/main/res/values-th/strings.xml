@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">เวลานอน: %d ชั่วโมง 1 นาที</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">เวลานอน: 1 ชั่วโมง %d นาที</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">เวลานอน: 1 ชั่วโมง 1 นาที</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">แตะสองครั้งเพื่อสลับเป็นมุมมองเดือน-วัน-ปี</string>
 </resources>

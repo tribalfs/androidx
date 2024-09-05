@@ -32,4 +32,6 @@
   <color name="sesl_grid_medium_size_color">#b399999e</color>
   <color name="sesl_grid_small_size_color">#4d99999e</color>
 
+    <color name="sesl_bed_wakeup_time_color">@color/sesl_dialog_body_text_color_dark</color>
+    <color name="sesl_bed_wakeup_time_icon_color">@color/sesl_text5_dark</color>
 </resources>

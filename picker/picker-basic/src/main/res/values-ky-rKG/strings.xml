@@ -18,7 +18,7 @@
     <string name="sesl_date_picker_increment_month">Кийинки ай</string>
     <string name="sesl_date_picker_switch_to_calendar_description">Календарь көрүнүшүнө которуу үчүн, эки жолу басыңыз.</string>
     <string name="sesl_time_picker_minute">Мүнөт</string>
-    <string name="sesl_picker_cancel">Токтотуу</string>
+    <string name="sesl_picker_cancel">Артка</string>
     <string name="sesl_number_picker_invalid_value_entered">Орунсуз маани киргизилди</string>
     <string name="sesl_date_picker_decrement_month">Мурунку ай</string>
     <string name="sesl_date_picker_day">Күн</string>
@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Уйку убактысы: %d саат 1 мүнөт</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Уйку убактысы: 1 саат %d мүнөт</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Уйку убактысы: 1 cаат 1 мүнөт</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Ай-Күн-Жыл көрүнүшүнө өтүү үчүн эки жолу басыңыз.</string>
 </resources>

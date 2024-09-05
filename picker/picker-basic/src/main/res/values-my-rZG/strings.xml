@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">အိပ္စက္ခ်ိန္ : %d နာရီ ၁ မိနစ္</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">အိပ္စက္ခ်ိန္ : ၁ နာရီ %d မိနစ္</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">အိပ္စက္ခ်ိန္ : ၁ နာရီ ၁ မိနစ္</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">လ-ရက္-ခုႏွစ္ ျမင္ကြင္းသို႔ ကူးေျပာင္းရန္ ႏွစ္ခ်က္ႏွိပ္ပါ။</string>
 </resources>

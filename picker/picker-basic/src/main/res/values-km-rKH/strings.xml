@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">ពេល​គេង៖ %d ម៉ោង 1 នាទី</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">ពេល​គេង៖ 1 ម៉ោង %d នាទី</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">ពេល​គេង៖ 1 ម៉ោង 1 នាទី</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">ប៉ះ​ពីរដង ដើម្បី​ប្ដូរ​ទៅ​ទិដ្ឋភាព​ខែ-ថ្ងៃ-ឆ្នាំ។</string>
 </resources>

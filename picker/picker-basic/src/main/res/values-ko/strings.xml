@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">수면 시간: %d시간 1분</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">수면 시간: 1시간 %d분</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">수면 시간: 1시간 1분</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">연도, 월, 일 순서 보기로 변경하려면 두 번 누르세요.</string>
 </resources>

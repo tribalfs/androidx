@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Yuxu vaxtı: %d saat 1 dəqiqə</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Yuxu vaxtı: 1 saat %d dəqiqə</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Yuxu vaxtı: 1 saat 1 dəqiqə</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Ay-Gün-İl görünüşünə keçmək üçün iki dəfə vurun.</string>
 </resources>

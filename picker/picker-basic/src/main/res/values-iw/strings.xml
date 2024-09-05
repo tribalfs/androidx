@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">זמן שינה: %d שעות ודקה אחת</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">זמן שינה: שעה אחת ו-%d דקות</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">זמן שינה: שעה אחת ודקה אחת</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">הקש הקשה כפולה כדי לעבור לתצוגת חודש-יום-שנה.</string>
 </resources>

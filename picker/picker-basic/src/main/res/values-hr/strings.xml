@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Vrijeme spavanja: %d sat/a/i 1 minuta</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Vrijeme spavanja: 1 sat %d minuta/e</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Vrijeme spavanja: 1 sat 1 minuta</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Dodirnite dvaput za prebacivanje na prikaz Mjesec-dan-godina.</string>
 </resources>

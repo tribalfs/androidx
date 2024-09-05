@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Masa tidur %d jam 1 minit</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Masa tidur: 1 jam %d minit</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Masa tidur: 1 jam 1 minit</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Dwiketik untuk bertukar kepada pandangan Bulan-Hari-Tahun.</string>
 </resources>

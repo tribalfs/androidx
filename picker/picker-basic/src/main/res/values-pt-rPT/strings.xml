@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Tempo de sono: %d horas e 1 minuto</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Tempo de sono: 1 hora e %d minutos</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Tempo de sono: 1 minuto e 1 minuto</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Toque duas vezes para mudar para a vista Dia-Mês-Ano.</string>
 </resources>

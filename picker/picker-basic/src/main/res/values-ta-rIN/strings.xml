@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">உறக்க நேரம்:%d மணிநேரங்கள் 1 நிமிடம்</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">உறக்க நேரம்: 1 மணிநேரம் %d நிமிடங்கள்</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">உறக்க நேரம்: 1 மணிநேரம் 1 நிமிடம்</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">மாதம்-நாள்-ஆண்டு காட்சிக்கு மாற இருமுறை டேப் செய்யவும்.</string>
 </resources>

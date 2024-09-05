@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Schlafzeit: %d Stunden und 1 Minute</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Schlafzeit: 1 Stunde und %d Minuten</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Schlafzeit: 1 Stunde und 1 Minute</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Zweimal tippen, um zur Tag-Monat-Jahr-Ansicht zu wechseln.</string>
 </resources>

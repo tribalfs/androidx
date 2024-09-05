@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Koha e gjumit: %d orë 1 minutë</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Koha e gjumit: 1 orë %d minuta</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Koha e gjumit: 1 orë 1 minutë</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Dy-trokit për të kaluar te pamja Muaji-Dita-Viti.</string>
 </resources>

@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Czas snu: godzin: %d, 1 minuta</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Czas snu: 1 godzina, minut: %d</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Czas snu: 1 godzina 1 minuta</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Dotknij dwukrotnie, aby przełączyć na widok miesiąc-dzień-rok.</string>
 </resources>

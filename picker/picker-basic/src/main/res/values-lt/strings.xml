@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Miegojimo laikas: %d val. 1 min.</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Miegojimo laikas: 1 val. %d min.</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Miegojimo laikas: 1 val. 1 min.</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Bakstelėkite dukart ir įjunkite mėnesio-dienos-metų rodinį.</string>
 </resources>

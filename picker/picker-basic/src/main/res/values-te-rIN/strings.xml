@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">నిద్ర సమయం: %d గంటల 1 నిమిషం</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">నిద్ర సమయం: 1 గంట %d నిమిషాలు</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">నిద్ర సమయం: 1 గంట 1 నిమిషం</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">నెల-రోజు-సంవత్సరం వీక్షణకి మార్చడానికి రెండుసార్లు నొక్కండి.</string>
 </resources>

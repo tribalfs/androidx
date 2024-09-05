@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Doba spánku: %d hodin 1 minuta</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Doba spánku: 1 hodina %d minut</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Doba spánku: 1 hodina 1 minuta</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Poklepáním přepnete na zobrazení měsíc-den-rok.</string>
 </resources>

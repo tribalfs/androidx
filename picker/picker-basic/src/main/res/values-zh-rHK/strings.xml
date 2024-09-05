@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">睡眠時間：%d 小時 1 分鐘</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">睡眠時間：1 小時 %d 分鐘</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">睡眠時間：1 小時 1 分鐘</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">輕觸兩下以切換為年月日檢視。</string>
 </resources>

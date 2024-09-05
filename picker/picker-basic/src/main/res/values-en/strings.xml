@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Sleep time: %d hours 1 minute</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Sleep time: 1 hour %d minutes</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Sleep time: 1 hour 1 minute</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Double tap to switch to Day-Month-Year view.</string>
 </resources>

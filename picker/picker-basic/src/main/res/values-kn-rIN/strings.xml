@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">ನಿದ್ರೆ ಸಮಯ: %d ಗಂಟೆಗಳು 1 ನಿಮಿಷ</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">ನಿದ್ರೆ ಸಮಯ: 1 ಗಂಟೆ %d ನಿಮಿಷಗಳು</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">ನಿದ್ರೆ ಸಮಯ: 1 ಗಂಟೆ 1 ನಿಮಿಷ</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">ತಿಂಗಳು-ದಿನ-ವರ್ಷ ವೀಕ್ಷಣೆಗೆ ಬದಲಾಯಿಸಲು ಎರಡುಬಾರಿ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
 </resources>

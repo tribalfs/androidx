@@ -32,4 +32,5 @@
     <string name="sesl_sleep_duration_in_hours_one_minute">Čas za spanje: %d h 1 min</string>
     <string name="sesl_sleep_duration_in_one_hour_minutes">Čas za spanje: 1 h %d min</string>
     <string name="sesl_sleep_duration_one_hour_one_minute">Čas za spanje: 1 h 1 min</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Dvakrat pritisnite za preklop na pogled dan-mesec-leto.</string>
 </resources>

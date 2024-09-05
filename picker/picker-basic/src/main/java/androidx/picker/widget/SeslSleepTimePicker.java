@@ -709,7 +709,7 @@ public class SeslSleepTimePicker extends LinearLayout {
 
         if (fontFromOpenTheme == null) {
             try {
-                fontFromOpenTheme = Build.VERSION.SDK_INT >= 28 ?
+                fontFromOpenTheme = Build.VERSION.SDK_INT >= 33 ?
                         Typeface.create(Typeface.create("sec", Typeface.NORMAL), FONT_WEIGHT_LIGHT, false) :
                         Typeface.create("roboto-num3L", Typeface.NORMAL);
             } catch (Exception e) {

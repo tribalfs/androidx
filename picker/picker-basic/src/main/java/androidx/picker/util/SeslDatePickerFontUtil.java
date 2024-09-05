@@ -26,7 +26,7 @@ import androidx.annotation.RestrictTo;
 public class SeslDatePickerFontUtil {
     @NonNull
     public static Typeface getRegularFontTypeface() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= 33) {
             return Typeface.create(Typeface.create("sec", Typeface.NORMAL), 400, false);
         }else{
             return Typeface.create("sec-roboto-light", Typeface.NORMAL);
@@ -35,7 +35,7 @@ public class SeslDatePickerFontUtil {
 
     @NonNull
     public static Typeface getBoldFontTypeface() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= 33) {
             return Typeface.create(Typeface.create("sec", Typeface.NORMAL), 600, false);
         }else{
             return Typeface.create("sec-roboto-light", Typeface.BOLD);

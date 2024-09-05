@@ -45,7 +45,6 @@ import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.appcompat.view.menu.MenuPresenter;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.appcompat.widget.ActionMenuPresenter.ActionMenuItemViewBadgedWrapper;
-import androidx.core.view.ViewCompat;
 import androidx.reflect.os.SeslBuildReflector;
 
 import java.util.ArrayList;
@@ -253,7 +252,7 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
                     itemView.setPaddingRelative(mActionButtonPaddingStart, 0, mActionButtonPaddingEnd, 0);
                     if (i == childCount - 1) {
                         if (itemView.hasText()) {
-                            if (ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_LTR) {
+                            if (getLayoutDirection() == LAYOUT_DIRECTION_LTR) {
                                 lp.rightMargin = mLastItemEndPadding;
                                 child.setLayoutParams(lp);
                             } else {
@@ -264,13 +263,13 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
                             if (mIsOneUI41) {
                                 itemView.setIsLastItem(true);
                                 child.setLayoutParams(lp);
-                                ViewCompat.setPaddingRelative(itemView, mActionButtonPaddingStart, 0,
+                                itemView.setPaddingRelative(mActionButtonPaddingStart, 0,
                                         mOverflowButtonPaddingEnd, 0);
                             } else {
                                 itemView.setIsLastItem(true);
                                 child.setMinimumWidth(mOverflowButtonMinWidth);
                                 child.setLayoutParams(lp);
-                                ViewCompat.setPaddingRelative(itemView, mOverflowButtonPaddingStart, 0,
+                                itemView.setPaddingRelative(mOverflowButtonPaddingStart, 0,
                                         Math.max(mOverflowButtonPaddingEnd, 0), 0);
                             }
                             if (isWrapped) {
@@ -290,7 +289,7 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
                                 mOverflowButtonPaddingEnd, 0);
                         child2.setMinimumWidth(mOverflowButtonMinWidth);
                     } else {
-                        ViewCompat.setPaddingRelative(child, mOverflowButtonPaddingStart, 0,
+                        child.setPaddingRelative(mOverflowButtonPaddingStart, 0,
                                 mOverflowButtonPaddingEnd, 0);
                         child.setMinimumWidth(mOverflowButtonMinWidth);
                     }

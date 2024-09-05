@@ -54,7 +54,7 @@
     <string name="sesl_searchview_description_clear">Изчистване на полето за търсене</string>
     <string name="sesl_searchview_description_search">Търсене</string>
     <string name="sesl_toolbar_collapse_description">Свиване</string>
-    <string name="sesl_action_bar_up_description">Навигация нагоре</string>
+    <string name="sesl_action_bar_up_description">Навигиране нагоре</string>
     <string name="sesl_searchview_description_voice">Гласово търсене</string>
     <string name="sesl_searchview_description_query">Заявка за търсене</string>
     <string name="sesl_index_selected">Избрано</string>

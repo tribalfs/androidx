@@ -51,7 +51,7 @@
     <string name="sesl_index_section">Indeks sekcije</string>
     <string name="sesl_action_menu_overflow_badge_text_n">N</string>
     <string name="sesl_index_scrollbar">Traka za pomjeranje</string>
-     <string name="sesl_searchview_description_clear">Obriši polje pretrage</string>
+    <string name="sesl_searchview_description_clear">Obriši polje pretrage</string>
     <string name="sesl_searchview_description_search">Pretraživanje</string>
     <string name="sesl_toolbar_collapse_description">Suzi</string>
     <string name="sesl_action_bar_up_description">Pomjeraj se prema gore</string>

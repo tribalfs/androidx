@@ -9,14 +9,14 @@
     <string name="sesl_action_menu_overflow_badge_text_n">N</string>
     <string name="sesl_action_menu_overflow_badge_description">Inneachar nua ar fáil</string>
     <string name="sesl_search_hint">Cuardaigh</string>
-    <string name="sesl_action_menu_overflow_description">Roghanna eile</string>
+    <string name="sesl_action_menu_overflow_description">Tuilleadh roghanna</string>
     <string name="sesl_switchbar_off_text">As</string>
     <string name="sesl_switchbar_on_text">Air</string>
     <string name="sesl_index_scrollbar">Scrollbharra</string>
     <string name="sesl_searchview_description_clear">Glan an réimse cuardaigh</string>
     <string name="sesl_searchview_description_search">Cuardaigh</string>
     <string name="sesl_toolbar_collapse_description">Leacaigh</string>
-    <string name="sesl_action_bar_up_description">Déan nascleanúint thuas</string>
+    <string name="sesl_action_bar_up_description">Déan nascleanúint suas</string>
     <string name="sesl_switch_off">As</string>
     <string name="sesl_searchview_description_voice">Cuardach gutha</string>
     <string name="sesl_switch_on">Air</string>

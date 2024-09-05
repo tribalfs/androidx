@@ -20,9 +20,11 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:textAppearance="?attr/textAppearanceListItem"
+    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+    android:ellipsize="marquee"
     android:gravity="center_vertical"
-    android:drawableStart="?android:attr/listChoiceIndicatorMultiple"
-    android:drawablePadding="18dp"
-    android:ellipsize="marquee" />
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:paddingStart="@dimen/sesl_select_dialog_single_multi_item_padding_start"
+    android:paddingTop="@dimen/sesl_select_dialog_item_padding_vertical"
+    android:paddingBottom="@dimen/sesl_select_dialog_item_padding_vertical"
+    android:textAppearance="?attr/textAppearanceListItem" />

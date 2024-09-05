@@ -54,15 +54,15 @@
     <string name="sesl_searchview_description_clear">Počisti iskalno polje</string>
     <string name="sesl_searchview_description_search">Iskanje</string>
     <string name="sesl_toolbar_collapse_description">Strni</string>
-    <string name="sesl_action_bar_up_description">Usmerjanje gor</string>
+    <string name="sesl_action_bar_up_description">Pomik navzgor</string>
     <string name="sesl_searchview_description_voice">Glasovno iskanje</string>
     <string name="sesl_searchview_description_query">Iskalna poizvedba</string>
     <string name="sesl_index_selected">Izbrano</string>
     <string name="sesl_action_menu_overflow_badge_description">Na voljo je nova vsebina</string>
     <string name="sesl_search_hint">Iskanje</string>
     <string name="sesl_action_menu_overflow_description">Več možnosti</string>
-    <string name="sesl_switchbar_off_text">Izključ.</string>
-    <string name="sesl_switchbar_on_text">Vključeno</string>
+    <string name="sesl_switchbar_off_text">Izklopljeno</string>
+    <string name="sesl_switchbar_on_text">Vklopljeno</string>
     <string name="sesl_switch_off">Izklopljeno</string>
     <string name="sesl_switch_on">Vklopljeno</string>
 </resources>

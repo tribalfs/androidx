@@ -256,7 +256,7 @@
     <!--    <dimen name="sesl_edit_textfield_cursor_inset">0.0px</dimen>-->
     <!--    <dimen name="sesl_edit_textfield_cursor_width">2.0px</dimen>-->
 
-    <dimen name="sesl_go_to_top_elevation">8dp</dimen>
+    <dimen name="sesl_go_to_top_elevation">6dp</dimen>
     <dimen name="sesl_go_to_top_scrollable_view_gap">20dp</dimen>
     <dimen name="sesl_go_to_top_scrollable_view_size">40dp</dimen>
 
@@ -351,13 +351,13 @@
 
     <dimen name="sesl_progress_circle_size">60dp</dimen>
     <dimen name="sesl_progress_circle_size_large_padding">2.5dp</dimen>
-    <dimen name="sesl_progress_circle_size_large_width">8.8dp</dimen>
+    <dimen name="sesl_progress_circle_size_large_width">8.799988dp</dimen>
     <dimen name="sesl_progress_circle_size_small_padding">1dp</dimen>
-    <dimen name="sesl_progress_circle_size_small_title_padding">0.7dp</dimen>
-    <dimen name="sesl_progress_circle_size_small_title_width">2.3dp</dimen>
+    <dimen name="sesl_progress_circle_size_small_title_padding">0.70000005dp</dimen>
+    <dimen name="sesl_progress_circle_size_small_title_width">2.2999878dp</dimen>
     <dimen name="sesl_progress_circle_size_small_width">3.5dp</dimen>
-    <dimen name="sesl_progress_circle_size_xlarge_padding">3.1dp</dimen>
-    <dimen name="sesl_progress_circle_size_xlarge_width">10.9dp</dimen>
+    <dimen name="sesl_progress_circle_size_xlarge_padding">3.0999756dp</dimen>
+    <dimen name="sesl_progress_circle_size_xlarge_width">10.899994dp</dimen>
     <dimen name="sesl_progress_circle_thickness">2.5dp</dimen>
 
     <dimen name="sesl_progress_dialog_circle_message_text_size">14dp</dimen>

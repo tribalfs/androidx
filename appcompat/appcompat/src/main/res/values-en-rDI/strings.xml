@@ -16,4 +16,8 @@
     <string name="sesl_switch_off">DREAM_ACCS_TBOPT_OFF_M_STATUS</string>
     <string name="sesl_searchview_description_voice">IDS_HEALTH_HEADER_VOICE_SEARCH</string>
     <string name="sesl_switch_on">DREAM_ACCS_TBOPT_ON_M_STATUS</string>
+    <string name="sesl_index_assistant_text">DREAM_IDLE_TBBODY_SWIPE_UP_OR_DOWN_WITH_TWO_FINGERS_TO_SCROLL</string>
+    <string name="sesl_index_scrollbar">DREAM_IDLE_TBOPT_SCROLL_BAR</string>
+    <string name="sesl_index_section">DREAM_IDLE_TBOPT_SECTION_INDEX</string>
+    <string name="sesl_index_selected">DREAM_BIX_TBOPT_SELECTED</string>
 </resources>

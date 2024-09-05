@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:gravity="center"
-        android:id="@android:id/background"
-        android:height="@dimen/sesl_seekbar_track_height">
+        android:gravity="fill_horizontal|center"
+        android:height="@dimen/sesl_seekbar_track_height"
+        android:id="@android:id/background">
         <nine-patch
             android:src="@drawable/sesl_progress_bar"
-            android:tint="@color/sesl_seekbar_control_color_default"/>
+            android:tint="@color/sesl_seekbar_control_color_default" />
     </item>
     <item
-        android:gravity="center"
-        android:id="@android:id/secondaryProgress"
-        android:height="@dimen/sesl_seekbar_track_height">
-        <scale
-            android:scaleWidth="100%">
+        android:gravity="fill_horizontal|center"
+        android:height="@dimen/sesl_seekbar_track_height"
+        android:id="@android:id/secondaryProgress">
+        <scale android:scaleWidth="100%">
             <nine-patch
                 android:src="@drawable/sesl_progress_bar"
-                android:tint="@color/sesl_seekbar_control_color_secondary"/>
+                android:tint="@color/sesl_seekbar_control_color_secondary" />
         </scale>
     </item>
     <item
-        android:gravity="center"
-        android:id="@android:id/progress"
-        android:height="@dimen/sesl_seekbar_track_height">
-        <scale
-            android:scaleWidth="100%">
+        android:gravity="fill_horizontal|center"
+        android:height="@dimen/sesl_seekbar_track_height"
+        android:id="@android:id/progress">
+        <scale android:scaleWidth="100%">
             <nine-patch
                 android:src="@drawable/sesl_progress_bar"
-                android:tint="@color/sesl_seekbar_control_color_activated"/>
+                android:tint="@color/sesl_seekbar_control_color_activated" />
         </scale>
     </item>
 </layer-list>

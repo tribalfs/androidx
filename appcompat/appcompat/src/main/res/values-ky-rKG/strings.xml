@@ -17,7 +17,7 @@
     <string name="sesl_searchview_description_search">Издөө</string>
     <string name="sesl_toolbar_collapse_description">Жыюу</string>
     <string name="sesl_action_bar_up_description">Өйдө жол өтүү</string>
-    <string name="sesl_switch_off">Жабык</string>
+    <string name="sesl_switch_off">Өчүк</string>
     <string name="sesl_searchview_description_voice">Үн издөө</string>
-    <string name="sesl_switch_on">Ачык</string>
+    <string name="sesl_switch_on">Күйүк</string>
 </resources>

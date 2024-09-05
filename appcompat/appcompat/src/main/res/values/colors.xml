@@ -47,7 +47,7 @@
     <color name="sesl_gray_L7">#dedee1</color>
     <color name="sesl_gray_L8">#c9c9cc</color>
     <color name="sesl_gray_L9">#a6a6a9</color>
-    <color name="sesl_white">#fffafafa</color>
+    <color name="sesl_white">#fffafaff</color>
     <color name="sesl_black">#252528</color>
     <color name="sesl_blue_color_dark">@color/sesl_blue_color_light</color>
     <color name="sesl_blue_color_light">#387aff</color>
@@ -108,8 +108,8 @@
     <color name="sesl_edge_effect_device_default_dark">#14fafaff</color>
     <color name="sesl_edge_effect_device_default_light">#0d000000</color>
     <color name="sesl_edit_text_color_dark">@color/sesl_white</color>
-    <color name="sesl_edit_text_color_disabled_dark">#454545</color>
-    <color name="sesl_edit_text_color_disabled_light">#bebebe</color>
+    <color name="sesl_edit_text_color_disabled_dark">@color/sesl_text6_dark</color>
+    <color name="sesl_edit_text_color_disabled_light">@color/sesl_text5_light</color>
     <color name="sesl_edit_text_color_light">@color/sesl_text1_light</color>
     <color name="sesl_edit_text_hint_color_dark">#999999</color>
     <color name="sesl_edit_text_hint_color_light">#8c8c8c</color>
@@ -184,8 +184,8 @@
     <color name="sesl_progress_dialog_text_body_color">@color/sesl_text2_light</color>
     <color name="sesl_ripple_color_dark">#33ffffff</color>
     <color name="sesl_ripple_color_light">#1a000000</color>
-    <color name="sesl_round_and_bgcolor_dark">#010102</color>
-    <color name="sesl_round_and_bgcolor_light">#f6f6f8</color>
+    <color name="sesl_round_and_bgcolor_dark">@color/sesl_gray_D1</color>
+    <color name="sesl_round_and_bgcolor_light">@color/sesl_gray_L2</color>
     <color name="sesl_secondary_text_color_dark">@color/sesl_text6_dark</color>
     <color name="sesl_secondary_text_color_light">@color/sesl_text5_light</color>
     <color name="sesl_scrollbar_handle_tint_color_dark">@color/sesl_gray_D7</color>
@@ -237,7 +237,7 @@
     <color name="sesl_spinner_item_text_color_disabled_dark">#66fafaff</color>
     <color name="sesl_spinner_item_text_color_disabled_light">#66252528</color>
     <color name="sesl_spinner_item_text_color_normal_dark">@color/sesl_white</color>
-    <color name="sesl_spinner_item_text_color_normal_light">@color/sesl_black</color>
+    <color name="sesl_spinner_item_text_color_normal_light">@color/sesl_text1_light</color>
     <color name="sesl_status_bar_color_dark">@color/sesl_black</color>
     <color name="sesl_status_bar_color_light">@color/sesl_white</color>
     <color name="sesl_thumb_control_color_activated">@color/sesl_blue_color_light</color>

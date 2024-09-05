@@ -47,7 +47,7 @@
 
     <string name="sesl_more_item_label">Mais</string>
     <string name="sesl_searchview_description_submit">Enviar consulta</string>
-    <string name="sesl_index_assistant_text">Deslize para cima ou para baixo com dois dedos para rolar.</string>
+    <string name="sesl_index_assistant_text">Deslize para cima ou para baixo com dois dedos para percorrer.</string>
     <string name="sesl_index_section">Índice de seção</string>
     <string name="sesl_action_menu_overflow_badge_text_n">N</string>
     <string name="sesl_index_scrollbar">Barra de rolagem</string>

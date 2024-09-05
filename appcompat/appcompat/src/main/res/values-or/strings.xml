@@ -56,9 +56,9 @@
     <string name="sesl_toolbar_collapse_description">କୋଲାପ୍ସ</string>
     <string name="sesl_action_bar_up_description">ଉପରକୁ ନେଭିଗେଟ୍ କରନ୍ତୁ</string>
     <string name="sesl_searchview_description_voice">ଭଏସ୍ ସର୍ଚ୍ଚ</string>
-    <string name="sesl_searchview_description_query">ଜିଜ୍ଞାସା ଖୋଜନ୍ତୁ</string>
+    <string name="sesl_searchview_description_query">ପ୍ରଶ୍ନ ଖୋଜନ୍ତୁ</string>
     <string name="sesl_index_selected">ଚୟନିତ</string>
-    <string name="sesl_action_menu_overflow_badge_description">ନୂତନ ବିଷୟବସ୍ତୁ ଉପଲବ୍ଧ</string>
+    <string name="sesl_action_menu_overflow_badge_description">ନୂତନ କଣ୍ଟେଣ୍ଟ ଉପଲବ୍ଧ</string>
     <string name="sesl_search_hint">ସର୍ଚ୍ଚ</string>
     <string name="sesl_action_menu_overflow_description">ଅଧିକ ବିକଳ୍ପ</string>
     <string name="sesl_switchbar_off_text">ଅଫ୍</string>

@@ -10,8 +10,8 @@
     <string name="sesl_action_menu_overflow_badge_description">Жаңа мазмұн қолжетімді</string>
     <string name="sesl_search_hint">Іздеу</string>
     <string name="sesl_action_menu_overflow_description">Қосымша опциялар</string>
-    <string name="sesl_switchbar_off_text">Өшірілген</string>
-    <string name="sesl_switchbar_on_text">Қосылған</string>
+    <string name="sesl_switchbar_off_text">Өшіру</string>
+    <string name="sesl_switchbar_on_text">Қосу</string>
     <string name="sesl_index_scrollbar">Жылжыту тақтасы</string>
     <string name="sesl_searchview_description_clear">Іздеу өрісін тазалау</string>
     <string name="sesl_searchview_description_search">Іздеу</string>

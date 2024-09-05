@@ -51,14 +51,14 @@
     <string name="sesl_index_section">अनुभाग क्रम-सूची</string>
     <string name="sesl_action_menu_overflow_badge_text_n">N</string>
     <string name="sesl_index_scrollbar">स्क्रॉल बार</string>
-    <string name="sesl_searchview_description_clear">खोज फील्ड साफ करें</string>
+    <string name="sesl_searchview_description_clear">खोज फील्ड मिटाएँ</string>
     <string name="sesl_searchview_description_search">खोजें</string>
     <string name="sesl_toolbar_collapse_description">संक्षिप्त करें</string>
     <string name="sesl_action_bar_up_description">ऊपर नेविगेट करें</string>
     <string name="sesl_searchview_description_voice">वॉइस खोज</string>
     <string name="sesl_searchview_description_query">प्रश्न खोजें</string>
     <string name="sesl_index_selected">चयनित</string>
-    <string name="sesl_action_menu_overflow_badge_description">नई सामग्री उपलब्ध है</string>
+    <string name="sesl_action_menu_overflow_badge_description">नई कंटेंट उपलब्ध है</string>
     <string name="sesl_search_hint">खोजें</string>
     <string name="sesl_action_menu_overflow_description">अधिक विकल्प</string>
     <string name="sesl_switchbar_off_text">बंद</string>

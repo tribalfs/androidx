@@ -47,15 +47,15 @@
 
     <string name="sesl_more_item_label">অধিক</string>
     <string name="sesl_searchview_description_submit">জানিবলগীয়াখিনি দাখিল কৰক</string>
-    <string name="sesl_index_assistant_text">"স্ক্ৰ'ল কৰিবলৈ দুটা আঙুলিৰে ওপৰলৈ বা তললৈ ছোৱাইপ কৰক।"</string>
+    <string name="sesl_index_assistant_text">স্ক্ৰ\'ল কৰিবলৈ দুটা আঙুলিৰে ওপৰলৈ বা তললৈ ছোৱাইপ কৰক।</string>
     <string name="sesl_index_section">শাখাৰ ইনডেক্স</string>
     <string name="sesl_action_menu_overflow_badge_text_n">ন</string>
-    <string name="sesl_index_scrollbar">"স্ক্ৰ'ল বাৰ"</string>
+    <string name="sesl_index_scrollbar">স্ক্ৰ\'ল বাৰ</string>
     <string name="sesl_searchview_description_clear">অনুসন্ধান ফিল্ড পৰিষ্কাৰ কৰক</string>
     <string name="sesl_searchview_description_search">অনুসন্ধান কৰক</string>
     <string name="sesl_toolbar_collapse_description">সংক্ষিপ্ত কৰক</string>
     <string name="sesl_action_bar_up_description">ওপৰলৈ নেভিগেট কৰক</string>
-    <string name="sesl_searchview_description_voice">মাত অনুসন্ধান</string>
+    <string name="sesl_searchview_description_voice">ভইচ অনুসন্ধান</string>
     <string name="sesl_searchview_description_query">জানিবলগীয়া বিচাৰক</string>
     <string name="sesl_index_selected">চয়নিত</string>
     <string name="sesl_action_menu_overflow_badge_description">নতুন সমল উপলব্ধ</string>

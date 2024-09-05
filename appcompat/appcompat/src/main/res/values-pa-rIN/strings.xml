@@ -18,6 +18,6 @@
     <string name="sesl_toolbar_collapse_description">ਸੰਕੁਚਿਤ ਕਰੋ</string>
     <string name="sesl_action_bar_up_description">ਉੱਪਰ ਨੈਵੀਗੇਟ ਕਰੋ</string>
     <string name="sesl_switch_off">ਬੰਦ ਹੈ</string>
-    <string name="sesl_searchview_description_voice">ਵਾੱਇਸ ਖੋਜ</string>
+    <string name="sesl_searchview_description_voice">ਵੌਇਸ ਖੋਜ</string>
     <string name="sesl_switch_on">ਚਾਲੂ ਹੈ</string>
 </resources>

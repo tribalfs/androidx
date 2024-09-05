@@ -32,7 +32,7 @@
 
     <style name="TextAppearance.AppCompat.Widget.FastScroll" parent="android:TextAppearance.Widget">
         <item name="android:textStyle">normal</item>
-        <item name="android:fontFamily">sec</item>
+        <item name="android:fontFamily">@string/sesl_font_family_regular</item>
     </style>
 
 </resources>

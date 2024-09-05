@@ -17424,7 +17424,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
             mTextPaint = new Paint();
             mTextPaint.setAntiAlias(true);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P/*originally 33(T)*/) {
+            if (Build.VERSION.SDK_INT >= 34) {
                 mTextPaint.setTypeface( Typeface.create(Typeface.create("sec", Typeface.NORMAL),
                         400, false));
             } else {

@@ -126,7 +126,7 @@ public class SeslSwipeListAnimator {
         mTextPaint = initPaintWithAlphaAntiAliasing(mSwipeConfiguration.textColor);
         mTextPaint.setTextSize(convertDipToPixels(mContext, mSwipeConfiguration.textSize));
 
-        if (Build.VERSION.SDK_INT >= 28) {
+        if (Build.VERSION.SDK_INT >= 34) {
             mTextPaint.setTypeface(
                     Typeface.create(Typeface.create("sec", Typeface.NORMAL), 400, false));
         }else {

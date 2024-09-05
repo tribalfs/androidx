@@ -56,11 +56,6 @@
         <item name="fontFamily">sec</item>
     </style>
 
-    <style name="TextAppearance.AppCompat.Widget.FastScroll" parent="@android:style/TextAppearance.Widget">
-        <item name="android:fontFamily">sec</item>
-        <item name="android:textFontWeight">400</item>
-    </style>
-
     <style name="TextAppearance.Design.CollapsingToolbar.Expanded" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">@dimen/sesl_appbar_extended_title_text_size</item>
         <item name="android:textStyle">normal</item>

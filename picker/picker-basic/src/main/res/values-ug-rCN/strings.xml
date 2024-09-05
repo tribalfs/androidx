@@ -15,21 +15,21 @@
   limitations under the License.
   -->
 <resources>
-  <string name="sesl_date_picker_increment_month">كېيىنكى ئاي</string>
-  <string name="sesl_date_picker_switch_to_calendar_description">قوش چېكىپ كالېنداردا كۆرۈشكە ئالماشتۇرۇڭ.</string>
-  <string name="sesl_time_picker_minute">مىنۇت</string>
-  <string name="sesl_picker_cancel">ياق</string>
-  <string name="sesl_number_picker_invalid_value_entered">ئىناۋەتسىز قىممەت كىرگۈزۈلدى.</string>
-  <string name="sesl_date_picker_decrement_month">ئالدىنقى ئاي</string>
-  <string name="sesl_date_picker_day">كۈن</string>
-  <string name="sesl_date_picker_switch_to_wheel_description">قوش چېكىپ چاقلىق كۆرۈشكە ئالماشتۇرۇڭ.</string>
-  <string name="sesl_picker_done">تامام</string>
-  <string name="sesl_time_picker_hour">سائەت</string>
-  <string name="sesl_time_picker_set_title">ۋاقىت بېكىتىش</string>
-  <string name="sesl_date_picker_year">يىل</string>
-  <string name="sesl_date_picker_month">ئاي</string>
-  <string name="sesl_sleep_duration_in_hours_minutes">睡眠时间：%1$d 小时 %2$d 分钟</string>
-  <string name="sesl_sleep_duration_in_hours_one_minute">睡眠时间：%d 小时 1 分钟</string>
-  <string name="sesl_sleep_duration_in_one_hour_minutes">睡眠时间：1 小时 %d 分钟</string>
-  <string name="sesl_sleep_duration_one_hour_one_minute">睡眠时间：1 小时 1 分钟</string>
+    <string name="sesl_date_picker_increment_month">كېيىنكى ئاي</string>
+    <string name="sesl_date_picker_switch_to_calendar_description">قوش چېكىپ كالېنداردا كۆرۈشكە ئالماشتۇرۇڭ.</string>
+    <string name="sesl_time_picker_minute">مىنۇت</string>
+    <string name="sesl_picker_cancel">ياق</string>
+    <string name="sesl_number_picker_invalid_value_entered">ئىناۋەتسىز قىممەت كىرگۈزۈلدى.</string>
+    <string name="sesl_date_picker_decrement_month">ئالدىنقى ئاي</string>
+    <string name="sesl_date_picker_day">كۈن</string>
+    <string name="sesl_date_picker_switch_to_wheel_description">قوش چېكىپ چاقلىق كۆرۈشكە ئالماشتۇرۇڭ.</string>
+    <string name="sesl_picker_done">تامام</string>
+    <string name="sesl_time_picker_hour">سائەت</string>
+    <string name="sesl_time_picker_set_title">ۋاقىت بېكىتىش</string>
+    <string name="sesl_date_picker_year">يىل</string>
+    <string name="sesl_date_picker_month">ئاي</string>
+    <string name="sesl_sleep_duration_in_hours_minutes">睡眠时间：%1$d 小时 %2$d 分钟</string>
+    <string name="sesl_sleep_duration_in_hours_one_minute">睡眠时间：%d 小时 1 分钟</string>
+    <string name="sesl_sleep_duration_in_one_hour_minutes">睡眠时间：1 小时 %d 分钟</string>
+    <string name="sesl_sleep_duration_one_hour_one_minute">睡眠时间：1 小时 1 分钟</string>
 </resources>

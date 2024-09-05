@@ -17,17 +17,6 @@
 <!-- Original code by Samsung, all rights reserved to the original author. -->
 <resources>
 
-    <style name="TabText">
-        <item name="android:textSize">@dimen/sesl_color_picker_tab_text_size</item>
-        <item name="android:fontFamily">sec-roboto-light</item>
-    </style>
-
-    <style name="TabTextSelected">
-        <item name="android:textSize">@dimen/sesl_color_picker_tab_text_size</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">sec-roboto-light</item>
-    </style>
-
     <style name="SeekbarTitleText">
         <item name="android:textSize">@dimen/sesl_color_seekbar_title_text_size</item>
         <item name="android:textStyle">bold</item>

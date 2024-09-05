@@ -14,25 +14,22 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
-  <string name="sesl_date_picker_increment_month">Sledeći mesec</string>
-  <string name="sesl_date_picker_switch_to_calendar_description">Dvaput kucnite za prelazak na prikaz kalendara.</string>
-  <string name="sesl_time_picker_minute">Minut</string>
-  <string name="sesl_picker_cancel">Otkaži</string>
-  <string name="sesl_number_picker_invalid_value_entered">Uneta neispravna vrednost.</string>
-  <string name="sesl_date_picker_decrement_month">Prethodni mesec</string>
-  <string name="sesl_date_picker_day">Dan</string>
-  <string name="sesl_date_picker_switch_to_wheel_description">Dvaput kucnite za prelazak na prikaz točkića.</string>
-  <string name="sesl_picker_done">Gotovo</string>
-  <string name="sesl_time_picker_hour">Sat</string>
-  <string name="sesl_time_picker_set_title">Podesi vreme</string>
-  <string name="sesl_date_picker_year">Godina</string>
-  <string name="sesl_date_picker_month">Mesec</string>
-
-  <string name="sesl_sleep_duration_in_hours_minutes">Vreme spavanja: %1$d sata/i i %2$d minuta</string>
-  <string name="sesl_sleep_duration_in_hours_one_minute">Vreme spavanja: %d sata/i i 1 minut</string>
-  <string name="sesl_sleep_duration_in_one_hour_minutes">Vreme spavanja: 1 sat i %d minuta</string>
-  <string name="sesl_sleep_duration_one_hour_one_minute">Vreme spavanja: 1 sat i 1 minut</string>
-
+    <string name="sesl_date_picker_increment_month">Sledeći mesec</string>
+    <string name="sesl_date_picker_switch_to_calendar_description">Dvaput kucnite za prelazak na prikaz kalendara.</string>
+    <string name="sesl_time_picker_minute">Minut</string>
+    <string name="sesl_picker_cancel">Otkaži</string>
+    <string name="sesl_number_picker_invalid_value_entered">Uneta neispravna vrednost.</string>
+    <string name="sesl_date_picker_decrement_month">Prethodni mesec</string>
+    <string name="sesl_date_picker_day">Dan</string>
+    <string name="sesl_date_picker_switch_to_wheel_description">Dvaput kucnite za prelazak na prikaz točkića.</string>
+    <string name="sesl_picker_done">Gotovo</string>
+    <string name="sesl_time_picker_hour">Sat</string>
+    <string name="sesl_time_picker_set_title">Podesi vreme</string>
+    <string name="sesl_date_picker_year">Godina</string>
+    <string name="sesl_date_picker_month">Mesec</string>
+    <string name="sesl_sleep_duration_in_hours_minutes">Vreme spavanja: %1$d sata/i i %2$d minuta</string>
+    <string name="sesl_sleep_duration_in_hours_one_minute">Vreme spavanja: %d sata/i i 1 minut</string>
+    <string name="sesl_sleep_duration_in_one_hour_minutes">Vreme spavanja: 1 sat i %d minuta</string>
+    <string name="sesl_sleep_duration_one_hour_one_minute">Vreme spavanja: 1 sat i 1 minut</string>
 </resources>

@@ -16,15 +16,15 @@
   -->
 <!-- Original code by Samsung, all rights reserved to the original author. -->
 <resources>
-  <dimen name="sesl_color_picker_color_swatch_view_height">194dp</dimen>
-  <dimen name="sesl_color_picker_color_swatch_view_width">194dp</dimen>
-  <dimen name="sesl_color_picker_main_content_width">520dp</dimen>
-  <dimen name="sesl_color_picker_opacity_seekbar_background_width">257.5dp</dimen>
-  <dimen name="sesl_color_picker_seekbar_width">268dp</dimen>
-  <dimen name="sesl_color_picker_selected_color_focus_width">129dp</dimen>
-  <dimen name="sesl_color_picker_selected_color_group_width">258dp</dimen>
-  <dimen name="sesl_color_picker_selected_color_text_width">71dp</dimen>
-  <dimen name="sesl_color_picker_used_color_group_width">260dp</dimen>
-  <dimen name="sesl_color_picker_used_color_item_gap_margin">8.4dp</dimen>
-  <dimen name="sesl_color_picker_used_color_item_size">36dp</dimen>
+    <dimen name="sesl_color_picker_color_swatch_view_height">194dp</dimen>
+    <dimen name="sesl_color_picker_color_swatch_view_width">194dp</dimen>
+    <dimen name="sesl_color_picker_main_content_width">520dp</dimen>
+    <dimen name="sesl_color_picker_opacity_seekbar_background_width">257.5dp</dimen>
+    <dimen name="sesl_color_picker_seekbar_width">268dp</dimen>
+    <dimen name="sesl_color_picker_selected_color_focus_width">129dp</dimen>
+    <dimen name="sesl_color_picker_selected_color_group_width">258dp</dimen>
+    <dimen name="sesl_color_picker_selected_color_text_width">71dp</dimen>
+    <dimen name="sesl_color_picker_used_color_group_width">260dp</dimen>
+    <dimen name="sesl_color_picker_used_color_item_gap_margin">8.4dp</dimen>
+    <dimen name="sesl_color_picker_used_color_item_size">36dp</dimen>
 </resources>

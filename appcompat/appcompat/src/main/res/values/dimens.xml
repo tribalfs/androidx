@@ -454,31 +454,29 @@
     <dimen name="sesl_text_size_subhead">@dimen/sesl_list_primary_text_size</dimen>
     <dimen name="sesl_text_size_title">20sp</dimen>
 
-    <dimen name="sesl_toast_padding_bottom">15.0dip</dimen>
-    <dimen name="sesl_toast_padding_end">21.0dip</dimen>
-    <dimen name="sesl_toast_padding_start">21.0dip</dimen>
-    <dimen name="sesl_toast_padding_top">15.0dip</dimen>
-    <dimen name="sesl_toast_text_size">14.0sp</dimen>
+    <dimen name="sesl_toast_padding_bottom">15dp</dimen>
+    <dimen name="sesl_toast_padding_end">21dp</dimen>
+    <dimen name="sesl_toast_padding_start">21dp</dimen>
+    <dimen name="sesl_toast_padding_top">15dp</dimen>
+    <dimen name="sesl_toast_text_size">14sp</dimen>
 
-    <dimen name="sesl_toolbar_content_inset">24.0dip</dimen>
-    <dimen name="sesl_toolbar_menu_text_size">18.0sp</dimen>
-    <dimen name="sesl_toolbar_subtitle_margin_top">-3.0dip</dimen>
-    <dimen name="sesl_toolbar_subtitle_text_size">13.0dip</dimen>
-    <dimen name="sesl_toolbar_title_text_size">21.0sp</dimen>
-    <dimen name="sesl_toolbar_title_text_size_with_subtitle">20.0sp</dimen>
+    <dimen name="sesl_toolbar_content_inset">24dp</dimen>
+    <dimen name="sesl_toolbar_menu_text_size">18sp</dimen>
+    <dimen name="sesl_toolbar_subtitle_margin_top">-3dp</dimen>
+    <dimen name="sesl_toolbar_subtitle_text_size">13dp</dimen>
+    <dimen name="sesl_toolbar_title_text_size">21sp</dimen>
+    <dimen name="sesl_toolbar_title_text_size_with_subtitle">20dp</dimen>
 
-    <dimen name="sesl_tooltip_horizontal_padding">16.0dip</dimen>
-    <dimen name="sesl_tooltip_margin">8.0dip</dimen>
-    <dimen name="sesl_tooltip_precise_anchor_extra_offset">8.0dip</dimen>
-    <dimen name="sesl_tooltip_precise_anchor_threshold">96.0dip</dimen>
-    <dimen name="sesl_tooltip_vertical_padding">6.5dip</dimen>
-    <dimen name="sesl_tooltip_y_offset_non_touch">0.0dip</dimen>
-    <dimen name="sesl_tooltip_y_offset_touch">16.0dip</dimen>
-
+    <dimen name="sesl_tooltip_horizontal_padding">16dp</dimen>
+    <dimen name="sesl_tooltip_margin">8dp</dimen>
+    <dimen name="sesl_tooltip_precise_anchor_extra_offset">8dp</dimen>
+    <dimen name="sesl_tooltip_precise_anchor_threshold">96dp</dimen>
+    <dimen name="sesl_tooltip_vertical_padding">6.5dp</dimen>
+    <dimen name="sesl_tooltip_y_offset_non_touch">0dp</dimen>
+    <dimen name="sesl_tooltip_y_offset_touch">16dp</dimen>
 
     <!-- The maximum width we would prefer dialogs to be.  0 if there is no
     maximum (let them grow as large as the screen).  Actual values are
     specified for -large and -xlarge configurations. -->
     <dimen name="sesl_config_prefDialogWidth">320dp</dimen>
-
 </resources>

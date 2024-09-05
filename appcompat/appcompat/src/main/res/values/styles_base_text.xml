@@ -259,4 +259,117 @@
 
     <style name="Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored" parent="Base.TextAppearance.AppCompat.Widget.Button"/>
 
+    <style name="Base.TextAppearance.AppCompat.Widget.ActionMode.Title" parent="TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+
+    <style name="Base.TextAppearance.AppCompat.Widget.ActionMode.Title.Inverse" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse" />
+
+    <style name="Base.TextAppearance.AppCompat.Widget.ActionMode.Subtitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle"/>
+
+    <style name="Base.TextAppearance.AppCompat.Widget.ActionMode.Subtitle.Inverse" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse" />
+
+    <style name="Base.TextAppearance.AppCompat.Widget.ActionBar.Menu" parent="@style/TextAppearance.AppCompat.Button">
+        <item name="android:textSize">@dimen/sesl_toolbar_menu_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/actionMenuTextColor</item>
+        <item name="fontFamily">sec-roboto-light</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="Base.TextAppearance.AppCompat.Light.Widget.ActionBar.Menu" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu">
+    </style>
+    <style name="Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Header" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Header">
+        <item name="android:textColor">@color/sesl_context_menu_title_text_color</item>
+    </style>
+    <style name="Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Large" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large">
+        <item name="android:textColor">@color/sesl_popup_menu_item_text_light</item>
+    </style>
+    <style name="Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Small">
+        <item name="android:textColor">@color/sesl_popup_menu_item_text_light</item>
+    </style>
+    <style name="Base.TextAppearance.AppCompat.Light.Widget.TextView.SpinnerItem" parent="@style/TextAppearance.AppCompat.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/sesl_spinner_item_text_light</item>
+    </style>
+
+    <style name="Base.TextAppearance.AppCompat.Widget.ActionBar.Title" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">@dimen/sesl_toolbar_title_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/sesl_action_bar_text_color_title_dark</item>
+        <item name="fontFamily">sec-roboto-light</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle" parent="TextAppearance.AppCompat.Subhead">
+        <item name="android:textSize">@dimen/sesl_toolbar_subtitle_text_size</item>
+        <item name="android:textColor">@color/sesl_action_bar_text_color_subtitle_dark</item>
+        <item name="fontFamily">sec-roboto-light</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="Base.TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/sesl_action_bar_text_color_title_light</item>
+    </style>
+
+    <style name="Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">@color/sesl_action_bar_text_color_subtitle_light</item>
+    </style>
+
+    <style name="Base.TextAppearance.AppCompat.Widget.DropDownItem" parent="android:TextAppearance.Small">
+        <item name="android:textSize">@dimen/sesl_popup_menu_item_text_size</item>
+        <item name="android:textColor">?attr/spinnerDropdownTextColor</item>
+        <item name="fontFamily">@string/sesl_font_family_regular</item>
+    </style>
+
+    <style name="Base.TextAppearance.Widget.AppCompat.ExpandedMenu.Item" parent="android:TextAppearance.Medium" />
+
+    <style name="Base.TextAppearance.AppCompat.Widget.PopupMenu.Large" parent="android:TextAppearance.Material.Widget.PopupMenu.Large">
+        <item name="android:textSize">@dimen/sesl_popup_menu_item_text_size</item>
+        <item name="android:textColor">@color/sesl_popup_menu_item_text_dark</item>
+        <item name="fontFamily">@string/sesl_font_family_regular</item>
+    </style>
+
+
+    <style name="Base.TextAppearance.AppCompat.Widget.PopupMenu.Small" parent="android:TextAppearance.Material.Widget.PopupMenu.Small">
+        <item name="android:textSize">@dimen/sesl_popup_menu_item_text_size</item>
+        <item name="android:textColor">@color/sesl_popup_menu_item_text_dark</item>
+        <item name="fontFamily">@string/sesl_font_family_regular</item>
+    </style>
+
+
+    <style name="Base.TextAppearance.AppCompat.Widget.PopupMenu.Header" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/sesl_context_menu_title_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/sesl_context_menu_title_text_color_dark</item>
+        <item name="fontFamily">@string/sesl_font_family_medium</item>
+    </style>
+
+    <style name="Base.TextAppearance.AppCompat.SearchResult.Title" parent="android:TextAppearance.Material.SearchResult.Title">
+        <item name="android:textSize">@dimen/sesl_search_result_title_text_size</item>
+        <item name="android:textColor">@color/sesl_search_result_title_text_color</item>
+        <item name="fontFamily">@string/sesl_font_family_regular</item>
+    </style>
+
+    <style name="Base.TextAppearance.AppCompat.SearchResult.Subtitle" parent="android:TextAppearance.Material.SearchResult.Subtitle">
+        <item name="android:textSize">@dimen/sesl_search_result_subtitle_text_size</item>
+        <item name="android:textColor">@color/sesl_search_result_subtitle_text_color</item>
+        <item name="fontFamily">@string/sesl_font_family_regular</item>
+    </style>
+
+    <style name="Base.TextAppearance.Widget.AppCompat.Toolbar.Title" parent="TextAppearance.AppCompat.Widget.ActionBar.Title" />
+    <style name="Base.TextAppearance.Widget.AppCompat.Toolbar.Title.Inverse" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse" />
+
+    <style name="Base.TextAppearance.Widget.AppCompat.Toolbar.Subtitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle" />
+    <style name="Base.TextAppearance.Widget.AppCompat.Toolbar.Subtitle.Inverse" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse" />
+
+    <style name="Base.TextAppearance.AppCompat.Widget.Switch" parent="TextAppearance.AppCompat.Button" />
+
+    <style name="Base.TextAppearance.AppCompat.Widget.SeslSwitchBar" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/sesl_text_size_medium</item>
+        <item name="android:textColor">?attr/colorPrimaryDark</item>
+    </style>
+
+    <style name="Base.TextAppearance.AppCompat.Widget.TextView.SpinnerItem" parent="android:TextAppearance.Material.Widget.TextView.SpinnerItem">
+        <item name="android:textSize">@dimen/sesl_spinner_item_text_size</item>
+        <item name="android:textColor">@color/sesl_spinner_item_text_dark</item>
+        <item name="fontFamily">@string/sesl_font_family_regular</item>
+    </style>
 </resources>

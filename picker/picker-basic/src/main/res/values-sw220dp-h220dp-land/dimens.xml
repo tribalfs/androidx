@@ -16,6 +16,6 @@
   -->
 <!-- Original code by Samsung, all rights reserved to the original author. -->
 <resources>
-  <dimen name="sesl_date_picker_selected_day_circle_radius">11dp</dimen>
-  <dimen name="sesl_spinning_date_picker_height_dialog">144dp</dimen>
+    <dimen name="sesl_date_picker_selected_day_circle_radius">11dp</dimen>
+    <dimen name="sesl_spinning_date_picker_height_dialog">144dp</dimen>
 </resources>

@@ -22,5 +22,4 @@
     <dimen name="sesl_dialog_button_bar_margin_bottom">16dp</dimen>
     <dimen name="sesl_toolbar_title_text_size">21sp</dimen>
     <dimen name="sesl_toolbar_title_text_size_with_subtitle">20dp</dimen>
-
 </resources>

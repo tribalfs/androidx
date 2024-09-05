@@ -1,57 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal" android:id="@+id/search_bar"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:id="@+id/search_bar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
     <TextView
+        android:id="@+id/search_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="2dp"
+        android:drawablePadding="0dp"
+        android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorPrimary"
-        android:gravity="center_vertical" android:id="@+id/search_badge" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_marginBottom="2dp" android:drawablePadding="0dp"/>
+        android:visibility="gone" />
+
     <ImageView
+        android:id="@+id/search_button"
+        style="?attr/actionButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:id="@+id/search_button" android:focusable="true" android:layout_width="wrap_content" android:layout_height="match_parent" android:contentDescription="@string/sesl_searchview_description_search" style="?attr/actionButtonStyle"/>
+        android:contentDescription="@string/sesl_searchview_description_search"
+        android:focusable="true" />
+
     <LinearLayout
+        android:id="@+id/search_edit_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:orientation="horizontal" android:id="@+id/search_edit_frame" android:layout_width="match_parent" android:layout_height="match_parent" android:layoutDirection="locale">
+        android:layoutDirection="locale"
+        android:orientation="horizontal">
+
         <LinearLayout
-            android:gravity="center_vertical"
+            android:id="@+id/search_plate"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sesl_search_plate_height"
             android:layout_gravity="center_vertical"
-            android:orientation="horizontal" android:id="@+id/search_plate" android:layout_width="match_parent" android:layout_height="@dimen/sesl_search_plate_height" android:layout_marginTop="@dimen/sesl_search_plate_margin" android:layout_marginBottom="@dimen/sesl_search_plate_margin" android:weightSum="1" android:paddingStart="16dp" android:paddingEnd="10dp" android:layout_marginStart="@dimen/sesl_search_margin_start" android:layout_marginEnd="@dimen/sesl_search_margin_end">
+            android:layout_marginStart="@dimen/sesl_search_margin_start"
+            android:layout_marginTop="@dimen/sesl_search_plate_margin"
+            android:layout_marginEnd="@dimen/sesl_search_margin_end"
+            android:layout_marginBottom="@dimen/sesl_search_plate_margin"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="10dp"
+            android:weightSum="1">
+
             <ImageView
-                android:layout_gravity="center_vertical"
                 android:id="@+id/search_back_btn"
-                android:background="@drawable/sesl_search_icon_background_borderless" android:focusable="true" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="match_parent" android:src="@drawable/sesl_ic_search_back" android:scaleType="centerInside" android:contentDescription="@string/sesl_action_bar_up_description" android:layout_marginEnd="12dp"/>
-            <ImageView android:layout_gravity="center_vertical"
-                android:id="@+id/search_mag_icon" android:visibility="gone" android:layout_width="@dimen/sesl_search_view_icon_width" android:layout_height="@dimen/sesl_search_view_icon_height" android:scaleType="centerInside" android:tint="@color/sesl_search_view_icon_color" style="@style/RtlOverlay.Widget.AppCompat.SearchView.MagIcon"/>
-            <view android:textSize="@dimen/sesl_search_view_search_text_size" android:ellipsize="end"
-                android:layout_gravity="center_vertical" android:id="@+id/search_src_text" android:background="@null" android:layout_width="0dp" android:layout_height="wrap_content" android:minWidth="@dimen/sesl_search_view_text_min_width" android:minHeight="@dimen/sesl_search_view_text_min_height"
-                android:maxLines="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/sesl_search_icon_background_borderless"
+                android:contentDescription="@string/sesl_action_bar_up_description"
+                android:focusable="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/sesl_ic_search_back"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/search_mag_icon"
+                style="@style/RtlOverlay.Widget.AppCompat.SearchView.MagIcon"
+                android:layout_width="@dimen/sesl_search_view_icon_width"
+                android:layout_height="@dimen/sesl_search_view_icon_height"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerInside"
+                android:tint="@color/sesl_search_view_icon_color"
+                android:visibility="gone" />
+
+            <view
+                android:id="@+id/search_src_text"
+                class="androidx.appcompat.widget.SearchView$SearchAutoComplete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@null"
+                android:dropDownAnchor="@+id/search_plate"
+                android:dropDownHeight="wrap_content"
+                android:dropDownHorizontalOffset="0dp"
+                android:dropDownVerticalOffset="1dp"
+                android:ellipsize="end"
+                android:imeOptions="actionSearch"
+                android:inputType="textAutoComplete|textNoSuggestions"
                 android:maxLength="1000"
-                android:layout_weight="1" android:inputType="textNoSuggestions" android:dropDownAnchor="@+id/search_plate" android:imeOptions="actionSearch" android:dropDownHeight="wrap_content"
-                android:dropDownHorizontalOffset="0dp" android:dropDownVerticalOffset="1dp"
-                android:nextFocusForward="@+id/search_back_btn" android:paddingStart="4dp"
-                app:emojiCompatEnabled="false"
-                class="androidx.appcompat.widget.SearchView$SearchAutoComplete"/>
+                android:maxLines="1"
+                android:minWidth="@dimen/sesl_search_view_text_min_width"
+                android:minHeight="@dimen/sesl_search_view_text_min_height"
+                android:nextFocusForward="@+id/search_back_btn"
+                android:paddingStart="4dp"
+                android:textSize="@dimen/sesl_search_view_search_text_size"
+                app:emojiCompatEnabled="false" />
+
             <ImageView
+                android:id="@+id/search_close_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:id="@+id/search_close_btn" android:background="@drawable/sesl_search_icon_background_borderless" android:focusable="true" android:layout_width="wrap_content"
-                android:layout_height="match_parent" android:contentDescription="@string/sesl_searchview_description_clear" android:paddingStart="10dp" android:paddingEnd="10dp"/>
+                android:background="@drawable/sesl_search_icon_background_borderless"
+                android:contentDescription="@string/sesl_searchview_description_clear"
+                android:focusable="true"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp" />
+
             <ImageView
-                android:layout_gravity="center_vertical"
                 android:id="@+id/search_go_btn"
-                android:background="@drawable/sesl_search_icon_background_borderless" android:focusable="true" android:visibility="gone"
-                android:layout_width="wrap_content" android:layout_height="match_parent" android:contentDescription="@string/sesl_searchview_description_submit" android:paddingStart="10dp" android:paddingEnd="10dp"/>
-            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:id="@+id/search_voice_btn"
-                android:background="@drawable/sesl_search_icon_background_borderless" android:focusable="true" android:visibility="gone" android:layout_width="wrap_content"
-                android:layout_height="match_parent" android:contentDescription="@string/sesl_searchview_description_voice" android:paddingStart="10dp" android:paddingEnd="10dp"/>
+                android:background="@drawable/sesl_search_icon_background_borderless"
+                android:contentDescription="@string/sesl_searchview_description_submit"
+                android:focusable="true"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:visibility="gone" />
+
             <ImageView
-                android:layout_gravity="center_vertical" android:id="@+id/search_more_btn" android:background="@drawable/sesl_search_icon_background_borderless" android:focusable="true"
-                android:visibility="gone" android:layout_width="wrap_content" android:layout_height="match_parent" android:src="@drawable/sesl_ic_search_more" android:contentDescription="@string/sesl_action_menu_overflow_description" android:paddingStart="10dp" android:paddingEnd="10dp"/>
+                android:id="@+id/search_voice_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/sesl_search_icon_background_borderless"
+                android:contentDescription="@string/sesl_searchview_description_voice"
+                android:focusable="true"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/search_more_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/sesl_search_icon_background_borderless"
+                android:contentDescription="@string/sesl_action_menu_overflow_description"
+                android:focusable="true"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:src="@drawable/sesl_ic_search_more"
+                android:visibility="gone" />
+
+            <Space
+                android:layout_width="4dp"
+                android:layout_height="match_parent" />
+
             <LinearLayout
-                android:orientation="horizontal" android:id="@+id/submit_area" android:layout_width="wrap_content" android:layout_height="match_parent"/>
+                android:id="@+id/submit_area"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

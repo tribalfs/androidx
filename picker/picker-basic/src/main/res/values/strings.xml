@@ -16,34 +16,31 @@
   -->
 <!-- Original code by Samsung, all rights reserved to the original author. -->
 <resources>
-  <string name="sesl_picker_cancel">Cancel</string>
-  <string name="sesl_picker_done">Done</string>
-  <string name="sesl_number_picker_invalid_value_entered">Invalid value entered.</string>
-  <string name="sesl_date_picker_day">Day</string>
-  <string name="sesl_date_picker_decrement_month">Previous month</string>
-  <string name="sesl_date_picker_increment_month">Next month</string>
-  <string name="sesl_date_picker_month">Month</string>
-  <string name="sesl_date_picker_switch_to_month_day_year_view_description">Double tap to switch to Month-Day-Year view.</string>
-  <string name="sesl_date_picker_switch_to_calendar_description">Double tap to switch to calendar view.</string>
-  <string name="sesl_date_picker_switch_to_wheel_description">Double tap to switch to wheel view.</string>
-  <string name="sesl_date_picker_year">Year</string>
-  <string name="sesl_time_picker_hour">Hour</string>
-  <string name="sesl_time_picker_minute">Minute</string>
-  <string name="sesl_time_picker_set_title">Set Time</string>
-
-  <string name="sesl_sleep_duration">Sleep time 9 hours</string>
-  <string name="sesl_sleep_picker_numeric_0">0</string>
-  <string name="sesl_sleep_picker_numeric_12">12</string>
-  <string name="sesl_sleep_picker_numeric_18">18</string>
-  <string name="sesl_sleep_picker_numeric_6">6</string>
-  <string name="sesl_sleep_duration_in_hours_minutes">Sleep time %1$d hours %2$d minutes</string>
-  <string name="sesl_sleep_duration_in_hours_one_minute">Sleep time %d hours 1 minute</string>
-  <string name="sesl_sleep_duration_in_one_hour_minutes">Sleep time 1 hour %d minutes</string>
-  <string name="sesl_sleep_duration_one_hour_one_minute">Sleep time 1 hour 1 minute</string>
-  <string name="sesl_sleep_goal_duration_in_hours_minutes">Your sleep goal %1$d hours %2$d minutes</string>
-  <string name="sesl_sleep_goal_duration_in_hours_one_minute">Your sleep goal %d hours 1 minute</string>
-  <string name="sesl_sleep_goal_duration_in_one_hour_minutes">Your sleep goal 1 hour %d minutes</string>
-  <string name="sesl_sleep_goal_duration_one_hour_one_minute">Your sleep goal 1 hour 1 minute</string>
-
-
+    <string name="sesl_picker_cancel">Cancel</string>
+    <string name="sesl_picker_done">Done</string>
+    <string name="sesl_number_picker_invalid_value_entered">Invalid value entered.</string>
+    <string name="sesl_date_picker_day">Day</string>
+    <string name="sesl_date_picker_decrement_month">Previous month</string>
+    <string name="sesl_date_picker_increment_month">Next month</string>
+    <string name="sesl_date_picker_month">Month</string>
+    <string name="sesl_date_picker_switch_to_month_day_year_view_description">Double tap to switch to Month-Day-Year view.</string>
+    <string name="sesl_date_picker_switch_to_calendar_description">Double tap to switch to calendar view.</string>
+    <string name="sesl_date_picker_switch_to_wheel_description">Double tap to switch to wheel view.</string>
+    <string name="sesl_date_picker_year">Year</string>
+    <string name="sesl_time_picker_hour">Hour</string>
+    <string name="sesl_time_picker_minute">Minute</string>
+    <string name="sesl_time_picker_set_title">Set Time</string>
+    <string name="sesl_sleep_duration">Sleep time 9 hours</string>
+    <string name="sesl_sleep_picker_numeric_0">0</string>
+    <string name="sesl_sleep_picker_numeric_12">12</string>
+    <string name="sesl_sleep_picker_numeric_18">18</string>
+    <string name="sesl_sleep_picker_numeric_6">6</string>
+    <string name="sesl_sleep_duration_in_hours_minutes">Sleep time %1$d hours %2$d minutes</string>
+    <string name="sesl_sleep_duration_in_hours_one_minute">Sleep time %d hours 1 minute</string>
+    <string name="sesl_sleep_duration_in_one_hour_minutes">Sleep time 1 hour %d minutes</string>
+    <string name="sesl_sleep_duration_one_hour_one_minute">Sleep time 1 hour 1 minute</string>
+    <string name="sesl_sleep_goal_duration_in_hours_minutes">Your sleep goal %1$d hours %2$d minutes</string>
+    <string name="sesl_sleep_goal_duration_in_hours_one_minute">Your sleep goal %d hours 1 minute</string>
+    <string name="sesl_sleep_goal_duration_in_one_hour_minutes">Your sleep goal 1 hour %d minutes</string>
+    <string name="sesl_sleep_goal_duration_one_hour_one_minute">Your sleep goal 1 hour 1 minute</string>
 </resources>

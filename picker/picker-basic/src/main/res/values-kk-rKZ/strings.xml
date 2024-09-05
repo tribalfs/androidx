@@ -15,21 +15,21 @@
   limitations under the License.
   -->
 <resources>
-  <string name="sesl_date_picker_increment_month">Келесі ай</string>
-  <string name="sesl_date_picker_switch_to_calendar_description">Күнтізбелік көрініске ауыстыру үшін, екі рет түртіңіз.</string>
-  <string name="sesl_time_picker_minute">Минут</string>
-  <string name="sesl_picker_cancel">Тоқтату</string>
-  <string name="sesl_number_picker_invalid_value_entered">Қате мән енгізілді</string>
-  <string name="sesl_date_picker_decrement_month">Алдыңғы ай</string>
-  <string name="sesl_date_picker_day">Күн</string>
-  <string name="sesl_date_picker_switch_to_wheel_description">Дөңгелекті айналдыру көрінісіне ауыстыру үшін, екі рет түртіңіз.</string>
-  <string name="sesl_picker_done">Дайын</string>
-  <string name="sesl_time_picker_hour">Сағат</string>
-  <string name="sesl_time_picker_set_title">Уақытты орнату</string>
-  <string name="sesl_date_picker_year">Жыл</string>
-  <string name="sesl_date_picker_month">Ай</string>
-  <string name="sesl_sleep_duration_in_hours_minutes">Ұйқы уақыты: %1$d сағат %2$d минут</string>
-  <string name="sesl_sleep_duration_in_hours_one_minute">Ұйқы уақыты: %d сағат 1 минут</string>
-  <string name="sesl_sleep_duration_in_one_hour_minutes">Ұйқы уақыты: 1 сағат %d минут</string>
-  <string name="sesl_sleep_duration_one_hour_one_minute">Ұйқы уақыты: 1 сағат 1 минут</string>
+    <string name="sesl_date_picker_increment_month">Келесі ай</string>
+    <string name="sesl_date_picker_switch_to_calendar_description">Күнтізбелік көрініске ауыстыру үшін, екі рет түртіңіз.</string>
+    <string name="sesl_time_picker_minute">Минут</string>
+    <string name="sesl_picker_cancel">Тоқтату</string>
+    <string name="sesl_number_picker_invalid_value_entered">Қате мән енгізілді</string>
+    <string name="sesl_date_picker_decrement_month">Алдыңғы ай</string>
+    <string name="sesl_date_picker_day">Күн</string>
+    <string name="sesl_date_picker_switch_to_wheel_description">Дөңгелекті айналдыру көрінісіне ауыстыру үшін, екі рет түртіңіз.</string>
+    <string name="sesl_picker_done">Дайын</string>
+    <string name="sesl_time_picker_hour">Сағат</string>
+    <string name="sesl_time_picker_set_title">Уақытты орнату</string>
+    <string name="sesl_date_picker_year">Жыл</string>
+    <string name="sesl_date_picker_month">Ай</string>
+    <string name="sesl_sleep_duration_in_hours_minutes">Ұйқы уақыты: %1$d сағат %2$d минут</string>
+    <string name="sesl_sleep_duration_in_hours_one_minute">Ұйқы уақыты: %d сағат 1 минут</string>
+    <string name="sesl_sleep_duration_in_one_hour_minutes">Ұйқы уақыты: 1 сағат %d минут</string>
+    <string name="sesl_sleep_duration_one_hour_one_minute">Ұйқы уақыты: 1 сағат 1 минут</string>
 </resources>

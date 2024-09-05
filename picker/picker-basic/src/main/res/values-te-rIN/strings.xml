@@ -15,21 +15,21 @@
   limitations under the License.
   -->
 <resources>
-  <string name="sesl_date_picker_increment_month">తదుపరి నెల</string>
-  <string name="sesl_date_picker_switch_to_calendar_description">క్యాలెండర్ వీక్షణకి మారడానికి రెండుసార్లు ట్యాప్ చేయండి.</string>
-  <string name="sesl_time_picker_minute">నిమిషం</string>
-  <string name="sesl_picker_cancel">రద్దు చేయి</string>
-  <string name="sesl_number_picker_invalid_value_entered">చెల్లని విలువ నమోదు చేయబడింది</string>
-  <string name="sesl_date_picker_decrement_month">మునుపటి నెల</string>
-  <string name="sesl_date_picker_day">రోజు</string>
-  <string name="sesl_date_picker_switch_to_wheel_description">వీల్ వీక్షణకి మారడానికి రెండు సార్లు ట్యాప్ చేయండి.</string>
-  <string name="sesl_picker_done">పూర్తి</string>
-  <string name="sesl_time_picker_hour">గంట</string>
-  <string name="sesl_time_picker_set_title">సమయాన్ని సెట్ చేయండి</string>
-  <string name="sesl_date_picker_year">సంవత్సరం</string>
-  <string name="sesl_date_picker_month">నెల</string>
-  <string name="sesl_sleep_duration_in_hours_minutes">నిద్ర సమయం: %1$d గంటల %2$d నిమిషాలు</string>
-  <string name="sesl_sleep_duration_in_hours_one_minute">నిద్ర సమయం: %d గంటల 1 నిమిషం</string>
-  <string name="sesl_sleep_duration_in_one_hour_minutes">నిద్ర సమయం: 1 గంట %d నిమిషాలు</string>
-  <string name="sesl_sleep_duration_one_hour_one_minute">నిద్ర సమయం: 1 గంట 1 నిమిషం</string>
+    <string name="sesl_date_picker_increment_month">తదుపరి నెల</string>
+    <string name="sesl_date_picker_switch_to_calendar_description">క్యాలెండర్ వీక్షణకి మారడానికి రెండుసార్లు ట్యాప్ చేయండి.</string>
+    <string name="sesl_time_picker_minute">నిమిషం</string>
+    <string name="sesl_picker_cancel">రద్దు చేయి</string>
+    <string name="sesl_number_picker_invalid_value_entered">చెల్లని విలువ నమోదు చేయబడింది</string>
+    <string name="sesl_date_picker_decrement_month">మునుపటి నెల</string>
+    <string name="sesl_date_picker_day">రోజు</string>
+    <string name="sesl_date_picker_switch_to_wheel_description">వీల్ వీక్షణకి మారడానికి రెండు సార్లు ట్యాప్ చేయండి.</string>
+    <string name="sesl_picker_done">పూర్తి</string>
+    <string name="sesl_time_picker_hour">గంట</string>
+    <string name="sesl_time_picker_set_title">సమయాన్ని సెట్ చేయండి</string>
+    <string name="sesl_date_picker_year">సంవత్సరం</string>
+    <string name="sesl_date_picker_month">నెల</string>
+    <string name="sesl_sleep_duration_in_hours_minutes">నిద్ర సమయం: %1$d గంటల %2$d నిమిషాలు</string>
+    <string name="sesl_sleep_duration_in_hours_one_minute">నిద్ర సమయం: %d గంటల 1 నిమిషం</string>
+    <string name="sesl_sleep_duration_in_one_hour_minutes">నిద్ర సమయం: 1 గంట %d నిమిషాలు</string>
+    <string name="sesl_sleep_duration_one_hour_one_minute">నిద్ర సమయం: 1 గంట 1 నిమిషం</string>
 </resources>

@@ -16,6 +16,6 @@
   -->
 <!-- Original code by Samsung, all rights reserved to the original author. -->
 <resources>
-  <dimen name="sesl_spinning_date_picker_date_spinner_text_size">19dp</dimen>
-  <item type="dimen" name="sesl_time_picker_inner_circle_container_ratio">0.8</item>
+    <dimen name="sesl_spinning_date_picker_date_spinner_text_size">19dp</dimen>
+    <item type="dimen" name="sesl_time_picker_inner_circle_container_ratio">0.8</item>
 </resources>

@@ -15,21 +15,21 @@
   limitations under the License.
   -->
 <resources>
-  <string name="sesl_date_picker_increment_month">Следующий месяц</string>
-  <string name="sesl_date_picker_switch_to_calendar_description">Дважды коснитесь, чтобы переключиться на вид календаря.</string>
-  <string name="sesl_time_picker_minute">Минута</string>
-  <string name="sesl_picker_cancel">Отмена</string>
-  <string name="sesl_number_picker_invalid_value_entered">Значение недопустимо</string>
-  <string name="sesl_date_picker_decrement_month">Предыдущий месяц</string>
-  <string name="sesl_date_picker_day">День</string>
-  <string name="sesl_date_picker_switch_to_wheel_description">Дважды коснитесь, чтобы переключиться на вид прокрутки колеса.</string>
-  <string name="sesl_picker_done">Готово</string>
-  <string name="sesl_time_picker_hour">Час</string>
-  <string name="sesl_time_picker_set_title">Установить время</string>
-  <string name="sesl_date_picker_year">Год</string>
-  <string name="sesl_date_picker_month">Месяц</string>
-  <string name="sesl_sleep_duration_in_hours_minutes">Продолжительность сна: %1$d ч. %2$d мин.</string>
-  <string name="sesl_sleep_duration_in_hours_one_minute">Продолжительность сна: %d ч. 1 мин.</string>
-  <string name="sesl_sleep_duration_in_one_hour_minutes">Продолжительность сна: 1 ч. %d мин.</string>
-  <string name="sesl_sleep_duration_one_hour_one_minute">Продолжительность сна: 1 ч. 1 мин.</string>
+    <string name="sesl_date_picker_increment_month">Следующий месяц</string>
+    <string name="sesl_date_picker_switch_to_calendar_description">Дважды коснитесь, чтобы переключиться на вид календаря.</string>
+    <string name="sesl_time_picker_minute">Минута</string>
+    <string name="sesl_picker_cancel">Отмена</string>
+    <string name="sesl_number_picker_invalid_value_entered">Значение недопустимо</string>
+    <string name="sesl_date_picker_decrement_month">Предыдущий месяц</string>
+    <string name="sesl_date_picker_day">День</string>
+    <string name="sesl_date_picker_switch_to_wheel_description">Дважды коснитесь, чтобы переключиться на вид прокрутки колеса.</string>
+    <string name="sesl_picker_done">Готово</string>
+    <string name="sesl_time_picker_hour">Час</string>
+    <string name="sesl_time_picker_set_title">Установить время</string>
+    <string name="sesl_date_picker_year">Год</string>
+    <string name="sesl_date_picker_month">Месяц</string>
+    <string name="sesl_sleep_duration_in_hours_minutes">Продолжительность сна: %1$d ч. %2$d мин.</string>
+    <string name="sesl_sleep_duration_in_hours_one_minute">Продолжительность сна: %d ч. 1 мин.</string>
+    <string name="sesl_sleep_duration_in_one_hour_minutes">Продолжительность сна: 1 ч. %d мин.</string>
+    <string name="sesl_sleep_duration_one_hour_one_minute">Продолжительность сна: 1 ч. 1 мин.</string>
 </resources>

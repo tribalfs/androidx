@@ -21,5 +21,4 @@
     <dimen name="sesl_dialog_button_bar_padding_bottom">20dp</dimen>
     <dimen name="sesl_dialog_title_padding_bottom">18dp</dimen>
     <dimen name="sesl_dialog_title_padding_top">24dp</dimen>
-
 </resources>

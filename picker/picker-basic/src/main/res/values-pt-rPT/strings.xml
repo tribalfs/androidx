@@ -14,25 +14,22 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
 <resources>
-  <string name="sesl_date_picker_increment_month">Mês seguinte</string>
-  <string name="sesl_date_picker_switch_to_calendar_description">Toque duas vezes para mudar para a vista de agenda.</string>
-  <string name="sesl_time_picker_minute">Minuto</string>
-  <string name="sesl_picker_cancel">Cancelar</string>
-  <string name="sesl_number_picker_invalid_value_entered">Valor inválido introduzido.</string>
-  <string name="sesl_date_picker_decrement_month">Mês anterior</string>
-  <string name="sesl_date_picker_day">Dia</string>
-  <string name="sesl_date_picker_switch_to_wheel_description">Toque duas vezes para mudar para a vista de roda.</string>
-  <string name="sesl_picker_done">Concluir</string>
-  <string name="sesl_time_picker_hour">Hora</string>
-  <string name="sesl_time_picker_set_title">Definir hora</string>
-  <string name="sesl_date_picker_year">Ano</string>
-  <string name="sesl_date_picker_month">Mês</string>
-
-  <string name="sesl_sleep_duration_in_hours_minutes">Tempo de sono: %1$d horas e %2$d minutos</string>
-  <string name="sesl_sleep_duration_in_hours_one_minute">Tempo de sono: %d horas e 1 minuto</string>
-  <string name="sesl_sleep_duration_in_one_hour_minutes">Tempo de sono: 1 hora e %d minutos</string>
-  <string name="sesl_sleep_duration_one_hour_one_minute">Tempo de sono: 1 minuto e 1 minuto</string>
-
+    <string name="sesl_date_picker_increment_month">Mês seguinte</string>
+    <string name="sesl_date_picker_switch_to_calendar_description">Toque duas vezes para mudar para a vista de agenda.</string>
+    <string name="sesl_time_picker_minute">Minuto</string>
+    <string name="sesl_picker_cancel">Cancelar</string>
+    <string name="sesl_number_picker_invalid_value_entered">Valor inválido introduzido.</string>
+    <string name="sesl_date_picker_decrement_month">Mês anterior</string>
+    <string name="sesl_date_picker_day">Dia</string>
+    <string name="sesl_date_picker_switch_to_wheel_description">Toque duas vezes para mudar para a vista de roda.</string>
+    <string name="sesl_picker_done">Concluir</string>
+    <string name="sesl_time_picker_hour">Hora</string>
+    <string name="sesl_time_picker_set_title">Definir hora</string>
+    <string name="sesl_date_picker_year">Ano</string>
+    <string name="sesl_date_picker_month">Mês</string>
+    <string name="sesl_sleep_duration_in_hours_minutes">Tempo de sono: %1$d horas e %2$d minutos</string>
+    <string name="sesl_sleep_duration_in_hours_one_minute">Tempo de sono: %d horas e 1 minuto</string>
+    <string name="sesl_sleep_duration_in_one_hour_minutes">Tempo de sono: 1 hora e %d minutos</string>
+    <string name="sesl_sleep_duration_one_hour_one_minute">Tempo de sono: 1 minuto e 1 minuto</string>
 </resources>

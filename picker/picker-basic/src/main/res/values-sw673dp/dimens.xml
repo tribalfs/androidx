@@ -16,5 +16,5 @@
   -->
 <!-- Original code by Samsung, all rights reserved to the original author. -->
 <resources>
-  <dimen name="sesl_picker_dialog_width">340dp</dimen>
+    <dimen name="sesl_picker_dialog_width">340dp</dimen>
 </resources>

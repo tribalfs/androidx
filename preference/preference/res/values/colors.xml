@@ -18,4 +18,7 @@
 <resources>
     <!-- Fallback color for versions of the system where ?android:attr/colorAccent is not available -->
     <color name="preference_fallback_accent_color">#ff008577</color>
+    <!--Sesl-->
+    <color name="sesl_preference_dot_badge_background_color">#e65b17</color>
+    <!--sesl-->
 </resources>

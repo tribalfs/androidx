@@ -2,7 +2,7 @@
 <shape
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
-    <solid android:color="@color/sesl_badge_background_color"/>
+    <solid android:color="@color/sesl_preference_dot_color"/>
     <size
         android:height="6dp"
         android:width="6dp"/>

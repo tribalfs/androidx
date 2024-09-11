@@ -17,12 +17,13 @@
 <!-- Original code by Samsung, all rights reserved to the original author. -->
 <resources>
 
-    <color name="sesl_index_bar_background_tint_color_dark">#993a3a3a</color>
-    <color name="sesl_index_bar_background_tint_color_light">#80e6e6e6</color>
+    <color name="sesl_index_bar_background_tint_color_dark">#993a3a3d</color>
+    <color name="sesl_index_bar_background_tint_color_light">#80e9e9ec</color>
 
-    <color name="sesl_index_bar_text_color_dark">#ff9c9c9c</color>
-    <color name="sesl_index_bar_text_color_light">#ff686868</color>
+    <color name="sesl_index_bar_text_color_dark">@color/sesl_gray_D10</color>
+    <color name="sesl_index_bar_text_color_light">@color/sesl_gray_L10</color>
 
-    <color name="sesl_index_scroll_preview_text_color_light">@color/sesl_white</color>
+    <color name="sesl_index_scroll_preview_text_color_light">@color/sesl_text1_dark</color>
+    <color name="sesl_bottom_navigation_text_dark">@color/sesl_text4_dark</color>
     
 </resources>

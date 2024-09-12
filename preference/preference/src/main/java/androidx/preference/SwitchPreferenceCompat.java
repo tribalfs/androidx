@@ -275,6 +275,7 @@ public class SwitchPreferenceCompat extends TwoStatePreference {
     }
 
     //Sesl
+    @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
     public void onBindViewHolder(@NonNull PreferenceViewHolder preferenceViewHolder, int width) {
         mWidth = width;
         onBindViewHolder(preferenceViewHolder);
@@ -297,7 +298,7 @@ public class SwitchPreferenceCompat extends TwoStatePreference {
 
         TextView titleView = view.findViewById(android.R.id.title);
 
-        if (isLargeLayout != 1) {
+        if (isLargeLayout != SWITCH_PREFERENCE_LAYOUT_LARGE) {
             if (mIsLargeLayout != isLargeLayout) {
                 mIsLargeLayout = isLargeLayout;
 

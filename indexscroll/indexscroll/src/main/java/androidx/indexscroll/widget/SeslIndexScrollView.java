@@ -148,6 +148,17 @@ public class SeslIndexScrollView extends FrameLayout {
     private void init() {
         mViewGroupOverlay = getOverlay();
 
+        if (mSECRobotoLightRegularFont == null) {
+            if (Build.VERSION.SDK_INT >= 34) {
+                mSECRobotoLightRegularFont = Typeface.create(
+                        Typeface.create("sec", Typeface.NORMAL), 400, false);
+            } else {
+                mSECRobotoLightRegularFont = Typeface.create(mContext
+                                .getString(androidx.appcompat.R.string.sesl_font_family_regular),
+                        Typeface.NORMAL);
+            }
+        }
+
         if (mIndexScrollPreview == null) {
             mIndexScrollPreview = new IndexScrollPreview(mContext);
             mIndexScrollPreview.setLayout(0, 0, getWidth(), getHeight());
@@ -827,16 +838,6 @@ public class SeslIndexScrollView extends FrameLayout {
             mTextPaint = new Paint();
             mTextPaint.setAntiAlias(true);
 
-            if (mSECRobotoLightRegularFont == null) {
-                if (Build.VERSION.SDK_INT >= 34) {
-                    mSECRobotoLightRegularFont = Typeface.create(
-                            Typeface.create("sec", Typeface.NORMAL), 400, false);
-                } else {
-                    mSECRobotoLightRegularFont = Typeface.create(mContext
-                            .getString(androidx.appcompat.R.string.sesl_font_family_regular),
-                            Typeface.NORMAL);
-                }
-            }
             if (mGroupIconFont == null) {
                 mGroupIconFont = Typeface.createFromAsset(mContext.getAssets(),
                         "sesl_indexscroll_group_font.ttf");

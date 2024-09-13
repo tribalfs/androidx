@@ -1988,7 +1988,11 @@ public class SeslProgressBar extends View {
         }
 
         if (mProgressDrawable != null) {
-            mProgressDrawable.setBounds(0, 0, right, bottom);
+            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mProgressDrawable.setBounds(0, 0, right, bottom);
+            }else{
+                mProgressDrawable.setBounds(0, 0, right, getResources().getDimensionPixelSize(R.dimen.sesl_seekbar_track_height));
+           }
         }
     }
 

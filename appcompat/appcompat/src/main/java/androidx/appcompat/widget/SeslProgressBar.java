@@ -381,17 +381,25 @@ public class SeslProgressBar extends View {
         mUseHorizontalProgress = a.getBoolean(R.styleable.ProgressBar_useHorizontalProgress,
                 mUseHorizontalProgress);
 
-        ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(context,
-                R.style.Base_V7_Theme_AppCompat_Light);
-
-        Resources.Theme theme = contextThemeWrapper.getTheme();
         Resources res = getResources();
 
-        mIndeterminateHorizontalXsmall = getCompatDrawable(context, R.drawable.sesl_progress_bar_indeterminate_xsmall_transition);
-        mIndeterminateHorizontalSmall = getCompatDrawable(context, R.drawable.sesl_progress_bar_indeterminate_small_transition);
-        mIndeterminateHorizontalMedium = getCompatDrawable(context, R.drawable.sesl_progress_bar_indeterminate_medium_transition);
-        mIndeterminateHorizontalLarge = getCompatDrawable(context, R.drawable.sesl_progress_bar_indeterminate_large_transition);
-        mIndeterminateHorizontalXlarge = getCompatDrawable(context, R.drawable.sesl_progress_bar_indeterminate_xlarge_transition);
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(context,
+                    R.style.Base_V7_Theme_AppCompat_Light);
+            Resources.Theme theme = contextThemeWrapper.getTheme();
+
+            mIndeterminateHorizontalXsmall = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_xsmall_transition, theme);
+            mIndeterminateHorizontalSmall = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_small_transition, theme);
+            mIndeterminateHorizontalMedium = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_medium_transition, theme);
+            mIndeterminateHorizontalLarge = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_large_transition, theme);
+            mIndeterminateHorizontalXlarge = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_xlarge_transition, theme);
+        }else{
+            mIndeterminateHorizontalXsmall = AnimatedVectorDrawableCompat.create(context, R.drawable.sesl_progress_bar_indeterminate_xsmall_transition);
+            mIndeterminateHorizontalSmall = AnimatedVectorDrawableCompat.create(context, R.drawable.sesl_progress_bar_indeterminate_small_transition);
+            mIndeterminateHorizontalMedium = AnimatedVectorDrawableCompat.create(context, R.drawable.sesl_progress_bar_indeterminate_medium_transition);
+            mIndeterminateHorizontalLarge = AnimatedVectorDrawableCompat.create(context, R.drawable.sesl_progress_bar_indeterminate_large_transition);
+            mIndeterminateHorizontalXlarge = AnimatedVectorDrawableCompat.create(context, R.drawable.sesl_progress_bar_indeterminate_xlarge_transition);
+        }
 
         a.recycle();
 
@@ -427,16 +435,6 @@ public class SeslProgressBar extends View {
             }
         }
     }
-
-    //Custom
-    private static Drawable getCompatDrawable(Context context, int resId) {
-        if ( Build.VERSION.SDK_INT >= 24) {
-            return context.getDrawable(resId);
-        } else {
-            return AnimatedVectorDrawableCompat.create(context, resId);
-        }
-    }
-
 
     /**
      * Sets the minimum width the progress bar can have.

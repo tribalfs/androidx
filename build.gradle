@@ -93,6 +93,24 @@ subprojects {
                         }
 
                         project.android.sourceSets.main.resources.srcDir JAVA_RESOURCES_TEMP_DIR
+
+                        task updateVersionBadge() {
+                            def readmeFile = file("${rootProject.projectDir}/README.md")
+                            def readmeContent = new String(readmeFile.bytes)
+
+                            def parentDir = project.projectDir.parent.split("\\\\").last()
+                            def moduleDir = project.projectDir.name
+
+                            def escapedParentDir = parentDir.replaceAll('\\.', '\\\\.').replaceAll('-', '--')
+                            def escapedModuleDir = moduleDir.replaceAll('\\.', '\\\\.').replaceAll('-', '--')
+
+                            def badgeUrl = "https://img.shields.io/badge/sesl.androidx.$escapedParentDir:$escapedModuleDir-${version_info[0].replaceAll('-', '--')}%2B${version_info[1].replaceAll('-', '--')}%2B${version_info[2]}-blue?logo=GitHub"
+                            def pattern = ~/https:\/\/img\.shields\.io\/badge\/sesl\.androidx\.${escapedParentDir}:${escapedModuleDir}-\d+.*blue\?logo=GitHub/
+
+                            readmeContent = readmeContent.replaceAll(pattern, badgeUrl)
+                            new File(readmeFile.path).text = readmeContent
+                        }
+
                     }
 
                 }

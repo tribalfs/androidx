@@ -383,7 +383,7 @@ public class SeslProgressBar extends View {
 
         Resources res = getResources();
 
-        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(context,
                     R.style.Base_V7_Theme_AppCompat_Light);
             Resources.Theme theme = contextThemeWrapper.getTheme();

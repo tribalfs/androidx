@@ -2355,44 +2355,39 @@ public class SeslProgressBar extends View {
     }
 
     private void initCirCleStrokeWidth(int size) {
-        if (getResources().getDimensionPixelSize(R.dimen.sesl_progress_bar_size_small) == size) {
-            mRoundStrokeWidth =
-                    getResources().getDimensionPixelSize(R.dimen.sesl_progress_circle_size_small_width);
-            mCirclePadding =
-                    getResources().getDimensionPixelOffset(R.dimen.sesl_progress_circle_size_small_padding);
-        } else if (getResources().getDimensionPixelSize(R.dimen.sesl_progress_bar_size_small_title) == size) {
-            mRoundStrokeWidth =
-                    getResources().getDimensionPixelSize(R.dimen.sesl_progress_circle_size_small_title_width);
-            mCirclePadding =
-                    getResources().getDimensionPixelOffset(R.dimen.sesl_progress_circle_size_small_title_padding);
-        } else if (getResources().getDimensionPixelSize(R.dimen.sesl_progress_bar_size_large) == size) {
-            mRoundStrokeWidth =
-                    getResources().getDimensionPixelSize(R.dimen.sesl_progress_circle_size_large_width);
-            mCirclePadding =
-                    getResources().getDimensionPixelOffset(R.dimen.sesl_progress_circle_size_large_padding);
-        } else if (getResources().getDimensionPixelSize(R.dimen.sesl_progress_bar_size_xlarge) == size) {
-            mRoundStrokeWidth =
-                    getResources().getDimensionPixelSize(R.dimen.sesl_progress_circle_size_xlarge_width);
-            mCirclePadding =
-                    getResources().getDimensionPixelOffset(R.dimen.sesl_progress_circle_size_xlarge_padding);
+        Resources res = getResources();
+        int progressBarSizeSmall = res.getDimensionPixelSize(R.dimen.sesl_progress_bar_size_small);
+        if (progressBarSizeSmall == size) {
+            mRoundStrokeWidth = res.getDimensionPixelSize(R.dimen.sesl_progress_circle_size_small_width);
+            mCirclePadding = res.getDimensionPixelOffset(R.dimen.sesl_progress_circle_size_small_padding);
+        } else if (res.getDimensionPixelSize(R.dimen.sesl_progress_bar_size_small_title) == size) {
+            mRoundStrokeWidth = res.getDimensionPixelSize(R.dimen.sesl_progress_circle_size_small_title_width);
+            mCirclePadding = res.getDimensionPixelOffset(R.dimen.sesl_progress_circle_size_small_title_padding);
+        } else if (res.getDimensionPixelSize(R.dimen.sesl_progress_bar_size_large) == size) {
+            mRoundStrokeWidth = res.getDimensionPixelSize(R.dimen.sesl_progress_circle_size_large_width);
+            mCirclePadding = res.getDimensionPixelOffset(R.dimen.sesl_progress_circle_size_large_padding);
+        } else if (res.getDimensionPixelSize(R.dimen.sesl_progress_bar_size_xlarge) == size) {
+            mRoundStrokeWidth = res.getDimensionPixelSize(R.dimen.sesl_progress_circle_size_xlarge_width);
+            mCirclePadding = res.getDimensionPixelOffset(R.dimen.sesl_progress_circle_size_xlarge_padding);
         } else {
             mRoundStrokeWidth =
-                    (getResources().getDimensionPixelSize(R.dimen.sesl_progress_circle_size_small_width) * size)
-                    / getResources().getDimensionPixelSize(R.dimen.sesl_progress_bar_size_small);
+                    (res.getDimensionPixelSize(R.dimen.sesl_progress_circle_size_small_width) * size)
+                            / progressBarSizeSmall;
             mCirclePadding =
-                    (size * getResources().getDimensionPixelOffset(R.dimen.sesl_progress_circle_size_small_padding))
-                    / getResources().getDimensionPixelSize(R.dimen.sesl_progress_bar_size_small);
+                    (size * res.getDimensionPixelOffset(R.dimen.sesl_progress_circle_size_small_padding))
+                            / progressBarSizeSmall;
         }
     }
 
     private void seslSetIndeterminateProgressDrawable(int size) {
-        if (getResources().getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_xsmall) >= size) {
+        Resources res = getResources();
+        if (res.getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_xsmall) >= size) {
             setIndeterminateDrawable(mIndeterminateHorizontalXsmall);
-        } else if (getResources().getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_small) >= size) {
+        } else if (res.getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_small) >= size) {
             setIndeterminateDrawable(mIndeterminateHorizontalSmall);
-        } else if (getResources().getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_medium) >= size) {
+        } else if (res.getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_medium) >= size) {
             setIndeterminateDrawable(mIndeterminateHorizontalMedium);
-        } else if (getResources().getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_large) >= size) {
+        } else if (res.getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_large) >= size) {
             setIndeterminateDrawable(mIndeterminateHorizontalLarge);
         } else {
             setIndeterminateDrawable(mIndeterminateHorizontalXlarge);
@@ -2457,13 +2452,13 @@ public class SeslProgressBar extends View {
     private void initializeRoundCicleMode() {
         mOnlyIndeterminate = false;
         setIndeterminate(false);
-
+        Resources res = getResources();
         CirCleProgressDrawable background
                 = new CirCleProgressDrawable(true,
-                colorToColorStateList(getResources().getColor(R.color.sesl_progress_control_color_background)));
+                colorToColorStateList(res.getColor(R.color.sesl_progress_control_color_background)));
         CirCleProgressDrawable primaryProgress
                 = new CirCleProgressDrawable(false,
-                colorToColorStateList(getResources().getColor(R.color.sesl_progress_control_color_activated_light)));
+                colorToColorStateList(res.getColor(R.color.sesl_progress_control_color_activated_light)));
         Drawable[] drawables = {background, primaryProgress};
 
         LayerDrawable layer = new LayerDrawable(drawables);

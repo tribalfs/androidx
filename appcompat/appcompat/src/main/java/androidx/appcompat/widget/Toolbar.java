@@ -1755,10 +1755,9 @@ public class Toolbar extends ViewGroup implements MenuHost {
         super.onAttachedToWindow();
         updateBackInvokedCallbackState();
         //Sesl
-        int topPadding = mUserTopPadding;
-        if (topPadding == -1) {
-            topPadding = getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding);
-        }
+        final int topPadding = mUserTopPadding != -1
+                ? mUserTopPadding
+                : getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding);
         setPadding(0, topPadding, 0, 0);
         //noinspection resource
         TypedArray a = getContext().obtainStyledAttributes(R.styleable.AppCompatTheme);
@@ -2970,13 +2969,12 @@ public class Toolbar extends ViewGroup implements MenuHost {
             mNavButtonView.setMinimumHeight(a.getDimensionPixelSize(R.styleable.View_android_minHeight, 0));
         }
         a.recycle();
-        if (mUserTopPadding == -1) {
-            mUserTopPadding = getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding);
-        }
-        setPadding(0, mUserTopPadding, 0, 0);
-
+        final int topPadding = mUserTopPadding != -1
+                ? mUserTopPadding
+                : getResources().getDimensionPixelSize(R.dimen.sesl_action_bar_top_padding);
+        setPadding(0, topPadding, 0, 0);
         ViewGroup.LayoutParams lp = getLayoutParams();
-        lp.height = actionBarSize + mUserTopPadding;
+        lp.height = actionBarSize + topPadding;
         setLayoutParams(lp);
 
         TypedArray a2 = context.obtainStyledAttributes(null, R.styleable.Toolbar, android.R.attr.toolbarStyle, 0);

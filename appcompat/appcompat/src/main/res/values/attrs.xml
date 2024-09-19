@@ -1474,6 +1474,8 @@
         <attr name="android:secondaryProgress" />
         <attr name="android:secondaryProgressTint" />
         <attr name="android:secondaryProgressTintMode" />
+        <!-- Setting this to true overrides android:indeterminateDrawable
+            with an indeterminate drawable  internally implemented in SeslProgressBar. -->
         <attr name="useHorizontalProgress" format="boolean" />
     </declare-styleable>
 

@@ -167,8 +167,10 @@ public class SeslProgressBar extends View {
 
     Drawable mIndeterminateDrawable;
     private Drawable mProgressDrawable;
-    private boolean mUseHorizontalProgress = false;
+    private final boolean mUseHorizontalProgress;
 
+    //TODO(Check if it's better not to cache these anymore
+    // as we're not anymore constantly calling these drawables in onMeasure)
     private final Drawable mIndeterminateHorizontalXsmall;
     private final Drawable mIndeterminateHorizontalSmall;
     private final Drawable mIndeterminateHorizontalMedium;
@@ -215,6 +217,8 @@ public class SeslProgressBar extends View {
     private Locale mCachedLocale;//added in Sesl6
     @Nullable
     private NumberFormat mPercentFormat;//added in Sesl6
+
+    private boolean mFirstMeasure = true;
 
     /**
      * Create a new progress bar with range 0...100 and initial progress of 0.
@@ -378,8 +382,7 @@ public class SeslProgressBar extends View {
             mProgressTintInfo.mHasIndeterminateTint = true;
         }
 
-        mUseHorizontalProgress = a.getBoolean(R.styleable.ProgressBar_useHorizontalProgress,
-                mUseHorizontalProgress);
+        mUseHorizontalProgress = a.getBoolean(R.styleable.ProgressBar_useHorizontalProgress, false);
 
         Resources res = getResources();
 
@@ -682,9 +685,13 @@ public class SeslProgressBar extends View {
             mIndeterminate = indeterminate;
 
             if (indeterminate) {
-                // swap between indeterminate and regular backgrounds
-                swapCurrentDrawable(mIndeterminateDrawable);
-                startAnimation();
+                if (mUseHorizontalProgress) {
+                    //Ensure we're using the correct indeterminate drawable size for the available width
+                    updateDrawableSizeAndBounds(getWidth(), getHeight());
+                }else {
+                    swapCurrentDrawable(mIndeterminateDrawable);
+                    startAnimation();
+                }
             } else {
                 swapCurrentDrawable(mProgressDrawable);
                 stopAnimation();
@@ -1795,7 +1802,7 @@ public class SeslProgressBar extends View {
             return;
         }
 
-        if (getWindowVisibility() == VISIBLE) {
+       if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M || getWindowVisibility() == VISIBLE) {
             if (mIndeterminateDrawable instanceof Animatable) {
                 mShouldStartAnimationDrawable = true;
                 mHasAnimation = false;
@@ -1942,6 +1949,22 @@ public class SeslProgressBar extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        updateDrawableSizeAndBounds(w, h);
+    }
+
+    //Custom
+    private void updateDrawableSizeAndBounds(int w, int h){
+        //Sesl (Note: Moved updating from onMeasure for efficiency
+        // and to fix concurrency issue causing the indeterminate drawable
+        // to not being shown after a re-layout)
+        int paddingLeft = getPaddingLeft();
+        int paddingRight = getPaddingRight();
+
+        initCirCleStrokeWidth(w - paddingLeft - paddingRight);
+        if (mUseHorizontalProgress && mIndeterminate) {
+            seslSetIndeterminateProgressDrawable(w - paddingLeft - paddingRight);
+        }
+        //sesl
         updateDrawableBounds(w, h);
     }
 
@@ -2045,13 +2068,16 @@ public class SeslProgressBar extends View {
 
     @Override
     protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int dw = 0;
-        int dh = 0;
+        int dw;
+        int dh;
 
         final Drawable d = mCurrentDrawable;
         if (d != null) {
             dw = Math.max(mMinWidth, Math.min(mMaxWidth, d.getIntrinsicWidth()));
             dh = Math.max(mMinHeight, Math.min(mMaxHeight, d.getIntrinsicHeight()));
+        }else{
+            dw = 0;
+            dh = 0;
         }
 
         updateDrawableState();
@@ -2061,9 +2087,9 @@ public class SeslProgressBar extends View {
 
         final int measuredWidth = resolveSizeAndState(dw, widthMeasureSpec, 0);
         final int measuredHeight = resolveSizeAndState(dh, heightMeasureSpec, 0);
-        initCirCleStrokeWidth(measuredWidth - getPaddingLeft() - getPaddingRight());
-        if (mUseHorizontalProgress && mIndeterminate) {
-            seslSetIndeterminateProgressDrawable(measuredWidth - getPaddingLeft() - getPaddingRight());
+        if (mFirstMeasure) {//Moved the subsequent updating to onSizeChanged
+            updateDrawableSizeAndBounds(measuredWidth, measuredHeight);
+            mFirstMeasure = false;
         }
         setMeasuredDimension(measuredWidth, measuredHeight);
     }
@@ -2172,16 +2198,14 @@ public class SeslProgressBar extends View {
         if (mIndeterminate) {
             startAnimation();
         }
-        if (mRefreshData != null) {
-            synchronized (this) {
-                final int count = mRefreshData.size();
-                for (int i = 0; i < count; i++) {
-                    final RefreshData rd = mRefreshData.get(i);
-                    doRefreshProgress(rd.id, rd.progress, rd.fromUser, true, rd.animate);
-                    rd.recycle();
-                }
-                mRefreshData.clear();
+        synchronized (this) {
+            final int count = mRefreshData.size();
+            for (int i = 0; i < count; i++) {
+                final RefreshData rd = mRefreshData.get(i);
+                doRefreshProgress(rd.id, rd.progress, rd.fromUser, true, rd.animate);
+                rd.recycle();
             }
+            mRefreshData.clear();
         }
         mAttached = true;
     }
@@ -2379,6 +2403,11 @@ public class SeslProgressBar extends View {
         }
     }
 
+
+    /**
+     *  Called when on indeterminate mode and useHorizontalProgress attr is set to true.
+     *  This overrides the drawable set in android:indeterminateDrawable attr.
+     */
     private void seslSetIndeterminateProgressDrawable(int size) {
         Resources res = getResources();
         if (res.getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_xsmall) >= size) {

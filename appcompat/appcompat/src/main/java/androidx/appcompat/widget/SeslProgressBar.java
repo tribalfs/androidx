@@ -63,6 +63,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.Transformation;
 import android.widget.RemoteViews.RemoteView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.IntDef;
 import androidx.annotation.InterpolatorRes;
 import androidx.annotation.NonNull;
@@ -169,13 +170,6 @@ public class SeslProgressBar extends View {
     private Drawable mProgressDrawable;
     private final boolean mUseHorizontalProgress;
 
-    //TODO(Check if it's better not to cache these anymore
-    // as we're not anymore constantly calling these drawables in onMeasure)
-    private final Drawable mIndeterminateHorizontalXsmall;
-    private final Drawable mIndeterminateHorizontalSmall;
-    private final Drawable mIndeterminateHorizontalMedium;
-    private final Drawable mIndeterminateHorizontalLarge;
-    private final Drawable mIndeterminateHorizontalXlarge;
     /**
      * Please use {@link #getCurrentDrawable()}, {@link #setProgressDrawable(Drawable)},
      * {@link #setIndeterminateDrawable(Drawable)} and their tiled versions instead of
@@ -384,26 +378,6 @@ public class SeslProgressBar extends View {
 
         mUseHorizontalProgress = a.getBoolean(R.styleable.ProgressBar_useHorizontalProgress, false);
 
-        Resources res = getResources();
-
-        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(context,
-                    R.style.Base_V7_Theme_AppCompat_Light);
-            Resources.Theme theme = contextThemeWrapper.getTheme();
-
-            mIndeterminateHorizontalXsmall = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_xsmall_transition, theme);
-            mIndeterminateHorizontalSmall = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_small_transition, theme);
-            mIndeterminateHorizontalMedium = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_medium_transition, theme);
-            mIndeterminateHorizontalLarge = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_large_transition, theme);
-            mIndeterminateHorizontalXlarge = res.getDrawable(R.drawable.sesl_progress_bar_indeterminate_xlarge_transition, theme);
-        }else{
-            mIndeterminateHorizontalXsmall = AnimatedVectorDrawableCompat.create(context, R.drawable.sesl_progress_bar_indeterminate_xsmall_transition);
-            mIndeterminateHorizontalSmall = AnimatedVectorDrawableCompat.create(context, R.drawable.sesl_progress_bar_indeterminate_small_transition);
-            mIndeterminateHorizontalMedium = AnimatedVectorDrawableCompat.create(context, R.drawable.sesl_progress_bar_indeterminate_medium_transition);
-            mIndeterminateHorizontalLarge = AnimatedVectorDrawableCompat.create(context, R.drawable.sesl_progress_bar_indeterminate_large_transition);
-            mIndeterminateHorizontalXlarge = AnimatedVectorDrawableCompat.create(context, R.drawable.sesl_progress_bar_indeterminate_xlarge_transition);
-        }
-
         a.recycle();
 
         applyProgressTints();
@@ -414,7 +388,7 @@ public class SeslProgressBar extends View {
             setImportantForAccessibility( IMPORTANT_FOR_ACCESSIBILITY_YES);
         }
 
-        mDensity = res.getDisplayMetrics().density;
+        mDensity = getResources().getDisplayMetrics().density;
         mCircleAnimationCallback = new CircleAnimationCallback(this);
     }
 
@@ -2410,16 +2384,35 @@ public class SeslProgressBar extends View {
      */
     private void seslSetIndeterminateProgressDrawable(int size) {
         Resources res = getResources();
+        Drawable mIndeterminateHorizontal;
         if (res.getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_xsmall) >= size) {
-            setIndeterminateDrawable(mIndeterminateHorizontalXsmall);
+            mIndeterminateHorizontal = createIndeterminateDrawable(res,
+                    R.drawable.sesl_progress_bar_indeterminate_xsmall_transition);
         } else if (res.getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_small) >= size) {
-            setIndeterminateDrawable(mIndeterminateHorizontalSmall);
+            mIndeterminateHorizontal = createIndeterminateDrawable(res,
+                    R.drawable.sesl_progress_bar_indeterminate_small_transition);
         } else if (res.getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_medium) >= size) {
-            setIndeterminateDrawable(mIndeterminateHorizontalMedium);
+            mIndeterminateHorizontal = createIndeterminateDrawable(res,
+                    R.drawable.sesl_progress_bar_indeterminate_medium_transition);
         } else if (res.getDimensionPixelSize(R.dimen.sesl_progress_bar_indeterminate_large) >= size) {
-            setIndeterminateDrawable(mIndeterminateHorizontalLarge);
+            mIndeterminateHorizontal = createIndeterminateDrawable(res,
+                    R.drawable.sesl_progress_bar_indeterminate_large_transition);
         } else {
-            setIndeterminateDrawable(mIndeterminateHorizontalXlarge);
+            mIndeterminateHorizontal = createIndeterminateDrawable(res,
+                    R.drawable.sesl_progress_bar_indeterminate_xlarge_transition);
+        }
+        setIndeterminateDrawable(mIndeterminateHorizontal);
+    }
+
+    //Custom
+    private Drawable createIndeterminateDrawable(Resources res, @DrawableRes int drawableRes){
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(getContext(),
+                    R.style.Base_V7_Theme_AppCompat_Light);
+            Resources.Theme theme = contextThemeWrapper.getTheme();
+            return res.getDrawable(drawableRes, theme);
+        }else{
+            return AnimatedVectorDrawableCompat.create(getContext(), drawableRes);
         }
     }
 

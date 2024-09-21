@@ -17750,7 +17750,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
 
     private boolean shouldSkipScroll() {
-        return Settings.System.getInt(getContext().getContentResolver(), "remove_animations", 0) == 1;
+        return Settings.Global.getInt(getContext().getContentResolver(), "remove_animations", 0) == 1;
     }
     //sesl
 }

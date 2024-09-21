@@ -3069,7 +3069,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
     }
 
     private fun shouldSkipScroll(): Boolean {
-        return Settings.System.getInt(context.contentResolver, "remove_animations", 0) == 1
+        return Settings.Global.getInt(context.contentResolver, "remove_animations", 0) == 1
     }
 
 

@@ -509,7 +509,7 @@ class SeslRecyclerViewFastScroller {
 
     public void setScrollbarPosition(int position) {
         if (position == View.SCROLLBAR_POSITION_DEFAULT) {
-            position = mRecyclerView.getLayoutManager().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ?
+            position = mRecyclerView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ?
                     View.SCROLLBAR_POSITION_LEFT : View.SCROLLBAR_POSITION_RIGHT;
         }
 

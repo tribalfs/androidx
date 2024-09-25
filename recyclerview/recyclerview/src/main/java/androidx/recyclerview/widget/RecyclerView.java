@@ -508,7 +508,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
                     int mHoverScrollSpeed =
                             (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                            HOVERSCROLL_SPEED, mContext.getResources().getDisplayMetrics()) + 0.5f);
+                                    HOVERSCROLL_SPEED, mContext.getResources().getDisplayMetrics()) + 0.5f);
                     if (mHoverRecognitionDurationTime == 3) {
                         mHoverScrollSpeed += (int) (mHoverScrollSpeed * 0.1d);
                     } else if (mHoverRecognitionDurationTime == 4) {
@@ -1289,7 +1289,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         }
 
         context.getTheme().resolveAttribute(androidx.appcompat.R.attr.roundedCornerColor,
-         outValue, true);
+                outValue, true);
         if (outValue.resourceId > 0) {
             mRectColor = resources.getColor(outValue.resourceId);
         }
@@ -4046,13 +4046,16 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             }
             mGapWorker.add(this);
 
-            //Sesl
+            //Removed in favor of onRtlPropertiesChanged override
+            //because layout direction is sometimes not yet resolved
+            //at this point
+            /*//Sesl
             if (mLayout != null && mLayout.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
                 if (mFastScroller != null) {
                     mFastScroller.setScrollbarPosition(getVerticalScrollbarPosition());
                 }
             }
-            //sesl
+           //sesl*/
         }
     }
 
@@ -5103,8 +5106,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         // dimensions of the RV are not equal to the last measured dimensions of RV, we need to
         // measure and layout children one last time.
         boolean needsRemeasureDueToExactSkip = mLastAutoMeasureSkippedDueToExact
-                        && (mLastAutoMeasureNonExactMeasuredWidth != getWidth()
-                        || mLastAutoMeasureNonExactMeasuredHeight != getHeight());
+                && (mLastAutoMeasureNonExactMeasuredWidth != getWidth()
+                || mLastAutoMeasureNonExactMeasuredHeight != getHeight());
         mLastAutoMeasureNonExactMeasuredWidth = 0;
         mLastAutoMeasureNonExactMeasuredHeight = 0;
         mLastAutoMeasureSkippedDueToExact = false;
@@ -7092,8 +7095,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * Create a new EdgeEffect for the provided direction.
          */
         protected @NonNull
-                EdgeEffect createEdgeEffect(@NonNull RecyclerView view,
-                        @EdgeDirection int direction) {
+        EdgeEffect createEdgeEffect(@NonNull RecyclerView view,
+                @EdgeDirection int direction) {
             return new EdgeEffect(view.getContext());
         }
     }
@@ -7877,7 +7880,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 if (mAccessibilityDelegate == null) {
                     setAccessibilityDelegateCompat(new RecyclerViewAccessibilityDelegate(RecyclerView.this));//sesl
                     Log.d(TAG, "attachAccessibilityDelegate: mAccessibilityDelegate is null, so "
-                    + "re create");//sesl
+                            + "re create");//sesl
                 }
                 AccessibilityDelegateCompat itemDelegate = mAccessibilityDelegate.getItemDelegate();
                 if (itemDelegate instanceof RecyclerViewAccessibilityDelegate.ItemDelegate) {
@@ -14935,9 +14938,9 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @see #animatePersistence(ViewHolder, ItemHolderInfo, ItemHolderInfo)
          */
         public @NonNull
-                ItemHolderInfo recordPreLayoutInformation(@NonNull State state,
-                        @NonNull ViewHolder viewHolder, @AdapterChanges int changeFlags,
-                        @NonNull List<Object> payloads) {
+        ItemHolderInfo recordPreLayoutInformation(@NonNull State state,
+                @NonNull ViewHolder viewHolder, @AdapterChanges int changeFlags,
+                @NonNull List<Object> payloads) {
             return obtainHolderInfo().setFrom(viewHolder);
         }
 
@@ -14964,8 +14967,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * @see #animatePersistence(ViewHolder, ItemHolderInfo, ItemHolderInfo)
          */
         public @NonNull
-                ItemHolderInfo recordPostLayoutInformation(@NonNull State state,
-                        @NonNull ViewHolder viewHolder) {
+        ItemHolderInfo recordPostLayoutInformation(@NonNull State state,
+                @NonNull ViewHolder viewHolder) {
             return obtainHolderInfo().setFrom(viewHolder);
         }
 
@@ -15658,7 +15661,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             mGoToTopState = where;
 
             int padding =
-            getPaddingLeft() + ((getWidth() - getPaddingLeft() - getPaddingRight()) / 2);
+                    getPaddingLeft() + ((getWidth() - getPaddingLeft() - getPaddingRight()) / 2);
             if (where != GTP_STATE_NONE) {
                 if (where == GTP_STATE_SHOWN || where == GTP_STATE_PRESSED) {
                     removeCallbacks(mGoToToFadeOutRunnable);
@@ -15676,7 +15679,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             }
 
             mGoToTopView.layout(mGoToTopRect.left, mGoToTopRect.top, mGoToTopRect.right,
-             mGoToTopRect.bottom);
+                    mGoToTopRect.bottom);
 
             if (where == GTP_STATE_SHOWN
                     && (mGoToTopLastState == GTP_STATE_NONE || mGoToTopView.getAlpha() == 0.0f || mSizeChnage)) {
@@ -15724,10 +15727,10 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             firstPosition = ((LinearLayoutManager) mLayout).findFirstVisibleItemPosition();
         } else if (mLayout instanceof StaggeredGridLayoutManager) {
             firstPosition =
-             ((StaggeredGridLayoutManager) mLayout).findFirstVisibleItemPositions(null)
-                    [mLayout.getLayoutDirection() == ViewCompat.LAYOUT_DIRECTION_RTL
-                    ? ((StaggeredGridLayoutManager) mLayout).getSpanCount() - 1
-                    : 0];
+                    ((StaggeredGridLayoutManager) mLayout).findFirstVisibleItemPositions(null)
+                            [mLayout.getLayoutDirection() == ViewCompat.LAYOUT_DIRECTION_RTL
+                            ? ((StaggeredGridLayoutManager) mLayout).getSpanCount() - 1
+                            : 0];
         }
         if (firstPosition == NO_POSITION) {
             return 0;
@@ -15753,12 +15756,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         mHoverBottomAreaHeight = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 HOVERSCROLL_HEIGHT_BOTTOM_DP, resources.getDisplayMetrics()) + 0.5f);
         mGoToTopBottomPadding =
-         resources.getDimensionPixelSize(androidx.appcompat.R.dimen.sesl_go_to_top_scrollable_view_gap);
+                resources.getDimensionPixelSize(androidx.appcompat.R.dimen.sesl_go_to_top_scrollable_view_gap);
         mGoToTopImmersiveBottomPadding = 0;
         mGoToTopSize =
-         resources.getDimensionPixelSize(androidx.appcompat.R.dimen.sesl_go_to_top_scrollable_view_size);
+                resources.getDimensionPixelSize(androidx.appcompat.R.dimen.sesl_go_to_top_scrollable_view_size);
         mGoToTopElevation =
-        resources.getDimensionPixelSize(androidx.appcompat.R.dimen.sesl_go_to_top_elevation);
+                resources.getDimensionPixelSize(androidx.appcompat.R.dimen.sesl_go_to_top_elevation);
     }
 
     boolean seslDispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed,
@@ -15831,7 +15834,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     void adjustNestedScrollRange() {
         getLocationInWindow(mWindowOffsets);
         mRemainNestedScrollRange =
-         mNestedScrollRange - (mInitialTopOffsetOfScreen - mWindowOffsets[1]);
+                mNestedScrollRange - (mInitialTopOffsetOfScreen - mWindowOffsets[1]);
         if (mInitialTopOffsetOfScreen - mWindowOffsets[1] < 0) {
             mNestedScrollRange = mRemainNestedScrollRange;
             mInitialTopOffsetOfScreen = mWindowOffsets[1];
@@ -16158,8 +16161,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                     mGoToTopView = new ImageView(mContext);
                 }
                 mGoToTopView.setBackground(mContext.getResources().getDrawable(isLightTheme
-                                ? R.drawable.sesl_go_to_top_background_light
-                                 : R.drawable.sesl_go_to_top_background_dark,  mContext.getTheme()));
+                        ? R.drawable.sesl_go_to_top_background_light
+                        : R.drawable.sesl_go_to_top_background_dark,  mContext.getTheme()));
                 mGoToTopView.setElevation(mGoToTopElevation);
                 mGoToTopView.setImageDrawable(mGoToTopImage);
                 mGoToTopView.setAlpha(0.0f);
@@ -16745,7 +16748,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
         if (nearestIndex < 0) {
             Log.e("SeslRecyclerView",
-             "findNearChildViewUnder didn't find valid child view! " + x + ", " + y);
+                    "findNearChildViewUnder didn't find valid child view! " + x + ", " + y);
             return null;
         }
 
@@ -16945,12 +16948,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         final boolean isUsingStylus =  toolType == TOOL_TYPE_STYLUS;
 
         mIsPenHovered =
-         ((action ==  ACTION_HOVER_MOVE || action == ACTION_HOVER_ENTER) && isUsingStylus);
+                ((action ==  ACTION_HOVER_MOVE || action == ACTION_HOVER_ENTER) && isUsingStylus);
         mIsTextViewHoveredState = SeslTextViewReflector.semIsTextViewHovered();
 
         final boolean mIsNeedPenSelectIconSet =
-         (!mIsTextViewHoveredState && mOldTextViewHoverState && mIsPenDragBlockEnabled
-                && (buttonState == BUTTON_STYLUS_PRIMARY || buttonState == BUTTON_SECONDARY));
+                (!mIsTextViewHoveredState && mOldTextViewHoverState && mIsPenDragBlockEnabled
+                        && (buttonState == BUTTON_STYLUS_PRIMARY || buttonState == BUTTON_SECONDARY));
 
         mOldTextViewHoverState = mIsTextViewHoveredState;
 
@@ -16968,12 +16971,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                                 && buttonState != BUTTON_STYLUS_PRIMARY
                                 && buttonState != BUTTON_SECONDARY) {
                             showPointerIcon(event,
-                             SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT());
+                                    SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT());
                             mIsPenSelectPointerSetted = false;
                         }
                     } else {
                         showPointerIcon(event,
-                         SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_PEN_SELECT());
+                                SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_PEN_SELECT());
                         mIsPenSelectPointerSetted = true;
                     }
                     break;
@@ -16981,7 +16984,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             case ACTION_HOVER_EXIT://10
                 if (mIsPenSelectPointerSetted) {
                     showPointerIcon(event,
-                     SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT());
+                            SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT());
                     mIsPenSelectPointerSetted = false;
                 }
                 break;
@@ -16997,15 +17000,15 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
                 if (mNeedsHoverScroll && toolType == TOOL_TYPE_STYLUS) {
                     String SEM_PEN_HOVERING =
-                     SeslSettingsReflector.SeslSystemReflector.getField_SEM_PEN_HOVERING();
+                            SeslSettingsReflector.SeslSystemReflector.getField_SEM_PEN_HOVERING();
                     boolean isPenHoverEnabled = android.provider.Settings.System.getInt(mContext.getContentResolver(),
-                      SEM_PEN_HOVERING, 0) == 1;
+                            SEM_PEN_HOVERING, 0) == 1;
 
                     boolean isCarMode;
                     try {
                         isCarMode =
-                        android.provider.Settings.System.getInt(mContext.getContentResolver(),
-                         "car_mode_on") == 1;
+                                android.provider.Settings.System.getInt(mContext.getContentResolver(),
+                                        "car_mode_on") == 1;
                     } catch (Settings.SettingNotFoundException var14) {
                         Log.i("SeslRecyclerView", "dispatchHoverEvent car_mode_on "
                                 + "SettingNotFoundException");
@@ -17022,7 +17025,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                             && (buttonState == BUTTON_STYLUS_PRIMARY || buttonState == BUTTON_SECONDARY)
                     ) {
                         showPointerIcon(event,
-                         SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_PEN_SELECT());
+                                SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_PEN_SELECT());
                         mIsPenSelectPointerSetted = true;
                     }
                 }
@@ -17171,7 +17174,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                                     }
 
                                     final int pointerIcon =
-                                     SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT();
+                                            SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT();
                                     showPointerIcon(event, pointerIcon);
                                     mHoverRecognitionStartTime = 0L;
                                     mHoverScrollStartTime = 0L;
@@ -17215,7 +17218,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                             }
 
                             final int pointerIcon =
-                              SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT();
+                                    SeslPointerIconReflector.getField_SEM_TYPE_STYLUS_DEFAULT();
                             showPointerIcon(event, pointerIcon);
 
                             mHoverRecognitionStartTime = 0L;
@@ -17751,6 +17754,14 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
     private boolean shouldSkipScroll() {
         return Settings.Global.getInt(getContext().getContentResolver(), "remove_animations", 0) == 1;
+    }
+
+    //Custom
+    @Override
+    public void onRtlPropertiesChanged(int layoutDirection) {
+        if (mFastScroller != null) {
+            mFastScroller.setScrollbarPosition(getVerticalScrollbarPosition());
+        }
     }
     //sesl
 }

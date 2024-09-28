@@ -3268,6 +3268,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
         }
     }
 
+    @SuppressLint("NewApi")
     private void setupGoToTop(int where) {
         final int paddingLeft = getPaddingLeft();
         final int paddingRight = getPaddingRight();
@@ -3348,10 +3349,10 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
             mGoToTopLastState = mGoToTopState;
 
             mOutline.setOval(0, 0, mGoToTopRect.width(), mGoToTopRect.height());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                mGoToTopRenderNode.setPosition(mGoToTopRect);
-                mGoToTopRenderNode.setClipToBounds(false);
-            }
+
+            mGoToTopRenderNode.setPosition(mGoToTopRect);
+            mGoToTopRenderNode.setClipToBounds(false);
+
         }
     }
 

@@ -32,7 +32,7 @@ import androidx.annotation.RestrictTo;
 public class SeslCursorIndexer extends SeslAbsIndexer {
     private final String TAG = "SeslCursorIndexer";
 
-    private final boolean DEBUG = false;
+    private final static boolean DEBUG = false;
 
     public static final String EXTRA_INDEX_COUNTS = "indexscroll_index_counts";
     public static final String EXTRA_INDEX_TITLES = "indexscroll_index_titles";

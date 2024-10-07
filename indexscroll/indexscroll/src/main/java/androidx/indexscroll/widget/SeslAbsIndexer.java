@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseIntArray;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 import androidx.indexscroll.widget.SeslIndexScrollView.IndexScroll;
 
@@ -37,9 +38,9 @@ import java.util.HashMap;
 
 @RestrictTo(LIBRARY)
 public abstract class SeslAbsIndexer extends DataSetObserver {
-    private final String TAG = "SeslAbsIndexer";
+    private final static String TAG = "SeslAbsIndexer";
 
-    private final boolean DEBUG = false;
+    private final static boolean DEBUG = false;
 
     private static final char DIGIT_CHAR = '#';
     private static final char FAVORITE_CHAR = '★';
@@ -192,8 +193,8 @@ public abstract class SeslAbsIndexer extends DataSetObserver {
         }
     }
 
-    private void initIndexer(CharSequence alphabet) {
-        if (alphabet == null || alphabet.length() == 0) {
+    private void initIndexer(@NonNull CharSequence alphabet) {
+        if (alphabet.length() == 0) {
             throw new IllegalArgumentException("Invalid indexString :"
                     + ((Object) alphabet));
         }

@@ -20,6 +20,8 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 
 import java.util.List;
@@ -31,10 +33,11 @@ import java.util.List;
 public class SeslArrayIndexer extends SeslAbsIndexer {
     private final String TAG = "SeslArrayIndexer";
     private final boolean DEBUG = false;
+    @NonNull
     @RestrictTo(LIBRARY_GROUP_PREFIX)
     protected List<String> mData;
 
-    public SeslArrayIndexer(List<String> listData, CharSequence indexCharacters) {
+    public SeslArrayIndexer(@NonNull List<String> listData, @NonNull CharSequence indexCharacters) {
         super(indexCharacters);
         mData = listData;
     }
@@ -45,12 +48,14 @@ public class SeslArrayIndexer extends SeslAbsIndexer {
         return mData.size();
     }
 
+    @NonNull
     @Override
     @RestrictTo(LIBRARY_GROUP_PREFIX)
     protected String getItemAt(int pos) {
         return mData.get(pos);
     }
 
+    @Nullable
     @Override
     @RestrictTo(LIBRARY_GROUP_PREFIX)
     protected Bundle getBundle() {

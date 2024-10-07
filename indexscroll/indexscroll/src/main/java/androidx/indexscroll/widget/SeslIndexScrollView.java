@@ -61,6 +61,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.reflect.view.SeslHapticFeedbackConstantsReflector;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
@@ -131,14 +133,14 @@ public class SeslIndexScrollView extends FrameLayout {
         void onReleased(float v);
     }
 
-    public SeslIndexScrollView(Context context) {
+    public SeslIndexScrollView(@NonNull Context context) {
         super(context);
         mContext = context;
         mCurrentIndex = null;
         init();
     }
 
-    public SeslIndexScrollView(Context context, AttributeSet attrs) {
+    public SeslIndexScrollView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
         mIndexBarGravity = GRAVITY_INDEX_BAR_RIGHT;
@@ -220,27 +222,17 @@ public class SeslIndexScrollView extends FrameLayout {
         }
     }
 
-    public void setIndexer(SeslArrayIndexer indexer) {
-        if (indexer != null) {
-            setAbsIndexer(indexer);
-        } else {
-            throw new IllegalArgumentException("SeslIndexView.setIndexer(indexer) " +
-                    ": indexer=null.");
-        }
+    public void setIndexer(@NonNull SeslArrayIndexer indexer) {
+        setAbsIndexer(indexer);
     }
 
-    public void setIndexer(SeslCursorIndexer indexer) {
-        if (indexer != null) {
-            if (indexer.isInitialized()) {
-                setAbsIndexer(indexer);
-            } else {
-                throw new IllegalArgumentException("The indexer was not initialized " +
-                        "before setIndexer api call. It is necessary to check if the items " +
-                        "being applied to the indexer is normal.");
-            }
+    public void setIndexer(@NonNull SeslCursorIndexer indexer) {
+        if (indexer.isInitialized()) {
+            setAbsIndexer(indexer);
         } else {
-            throw new IllegalArgumentException("SeslIndexView.setIndexer(indexer) " +
-                    ": indexer=null.");
+            throw new IllegalArgumentException("The indexer was not initialized " +
+                    "before setIndexer api call. It is necessary to check if the items " +
+                    "being applied to the indexer is normal.");
         }
     }
 
@@ -293,9 +285,8 @@ public class SeslIndexScrollView extends FrameLayout {
         }
     }
 
-    public void attachToRecyclerView(@Nullable RecyclerView recyclerView) {
-        if (mIndexScroll.mRecyclerView != recyclerView
-                && recyclerView != null) {
+    public void attachToRecyclerView(@NotNull RecyclerView recyclerView) {
+        if (mIndexScroll.mRecyclerView != recyclerView) {
             if (mIndexScroll.mRecyclerView != null) {
                 mIndexScroll.mRecyclerView
                         .removeOnScrollListener(mIndexScroll.mScrollListener);

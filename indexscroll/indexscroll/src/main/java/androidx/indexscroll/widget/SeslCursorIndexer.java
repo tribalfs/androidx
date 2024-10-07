@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
 /*
@@ -31,7 +32,7 @@ import androidx.annotation.RestrictTo;
 public class SeslCursorIndexer extends SeslAbsIndexer {
     private final String TAG = "SeslCursorIndexer";
 
-    private final boolean DEBUG = false;
+    private final static boolean DEBUG = false;
 
     public static final String EXTRA_INDEX_COUNTS = "indexscroll_index_counts";
     public static final String EXTRA_INDEX_TITLES = "indexscroll_index_titles";
@@ -40,14 +41,14 @@ public class SeslCursorIndexer extends SeslAbsIndexer {
     protected int mColumnIndex;
     protected int mSavedCursorPos;
 
-    public SeslCursorIndexer(Cursor cursor, int sortedColumnIndex,
-                             CharSequence indexCharacters) {
+    public SeslCursorIndexer(@NonNull Cursor cursor, int sortedColumnIndex,
+            @NonNull CharSequence indexCharacters) {
         super(indexCharacters);
         mCursor = cursor;
         mColumnIndex = sortedColumnIndex;
     }
 
-    public SeslCursorIndexer(Cursor cursor, int sortedColumnIndex,
+    public SeslCursorIndexer(@NonNull Cursor cursor, int sortedColumnIndex,
                              String[] indexCharacters, int aLangIndex) {
         super(indexCharacters, aLangIndex);
         mCursor = cursor;

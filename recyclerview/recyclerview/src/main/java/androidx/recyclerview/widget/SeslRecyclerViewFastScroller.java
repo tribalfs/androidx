@@ -24,6 +24,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -52,6 +53,8 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+import android.window.OnBackInvokedCallback;
+import android.window.OnBackInvokedDispatcher;
 
 import androidx.annotation.RestrictTo;
 import androidx.appcompat.animation.SeslAnimationUtils;
@@ -70,7 +73,7 @@ import androidx.reflect.view.SeslHapticFeedbackConstantsReflector;
  */
 @RestrictTo(LIBRARY_GROUP_PREFIX)
 class SeslRecyclerViewFastScroller {
-    // Sesl
+    //Sesl
     private static final String TAG = "SeslFastScroller";
 
     private static final int FASTSCROLL_VIBRATE_INDEX = 26;
@@ -104,7 +107,11 @@ class SeslRecyclerViewFastScroller {
     private final int mVibrateIndex;
 
     private final boolean mIsDexMode;
-    // Sesl
+    //sesl
+    //Custom
+    private OnBackInvokedDispatcher onBackInvokedDispatcher = null;
+    private OnBackInvokedCallback dummyOnBackInvokedCallback;
+    //custom
 
     /** Duration of fade-out animation. */
     private static final int DURATION_FADE_OUT = 150;
@@ -360,6 +367,13 @@ class SeslRecyclerViewFastScroller {
         postAutoHide();
 
         mVibrateIndex = SeslHapticFeedbackConstantsReflector.semGetVibrationIndex(FASTSCROLL_VIBRATE_INDEX);
+
+        //Custom
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            onBackInvokedDispatcher = listView.findOnBackInvokedDispatcher();
+            dummyOnBackInvokedCallback = () -> {};
+        }
+        //custom
     }
 
     private void updateAppearance() {
@@ -1489,6 +1503,7 @@ class SeslRecyclerViewFastScroller {
         setState(STATE_DRAGGING);
     }
 
+    @SuppressLint("NewApi")
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if (!isEnabled()) {
             return false;
@@ -1497,6 +1512,13 @@ class SeslRecyclerViewFastScroller {
         switch (ev.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 if (isPointInside(ev.getX(), ev.getY())) {
+                    //Custom
+                    if (onBackInvokedDispatcher != null){
+                        onBackInvokedDispatcher.registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_OVERLAY,
+                                dummyOnBackInvokedCallback);
+                    }
+                    //custom
+
                     // If the parent has requested that its children delay
                     // pressed state (e.g. is a scrolling container) then we
                     // need to allow the parent time to decide whether it wants
@@ -1530,6 +1552,11 @@ class SeslRecyclerViewFastScroller {
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                //Custom
+                if (onBackInvokedDispatcher != null){
+                    onBackInvokedDispatcher.unregisterOnBackInvokedCallback(dummyOnBackInvokedCallback);
+                }
+                //custom
                 cancelPendingDrag();
                 break;
         }

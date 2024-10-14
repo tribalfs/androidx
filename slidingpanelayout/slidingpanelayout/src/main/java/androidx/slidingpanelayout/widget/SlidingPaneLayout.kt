@@ -3441,5 +3441,8 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         mDrawerMarginBottom = margin
         mSlidingPaneRoundedCorner?.setMarginBottom(margin)
     }
+
+    //Custom
+    fun seslIsAnimating(): Boolean = isAnimating
     //sesl
 }

@@ -581,8 +581,8 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
         if (scale == 0) {
             mFourDot.setScale(0);
         } else {
-            mFourDot.setScale(Math.min(scale * 11.0f * mScreenDensity,
-                    mScreenDensity * 11.0f));
+            final float minScale =  mScreenDensity * 11.0f;
+            mFourDot.setScale(Math.min(scale * minScale, minScale));
         }
         invalidateSelf();
     }

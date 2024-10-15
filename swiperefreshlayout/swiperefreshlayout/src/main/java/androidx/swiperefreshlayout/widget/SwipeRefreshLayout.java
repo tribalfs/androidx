@@ -496,7 +496,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         if (refreshing && mRefreshing != refreshing) {
             // scale and show
             mRefreshing = true;
-            int endTarget = 0;
+            int endTarget;
             if (!mUsingCustomStart) {
                 endTarget = mSpinnerOffsetEnd + mOriginalOffsetTop;
             } else {
@@ -1181,11 +1181,10 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         }
 
         if (mScale) {
+            final int alpha = (int) (Math.min(1, overscrollTop / (mTotalDragDistance / 4)) * MAX_ALPHA);
             setAnimationProgress(Math.min(1, (overscrollTop * 0.8f) / (mTotalDragDistance / 4) + 0.2f));
-            mProgress.setAlpha((int) (Math.min(1, overscrollTop / (mTotalDragDistance / 4))
-                    * MAX_ALPHA));
-            mCircleView.getBackground().setAlpha((int) (Math.min(1, overscrollTop / (mTotalDragDistance / 4.0f))
-                    * MAX_ALPHA));
+            mProgress.setAlpha(alpha);
+            mCircleView.getBackground().setAlpha(alpha);
         }
         if (overscrollTop < mTotalDragDistance) {
             mIsHaptic = false;
@@ -1200,9 +1199,9 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
             }
         }
 
-        if (overscrollTop - (mTotalDragDistance / 4) > 0) {
-            mProgress.setScale((overscrollTop - (mTotalDragDistance / 4))
-                    / ((mTotalDragDistance * 3) / 4));
+        final float scale = overscrollTop - (mTotalDragDistance / 4);
+        if (scale > 0) {
+            mProgress.setScale(scale / ((mTotalDragDistance * 3) / 4));
         } else {
             mProgress.setScale(0);
         }

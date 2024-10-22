@@ -41,10 +41,6 @@ android {
     }
 }
 
-kotlin {
-    jvmToolchain(17)
-}
-
 ext {
     POM_NAME = "SESL Sliding Pane Layout"
     POM_DESCRIPTION = "SESL variant of android jetpack androidx.slidingpanepayout:slidingpanepayout module. " +

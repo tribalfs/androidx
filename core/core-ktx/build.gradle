@@ -8,10 +8,6 @@ android {
     namespace = "androidx.core.ktx"
 }
 
-kotlin {
-    jvmToolchain(17)
-}
-
 dependencies {
     // Atomically versioned.
     constraints {

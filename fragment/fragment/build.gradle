@@ -28,11 +28,6 @@ android {
     }
 }
 
-kotlin {
-    jvmToolchain(17)
-}
-
-
 dependencies {
     api("androidx.annotation:annotation:1.8.1")
     api project(":core:core")

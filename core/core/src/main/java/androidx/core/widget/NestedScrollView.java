@@ -1771,7 +1771,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
             handled = false;
         } else {
             int delta = up ? (top - containerTop) : (bottom - containerBottom);
-            doScrollY(delta);//sesl
+            scrollBy(delta, 0, ViewCompat.TYPE_NON_TOUCH, true);
         }
 
         if (newFocused != findFocus()) newFocused.requestFocus(direction);
@@ -1799,7 +1799,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
             offsetDescendantRectToMyCoords(nextFocused, mTempRect);
             int scrollDelta = computeScrollDeltaToGetChildRectOnScreen(mTempRect);
 
-            doScrollY(scrollDelta);//sesl
+            scrollBy(scrollDelta, 0, ViewCompat.TYPE_NON_TOUCH, true);
             nextFocused.requestFocus(direction);
 
         } else {

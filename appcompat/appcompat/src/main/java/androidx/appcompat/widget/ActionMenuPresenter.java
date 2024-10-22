@@ -356,7 +356,7 @@ class ActionMenuPresenter extends BaseMenuPresenter
             View menuItemView =  actionMenuView.getChildAt(i);
             if (!(menuItemView instanceof ActionMenuItemView)) continue;
             if (item.getItemId() == ((ActionMenuItemView)menuItemView).getItemData().getItemId()){
-                if (item.getBadgeText() == null) continue;
+                if (item.getBadgeText() == null) return;
                 actionMenuView.removeView(menuItemView);
                 ActionMenuItemViewBadgedWrapper
                         amvBadgedWrapper = new ActionMenuItemViewBadgedWrapper(actionMenuView.getContext(), (ActionMenuItemView)menuItemView);

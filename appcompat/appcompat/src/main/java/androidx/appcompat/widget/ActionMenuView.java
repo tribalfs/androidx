@@ -111,27 +111,28 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
         mPopupTheme = 0;
 
         //Sesl
-        mIsOneUI41 = SeslBuildReflector.SeslVersionReflector.getField_SEM_PLATFORM_INT() >= 130100;
-
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.View, R.attr.actionButtonStyle, 0);
-        mActionButtonPaddingStart = a.getDimensionPixelSize(R.styleable.View_paddingStart, 0);
-        mActionButtonPaddingEnd = a.getDimensionPixelSize(R.styleable.View_paddingEnd, 0);
-        a.recycle();
-
-        TypedArray a2 = context.obtainStyledAttributes(attrs, R.styleable.View, R.attr.actionOverflowButtonStyle, 0);
-        mOverflowButtonPaddingStart = a2.getDimensionPixelSize(R.styleable.View_paddingStart, 0);
-        mOverflowButtonPaddingEnd = a2.getDimensionPixelSize(R.styleable.View_paddingEnd, 0);
-        mOverflowButtonMinWidth = a2.getDimensionPixelSize(R.styleable.View_android_minWidth, 0);
-        a2.recycle();
-
         mOverflowBadgeText = resources.getString(R.string.sesl_action_menu_overflow_badge_text_n);
+
+        TypedArray overflowButtonsAttrs = context.obtainStyledAttributes(attrs, R.styleable.View, R.attr.actionOverflowButtonStyle, 0);
+        mOverflowButtonMinWidth = overflowButtonsAttrs.getDimensionPixelSize(R.styleable.View_android_minWidth, 0);
+
+        mIsOneUI41 = SeslBuildReflector.SeslVersionReflector.getField_SEM_PLATFORM_INT() >= 130100;
 
         if (mIsOneUI41) {
             mActionButtonPaddingStart = resources.getDimensionPixelSize(R.dimen.sesl_action_button_side_padding);
             mActionButtonPaddingEnd = resources.getDimensionPixelSize(R.dimen.sesl_action_button_side_padding);
             mOverflowButtonPaddingStart = resources.getDimensionPixelSize(R.dimen.sesl_action_bar_overflow_side_padding);
             mOverflowButtonPaddingEnd = resources.getDimensionPixelSize(R.dimen.sesl_action_bar_overflow_padding_end);
+        }else{
+            TypedArray actionButtonAttrs = context.obtainStyledAttributes(attrs, R.styleable.View, R.attr.actionButtonStyle, 0);
+            mActionButtonPaddingStart = actionButtonAttrs.getDimensionPixelSize(R.styleable.View_paddingStart, 0);
+            mActionButtonPaddingEnd = actionButtonAttrs.getDimensionPixelSize(R.styleable.View_paddingEnd, 0);
+            actionButtonAttrs.recycle();
+
+            mOverflowButtonPaddingStart = overflowButtonsAttrs.getDimensionPixelSize(R.styleable.View_paddingStart, 0);
+            mOverflowButtonPaddingEnd = overflowButtonsAttrs.getDimensionPixelSize(R.styleable.View_paddingEnd, 0);
         }
+        overflowButtonsAttrs.recycle();
         mLastItemEndPadding = resources.getDimensionPixelSize(R.dimen.sesl_action_bar_last_padding);
         //sesl
     }
@@ -188,25 +189,26 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
 
         //Sesl
         Context context = getContext();
-        TypedArray a = context.obtainStyledAttributes(null, R.styleable.View, R.attr.actionButtonStyle, 0);
-        mActionButtonPaddingStart = a.getDimensionPixelSize(R.styleable.View_paddingStart, 0);
-        mActionButtonPaddingEnd = a.getDimensionPixelSize(R.styleable.View_paddingEnd, 0);
-        a.recycle();
-
-        TypedArray a2 = context.obtainStyledAttributes(null, R.styleable.View, R.attr.actionOverflowButtonStyle, 0);
-        mOverflowButtonPaddingStart = a2.getDimensionPixelSize(R.styleable.View_paddingStart, 0);
-        mOverflowButtonPaddingEnd = a2.getDimensionPixelSize(R.styleable.View_paddingEnd, 0);
-        mOverflowButtonMinWidth = a2.getDimensionPixelSize(R.styleable.View_android_minWidth, 0);
-        a2.recycle();
-
         Resources resources = getResources();
+
+        TypedArray actionButtonAttrs = context.obtainStyledAttributes(null, R.styleable.View, R.attr.actionOverflowButtonStyle, 0);
+        mOverflowButtonMinWidth = actionButtonAttrs.getDimensionPixelSize(R.styleable.View_android_minWidth, 0);
 
         if (mIsOneUI41) {
             mActionButtonPaddingStart = resources.getDimensionPixelSize(R.dimen.sesl_action_button_side_padding);
             mActionButtonPaddingEnd = resources.getDimensionPixelSize(R.dimen.sesl_action_button_side_padding);
             mOverflowButtonPaddingStart = resources.getDimensionPixelSize(R.dimen.sesl_action_bar_overflow_side_padding);
             mOverflowButtonPaddingEnd = resources.getDimensionPixelSize(R.dimen.sesl_action_bar_overflow_padding_end);
+        }else{
+            TypedArray overflowButtonsAttrs = context.obtainStyledAttributes(null, R.styleable.View, R.attr.actionButtonStyle, 0);
+            mActionButtonPaddingStart = overflowButtonsAttrs.getDimensionPixelSize(R.styleable.View_paddingStart, 0);
+            mActionButtonPaddingEnd = overflowButtonsAttrs.getDimensionPixelSize(R.styleable.View_paddingEnd, 0);
+            overflowButtonsAttrs.recycle();
+
+            mOverflowButtonPaddingStart = actionButtonAttrs.getDimensionPixelSize(R.styleable.View_paddingStart, 0);
+            mOverflowButtonPaddingEnd = actionButtonAttrs.getDimensionPixelSize(R.styleable.View_paddingEnd, 0);
         }
+        actionButtonAttrs.recycle();
         mLastItemEndPadding = resources.getDimensionPixelSize(R.dimen.sesl_action_bar_last_padding);
         //sesl
     }

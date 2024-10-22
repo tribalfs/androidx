@@ -1025,5 +1025,11 @@ public class ActionMenuView extends LinearLayoutCompat implements MenuBuilder.It
     String getOverflowBadgeText() {
         return mOverflowBadgeText;
     }
+
+    //Custom
+    @RestrictTo(LIBRARY_GROUP_PREFIX)
+    int getEndBadgeAdditionalMargin() {
+        return mOverflowButtonPaddingEnd - mActionButtonPaddingEnd;
+    }
     //sesl
 }

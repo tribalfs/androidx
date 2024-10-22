@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 The Android Open Source Project
+ * Copyright (C) 2015 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,12 +94,9 @@ import androidx.reflect.widget.SeslOverScrollerReflector;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-/*
- * Original code by Samsung, all rights reserved to the original author.
- */
-
-
 /**
+ * <b>SESL Variant</b><br/><br/>
+ *
  * NestedScrollView is just like {@link ScrollView}, but it supports acting
  * as both a nested scrolling parent and child on both new and old versions of Android.
  * Nested scrolling is enabled by default.
@@ -350,7 +347,7 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
     public NestedScrollView(@NonNull Context context, @Nullable AttributeSet attrs,
             int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mContext = context;
+        mContext = context;//sesl
         mEdgeGlowTop = EdgeEffectCompat.create(context, attrs);
         mEdgeGlowBottom = EdgeEffectCompat.create(context, attrs);
 
@@ -387,12 +384,14 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
                 offsetInWindow, type, consumed);
     }
 
+    //Sesl
     /** @noinspection SameParameterValue*/
     private boolean seslDispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed,
             int dyUnconsumed, @Nullable int[] offsetInWindow, int type, @NonNull int[] consumed) {
         return mChildHelper.seslDispatchNestedScroll(dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed,
                 offsetInWindow, type, consumed);
     }
+    //sesl
 
     // NestedScrollingChild2
 
@@ -1099,67 +1098,6 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
                     // Updates the global positions (used by later move events to properly scroll).
                     mLastMotionY = y - scrollOffset;
                     mNestedYOffset += scrollOffset;
-//                    // Start with nested pre scrolling
-//                    if (dispatchNestedPreScroll(0, deltaY, mScrollConsumed, mScrollOffset,
-//                            ViewCompat.TYPE_TOUCH)) {
-//                        deltaY -= mScrollConsumed[1];
-//                        mNestedYOffset += mScrollOffset[1];
-//                    }
-//
-//                    // Scroll to follow the motion event
-//                    mLastMotionY = y - mScrollOffset[1];
-//
-//                    final int oldY = getScrollY();
-//                    final int range = getScrollRange();
-//                    final int overscrollMode = getOverScrollMode();
-//                    boolean canOverscroll = overscrollMode == View.OVER_SCROLL_ALWAYS
-//                            || (overscrollMode == View.OVER_SCROLL_IF_CONTENT_SCROLLS && range > 0);
-//
-//                    // Calling overScrollByCompat will call onOverScrolled, which
-//                    // calls onScrollChanged if applicable.
-//                    boolean clearVelocityTracker =
-//                            overScrollByCompat(0, deltaY, 0, getScrollY(), 0, range, 0,
-//                                    0, true) && !hasNestedScrollingParent(ViewCompat.TYPE_TOUCH);
-//
-//                    final int scrolledDeltaY = getScrollY() - oldY;
-//                    final int unconsumedY = deltaY - scrolledDeltaY;
-//
-//                    mScrollConsumed[1] = 0;
-//
-//                    dispatchNestedScroll(0, scrolledDeltaY, 0, unconsumedY, mScrollOffset,
-//                            ViewCompat.TYPE_TOUCH, mScrollConsumed);
-//
-//                    mLastMotionY -= mScrollOffset[1];
-//                    mNestedYOffset += mScrollOffset[1];
-//
-//                    if (canOverscroll) {
-//                        deltaY -= mScrollConsumed[1];
-//                        final int pulledToY = oldY + deltaY;
-//                        if (pulledToY < 0) {
-//                            EdgeEffectCompat.onPullDistance(mEdgeGlowTop,
-//                                    (float) -deltaY / getHeight(),
-//                                    motionEvent.getX(activePointerIndex) / getWidth());
-//                            if (!mEdgeGlowBottom.isFinished()) {
-//                                mEdgeGlowBottom.onRelease();
-//                            }
-//                        } else if (pulledToY > range) {
-//                            EdgeEffectCompat.onPullDistance(mEdgeGlowBottom,
-//                                    (float) deltaY / getHeight(),
-//                                    1.f - motionEvent.getX(activePointerIndex) / getWidth());
-//                            showGoToTop();
-//                            if (!mEdgeGlowTop.isFinished()) {
-//                                mEdgeGlowTop.onRelease();
-//                            }
-//                        }
-//                        if (!mEdgeGlowTop.isFinished() || !mEdgeGlowBottom.isFinished()) {
-//                            ViewCompat.postInvalidateOnAnimation(this);
-//                            clearVelocityTracker = false;
-//                        }
-//                    }
-//                    if (clearVelocityTracker) {
-//                        // Break our velocity if we hit a scroll barrier.
-//                        mVelocityTracker.clear();
-//                    }
                 }
                 break;
             }
@@ -1545,51 +1483,6 @@ public class NestedScrollView extends FrameLayout implements NestedScrollingPare
 
                 return true;
             }
-
-//            if (verticalScroll != 0) {
-//                final int delta = (int) (verticalScroll * getVerticalScrollFactorCompat());
-//                final int range = getScrollRange();
-//                int oldScrollY = getScrollY();
-//                int newScrollY = oldScrollY - delta;
-//                boolean absorbed = false;
-//                if (newScrollY < 0) {
-//                    // We don't want an EdgeEffect for mouse wheel operations
-//                    final boolean canOverScroll = canOverScroll()
-//                            && !MotionEventCompat.isFromSource(motionEvent, InputDevice.SOURCE_MOUSE);
-//                    if (canOverScroll) {
-//                        EdgeEffectCompat.onPullDistance(mEdgeGlowTop,
-//                                -((float) newScrollY) / getHeight(),
-//                                0.5f);
-//                        mEdgeGlowTop.onRelease();
-//                        invalidate();
-//                        absorbed = true;
-//                    }
-//                    newScrollY = 0;
-//                } else if (newScrollY > range) {
-//                    // We don't want an EdgeEffect for mouse wheel operations
-//                    final boolean canOverScroll = canOverScroll()
-//                            && !MotionEventCompat.isFromSource(motionEvent, InputDevice.SOURCE_MOUSE);
-//                    if (canOverScroll) {
-//                        EdgeEffectCompat.onPullDistance(mEdgeGlowBottom,
-//                                ((float) (newScrollY - range)) / getHeight(),
-//                                0.5f);
-//                        mEdgeGlowBottom.onRelease();
-//                        invalidate();
-//                        absorbed = true;
-//                    }
-//                    newScrollY = range;
-//                }
-//                if (newScrollY != oldScrollY) {
-//                    super.scrollTo(getScrollX(), newScrollY);
-//                    startNestedScroll(newScrollY, ViewCompat.TYPE_NON_TOUCH);
-//                    showGoToTop();
-//                    if (!dispatchNestedPreScroll(0, newScrollY, null, null, ViewCompat.TYPE_NON_TOUCH)) {
-//                        super.scrollTo(getScrollX(), newScrollY);
-//                    }
-//                    return true;
-//                }
-//                return absorbed;
-//            }
         }
         return false;
     }

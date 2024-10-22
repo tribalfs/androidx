@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 The Android Open Source Project
+ * Copyright (C) 2011 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package androidx.core.widget;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -31,11 +30,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.reflect.view.SeslViewRuneReflector;
 
-/*
- * Original code by Samsung, all rights reserved to the original author.
- */
-
 /**
+ * <b>SESL Variant</b><br/><br/>
+ *
  * Helper for accessing {@link EdgeEffect}.
  *
  * This class is used to access {@link EdgeEffect} on platform versions

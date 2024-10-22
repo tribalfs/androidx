@@ -361,6 +361,10 @@ class ActionMenuPresenter extends BaseMenuPresenter
                 ActionMenuItemViewBadgedWrapper
                         amvBadgedWrapper = new ActionMenuItemViewBadgedWrapper(actionMenuView.getContext(), (ActionMenuItemView)menuItemView);
                 actionMenuView.addView(amvBadgedWrapper, i);
+                if (i == count -1 && ((MenuBuilder) actionMenuView.getMenu()).getNonActionItems().isEmpty()){
+                    //For cases where setBadgeText() was set before the ActionMenuView is laid out.
+                    amvBadgedWrapper.adjustBadgeEndMargin(actionMenuView.getEndBadgeAdditionalMargin());
+                }
                 return;
             }
         }

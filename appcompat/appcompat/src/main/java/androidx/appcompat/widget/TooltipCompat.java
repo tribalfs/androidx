@@ -46,13 +46,26 @@ public class TooltipCompat  {
      * @param tooltipText the tooltip text
      */
     public static void setTooltipText(@NonNull View view, @Nullable CharSequence tooltipText) {
-        //Use TooltipCompatHandler for consistency with non-OneUI
-        TooltipCompatHandler.setTooltipText(view, tooltipText);
+        if (Build.VERSION.SDK_INT >= 26) {
+            Api26Impl.setTooltipText(view, tooltipText);
+        } else {
+            TooltipCompatHandler.setTooltipText(view, tooltipText);
+        }
     }
 
     private TooltipCompat() {
     }
 
+    @RequiresApi(26)
+    static class Api26Impl {
+        private Api26Impl() {
+            // This class is not instantiable.
+        }
+
+        static void setTooltipText(View view, CharSequence tooltipText) {
+            TooltipCompatHandler.setTooltipText(view, tooltipText);//sesl
+        }
+    }
 
     //Sesl
     /**

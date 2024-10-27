@@ -63,7 +63,7 @@ public class TooltipCompat  {
         }
 
         static void setTooltipText(View view, CharSequence tooltipText) {
-            TooltipCompatHandler.setTooltipText(view, tooltipText);//sesl
+            view.setTooltipText(tooltipText);
         }
     }
 

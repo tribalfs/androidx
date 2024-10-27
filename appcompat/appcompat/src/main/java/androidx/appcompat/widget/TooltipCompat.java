@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.RestrictTo;
+import androidx.reflect.DeviceInfo;
 
 /**
  * <p><b>SESL variant</b></p><br>
@@ -46,7 +47,7 @@ public class TooltipCompat  {
      * @param tooltipText the tooltip text
      */
     public static void setTooltipText(@NonNull View view, @Nullable CharSequence tooltipText) {
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= 26 && DeviceInfo.isOneUI()) {
             Api26Impl.setTooltipText(view, tooltipText);
         } else {
             TooltipCompatHandler.setTooltipText(view, tooltipText);

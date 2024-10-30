@@ -722,17 +722,17 @@ open class SlidingPaneLayout @JvmOverloads constructor(
             mDrawerMarginBottom = getDimensionPixelSize(R.styleable.SlidingPaneLayout_seslDrawerMarginBottom, 0)
 
             val prefDrawerWidthSize = R.styleable.SlidingPaneLayout_seslPrefDrawerWidthSize
-            mPrefDrawerWidth = if (hasValue(prefDrawerWidthSize)) {
-                TypedValue().also { getValue(prefDrawerWidthSize, it) }
-            }else{
-                TypedValue().also { resources.getValue(R.dimen.sesl_sliding_pane_drawer_width, it, true) }
+            if (hasValue(prefDrawerWidthSize)) {
+                val drawerWidthVal = TypedValue()
+                getValue(prefDrawerWidthSize, drawerWidthVal)
+                mPrefDrawerWidth = drawerWidthVal
             }
 
             val prefContentWidthSize = R.styleable.SlidingPaneLayout_seslPrefContentWidthSize
-            mPrefContentWidth = if (hasValue(prefContentWidthSize)) {
-                TypedValue().also { getValue(prefContentWidthSize, it) }
-            }else{
-                TypedValue().also { resources.getValue(R.dimen.sesl_sliding_pane_contents_width, it, true) }
+            if (hasValue(prefContentWidthSize)) {
+                val contentWidthVal = TypedValue()
+                getValue(prefContentWidthSize, contentWidthVal)
+                mPrefContentWidth = contentWidthVal
             }
             //sesl
         }
@@ -1535,7 +1535,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
      * has already completed this will animate.
      */
     override fun open() {
-        mLastValidVelocity = 0;//sesl
+        mLastValidVelocity = 0//sesl
         openPane()
     }
 
@@ -2126,9 +2126,9 @@ open class SlidingPaneLayout @JvmOverloads constructor(
                 child.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS)
             }
 
-            if (filter(child)) return false;
+            if (filter(child)) return false
             //sesl
-            return super.onRequestSendAccessibilityEvent(host, child, event);
+            return super.onRequestSendAccessibilityEvent(host, child, event)
         }
 
         //sesl
@@ -3014,10 +3014,10 @@ open class SlidingPaneLayout @JvmOverloads constructor(
             Log.e(TAG, "mDrawerPanel is null")
             return
         }
-        val prefDrawerWidth = mPrefDrawerWidth!!
-        val drawerWidth = when (prefDrawerWidth.type) {
-            TypedValue.TYPE_FLOAT -> (windowWidth * prefDrawerWidth.float).toInt()
-            TypedValue.TYPE_DIMENSION -> prefDrawerWidth.getDimension(resources.displayMetrics).toInt()
+        val typedValue = TypedValue().also {resources.getValue(R.dimen.sesl_sliding_pane_drawer_width, it, true) }
+        val drawerWidth = when (typedValue.type) {
+            TypedValue.TYPE_FLOAT -> (windowWidth * typedValue.float).toInt()
+            TypedValue.TYPE_DIMENSION -> typedValue.getDimension(resources.displayMetrics).toInt()
             else -> MATCH_PARENT
         }
         val layoutParams = mDrawerPanel!!.layoutParams
@@ -3046,7 +3046,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
             } else if (mDoubleCheckState == 0) {
                 closePane(0, true)
             }
-            mDoubleCheckState = -1;
+            mDoubleCheckState = -1
         }
     }
 
@@ -3095,6 +3095,11 @@ open class SlidingPaneLayout @JvmOverloads constructor(
                     (if (mUserPreferredContentSize != -1) {
                         mUserPreferredContentSize
                     } else {
+                        if (mPrefContentWidth == null) {
+                            mPrefContentWidth = TypedValue().also {
+                                resources.getValue(R.dimen.sesl_sliding_pane_contents_width, it, true)
+                            }
+                        }
                         when (mPrefContentWidth!!.type) {
                             TypedValue.TYPE_FLOAT -> maxWidth * mPrefContentWidth!!.float
                             TypedValue.TYPE_DIMENSION -> mPrefContentWidth!!.getDimension(resources.displayMetrics)
@@ -3178,12 +3183,15 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         }
     }
 
-
     private fun getFixedPaneWidth(fixedPanelWidthLimit: Int): Int{
         val prefDrawerWidthSize: Int =
             (if (mUserPreferredDrawerSize != -1) {
                 mUserPreferredDrawerSize
             } else {
+                if (mPrefDrawerWidth == null) {
+                    mPrefDrawerWidth = TypedValue()
+                    resources.getValue(R.dimen.sesl_sliding_pane_drawer_width, mPrefDrawerWidth, true)
+                }
                 when (mPrefDrawerWidth!!.type) {
                     TypedValue.TYPE_FLOAT -> (windowWidth * mPrefDrawerWidth!!.float).toInt()
                     TypedValue.TYPE_DIMENSION -> mPrefDrawerWidth!!.getDimension(resources.displayMetrics).toInt()
@@ -3197,7 +3205,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
     internal val windowWidth: Int get() = resources.displayMetrics.widthPixels
 
     internal fun settleSlidingPane(): Boolean {
-        mSmoothWidth = slideableView!!.width;
+        mSmoothWidth = slideableView!!.width
         mDoubleCheckState = -1
         if (isAnimating) return false
         if (currentSlideOffset != 0.0f && currentSlideOffset != 1.0f) {

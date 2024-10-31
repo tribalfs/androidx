@@ -17,8 +17,8 @@ ext {
     // Module versions map
     versions_metadata = [
             //[{base androidx version or sesl if purely sesl} , {sesl version}, {internal version}, {minsdk}, {targetSdk/compile}]
-            "androidx.core"              : ["1.15.0-rc01", "1.0.11-sesl6", "rev0", 21, 35],
-            "androidx.core-ktx"          : ["1.15.0-rc01", "1.0.0-sesl6", "rev0", 21, 35],
+            "androidx.core"              : ["1.15.0", "1.0.11-sesl6", "rev0", 21, 35],
+            "androidx.core-ktx"          : ["1.15.0", "1.0.0-sesl6", "rev0", 21, 35],
             "androidx.customview"        : ["1.2.0-alpha02", "1.0.1-sesl6", "rev0", 21, 34],
             "androidx.drawerlayout"      : ["1.2.0", "1.0.1-sesl6", "rev1", 21, 34],
             "androidx.viewpager"         : ["1.1.0-alpha01", "1.0.0-sesl6", "rev0", 21, 35],

@@ -13,7 +13,7 @@ Info: Samsung’s One UI apps are created using heavily modified versions of som
 - [![latest version](https://img.shields.io/badge/sesl.androidx.core:core--ktx-1.15.0%2B1.0.0--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110025)
 - [![latest version](https://img.shields.io/badge/sesl.androidx.customview:customview-1.2.0--alpha02%2B1.0.1--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110026)
 - [![latest version](https://img.shields.io/badge/sesl.androidx.drawerlayout:drawerlayout-1.2.0%2B1.0.1--sesl6%2Brev1-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110027)
-- [![latest version](https://img.shields.io/badge/sesl.androidx.viewpager:viewpager-1.1.0--alpha01%2B1.0.0--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110037)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.viewpager:viewpager-1.1.0--beta01%2B1.0.0--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110037)
 - [![latest version](https://img.shields.io/badge/sesl.androidx.swiperefreshlayout:swiperefreshlayout-1.2.0--alpha01%2B1.0.0--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110035)
 - [![latest version](https://img.shields.io/badge/sesl.androidx.coordinatorlayout:coordinatorlayout-1.3.0--alpha02%2B1.0.0--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110023)
 - [![latest version](https://img.shields.io/badge/sesl.androidx.fragment:fragment-1.8.5%2B1.0.0--sesl6%2Brev0-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110028)

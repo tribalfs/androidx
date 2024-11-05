@@ -33,7 +33,7 @@ ext {
             "androidx.indexscroll"       : ["1.0.3", "1.0.3-sesl6", "rev2", 21, 34],
             "androidx.picker-basic"      : ["1.0.17", "1.0.17-sesl6", "rev2", 21, 34],
             "androidx.picker-color"      : ["1.0.6", "1.0.6-sesl6", "rev3", 21, 34],
-            "androidx.apppickerview"     : ["1.0.1", "1.0.1-sesl6", "rev2", 21, 34],
+            "androidx.apppickerview"     : ["1.0.1", "1.0.1-sesl6", "rev3", 21, 34],
     ]
 
 }

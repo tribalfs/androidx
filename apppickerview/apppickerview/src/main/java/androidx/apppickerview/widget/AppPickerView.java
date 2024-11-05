@@ -130,7 +130,7 @@ public class AppPickerView extends RecyclerView
     private int mType;
 
     public interface OnBindListener {
-        void onBindViewHolder(ViewHolder holder, int position, String packageName);
+        void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull String packageName);
     }
 
     public interface OnSearchFilterListener {
@@ -173,39 +173,39 @@ public class AppPickerView extends RecyclerView
         setAppPickerView(type, packageNamesList, ORDER_ASCENDING_IGNORE_CASE, null);
     }
 
-    public void setAppPickerView(@AppPickerType int type, List<String> packageNamesList,
-                                 List<AppLabelInfo> labelInfoList) {
+    public void setAppPickerView(@AppPickerType int type, @Nullable List<String> packageNamesList,
+                                 @Nullable List<AppLabelInfo> labelInfoList) {
         setAppPickerView(type, packageNamesList, ORDER_ASCENDING_IGNORE_CASE, labelInfoList);
     }
 
-    public void setAppPickerView(@AppPickerType int type, List<String> packageNamesList,
+    public void setAppPickerView(@AppPickerType int type, @Nullable List<String> packageNamesList,
                                  @AppPickerOrder int order) {
         setAppPickerView(type, packageNamesList, order, null);
     }
 
-    public void setAppPickerView(@AppPickerType int type, List<String> packageNamesList,
-                                 @AppPickerOrder int order, List<AppLabelInfo> labelInfoList) {
+    public void setAppPickerView(@AppPickerType int type, @Nullable List<String> packageNamesList,
+                                 @AppPickerOrder int order, @Nullable List<AppLabelInfo> labelInfoList) {
         setAppPickerView(type, packageNamesList, order, labelInfoList, null);
     }
 
-    public void setAppPickerView(List<ComponentName> activityNamesList, @AppPickerType int type) {
+    public void setAppPickerView(@Nullable List<ComponentName> activityNamesList, @AppPickerType int type) {
         setAppPickerView(type, null, ORDER_ASCENDING_IGNORE_CASE, null, activityNamesList);
     }
 
     public void setAppPickerView(@AppPickerType int type, @AppPickerOrder int order,
-                                 List<ComponentName> activityNamesList) {
+                                 @Nullable List<ComponentName> activityNamesList) {
         setAppPickerView(type, null, order, null, activityNamesList);
     }
 
     public void setAppPickerView(@AppPickerType int type, @AppPickerOrder int order,
-                                 List<AppLabelInfo> labelInfoList,
-                                 List<ComponentName> activityNamesList) {
+                                 @Nullable List<AppLabelInfo> labelInfoList,
+                                 @Nullable List<ComponentName> activityNamesList) {
         setAppPickerView(type, null, order, labelInfoList, activityNamesList);
     }
 
-    private void setAppPickerView(@AppPickerType int type, List<String> packageNamesList,
-                                  @AppPickerOrder int order, List<AppLabelInfo> labelInfoList,
-                                  List<ComponentName> activityNamesList) {
+    private void setAppPickerView(@AppPickerType int type, @Nullable List<String> packageNamesList,
+                                 @AppPickerOrder int order, @Nullable List<AppLabelInfo> labelInfoList,
+                                 @Nullable  List<ComponentName> activityNamesList) {
         TypedValue outValue = new TypedValue();
         mContext.getTheme().resolveAttribute(androidx.appcompat.R.attr.roundedCornerColor,
                 outValue, true);
@@ -271,6 +271,7 @@ public class AppPickerView extends RecyclerView
         }
     }
 
+    @Nullable
     public AppLabelInfo getAppLabelInfo(int position) {
         if (mAdapter != null) {
             return mAdapter.getAppInfo(position);
@@ -278,21 +279,25 @@ public class AppPickerView extends RecyclerView
         return null;
     }
 
-    public static List<AppLabelInfo> getInstalledPackagesWithLabel(Context context) {
+    @NonNull
+    public static List<AppLabelInfo> getInstalledPackagesWithLabel(@NonNull Context context) {
         return DataManager.resetPackages(context, getInstalledPackages(context));
     }
 
-    public static List<AppLabelInfo> getAppLabelinfoList(Context context,
-                                                         List<String> packageNamesList) {
+    @NonNull
+    public static List<AppLabelInfo> getAppLabelinfoList(@NonNull Context context,
+                                                         @NonNull List<String> packageNamesList) {
         return DataManager.resetPackages(context, packageNamesList);
     }
 
-    public static List<AppLabelInfo> getAppLabelinfoList(List<ComponentName> activityNamesList,
-                                                         Context context) {
+    @NonNull
+    public static List<AppLabelInfo> getAppLabelinfoList(@NonNull List<ComponentName> activityNamesList,
+                                                         @NonNull Context context) {
         return DataManager.resetPackages(activityNamesList, context);
     }
 
-    public static List<String> getInstalledPackages(Context context) {
+    @NonNull
+    public static List<String> getInstalledPackages(@NonNull Context context) {
         List<ApplicationInfo> installedApplications
                 = context.getPackageManager().getInstalledApplications(0);
         ArrayList<String> packagesList = new ArrayList<>();
@@ -336,28 +341,28 @@ public class AppPickerView extends RecyclerView
         }
     }
 
-    public void resetPackages(List<String> packageNamesList) {
+    public void resetPackages(@NonNull List<String> packageNamesList) {
         mAdapter.resetPackages(packageNamesList, true, null, null);
     }
 
-    public void resetPackages(List<String> packageNamesList, List<AppLabelInfo> labelInfoList) {
+    public void resetPackages(@NonNull List<String> packageNamesList, @Nullable List<AppLabelInfo> labelInfoList) {
         mAdapter.resetPackages(packageNamesList, true, labelInfoList, null);
     }
 
-    public void resetComponentName(List<ComponentName> activityNamesList) {
+    public void resetComponentName(@NonNull List<ComponentName> activityNamesList) {
         mAdapter.resetPackages(null, true, null, activityNamesList);
     }
 
-    public void resetComponentName(List<ComponentName> activityNamesList,
-                                   List<AppLabelInfo> labelInfoList) {
+    public void resetComponentName(@Nullable List<ComponentName> activityNamesList,
+                                   @Nullable List<AppLabelInfo> labelInfoList) {
         mAdapter.resetPackages(null, true, labelInfoList, activityNamesList);
     }
 
-    public void setSearchFilter(String constraint) {
+    public void setSearchFilter(@NonNull String constraint) {
         setSearchFilter(constraint, null);
     }
 
-    public void setSearchFilter(String constraint, OnSearchFilterListener listener) {
+    public void setSearchFilter(@Nullable String constraint, @Nullable OnSearchFilterListener listener) {
         if (listener != null) {
             mAdapter.setOnSearchFilterListener(listener);
         }
@@ -717,34 +722,37 @@ public class AppPickerView extends RecyclerView
         private String mLabel;
         private String mPackageName;
 
-        public AppLabelInfo(String packageName, String label,
-                            String activityName) {
+        public AppLabelInfo(@NonNull String packageName, @NonNull String label,
+                            @NonNull String activityName) {
             mPackageName = packageName;
             mLabel = label;
             mActivityName = activityName;
         }
 
+        @NonNull
         public String getPackageName() {
             return mPackageName;
         }
 
-        public void setPackageName(String packageName) {
+        public void setPackageName(@NonNull String packageName) {
             mPackageName = packageName;
         }
 
+        @NonNull
         public String getActivityName() {
             return mActivityName;
         }
 
-        public void setActivityName(String activityName) {
+        public void setActivityName(@NonNull String activityName) {
             mActivityName = activityName;
         }
 
+        @NonNull
         public String getLabel() {
             return mLabel;
         }
 
-        public void setLabel(String label) {
+        public void setLabel(@NonNull String label) {
             mLabel = label;
         }
 
@@ -752,6 +760,7 @@ public class AppPickerView extends RecyclerView
             return mIsSeparator;
         }
 
+        @NonNull
         public AppLabelInfo setSeparator(boolean isSeparator) {
             mIsSeparator = isSeparator;
             return this;

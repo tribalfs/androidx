@@ -23,7 +23,7 @@ Info: Samsung’s One UI apps are created using heavily modified versions of som
 - [![latest version](https://img.shields.io/badge/sesl.androidx.slidingpanelayout:slidingpanelayout-1.2.0%2B1.0.2--sesl6%2Brev3-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110034)
 - [![latest version](https://img.shields.io/badge/sesl.androidx.preference:preference-1.2.1%2B1.0.4--sesl6%2Brev3-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110032)
 #### SESL6(OneUI 6) Samsung
-- [![latest version](https://img.shields.io/badge/sesl.androidx.indexscroll:indexscroll-1.0.3%2B1.0.3--sesl6%2Brev2-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110029)
+- [![latest version](https://img.shields.io/badge/sesl.androidx.indexscroll:indexscroll-1.0.3%2B1.0.3--sesl6%2Brev3-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110029)
 - [![latest version](https://img.shields.io/badge/sesl.androidx.picker:picker--basic-1.0.17%2B1.0.17--sesl6%2Brev2-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110030)
 - [![latest version](https://img.shields.io/badge/sesl.androidx.picker:picker--color-1.0.6%2B1.0.6--sesl6%2Brev3-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110031)
 - [![latest version](https://img.shields.io/badge/sesl.androidx.apppickerview:apppickerview-1.0.1%2B1.0.1--sesl6%2Brev3-blue?logo=GitHub)](https://github.com/tribalfs/sesl-androidx/packages/2110022)

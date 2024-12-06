@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Բաց թողնել առաջարկը</string>
     <string name="sesl_appbar_suggest_pagination">Էջ %1$d՝ %2$d-ից</string>
+    <string name="sesl_action_mode_done">Արված</string>
     <!--sesl7-->
 </resources>

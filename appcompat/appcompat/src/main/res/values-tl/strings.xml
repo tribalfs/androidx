@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">I-dismiss ang mungkahi</string>
     <string name="sesl_appbar_suggest_pagination">Pahina %1$d ng %2$d</string>
+    <string name="sesl_action_mode_done">Tapos na</string>
     <!--sesl7-->
 </resources>

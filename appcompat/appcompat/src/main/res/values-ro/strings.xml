@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Anulare sugestie</string>
     <string name="sesl_appbar_suggest_pagination">Pagina %1$d din %2$d</string>
+    <string name="sesl_action_mode_done">Efectuat</string>
     <!--sesl7-->
 </resources>

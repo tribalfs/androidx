@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">DREAM_IDLE_TBOPT_DISMISS_SUGGESTION</string>
     <string name="sesl_appbar_suggest_pagination">DREAM_ACCS_TBOPT_PAGE_P1SD_OF_P2SD %1$d %2$d</string>
+    <string name="sesl_action_mode_done">DREAM_IME_BUTTON_DONE_31</string>
     <!--sesl7-->
 </resources>

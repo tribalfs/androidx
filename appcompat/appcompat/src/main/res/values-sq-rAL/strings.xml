@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Shpërfille sugjerimin</string>
     <string name="sesl_appbar_suggest_pagination">Faqja %1$d nga %2$d</string>
+    <string name="sesl_action_mode_done">U krye</string>
     <!--sesl7-->
 </resources>

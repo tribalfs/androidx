@@ -19,6 +19,8 @@ package androidx.appcompat.util;
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 import android.content.Context;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
@@ -34,6 +36,9 @@ import androidx.appcompat.R;
  */
 @RestrictTo(LIBRARY_GROUP_PREFIX)
 public class SeslMisc {
+    public static boolean isDefaultTheme(@NonNull Context context) {
+        return TextUtils.isEmpty(Settings.System.getString(context.getContentResolver(), "current_sec_active_themepackage"));
+    }
 
     public static boolean isLightTheme(@NonNull Context context) {
         TypedValue typedValue = new TypedValue();

@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">পৰামৰ্শ অগ্ৰাহ্য কৰক</string>
     <string name="sesl_appbar_suggest_pagination">%2$d-ৰ %1$d পৃষ্ঠা</string>
+    <string name="sesl_action_mode_done">সম্পন্ন</string>
     <!--sesl7-->
 </resources>

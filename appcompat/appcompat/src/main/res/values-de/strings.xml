@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Vorschlag verwerfen</string>
     <string name="sesl_appbar_suggest_pagination">Seite %1$d von %2$d</string>
+    <string name="sesl_action_mode_done">OK</string>
     <!--sesl7-->
 </resources>

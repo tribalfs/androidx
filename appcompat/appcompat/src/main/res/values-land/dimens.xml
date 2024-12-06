@@ -21,7 +21,7 @@
     <dimen name="sesl_dialog_body_text_padding_bottom">12dp</dimen>
     <dimen name="sesl_dialog_button_bar_margin_bottom">8dp</dimen>
     <dimen name="sesl_dialog_button_bar_padding_bottom">4dp</dimen>
-    <dimen name="sesl_dialog_title_padding_bottom">2dp</dimen>
+    <dimen name="sesl_dialog_title_padding_bottom">6dp</dimen>
     <dimen name="sesl_dialog_title_padding_top">12dp</dimen>
     <dimen name="sesl_select_dialog_padding_bottom">12dp</dimen>
     <dimen name="sesl_toolbar_title_text_size">19sp</dimen>

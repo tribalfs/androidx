@@ -1,43 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt" android:height="32dp" android:width="32dp" android:viewportWidth="32"
-    android:viewportHeight="32" aapt:fps="60">
-    <group android:name="s3" android:scaleX="0.25"
-        android:scaleY="0.25" android:translateX="16" android:translateY="16" aapt:layer_name="Check_outCircle">
-        <group android:name="s3pg1" aapt:layer_name="Ellipse 1">
-            <path android:name="s3pg1p10"
-                android:pathData="M 0 -36 C 19.882 -36 36 -19.882 36 0 C 36 19.882 19.882 36 0 36 C -19.882 36 -36 19.882 -36 0 C -36 -19.882 -19.882 -36 0 -36 Z" android:strokeColor="?attr/colorControlNormal" android:strokeWidth="6" android:strokeLineCap="butt" android:strokeLineJoin="miter" android:strokeMiterLimit="4" android:strokeAlpha="0.8" aapt:layer_name="Ellipse Path 1" aapt:style_name="Stroke 1"/>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportHeight="32"
+    android:viewportWidth="32"
+    aapt:fps="60">
+    <group
+        android:name="s3"
+        android:scaleX="0.25"
+        android:scaleY="0.25"
+        android:translateX="16"
+        android:translateY="16"
+        aapt:layer_name="Check_outCircle">
+        <group
+            android:name="s3pg1"
+            aapt:layer_name="Ellipse 1">
+            <path
+                android:name="s3pg1p10"
+                android:pathData="M 0 -36 C 19.882 -36 36 -19.882 36 0 C 36 19.882 19.882 36 0 36 C -19.882 36 -36 19.882 -36 0 C -36 -19.882 -19.882 -36 0 -36 Z"
+                android:strokeAlpha="1"
+                android:strokeColor="?colorControlNormal"
+                android:strokeLineCap="butt"
+                android:strokeLineJoin="miter"
+                android:strokeMiterLimit="4"
+                android:strokeWidth="6"
+                aapt:layer_name="Ellipse Path 1"
+                aapt:style_name="Stroke 1" />
         </group>
     </group>
     <group
         android:name="s3s2"
         android:scaleX="0.25"
-        android:scaleY="0.25" android:translateX="16"
+        android:scaleY="0.25"
+        android:translateX="16"
         android:translateY="16"
         aapt:layer_name="Check_inCircle_0 ParentLink">
         <group
-            android:name="s2" android:pivotX="40.25"
+            android:name="s2"
+            android:pivotX="40.25"
             android:pivotY="40.25"
             android:translateX="-40.25"
             android:translateY="-40.25"
             aapt:layer_name="Check_inCircle_0">
             <path
                 android:name="s2p300"
-                android:fillColor="?attr/colorPrimary"
-                android:pathData="M23.502,39.954c-0.722,0.72 -1.667,1.08 -2.612,1.08c-0.949,0 -1.898,-0.363 -2.62,-1.088v-0.041c-1.443,-1.447 -1.44,-3.79 0.008,-5.232c1.447,-1.444 3.79,-1.44 5.232,0.007v0.042c1.443,1.447 1.439,3.79 -0.008,5.232zM40.25,0.25c-22.065,0 -40,17.935 -40,40c0,22.064 17.935,40 40,40c22.063,0 40,-17.936 40,-40c0,-22.065 -17.937,-40 -40,-40z" android:fillAlpha="0" aapt:layer_name="Merge Paths 1" aapt:style_name="Check_inCircle_0_BG"/>
+                android:fillAlpha="0"
+                android:fillColor="?colorPrimary"
+                android:pathData="M23.502,39.954c-0.722,0.72 -1.667,1.08 -2.612,1.08c-0.949,0 -1.898,-0.363 -2.62,-1.088v-0.041c-1.443,-1.447 -1.44,-3.79 0.008,-5.232c1.447,-1.444 3.79,-1.44 5.232,0.007v0.042c1.443,1.447 1.439,3.79 -0.008,5.232zM40.25,0.25c-22.065,0 -40,17.935 -40,40c0,22.064 17.935,40 40,40c22.063,0 40,-17.936 40,-40c0,-22.065 -17.937,-40 -40,-40z"
+                aapt:layer_name="Merge Paths 1"
+                aapt:style_name="Check_inCircle_0_BG" />
         </group>
     </group>
     <group
-        android:name="s3s1" android:scaleX="0.25" android:scaleY="0.25"
-        android:translateX="16" android:translateY="16"
+        android:name="s3s1"
+        android:scaleX="0.25"
+        android:scaleY="0.25"
+        android:translateX="16"
+        android:translateY="16"
         aapt:layer_name="Check_inCircle_1 ParentLink">
         <group
-            android:name="s1" android:pivotX="40.25"
-            android:pivotY="40.25" android:translateX="-40.25"
-            android:translateY="-40.25" aapt:layer_name="Check_inCircle_1">
+            android:name="s1"
+            android:pivotX="40.25"
+            android:pivotY="40.25"
+            android:translateX="-40.25"
+            android:translateY="-40.25"
+            aapt:layer_name="Check_inCircle_1">
             <path
                 android:name="s1p300"
-                android:fillColor="?attr/colorPrimary"
-                android:pathData="M41.612,52.788l-1.03,1.108c-1.12,1.12 -2.604,1.735 -4.182,1.735c-1.581,0 -3.065,-0.616 -4.181,-1.734l-13.949,-13.992c-1.443,-1.447 -1.44,-3.79 0.007,-5.232c1.448,-1.444 3.791,-1.44 5.233,0.007l12.89,12.93l-0.028,-0.047c1.443,-1.448 3.785,-1.45 5.232,-0.007c1.447,1.442 1.451,3.785 0.008,5.232zM40.25,0.25c-22.065,0 -40,17.935 -40,40c0,22.064 17.935,40 40,40c22.063,0 40,-17.936 40,-40c0,-22.065 -17.937,-40 -40,-40z" android:fillAlpha="0" aapt:layer_name="Merge Paths 1" aapt:style_name="Check_inCircle_1_BG"/>
+                android:fillAlpha="0"
+                android:fillColor="?colorPrimary"
+                android:pathData="M41.612,52.788l-1.03,1.108c-1.12,1.12 -2.604,1.735 -4.182,1.735c-1.581,0 -3.065,-0.616 -4.181,-1.734l-13.949,-13.992c-1.443,-1.447 -1.44,-3.79 0.007,-5.232c1.448,-1.444 3.791,-1.44 5.233,0.007l12.89,12.93l-0.028,-0.047c1.443,-1.448 3.785,-1.45 5.232,-0.007c1.447,1.442 1.451,3.785 0.008,5.232zM40.25,0.25c-22.065,0 -40,17.935 -40,40c0,22.064 17.935,40 40,40c22.063,0 40,-17.936 40,-40c0,-22.065 -17.937,-40 -40,-40z"
+                aapt:layer_name="Merge Paths 1"
+                aapt:style_name="Check_inCircle_1_BG" />
         </group>
     </group>
 </vector>

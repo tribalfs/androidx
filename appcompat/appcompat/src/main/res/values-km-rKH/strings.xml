@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">ចោល​សំណើ</string>
     <string name="sesl_appbar_suggest_pagination">ទំព័រ %1$d នៃ %2$d</string>
+    <string name="sesl_action_mode_done">រួចរាល់</string>
     <!--sesl7-->
 </resources>

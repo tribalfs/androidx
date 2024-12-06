@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Baztertu iradokizuna</string>
     <string name="sesl_appbar_suggest_pagination">%2$d orritik %1$dgarrena</string>
+    <string name="sesl_action_mode_done">Eginda</string>
     <!--sesl7-->
 </resources>

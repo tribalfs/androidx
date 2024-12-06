@@ -1,18 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt" android:height="32dp" android:width="32dp" android:viewportWidth="32" android:viewportHeight="32" aapt:fps="60">
-    <group android:name="s3" android:scaleX="0.25" android:scaleY="0.25" android:translateX="16" android:translateY="16" aapt:layer_name="Radio_outCircle_0">
-        <group android:name="s3pg1" aapt:layer_name="Ellipse 1">
-            <path android:name="s3pg1p10" android:pathData="M 0 -36 C 19.882 -36 36 -19.882 36 0 C 36 19.882 19.882 36 0 36 C -19.882 36 -36 19.882 -36 0 C -36 -19.882 -19.882 -36 0 -36 Z" android:strokeColor="?attr/colorControlNormal" android:strokeWidth="6" android:strokeLineCap="butt" android:strokeLineJoin="miter" android:strokeMiterLimit="4" android:strokeAlpha="0.8" aapt:layer_name="Ellipse Path 1" aapt:style_name="Stroke 1"/>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportHeight="32"
+    android:viewportWidth="32"
+    aapt:fps="60">
+    <group
+        android:name="s3"
+        android:scaleX="0.25"
+        android:scaleY="0.25"
+        android:translateX="16"
+        android:translateY="16"
+        aapt:layer_name="Radio_outCircle_0">
+        <group
+            android:name="s3pg1"
+            aapt:layer_name="Ellipse 1">
+            <path
+                android:name="s3pg1p10"
+                android:pathData="M 0 -36 C 19.882 -36 36 -19.882 36 0 C 36 19.882 19.882 36 0 36 C -19.882 36 -36 19.882 -36 0 C -36 -19.882 -19.882 -36 0 -36 Z"
+                android:strokeAlpha="1"
+                android:strokeColor="?colorControlNormal"
+                android:strokeLineCap="butt"
+                android:strokeLineJoin="miter"
+                android:strokeMiterLimit="4"
+                android:strokeWidth="6"
+                aapt:layer_name="Ellipse Path 1"
+                aapt:style_name="Stroke 1" />
         </group>
     </group>
-    <group android:name="s2" android:scaleX="0.25" android:scaleY="0.25" android:translateX="16" android:translateY="16" aapt:layer_name="Radio_outCircle_1">
-        <group android:name="s2pg1" aapt:layer_name="Ellipse 1">
-            <path android:name="s2pg1p10" android:pathData="M 0 -36 C 19.882 -36 36 -19.882 36 0 C 36 19.882 19.882 36 0 36 C -19.882 36 -36 19.882 -36 0 C -36 -19.882 -19.882 -36 0 -36 Z" android:strokeColor="?attr/colorPrimary" android:strokeWidth="8" android:strokeLineCap="butt" android:strokeLineJoin="miter" android:strokeMiterLimit="4" android:strokeAlpha="0" aapt:layer_name="Ellipse Path 1" aapt:style_name="Stroke 1"/>
+    <group
+        android:name="s2"
+        android:scaleX="0.25"
+        android:scaleY="0.25"
+        android:translateX="16"
+        android:translateY="16"
+        aapt:layer_name="Radio_outCircle_1">
+        <group
+            android:name="s2pg1"
+            aapt:layer_name="Ellipse 1">
+            <path
+                android:name="s2pg1p10"
+                android:pathData="M 0 -36 C 19.882 -36 36 -19.882 36 0 C 36 19.882 19.882 36 0 36 C -19.882 36 -36 19.882 -36 0 C -36 -19.882 -19.882 -36 0 -36 Z"
+                android:strokeAlpha="0"
+                android:strokeColor="?colorPrimary"
+                android:strokeLineCap="butt"
+                android:strokeLineJoin="miter"
+                android:strokeMiterLimit="4"
+                android:strokeWidth="8"
+                aapt:layer_name="Ellipse Path 1"
+                aapt:style_name="Stroke 1" />
         </group>
     </group>
-    <group android:name="s1" android:pivotX="20.25" android:pivotY="20.25" android:scaleX="0" android:scaleY="0" android:translateX="-4.25" android:translateY="-4.25" aapt:layer_name="Radio_inCircle">
-        <group android:name="s1pg1" android:translateX="20.25" android:translateY="20.25" aapt:layer_name="Group 1">
-            <path android:name="s1pg1p10" android:fillColor="?attr/colorPrimary" android:pathData="M 0 -20 C 11.046 -20 20 -11.046 20 0 C 20 11.046 11.046 20 0 20 C -11.046 20 -20 11.046 -20 0 C -20 -11.046 -11.046 -20 0 -20 Z" android:fillAlpha="1" aapt:layer_name="Path 1" aapt:style_name="Fill 1"/>
+    <group
+        android:name="s1"
+        android:pivotX="20.25"
+        android:pivotY="20.25"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:translateX="-4.25"
+        android:translateY="-4.25"
+        aapt:layer_name="Radio_inCircle">
+        <group
+            android:name="s1pg1"
+            android:translateX="20.25"
+            android:translateY="20.25"
+            aapt:layer_name="Group 1">
+            <path
+                android:name="s1pg1p10"
+                android:fillAlpha="1"
+                android:fillColor="?colorPrimary"
+                android:pathData="M 0 -20 C 11.046 -20 20 -11.046 20 0 C 20 11.046 11.046 20 0 20 C -11.046 20 -20 11.046 -20 0 C -20 -11.046 -11.046 -20 0 -20 Z"
+                aapt:layer_name="Path 1"
+                aapt:style_name="Fill 1" />
         </group>
     </group>
 </vector>

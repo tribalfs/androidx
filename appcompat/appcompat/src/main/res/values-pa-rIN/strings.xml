@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">ਸੁਝਾਅ ਨੂੰ ਖਾਰਿਜ ਕਰੋ</string>
     <string name="sesl_appbar_suggest_pagination">ਪੰਨਾ %2$d ਵਿੱਚੋਂ %1$d</string>
+    <string name="sesl_action_mode_done">ਪੂਰਨ</string>
     <!--sesl7-->
 </resources>

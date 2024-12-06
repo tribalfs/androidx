@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Bỏ qua gợi ý</string>
     <string name="sesl_appbar_suggest_pagination">Trang %1$d trên %2$d</string>
+    <string name="sesl_action_mode_done">Hoàn tất</string>
     <!--sesl7-->
 </resources>

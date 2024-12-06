@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Avvisa förslag</string>
     <string name="sesl_appbar_suggest_pagination">Sidan %1$d av %2$d</string>
+    <string name="sesl_action_mode_done">Klart</string>
     <!--sesl7-->
 </resources>

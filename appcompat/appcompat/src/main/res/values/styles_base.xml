@@ -353,8 +353,9 @@
     </style>
 
     <style name="Base.Widget.AppCompat.Button.Custom" parent="Base.Widget.AppCompat.Button">
-        <item name="buttonCornerRadius">22dp</item>
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">18.0sp<!--sesl7--></item>
+        <item name="android:minHeight">44.0dip</item><!--sesl7-->
+        <item name="buttonCornerRadius">22.0dip</item>
     </style>
 
     <style name="Base.Widget.AppCompat.Button.Dialog" parent="@style/Base.Widget.AppCompat.Light.Button.Borderless.Small">

@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">关闭建议</string>
     <string name="sesl_appbar_suggest_pagination">第 %1$d 页，共 %2$d 页</string>
+    <string name="sesl_action_mode_done">完成</string>
     <!--sesl7-->
 </resources>

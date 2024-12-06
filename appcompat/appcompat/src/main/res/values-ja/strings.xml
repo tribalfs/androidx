@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">おすすめを解除</string>
     <string name="sesl_appbar_suggest_pagination">%2$dページ中%1$dページ</string>
+    <string name="sesl_action_mode_done">完了</string>
     <!--sesl7-->
 </resources>

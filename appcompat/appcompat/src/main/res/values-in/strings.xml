@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Abaikan saran</string>
     <string name="sesl_appbar_suggest_pagination">Halaman %1$d dari %2$d</string>
+    <string name="sesl_action_mode_done">Selesai</string>
     <!--sesl7-->
 </resources>

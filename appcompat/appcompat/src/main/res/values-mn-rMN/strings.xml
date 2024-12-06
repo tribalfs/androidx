@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Саналыг арилгах</string>
     <string name="sesl_appbar_suggest_pagination">Хуудас %2$d-с %1$d</string>
+    <string name="sesl_action_mode_done">Дууслаа</string>
     <!--sesl7-->
 </resources>

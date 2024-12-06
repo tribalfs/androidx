@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Hylkää ehdotus</string>
     <string name="sesl_appbar_suggest_pagination">Sivu %1$d, %2$d sivua</string>
+    <string name="sesl_action_mode_done">Valmis</string>
     <!--sesl7-->
 </resources>

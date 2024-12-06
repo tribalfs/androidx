@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">تجویز کو مسترد کریں</string>
     <string name="sesl_appbar_suggest_pagination">صفحہ %1$d کا %2$d</string>
+    <string name="sesl_action_mode_done">ہو گیا</string>
     <!--sesl7-->
 </resources>

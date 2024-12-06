@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <style name="Base.V35.Theme.AppCompat" parent="@style/Base.V29.Theme.AppCompat">
+        <item name="android:scrollbarThumbVertical">@drawable/sesl_scroll_thumb_dark</item>
+    </style>
+
+    <style name="Base.V35.Theme.AppCompat.Dialog" parent="@style/Base.V21.Theme.AppCompat.Dialog">
+        <item name="android:scrollbarThumbVertical">@drawable/sesl_dialog_scroll_thumb_dark</item>
+    </style>
+
+    <style name="Base.V35.Theme.AppCompat.Light" parent="@style/Base.V29.Theme.AppCompat.Light">
+        <item name="android:scrollbarThumbVertical">@drawable/sesl_scroll_thumb</item>
+    </style>
+
+    <style name="Base.V35.Theme.AppCompat.Light.Dialog" parent="@style/Base.V21.Theme.AppCompat.Light.Dialog">
+        <item name="android:scrollbarThumbVertical">@drawable/sesl_dialog_scroll_thumb</item>
+    </style>
+
+    <style name="Base.V35.ThemeOverlay.AppCompat.Dialog" parent="@style/Base.V21.ThemeOverlay.AppCompat.Dialog">
+        <item name="android:scrollbarThumbVertical">@drawable/sesl_dialog_scroll_thumb_dark</item>
+    </style>
+
+    <style name="Base.V35.ThemeOverlay.AppCompat.Light.Dialog" parent="@style/Base.V7.ThemeOverlay.AppCompat.Light.Dialog">
+        <item name="android:scrollbarThumbVertical">@drawable/sesl_dialog_scroll_thumb</item>
+    </style>
+
+    <style name="Base.Theme.AppCompat" parent="Base.V35.Theme.AppCompat" />
+
+    <style name="Base.Theme.AppCompat.Light" parent="Base.V35.Theme.AppCompat.Light" />
+
+    <style name="Base.Theme.AppCompat.Dialog" parent="Base.V35.Theme.AppCompat.Dialog" />
+
+    <style name="Base.Theme.AppCompat.Light.Dialog" parent="Base.V35.Theme.AppCompat.Light.Dialog" />
+
+    <style name="Base.ThemeOverlay.AppCompat.Dialog" parent="Base.V35.ThemeOverlay.AppCompat.Dialog" />
+
+    <style name="Base.ThemeOverlay.AppCompat.Light.Dialog" parent="Base.V35.ThemeOverlay.AppCompat.Light.Dialog" />
+</resources>

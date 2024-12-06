@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">යෝජනාව ඉවත ලන්න</string>
     <string name="sesl_appbar_suggest_pagination">%2$d න් %1$d වැනි පිටුව</string>
+    <string name="sesl_action_mode_done">නිමයි</string>
     <!--Sesl7-->
 </resources>

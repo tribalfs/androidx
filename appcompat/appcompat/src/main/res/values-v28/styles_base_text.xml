@@ -4,35 +4,31 @@
     <style name="Base.TextAppearance.AppCompat.Widget.Button" parent="TextAppearance.AppCompat.Button">
         <item name="android:textStyle">@string/sesl_text_style_medium</item>
         <item name="android:textColor">@color/sesl_btn_text_color_dark</item>
-        <item name="fontFamily">@string/sesl_font_family_regular</item>
-        <item name="textAllCaps">false</item>
+        <item name="fontFamily">@string/sesl_font_family_medium</item>
     </style>
 
-    <style name="Base.TextAppearance.AppCompat.Widget.Light.Button" parent="@style/TextAppearance.AppCompat.Button">
-        <item name="android:textSize">@dimen/sesl_button_text_size</item>
-        <item name="android:textStyle">bold</item>
+    <style name="Base.TextAppearance.AppCompat.Widget.Light.Button" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textStyle">@string/sesl_text_style_medium</item>
         <item name="android:textColor">@color/sesl_btn_text_color_light</item>
-        <item name="fontFamily">@string/sesl_font_family_regular</item>
-        <item name="textAllCaps">false</item>
+        <item name="fontFamily">@string/sesl_font_family_medium</item>
     </style>
 
     <style name="Base.TextAppearance.AppCompat.Widget.ActionBar.Title" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/sesl_toolbar_title_text_size</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">@string/sesl_text_style_medium</item>
         <item name="android:textColor">@color/sesl_action_bar_text_color_title_dark</item>
-        <item name="fontFamily">sec-roboto-light</item>
+        <item name="fontFamily">@string/sesl_font_family_medium</item>
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle" parent="@style/TextAppearance.AppCompat.Subhead">
+    <style name="Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle" parent="TextAppearance.AppCompat.Subhead">
         <item name="android:textSize">@dimen/sesl_toolbar_subtitle_text_size</item>
         <item name="android:textColor">@color/sesl_action_bar_text_color_subtitle_dark</item>
-        <item name="fontFamily">sec-roboto-light</item>
+        <item name="fontFamily">@string/sesl_font_family_regular</item>
         <item name="textAllCaps">false</item>
     </style>
 
-
-    <style name="Base.TextAppearance.AppCompat.Widget.PopupMenu.Header" parent="@style/TextAppearance.AppCompat">
+    <style name="Base.TextAppearance.AppCompat.Widget.PopupMenu.Header" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/sesl_context_menu_title_text_size</item>
         <item name="android:textStyle">@string/sesl_text_style_medium</item>
         <item name="android:textColor">@color/sesl_context_menu_title_text_color_dark</item>

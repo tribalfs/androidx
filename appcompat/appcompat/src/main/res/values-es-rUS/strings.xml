@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Descartar sugerencia</string>
     <string name="sesl_appbar_suggest_pagination">Página %1$d de %2$d</string>
+    <string name="sesl_action_mode_done">Realizado</string>
     <!--sesl7-->
 </resources>

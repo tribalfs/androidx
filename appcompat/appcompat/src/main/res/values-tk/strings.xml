@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Teklibi aýyr</string>
     <string name="sesl_appbar_suggest_pagination">Sahypa %1$d / %2$d</string>
+    <string name="sesl_action_mode_done">Tamam</string>
     <!--sesl7-->
 </resources>

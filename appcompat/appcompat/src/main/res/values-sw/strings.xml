@@ -44,4 +44,22 @@
     <string name="abc_menu_space_shortcut_label" msgid="5473865519181928982">"space"</string>
     <string name="abc_menu_enter_shortcut_label" msgid="7986526966204849475">"enter"</string>
     <string name="abc_menu_delete_shortcut_label" msgid="838001238306846836">"delete"</string>
+    <string name="sesl_action_bar_up_description">Sogeza juu</string>
+    <string name="sesl_action_menu_overflow_badge_description">Maudhui mapya yanapatikana</string>
+    <string name="sesl_action_menu_overflow_badge_text_n">N</string>
+    <string name="sesl_action_menu_overflow_description">Chaguo zaidi</string>
+    <string name="sesl_action_mode_done">Imekamilika</string>
+    <string name="sesl_more_item_label">Zaidi</string>
+    <string name="sesl_search_hint">Tafuta</string>
+    <string name="sesl_searchview_description_clear">Futa maudhui ya sehemu ya utafutaji</string>
+    <string name="sesl_searchview_description_search">Tafuta</string>
+    <string name="sesl_searchview_description_submit">Wasilisha swali</string>
+    <string name="sesl_searchview_description_voice">Kutafuta kwa sauti</string>
+    <string name="sesl_switch_off">Imezimwa</string>
+    <string name="sesl_switch_on">Imewashwa</string>
+    <string name="sesl_switchbar_off_text">Imezimwa</string>
+    <string name="sesl_switchbar_on_text">Imewashwa</string>
+    <string name="sesl_toolbar_collapse_description">Kunja</string>
+    <string name="sesl_appbar_suggest_dismiss">Dismiss suggestion</string>
+    <string name="sesl_appbar_suggest_pagination">Ukurasa wa %1$d kati ya %2$d</string>
 </resources>

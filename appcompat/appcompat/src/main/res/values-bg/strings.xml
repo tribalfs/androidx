@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Отхвърляне на предложение</string>
     <string name="sesl_appbar_suggest_pagination">Страница %1$d от %2$d</string>
+    <string name="sesl_action_mode_done">Готово</string>
     <!--sesl7-->
 </resources>

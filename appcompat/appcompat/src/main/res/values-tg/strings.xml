@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Тавсияро пӯшидан</string>
     <string name="sesl_appbar_suggest_pagination">Саҳифаи %1$d аз %2$d</string>
+    <string name="sesl_action_mode_done">Иҷро шуд</string>
     <!--sesl7-->
 </resources>

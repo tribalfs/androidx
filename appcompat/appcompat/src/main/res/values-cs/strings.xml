@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Zrušit návrh</string>
     <string name="sesl_appbar_suggest_pagination">Stránka %1$d z %2$d</string>
+    <string name="sesl_action_mode_done">Hotovo</string>
     <!--sesl7-->
 </resources>

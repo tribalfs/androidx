@@ -3,5 +3,5 @@
     <dimen name="sesl_dialog_background_corner_radius">18dp</dimen>
     <dimen name="sesl_dialog_background_inset_horizontal">16dp</dimen>
     <dimen name="sesl_dialog_button_bar_padding_bottom">5dp</dimen>
-    <dimen name="sesl_dialog_title_padding_bottom">2dp</dimen>
+    <dimen name="sesl_dialog_title_padding_bottom">6dp</dimen>
 </resources>

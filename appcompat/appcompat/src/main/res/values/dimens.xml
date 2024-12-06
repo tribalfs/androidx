@@ -297,7 +297,7 @@
 
     <dimen name="sesl_menu_item_badge_end_margin">21dp</dimen>
     <dimen name="sesl_menu_item_badge_size">6dp</dimen>
-    <dimen name="sesl_menu_item_badge_text_size">11dp</dimen>
+    <dimen name="sesl_menu_item_badge_text_size">11sp</dimen>
     <dimen name="sesl_menu_item_badge_top_margin">17dp</dimen>
     <dimen name="sesl_menu_item_number_badge_end_margin">16dp</dimen>
     <dimen name="sesl_menu_item_number_badge_top_margin">10dp</dimen>

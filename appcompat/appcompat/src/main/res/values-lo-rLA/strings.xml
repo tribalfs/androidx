@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">ປ່ອຍຄຳແນະນຳໄປ</string>
     <string name="sesl_appbar_suggest_pagination">ໜ້າ %1$d ໃນ %2$d</string>
+    <string name="sesl_action_mode_done">ສໍາເລັດ</string>
     <!--sesl7-->
 </resources>

@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">সুপারিশ ডিসমিস করুন</string>
     <string name="sesl_appbar_suggest_pagination">পেইজ %2$d-এর %1$d</string>
+    <string name="sesl_action_mode_done">শেষ হয়েছে</string>
     <!--sesl7-->
 </resources>

@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">نادیده گرفتن پیشنهاد</string>
     <string name="sesl_appbar_suggest_pagination">صفحه %1$d از %2$d</string>
+    <string name="sesl_action_mode_done">انجام شد</string>
     <!--sesl7-->
 </resources>

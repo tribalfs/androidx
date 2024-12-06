@@ -51,7 +51,7 @@
     <color name="sesl_black">#252528</color>
     <color name="sesl_blue_color_dark">@color/sesl_blue_color_light</color>
     <color name="sesl_blue_color_light">#387aff</color>
-    <color name="sesl_blue_dark_color_dark">#578fff</color>
+    <color name="sesl_blue_dark_color_dark">#598fff</color>
     <color name="sesl_blue_dark_color_light">#376fde</color>
     <color name="sesl_text1_dark">#fafaff</color>
     <color name="sesl_text1_light">#010102</color>
@@ -135,11 +135,11 @@
     <color name="sesl_input_method_navigation_guard">@android:color/black</color>
     <color name="sesl_list_divider_color_dark">#3a3a3d</color>
     <color name="sesl_list_divider_color_light">#e4e4e7</color>
-    <color name="sesl_list_go_to_top_arrow_bottom_dark">@color/sesl_text1_dark</color>
-    <color name="sesl_list_go_to_top_arrow_bottom_light">#404040</color>
+    <color name="sesl_list_go_to_top_arrow_bottom_dark">#ffffff</color>
+    <color name="sesl_list_go_to_top_arrow_bottom_light">#000000</color>
     <color name="sesl_list_go_to_top_arrow_top_dark">#aaaaaa</color>
     <color name="sesl_list_go_to_top_arrow_top_light">#888888</color>
-    <color name="sesl_list_go_to_top_inner_round_dark">#3d3d3d</color>
+    <color name="sesl_list_go_to_top_inner_round_dark">#3a3a3d</color>
     <color name="sesl_list_go_to_top_inner_round_light">@color/sesl_gray_L1</color>
     <color name="sesl_list_go_to_top_outer_round_dark">#5e5e5e</color>
     <color name="sesl_list_go_to_top_outer_round_light">#33252528</color>
@@ -214,9 +214,9 @@
     <color name="sesl_seekbar_control_color_activated">@color/sesl_blue_color_light</color>
     <color name="sesl_seekbar_control_color_default">#73c9c9cc</color>
     <color name="sesl_seekbar_control_color_secondary">#7ab9cb</color>
-    <color name="sesl_seekbar_disable_color_activated_dark">#545454</color>
-    <color name="sesl_seekbar_disable_color_activated_light">#d2d2d2</color>
-    <color name="sesl_seekbar_level_control_color_default">#73c9c9cc</color>
+    <color name="sesl_seekbar_disable_color_activated_dark">@color/sesl_gray_D7</color>
+    <color name="sesl_seekbar_disable_color_activated_light">@color/sesl_gray_L7</color>
+    <color name="sesl_seekbar_level_control_color_default">#66c9c9cc</color>
     <color name="sesl_seekbar_overlap_color_activated_dark">@color/sesl_functional_orange_dark</color>
     <color name="sesl_seekbar_overlap_color_activated_light">@color/sesl_functional_orange_light</color>
     <color name="sesl_seekbar_overlap_color_default_dark">#73c9c9cc</color>
@@ -266,7 +266,7 @@
     <color name="sesl_switchbar_off_text_color_light">@color/sesl_text2_light</color>
     <color name="sesl_switchbar_on_background_color_dark">@color/sesl_gray_D4</color>
     <color name="sesl_switchbar_on_background_color_light">@color/sesl_gray_L5</color>
-    <color name="sesl_tick_mark_disable_seekbar_level">#66a6a6a9</color>
+    <color name="sesl_tick_mark_disable_seekbar_level">@color/sesl_gray_L9</color>
     <color name="sesl_tick_mark_seekbar_level">@color/sesl_gray_L9</color>
     <color name="sesl_tooltip_background_dark">@color/sesl_gray_D5</color>
     <color name="sesl_tooltip_background_light">@color/sesl_gray_L1</color>
@@ -281,10 +281,5 @@
     <!--Sesl7-->
     <color name="sesl_button_text_color">@color/sesl_btn_default_text_color_light</color>
     <color name="sesl_button_text_color_dark">@color/sesl_text1_dark</color>
-    <color name="sesl_suggest_button_text_color">@color/sesl_primary_text_color_light</color>
-    <color name="sesl_suggest_button_text_color_dark">@color/sesl_text1_dark</color>
-    <color name="sesl_suggest_button_text_color_with_white_case">@color/sesl_action_bar_text_color_title_light</color>
-    <color name="sesl_suggest_close_button_container_color_with_white_case">@color/sesl_suggest_close_button_container_color</color>
-    <color name="sesl_suggest_close_button_icon_color_with_white_case">@color/sesl_suggest_close_button_icon_color</color>
     <!--sesl7-->
 </resources>

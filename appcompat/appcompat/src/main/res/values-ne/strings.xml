@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">सुझाव खारेज गर्नुहोस्</string>
     <string name="sesl_appbar_suggest_pagination">%2$d मध्ये पेज %1$d</string>
+    <string name="sesl_action_mode_done">भयो</string>
     <!--sesl7-->
 </resources>

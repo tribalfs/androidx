@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">შეთავაზების გათიშვა</string>
     <string name="sesl_appbar_suggest_pagination">გვერდი %1$d, სულ %2$d</string>
+    <string name="sesl_action_mode_done">მზადაა</string>
     <!--sesl7-->
 </resources>

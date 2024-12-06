@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">നിർദ്ദേശം ഡിസ്മിസ് ചെയ്യുക</string>
     <string name="sesl_appbar_suggest_pagination">പേജ് %2$d-ൽ %1$d</string>
+    <string name="sesl_action_mode_done">ചെയ്തു</string>
     <!--sesl7-->
 </resources>

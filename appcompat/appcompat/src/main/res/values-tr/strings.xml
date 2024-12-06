@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">Öneriyi durdur</string>
     <string name="sesl_appbar_suggest_pagination">Sayfa %1$d / %2$d</string>
+    <string name="sesl_action_mode_done">Bitti</string>
     <!--sesl7-->
 </resources>

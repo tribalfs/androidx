@@ -68,5 +68,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">ปิดคำแนะนำ</string>
     <string name="sesl_appbar_suggest_pagination">หน้าที่ %1$d จาก %2$d</string>
+    <string name="sesl_action_mode_done">เสร็จสิ้น</string>
     <!--sesl7-->
 </resources>

@@ -2,6 +2,6 @@
 <resources>
   <color name="sesl_thumb_control_fill_color_activated">@color/sesl_gray_D1</color>
   <color name="sesl_thumb_disable_seekbar_level">@color/sesl_seekbar_disable_color_activated_dark</color>
-  <color name="sesl_tick_mark_disable_seekbar_level">#6677777a</color>
+  <color name="sesl_tick_mark_disable_seekbar_level">@color/sesl_gray_D9</color>
   <color name="sesl_tick_mark_seekbar_level">@color/sesl_gray_D9</color>
 </resources>

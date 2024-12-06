@@ -23,5 +23,6 @@
     <!--Sesl7-->
     <string name="sesl_appbar_suggest_dismiss">ಸಲಹೆಯನ್ನು ವಜಾಗೊಳಿಸಿ</string>
     <string name="sesl_appbar_suggest_pagination">%2$dರಲ್ಲಿ %1$dನೇ ಪುಟ</string>
+    <string name="sesl_action_mode_done">ಮುಗಿದಿದೆ</string>
     <!--sesl7-->
 </resources>

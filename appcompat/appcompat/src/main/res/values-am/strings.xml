@@ -44,4 +44,23 @@
     <string name="abc_menu_space_shortcut_label" msgid="5473865519181928982">"ክፍተት"</string>
     <string name="abc_menu_enter_shortcut_label" msgid="7986526966204849475">"enter"</string>
     <string name="abc_menu_delete_shortcut_label" msgid="838001238306846836">"ሰርዝ"</string>
+
+    <string name="sesl_action_bar_up_description">ወደ ላይ ያስሱ</string>
+    <string name="sesl_action_menu_overflow_badge_description">አዲስ ይዞታ ይገኛል</string>
+    <string name="sesl_action_menu_overflow_badge_text_n">ኤን</string>
+    <string name="sesl_action_menu_overflow_description">ተጨማሪ አማራጮች</string>
+    <string name="sesl_action_mode_done">ተከናውኗል</string>
+    <string name="sesl_more_item_label">ተጨማሪ</string>
+    <string name="sesl_search_hint">ፍለጋ</string>
+    <string name="sesl_searchview_description_clear">የፍለጋ መስክን ያጽዱ</string>
+    <string name="sesl_searchview_description_search">ፍለጋ</string>
+    <string name="sesl_searchview_description_submit">ጥያቄ አስገባ</string>
+    <string name="sesl_searchview_description_voice">የድምጽ ፍለጋዎ</string>
+    <string name="sesl_switch_off">ጠፍቷል</string>
+    <string name="sesl_switch_on">በርቷል</string>
+    <string name="sesl_switchbar_off_text">ጠፍቷል</string>
+    <string name="sesl_switchbar_on_text">በርቷል</string>
+    <string name="sesl_toolbar_collapse_description">ይሰብስቡ</string>
+    <string name="sesl_appbar_suggest_dismiss">Dismiss suggestion</string>
+    <string name="sesl_appbar_suggest_pagination">ገጽ %1$d ከ%2$d</string>
 </resources>

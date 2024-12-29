@@ -27,7 +27,7 @@ ext {
             "androidx.fragment"          : ["1.8.5", "1.0.0-sesl6", "rev0", 21, 34],
             "androidx.recyclerview"      : ["1.4.0-rc01", "1.0.21-sesl6", "rev0", 21, 35],
             "androidx.preference"        : ["1.2.1", "1.0.4-sesl6", "rev3", 21, 34],
-            "androidx.slidingpanelayout" : ["1.2.0", "1.0.2-sesl6", "rev3", 21, 34],
+            "androidx.slidingpanelayout" : ["1.2.0", "1.0.2-sesl6", "rev4", 21, 34],
             "androidx.viewpager2"        : ["1.1.0", "1.0.0-sesl6", "rev0", 21, 35],
             "androidx.swiperefreshlayout": ["1.2.0-alpha01", "1.0.0-sesl6", "rev0", 21, 35],
             "androidx.indexscroll"       : ["1.0.3", "1.0.3-sesl6", "rev3", 21, 34],

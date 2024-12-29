@@ -1932,7 +1932,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         }
         super.onRestoreInstanceState(state.superState)
         if (state.isOpen) {
-            openPane()
+            if (!openPane()) seslSetPendingAction(PENDING_ACTION_EXPANDED)
         } else {
             closePane()
         }

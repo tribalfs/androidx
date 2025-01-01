@@ -643,8 +643,6 @@ public class SeslIndexScrollView extends FrameLayout {
     }
 
     class IndexScroll {
-        public static final int GRAVITY_INDEX_BAR_LEFT = 0;
-        public static final int GRAVITY_INDEX_BAR_RIGHT = 1;
         public static final int NO_SELECTED_INDEX = -1;
         private final Interpolator LINEAR_INTERPOLATOR = new LinearInterpolator();
 

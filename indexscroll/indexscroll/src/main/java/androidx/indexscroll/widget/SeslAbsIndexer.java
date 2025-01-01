@@ -59,7 +59,7 @@ public abstract class SeslAbsIndexer extends DataSetObserver {
     protected Collator mCollator;
     private final DataSetObservable mDataSetObservable = new DataSetObservable();
     private String[] mLangAlphabetArray;
-    private HashMap<Integer, Integer> mLangIndexMap = new HashMap<>();
+    //private HashMap<Integer, Integer> mLangIndexMap = new HashMap<>();
 
     private int mAlphabetLength;
     private int[] mCachingValue;
@@ -143,14 +143,14 @@ public abstract class SeslAbsIndexer extends DataSetObserver {
         int langIndex = 0;
         while (langIndex < mLangAlphabetArray.length) {
             for (int i = 0; i < mLangAlphabetArray[langIndex].length(); i++) {
-                mLangIndexMap.put(indexerString.length(), Integer.valueOf(langIndex));
+                //mLangIndexMap.put(indexerString.length(), langIndex);
                 indexerString.append(mLangAlphabetArray[langIndex].charAt(i));
             }
             langIndex++;
         }
 
         if (mUseDigitIndex) {
-            mLangIndexMap.put(indexerString.length(), Integer.valueOf(langIndex - 1));
+            //mLangIndexMap.put(indexerString.length(), langIndex - 1);
             indexerString.append(DIGIT_CHAR);
         }
 

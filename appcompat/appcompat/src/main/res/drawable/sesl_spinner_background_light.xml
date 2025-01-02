@@ -9,6 +9,10 @@
                     android:drawable="@drawable/sesl_spinner_background_mask"/>
             </ripple>
         </item>
-        <item android:drawable="@drawable/abc_spinner_mtrl_am_alpha" />
+        <item>
+            <nine-patch
+                android:src="@drawable/abc_spinner_mtrl_am_alpha"
+                android:tint="?android:textColorPrimary"/>
+        </item>
     </layer-list>
 </inset>

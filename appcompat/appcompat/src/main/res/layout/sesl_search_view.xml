@@ -34,6 +34,9 @@
         android:layoutDirection="locale"
         android:orientation="horizontal">
 
+        <!--Note: On vanilla sesl6, it's android:paddingStart="16dp"
+        but this value causes misalignment of the back button with
+        Toolbar's back navigation button.-->
         <LinearLayout
             android:id="@+id/search_plate"
             android:layout_width="match_parent"
@@ -45,7 +48,7 @@
             android:layout_marginBottom="@dimen/sesl_search_plate_margin"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="16dp"
+            android:paddingStart="20dp"
             android:paddingEnd="10dp"
             android:weightSum="1">
 

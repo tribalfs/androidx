@@ -2650,7 +2650,7 @@ public class DrawerLayout extends ViewGroup implements Openable {
     }
 
     private boolean shouldSkipScroll() {
-        return Settings.System.getInt(getContext().getContentResolver(),
+        return Settings.Global.getInt(getContext().getContentResolver(),
                 "remove_animations", 0) == 1;
     }
     //sesl

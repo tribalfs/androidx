@@ -2556,7 +2556,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
                 }
                 //sesl
             }
-            if (abs(mStartOffset - currentSlideOffset) < 0.1f) return false //sesl
+            if (abs(mStartOffset - currentSlideOffset) < SESL_EXTRA_AREA_SENSITIVITY) return false //sesl
             val interceptForDrag = dragHelper.shouldInterceptTouchEvent(ev)
             return interceptForDrag || interceptTap
         }
@@ -2961,6 +2961,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         const val SESL_STATE_CLOSE = 0
         const val SESL_STATE_IDLE = 2
         const val SESL_STATE_OPEN = 1
+        private const val SESL_EXTRA_AREA_SENSITIVITY: Float = 0.1f
         //sesl
     }
 
@@ -3025,7 +3026,7 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         mDrawerPanel!!.layoutParams = layoutParams
     }
 
-    private class SeslSlidingState() {
+    class SeslSlidingState() {
         var state = SESL_STATE_IDLE
             private set
 
@@ -3432,22 +3433,27 @@ open class SlidingPaneLayout @JvmOverloads constructor(
         mOverhangSize = (size * context.resources.displayMetrics.density + 0.5f).toInt()
     }
 
-    /**
-     * Custom added to be able to dynamically update it with [setOnApplyWindowInsetsListener]
-     */
     fun seslSetDrawerMarginTop(margin: Int){
         if (mDrawerMarginTop == margin) return
         mDrawerMarginTop = margin
-        mSlidingPaneRoundedCorner?.setMarginTop(margin)
+        mSlidingPaneRoundedCorner?.apply {
+            setMarginTop(margin)
+            requestLayout()
+        }
     }
 
-    /**
-     * Custom added to be able to dynamically update it with [setOnApplyWindowInsetsListener]
-     */
     fun seslSetDrawerMarginBottom(margin: Int){
         if (mDrawerMarginBottom == margin) return
         mDrawerMarginBottom = margin
-        mSlidingPaneRoundedCorner?.setMarginBottom(margin)
+        mSlidingPaneRoundedCorner?.apply {
+            setMarginBottom(margin)
+            requestLayout()
+        }
     }
+
+    fun seslGetSlidingPaneDragArea(): Int = mSlidingPaneDragArea
+
+    fun seslGetSlidingState(): SeslSlidingState? = mSlidingState
+
     //sesl
 }
